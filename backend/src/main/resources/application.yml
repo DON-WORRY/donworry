@@ -1,0 +1,75 @@
+server:
+  port: 8001
+
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/donworry?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
+    username: ssafy
+    password: ssafy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      #validator:
+        #apply_to_ddl: true
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        #show_sql: true
+        format_sql: true
+        highlight_sql: true
+        default_batch_fetch_size: 100
+
+        # reserved words error config (add backticks)
+        auto_quote_keyword: true
+        globally_quoted_identifiers: true
+
+    #ddl-auto 먼저 실행 후 script 실행
+    defer-datasource-initialization: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      #enabled: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: trace
+    com:
+      ssafy:
+        donworry: debug
+#  file:
+#    name: /log.log
+
+app:
+  jwt:
+    secret: ehzjdlsgudQhqrl
+    accessExpirationMs: 1000000
+    refreshExpirationMs: 100000000
+    #emailCodeExpirationMs: 100000000
+
+file:
+  dir: /imagesss/
+
+
+# spring mail
+#    spring.mail.host=smtp.gmail.com
+#    spring.mail.port=587
+#    spring.mail.username=duljjii@gmail.com
+#    spring.mail.password=slpyezafdivydqqt
+#    spring.mail.properties.mail.smtp.auth=true
+#    spring.mail.properties.mail.smtp.starttls.enable=true
