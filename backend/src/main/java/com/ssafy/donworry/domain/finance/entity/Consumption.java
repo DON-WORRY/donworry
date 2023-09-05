@@ -1,5 +1,6 @@
 package com.ssafy.donworry.domain.finance.entity;
 
+import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.account.entity.Card;
 import com.ssafy.donworry.domain.member.entity.Member;
@@ -14,7 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Consumption {
+public class Consumption extends BaseEntity {
     @Id
     @Column(name = "consumprion_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

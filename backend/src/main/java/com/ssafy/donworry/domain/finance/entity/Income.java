@@ -1,5 +1,6 @@
 package com.ssafy.donworry.domain.finance.entity;
 
+import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -13,7 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Income {
+public class Income extends BaseEntity {
     @Id
     @Column(name = "income_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -6,5 +6,5 @@ public enum Category {
     LIFE,
     HOBBY,
     STYLE,
-    ETC
+    ETC,
 }
