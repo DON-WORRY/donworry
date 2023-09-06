@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -18,28 +19,31 @@ import static lombok.AccessLevel.PROTECTED;
 public class Consumption extends BaseEntity {
     @Id
     @Column(name = "consumprion_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
+    @NotNull
+    private Long price;
 
     @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-//    @ManyToOne(fetch = LAZY)
-//    @JoinColumn(name = "account_id")
-//    private Account account;
-//
-//    @ManyToOne(fetch = LAZY)
-//    @JoinColumn(name = "card_id")
-//    private Card card;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "card_id")
+    private Card card;
 
     @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "consumption_category_id")
     private ConsumptionCategory consumptionCategory;
 
-    private Long price;
+
 
 
 
