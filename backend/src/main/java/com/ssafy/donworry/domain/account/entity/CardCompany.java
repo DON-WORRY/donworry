@@ -4,6 +4,7 @@ import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.account.entity.enums.Company;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,11 +25,18 @@ public class CardCompany extends BaseEntity {
     private Long id;
 
     @NotNull
+    @Size(max = 30)
     private String company;
 
+    @NotNull
+    @Size(max = 10)
+    private String companyCode;
+
+
     @Builder
-    public CardCompany(Long id, @NotNull String company) {
+    public CardCompany(Long id, @NotNull String company, @NotNull String companyCode) {
         this.id = id;
         this.company = company;
+        this.companyCode = companyCode;
     }
 }
