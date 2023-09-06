@@ -22,17 +22,17 @@ public class Bank extends BaseEntity {
     private Long id;
 
     @NotNull
-    @Size(max = 10)
+    @Size(max = 30)
     private String name;
 
     @NotNull
     @Size(max = 10)
-    private String bank_code;
+    private String bankCode;
 
     @Builder
-    public Bank(Long id, @NotNull String name, @NotNull String bank_code) {
+    public Bank(Long id, @NotNull String name, @NotNull String bankCode) {
         this.id = id;
         this.name = name;
-        this.bank_code = bank_code;
+        this.bankCode = bankCode;
     }
 }
