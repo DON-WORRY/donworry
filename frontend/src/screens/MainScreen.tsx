@@ -1,0 +1,1 @@
+import * as NavigationBar from 'expo-navigation-bar';
