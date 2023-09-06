@@ -10,5 +10,4 @@ public class MemberQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-
 }
