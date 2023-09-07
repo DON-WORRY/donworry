@@ -1,6 +1,11 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 const SignupCertificationBtn: React.FC = () => {
-  return <></>;
+  return (
+    <View>
+      <TouchableOpacity></TouchableOpacity>
+      <TouchableOpacity></TouchableOpacity>
+    </View>
+  );
 };
 export default SignupCertificationBtn;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 
 import SignupHeader from '../components/signups/SignupHeader';
 import SignupMiddleInput from '../components/signups/SignupMiddleInput';
@@ -9,10 +9,22 @@ import SignupBtn from '../components/signups/SignupBtn';
 
 const SignupScreen: React.FC = () => {
   return (
-    <View>
+    <View style={styles.container}>
       <SignupHeader />
-      <View></View>
+      <SignupMiddleInput />
+      <SignupBottomInput />
+      <SignupPrivacyAgreement />
+      <SignupBtn />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 40,
+  }
+})
+
 export default SignupScreen;
