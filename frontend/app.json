@@ -25,6 +25,9 @@
     },
     "web": {
       "favicon": "./src/assets/logo/donLogo.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
