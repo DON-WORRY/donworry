@@ -1,5 +1,6 @@
 package com.ssafy.donworry.domain.member.entity;
 
+import com.ssafy.donworry.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class FriendRequest {
+public class FriendRequest extends BaseEntity {
 
     @Id
     @Column(name = "friend_request_id")
