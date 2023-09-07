@@ -1,26 +1,16 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import LoginPage from './screens/loginpage';
+import { StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import StackNavigation from './navigations/Stack';
+
 const App: React.FC = () => {
   return (
-    <View style={styles.container}>
-      <LoginPage></LoginPage>
+    <NavigationContainer>
+      <StackNavigation />
       <StatusBar style="auto" />
-    </View>
+    </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 30,
-  },
-});
 
 export default App;

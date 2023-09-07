@@ -6,8 +6,8 @@ import {
   Animated,
   Keyboard,
 } from 'react-native';
-import DonWorryText from '../components/donworrytext';
-import Login from '../components/login';
+import DonWorryText from '../components/DonWorryText';
+import Login from '../components/Login';
 
 const LoginPage: React.FC = () => {
   const [moveAnimation] = useState<Animated.Value>(new Animated.Value(0));
@@ -25,15 +25,15 @@ const LoginPage: React.FC = () => {
     // 첫 번째 애니메이션: 이동 애니메이션
     const moveAnimationSequence = Animated.parallel([
       Animated.timing(moveAnimation, {
-        toValue: -150,
+        toValue: -190,
         duration: 2000,
-        delay: 500,
+        delay: 1000,
         useNativeDriver: false,
       }),
       // 두 번째 애니메이션: 페이드 인 애니메이션
       Animated.timing(fadeInAnimation, {
         toValue: 1,
-        duration: 2000,
+        duration: 1500,
         delay: 2000,
         useNativeDriver: false,
       }),
@@ -46,13 +46,13 @@ const LoginPage: React.FC = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View style={styles.box1}></View>
+        <View style={styles.box2}></View>
         <Animated.View style={[moveAnimationStyles, { position: 'absolute' }]}>
           <DonWorryText />
         </Animated.View>
         <Animated.View style={fadeInAnimationStyles}>
           <Login />
         </Animated.View>
-        <View style={styles.box2}></View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
     width: 500,
     height: 500,
     transform: [{ rotate: '60deg' }],
-    left: 140,
-    top: -210,
+    left: 220,
+    top: -225,
   },
   box2: {
     position: 'absolute',
@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
     width: 500,
     height: 500,
     transform: [{ rotate: '60deg' }],
-    right: 140,
-    bottom: -210,
+    right: 220,
+    bottom: -225,
   },
   title: {
     fontSize: 30,

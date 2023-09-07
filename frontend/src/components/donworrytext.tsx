@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, Dimensions } from 'react-native';
 
 const DonWorryText: React.FC = () => {
   return (
-    <View style={styles.view}>
+    <View>
       <Image
         source={require('../assets/logo/donworrytext.png')}
         style={styles.image}
@@ -14,7 +14,6 @@ const DonWorryText: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  view: {},
   image: {
     height: 200,
     width: Dimensions.get('screen').width * 0.7,
