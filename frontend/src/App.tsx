@@ -1,12 +1,11 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Test from './components/test';
+import LoginPage from './screens/loginpage';
 const App: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>my first react Native</Text>
-      <Test/>
+      <LoginPage></LoginPage>
       <StatusBar style="auto" />
     </View>
   );
