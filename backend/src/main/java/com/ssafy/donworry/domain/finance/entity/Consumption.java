@@ -23,6 +23,9 @@ public class Consumption extends BaseEntity {
     private Long id;
 
     @NotNull
+    private String detail;
+
+    @NotNull
     private Long price;
 
     @NotNull
@@ -33,6 +36,10 @@ public class Consumption extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "receiver_account_id")
+    private Account receiverAccount;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "card_id")

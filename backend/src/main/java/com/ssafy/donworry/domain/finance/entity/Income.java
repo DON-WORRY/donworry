@@ -22,6 +22,9 @@ public class Income extends BaseEntity {
     private Long id;
 
     @NotNull
+    private String detail;
+
+    @NotNull
     private Long price;
 
     @NotNull
@@ -29,13 +32,16 @@ public class Income extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "consumption_id")
-    private Consumption consumption;
+    @JoinColumn(name = "sender_account_id")
+    private Account senderAccount;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "dutchpay_id")
+    private DutchPay dutchPay;
 
 }
