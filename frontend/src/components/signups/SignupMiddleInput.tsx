@@ -6,7 +6,6 @@ import {
   Dimensions,
   StyleSheet,
   KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 
 interface SignupMiddleInputProps {

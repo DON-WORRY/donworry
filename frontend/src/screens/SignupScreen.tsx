@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
   Text,
   View,
   Dimensions,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 
 import SignupHeader from '../components/signups/SignupHeader';
@@ -36,7 +35,7 @@ const SignupScreen: React.FC = () => {
     ]);
   }
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
       <SignupHeader />
       <SignupMiddleInput
         setEmail={setEmail}
@@ -51,7 +50,7 @@ const SignupScreen: React.FC = () => {
       />
       <SignupPrivacyAgreement />
       <SignupBtn signupOper={signupOper} />
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 };
 
