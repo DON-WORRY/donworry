@@ -19,6 +19,9 @@ public class DutchPayController {
     @Operation(summary = "더치페이 요청", description = "해당 거래내역에서 더치페이를 요청할 수 있는 API입니다.")
     @PostMapping("/create")
     public ApiResult<Long> createDutchPay(@RequestBody DutchPayCreateRequest dutchPayCreateRequest) {
+        log.info("createDutchPay : " + dutchPayCreateRequest.getId());
+        log.info("createDutchPay : " + dutchPayCreateRequest.getReqAmountList().get(0).getMemberid());
+
 
         return null;
     }

@@ -12,5 +12,5 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class DutchPayCreateRequest {
     private Long id;
-    private List<ReqAmountRequest> ReqAmountList;
+    private List<ReqAmountRequest> reqAmountList;
 }
