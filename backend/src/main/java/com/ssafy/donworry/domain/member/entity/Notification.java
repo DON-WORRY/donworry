@@ -1,5 +1,6 @@
 package com.ssafy.donworry.domain.member.entity;
 
+import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.member.entity.enums.NotificationStatus;
 import com.ssafy.donworry.domain.member.entity.enums.NotificationType;
 import jakarta.persistence.*;
@@ -15,7 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Notification {
+public class Notification extends BaseEntity {
 
     @Id
     @Column(name = "notification_id")

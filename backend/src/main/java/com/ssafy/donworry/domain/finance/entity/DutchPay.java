@@ -1,47 +1,44 @@
 package com.ssafy.donworry.domain.finance.entity;
 
-import com.ssafy.donworry.domain.BaseEntity;
-import com.ssafy.donworry.domain.account.entity.Account;
+import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 import com.ssafy.donworry.domain.member.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.*;
-import static lombok.AccessLevel.PROTECTED;
+import static lombok.AccessLevel.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Income extends BaseEntity {
+public class DutchPay {
     @Id
-    @Column(name = "income_id")
+    @Column(name = "dutchpay_id")
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @NotNull
-    private String detail;
+    private Long reqAmount;
 
     @NotNull
-    private Long price;
+    private Long receivedAmount;
+
+    @NotNull
+    @Enumerated(STRING)
+    private DutchpayStatus dutchpayStatus;
 
     @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @NotNull
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "account_id")
-    private Account account;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "sender_account_id")
-    private Account senderAccount;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "dutchpay_id")
-    private DutchPay dutchPay;
-
+    @JoinColumn(name = "consumption_id")
+    private Consumption consumption;
 }
