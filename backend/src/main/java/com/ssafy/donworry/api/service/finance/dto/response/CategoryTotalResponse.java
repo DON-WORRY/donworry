@@ -9,7 +9,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class CategoryTotalResponse {
 
-    private String total;
+    private Long total;
     private CategoryAmountResponse categoryAmountResponse;
 
 }

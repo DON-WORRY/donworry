@@ -8,10 +8,10 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class CategoryAmountResponse {
-    private String food;
-    private String transport;
-    private String life;
-    private String hobby;
-    private String style;
-    private String etc;
+    private Long food;
+    private Long transport;
+    private Long life;
+    private Long hobby;
+    private Long style;
+    private Long etc;
 }
