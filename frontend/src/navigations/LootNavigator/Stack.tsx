@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginPage from '../screens/Loginpage';
-import Test from '../components/test';
+import LoginScreen from '../../screens/LoginScreen';
+import SignupScreen from '../../screens/SignupScreen';
 const Stack = createStackNavigator();
 
 const StackNavigation: React.FC = () => {
@@ -9,12 +9,13 @@ const StackNavigation: React.FC = () => {
     <Stack.Navigator>
       <Stack.Screen
         name="Login"
-        component={LoginPage}
+        component={LoginScreen}
         options={{ headerShown: false }}
+        //freezeOnBlur
       />
       <Stack.Screen
-        name="Test"
-        component={Test}
+        name="SignUp"
+        component={SignupScreen}
         options={{
           headerTintColor: '#808080',
           headerBackTitleVisible: false,

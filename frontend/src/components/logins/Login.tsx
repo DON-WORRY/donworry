@@ -23,10 +23,12 @@ interface ButtonProps {
 
 interface ScreenProps {
   navigation: {
-    navigate: (screen: string) => void;
+    navigate: (screen: string, params?: any) => void;
+    replace: (screen: string, params?: any) => void;
   };
 }
 const Login: React.FC = () => {
+  const navigation = useNavigation<ScreenProps['navigation']>();
   const [loginId, setloginId] = useState('');
   const [password, setPassword] = useState('');
 
@@ -34,6 +36,7 @@ const Login: React.FC = () => {
     // 로그인 시
     console.log(loginId);
     console.log(password);
+    navigation.replace('Layout', { screen: 'Home' });
   }
 
   return (
@@ -83,7 +86,7 @@ const Botton: React.FC<ButtonProps> = (props) => {
 const GoToSignup: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   function handleGoToSignup() {
-    navigation.navigate('Test');
+    navigation.navigate('SignUp');
   }
   return (
     <View

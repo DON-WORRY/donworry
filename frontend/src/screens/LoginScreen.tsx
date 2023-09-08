@@ -6,8 +6,8 @@ import {
   Animated,
   Keyboard,
 } from 'react-native';
-import DonWorryText from '../components/DonWorryText';
-import Login from '../components/Login';
+import DonWorryText from '../components/logins/LoginDonWorryText';
+import Login from '../components/logins/Login';
 
 const LoginPage: React.FC = () => {
   const [moveAnimation] = useState<Animated.Value>(new Animated.Value(0));
@@ -40,6 +40,10 @@ const LoginPage: React.FC = () => {
     ]);
 
     moveAnimationSequence.start();
+
+    return () => {
+      moveAnimationSequence.stop();
+    };
   }, [moveAnimation, fadeInAnimation]);
 
   return (

@@ -1,0 +1,25 @@
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import StackNavigation from './LootNavigator/Stack';
+import Layout from './LootNavigator/MainPage';
+
+const Root = createStackNavigator();
+
+const LootNavigator: React.FC = () => {
+  return (
+    <Root.Navigator>
+      <Root.Screen
+        name="StackNavigation"
+        component={StackNavigation}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="Layout"
+        component={Layout}
+        options={{ headerShown: false }}
+      />
+    </Root.Navigator>
+  );
+};
+
+export default LootNavigator;
