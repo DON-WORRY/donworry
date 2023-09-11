@@ -1,4 +1,4 @@
-package com.ssafy.donworry.api.controller.account.requestdto;
+package com.ssafy.donworry.api.controller.account.dto.request;
 
 import lombok.AccessLevel;
 import lombok.Getter;
