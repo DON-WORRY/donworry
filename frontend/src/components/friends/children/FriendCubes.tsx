@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
-import FriendCubes from './children/FriendCubes';
-
-const FriendSpendKing: React.FC = () => {
+const FriendCubes: React.FC = () => {
   return (
     <View style={styles.container}>
-      <FriendCubes />
+      <FontAwesome name="cube" size={80} style={styles.myCube} />
+      <FontAwesome name="cube" size={80} style={styles.goldCube} />
     </View>
   );
 };
@@ -14,13 +14,8 @@ const FriendSpendKing: React.FC = () => {
 const screenWidth = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    height: 470,
-    padding: 20,
-    width: screenWidth - 40,
-    borderRadius: 15,
-    backgroundColor: 'white',
-    marginBottom: 20,
+    flexDirection: "row",
+    justifyContent: 'space-between'
   },
   goldCube: {
     color: '#FFD700',
@@ -30,4 +25,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FriendSpendKing;
+export default FriendCubes;
