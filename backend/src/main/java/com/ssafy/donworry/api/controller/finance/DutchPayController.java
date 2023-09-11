@@ -1,6 +1,6 @@
 package com.ssafy.donworry.api.controller.finance;
 
-import com.ssafy.donworry.api.controller.finance.requestdto.DutchPayCreateRequest;
+import com.ssafy.donworry.api.controller.finance.dto.request.DutchPayCreateRequest;
 import com.ssafy.donworry.common.api.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

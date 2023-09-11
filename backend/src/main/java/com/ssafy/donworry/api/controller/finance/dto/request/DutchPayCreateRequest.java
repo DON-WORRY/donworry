@@ -1,6 +1,5 @@
-package com.ssafy.donworry.api.controller.finance.requestdto;
+package com.ssafy.donworry.api.controller.finance.dto.request;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -1,6 +1,6 @@
 package com.ssafy.donworry.api.controller.finance;
 
-import com.ssafy.donworry.api.controller.finance.requestdto.CategoryModifyRequest;
+import com.ssafy.donworry.api.controller.finance.dto.request.CategoryModifyRequest;
 import com.ssafy.donworry.api.service.finance.dto.response.CategoryHistoryResponse;
 import com.ssafy.donworry.api.service.finance.dto.response.CategoryTotalResponse;
 import com.ssafy.donworry.common.api.ApiResult;
