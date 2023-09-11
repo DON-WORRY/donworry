@@ -1,4 +1,4 @@
-package com.ssafy.donworry.domain.member.repository.datajpa;
+package com.ssafy.donworry.domain.member.repository.repo;
 
 import com.ssafy.donworry.domain.member.entity.FriendRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
