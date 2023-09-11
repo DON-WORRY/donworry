@@ -1,63 +1,94 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { Platform } from 'react-native';
 
-import HomeScreen from '../../screens/bottomTabs/ScreenA';
+import HomeScreen from '../../screens/bottomTabs/HomeScreen';
+import SpendScreen from '../../screens/bottomTabs/SpendScreen';
+import AssetScreen from '../../screens/bottomTabs/AssetScreen';
+import ComparisonScreen from '../../screens/bottomTabs/ComparsionScreen';
+import FriendScreen from '../../screens/bottomTabs/FriendScreen';
 
 const Tab = createBottomTabNavigator();
 
-function SearchScreen() {
-  return <Text>Search</Text>;
-}
-
-function NotificationScreen() {
-  return <Text>Notification</Text>;
-}
-
-function MessageScreen() {
-  return <Text>Message</Text>;
-}
 const TabNavigation: React.FC = () => {
   return (
-    <Tab.Navigator initialRouteName="Home">
+    <Tab.Navigator
+      initialRouteName="BottomTab"
+      screenOptions={{
+        tabBarStyle: {
+          height: Platform.OS === 'android' ? 60 : 95,
+          borderTopLeftRadius: 15,
+          borderTopRightRadius: 15,
+          backgroundColor: '#FFFFFF',
+        },
+        tabBarLabelStyle: {
+          marginBottom: Platform.OS === 'android' ? 5 : 0,
+        },
+        tabBarItemStyle: {
+          paddingBottom: 1,
+        },
+        tabBarIconStyle: {
+          marginBottom: -10,
+        },
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
           title: '홈',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name="home" color={color} size={size} />
+            <FontAwesome name="home" color={color} size={size * 1.5} />
           ),
         }}
       />
       <Tab.Screen
-        name="Search"
-        component={SearchScreen}
+        name="Spend"
+        component={SpendScreen}
         options={{
-          title: '알림',
+          title: '소비',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name="notifications" color={color} size={size} />
+            <MaterialIcons name="credit-card" color={color} size={size * 1.5} />
           ),
         }}
       />
       <Tab.Screen
-        name="Notification"
-        component={NotificationScreen}
+        name="Asset"
+        component={AssetScreen}
         options={{
-          title: '검색',
+          title: '자산',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name="search" color={color} size={size} />
+            <MaterialIcons
+              name="account-balance-wallet"
+              color={color}
+              size={size * 1.5}
+            />
           ),
         }}
       />
       <Tab.Screen
-        name="Message"
-        component={MessageScreen}
+        name="Comparison"
+        component={ComparisonScreen}
         options={{
-          title: '메시지',
+          title: '비교',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name="message" color={color} size={size} />
+            <FontAwesome name="pie-chart" color={color} size={size * 1.25} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Friend"
+        component={FriendScreen}
+        options={{
+          title: '친구',
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="people-alt" color={color} size={size * 1.5} />
           ),
         }}
       />
