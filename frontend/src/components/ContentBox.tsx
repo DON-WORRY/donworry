@@ -21,7 +21,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 4,
-    padding: 10,
+    // elevation: 7, // Android에서 그림자 효과를 추가
+    padding: 20,
+    marginBottom: 20,
   },
 });
 
