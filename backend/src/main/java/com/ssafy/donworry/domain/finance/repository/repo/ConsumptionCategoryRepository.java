@@ -1,4 +1,4 @@
-package com.ssafy.donworry.domain.finance.repository.datajpa;
+package com.ssafy.donworry.domain.finance.repository.repo;
 
 import com.ssafy.donworry.domain.finance.entity.ConsumptionCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
