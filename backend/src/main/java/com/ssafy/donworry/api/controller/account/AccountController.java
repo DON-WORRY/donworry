@@ -1,9 +1,11 @@
 package com.ssafy.donworry.api.controller.account;
 
+import com.ssafy.donworry.api.service.account.command.AccountService;
 import com.ssafy.donworry.api.service.account.dto.request.CreateGoalRequest;
 import com.ssafy.donworry.api.service.account.dto.response.AccountDetailResponse;
 import com.ssafy.donworry.api.service.account.dto.response.ConsumptionResponse;
 import com.ssafy.donworry.api.service.account.dto.response.StatisticsResponse;
+import com.ssafy.donworry.api.service.account.query.AccountQueryService;
 import com.ssafy.donworry.common.api.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,10 @@ import static com.ssafy.donworry.common.api.ApiResult.OK;
 @RequestMapping("/api/account")
 @RequiredArgsConstructor
 public class AccountController {
+
+    private final AccountService accountService;
+    private final AccountQueryService accountQueryService;
+
 
     @Operation(summary = "계좌 거래내역", description = "계좌별 거래내역을 불러오는 API입니다.")
     @GetMapping("/account/{id}")
@@ -45,6 +51,14 @@ public class AccountController {
     @PostMapping("/goal")
     public ApiResult<Void> createGoal(@RequestBody CreateGoalRequest createGoalRequest) {
         log.info("createGoalRequest :" + createGoalRequest.toString());
+        return OK(null);
+    }
+
+    @Operation(summary = "테스트", description = "사용자 계정 생성 시 테스트 진행")
+    @GetMapping("/test")
+    public ApiResult<Void> test() {
+        log.info("test 입력");
+        accountService.createUserInitAccount(1, 2);
         return OK(null);
     }
 
