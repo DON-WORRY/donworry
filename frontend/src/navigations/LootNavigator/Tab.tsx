@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { Platform } from 'react-native';
 
 import HomeScreen from '../../screens/bottomTabs/HomeScreen';
 import SpendScreen from '../../screens/bottomTabs/SpendScreen';
@@ -16,13 +17,13 @@ const TabNavigation: React.FC = () => {
       initialRouteName="BottomTab"
       screenOptions={{
         tabBarStyle: {
-          height: 60, 
+          height: Platform.OS === 'android' ? 60 : 95,
           borderTopLeftRadius: 15,
           borderTopRightRadius: 15,
-          backgroundColor: "#FFFFFF",
+          backgroundColor: '#FFFFFF',
         },
         tabBarLabelStyle: {
-          marginBottom: 5,
+          marginBottom: Platform.OS === 'android' ? 5 : 0,
         },
         tabBarItemStyle: {
           paddingBottom: 1,
