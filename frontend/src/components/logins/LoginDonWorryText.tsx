@@ -5,7 +5,7 @@ const DonWorryText: React.FC = () => {
   return (
     <View>
       <Image
-        source={require('../assets/logo/donworrytext.png')}
+        source={require('../../assets/logo/donworrytext.png')}
         style={styles.image}
         resizeMode="contain"
       />
