@@ -1,0 +1,44 @@
+server:
+  port: 8001
+
+spring:
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        highlight_sql: true
+        default_batch_fetch_size: 100
+
+        ## reserved words error config (add backticks)
+        auto_quote_keyword: true
+        globally_quoted_identifiers: true
+
+    ## ddl-auto 먼저 진행 후 script 진행
+    defer-datasource-initialization: true
+
+## log 설정
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: trace
+    com:
+      shinhan:
+        shbhack:
+          ijoa: debug
+  file:
+    name: /log.log
+
+## image file 설정
+file:
+  dir: /dev/

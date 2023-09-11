@@ -1,0 +1,5 @@
+app:
+  jwt:
+    secret: asldjifiaweghkljhzkxjvhlaisudhflaushdglkjsdkjhviauhrgjklsnhfoivudhs
+    accessExpirationMs: 1000000
+    refreshExpirationMs: 100000000
