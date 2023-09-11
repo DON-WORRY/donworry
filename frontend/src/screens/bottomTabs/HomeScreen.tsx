@@ -1,10 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import HomeAsset from '../../components/homes/HomeAsset';
+import HomeSpend from '../../components/homes/HomeSpend';
+import HomeCardSpend from '../../components/homes/HomeCardSpend';
 
-function HomeScreen() {
+
+const HomeScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>Home Screen</Text>
+      <HomeAsset />
+      <HomeSpend />
+      <HomeCardSpend />
     </View>
   );
 }
