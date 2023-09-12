@@ -10,8 +10,7 @@ const StackNavigation: React.FC = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ headerShown: false }}
-        //freezeOnBlur
+        options={{ headerShown: false, freezeOnBlur: true }}
       />
       <Stack.Screen
         name="SignUp"
@@ -20,6 +19,7 @@ const StackNavigation: React.FC = () => {
           headerTintColor: '#808080',
           headerBackTitleVisible: false,
           headerTitle: '회원가입',
+          headerTitleAlign: 'center',
         }}
       />
     </Stack.Navigator>
