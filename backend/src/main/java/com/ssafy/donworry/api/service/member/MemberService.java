@@ -1,4 +1,4 @@
-package com.ssafy.donworry.api.service.member.command;
+package com.ssafy.donworry.api.service.member;
 
 
 import lombok.RequiredArgsConstructor;
