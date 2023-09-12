@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   image: {
-    height: 40,
-    width: 167,
+    height: screenWidth * 0.08,
+    width: screenWidth * 0.35,
   },
 });
 

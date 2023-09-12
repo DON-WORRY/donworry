@@ -8,17 +8,17 @@ import FriendList from '../../components/friends/FriendList';
 
 const FriendScreen: React.FC = () => {
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-      alwaysBounceHorizontal={true}
-    >
+    <View style={styles.container}>
       <ComponentsHeader />
-      <FriendMessage />
-      <FriendSpendKing />
-      <FriendList />
-
-    </ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        alwaysBounceHorizontal={true}
+      >
+        <FriendMessage />
+        <FriendSpendKing />
+        <FriendList />
+      </ScrollView>
+    </View>
   );
 };
 
