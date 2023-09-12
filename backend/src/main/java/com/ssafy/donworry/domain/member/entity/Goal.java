@@ -27,10 +27,10 @@ public class Goal extends BaseEntity {
     private Long goalAmount;
 
     @NotNull
-    private LocalDateTime start_time;
+    private LocalDateTime goalStartTime;
 
     @NotNull
-    private LocalDateTime end_time;
+    private LocalDateTime goalEndTime;
 
     @NotNull
     @ManyToOne(fetch = LAZY)
@@ -38,14 +38,11 @@ public class Goal extends BaseEntity {
     private Member member;
 
     @Builder
-    public Goal(Long id, Long goalAmount, LocalDateTime start_time, LocalDateTime end_time, Member member) {
+    public Goal(Long id, Long goalAmount, LocalDateTime goalStartTime, LocalDateTime goalEndTime, Member member) {
         this.id = id;
         this.goalAmount = goalAmount;
-        this.start_time = start_time;
-        this.end_time = end_time;
+        this.goalStartTime = goalStartTime;
+        this.goalEndTime = goalEndTime;
         this.member = member;
     }
-
-
-
 }
