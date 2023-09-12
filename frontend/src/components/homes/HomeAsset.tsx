@@ -1,13 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-const { width } = Dimensions.get('window');
+type RootStackParamList = {
+  Home: undefined;
+  Spend: undefined;
+  Asset: undefined;
+  Comparison: undefined;
+  Friend: undefined;
+};
+
+const { width } = Dimensions.get('screen');
 
 const HomeAsset: React.FC = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Asset'>>();
+
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => navigation.navigate('Asset')}
+      >
         <Text style={styles.headText}>자산</Text>
         <MaterialIcons
           style={styles.amountText}
@@ -15,7 +30,7 @@ const HomeAsset: React.FC = () => {
           color={'grey'}
           size={width * 0.06}
         />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -33,7 +48,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   headText: {
-    fontSize: width * 0.06, // 화면 너비의 5%로 폰트 크기 설정
+    fontSize: width * 0.06,
     fontWeight: 'bold',
     textAlign: 'left',
   },
