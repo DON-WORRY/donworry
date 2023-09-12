@@ -1,20 +1,20 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import StackNavigation from './LootNavigator/Stack';
-import TabNavigation from './LootNavigator/Tab';
+import StackNavigation from './Stack';
+import TabNavigation from './Tab';
 
 const Root = createStackNavigator();
 
-const LootNavigator: React.FC = () => {
+const ChildrenNavigation: React.FC = () => {
   return (
-    <Root.Navigator>
+    <Root.Navigator initialRouteName="StackNavigation">
       <Root.Screen
         name="StackNavigation"
         component={StackNavigation}
         options={{ headerShown: false }}
       />
       <Root.Screen
-        name="Layout"
+        name="TabNavigation"
         component={TabNavigation}
         options={{ headerShown: false }}
       />
@@ -22,4 +22,4 @@ const LootNavigator: React.FC = () => {
   );
 };
 
-export default LootNavigator;
+export default ChildrenNavigation;

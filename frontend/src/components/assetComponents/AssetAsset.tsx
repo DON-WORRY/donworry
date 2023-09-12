@@ -17,7 +17,7 @@ const formatAmount = (amount: string): string => {
   return parseInt(amount, 10).toLocaleString('ko-KR') + '원';
 };
 
-const HomeSpend: React.FC = () => {
+const AssetAsset: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
 
@@ -28,12 +28,12 @@ const HomeSpend: React.FC = () => {
   }, [isFocused]);
 
   const data = [
-    { bank: '취미', money: -200000 },
-    { bank: '식비', money: -342500 },
-    { bank: '생활', money: -120000 },
-    { bank: '쇼핑', money: -485000 },
-    { bank: '기타', money: -79400 },
-  ].sort((a, b) => a.money - b.money);
+    { bank: '국민은행', money: 3500528 },
+    { bank: '신한은행', money: 1282999 },
+    { bank: '기업은행', money: 782600 },
+    { bank: '농협은행', money: 500000 },
+    { bank: '토스뱅크', money: 67500 },
+  ];
   const handleToggle = () => {
     setIsExpanded((prevState) => !prevState);
   };
@@ -43,7 +43,7 @@ const HomeSpend: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <Text style={styles.headText}>소비</Text>
+        <Text style={styles.headText}>자산</Text>
         <Text style={[styles.headText, styles.amountText]}>
           {formatAmount(totalAmount.toString())}
         </Text>
@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
     width: width * 0.13,
     height: width * 0.13,
     borderRadius: (width * 0.13) / 2,
-    // backgroundColor: 'purple'
   },
   imageTextContainer: {
     flexDirection: 'row',
@@ -123,4 +122,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-export default HomeSpend;
+
+export default AssetAsset;
