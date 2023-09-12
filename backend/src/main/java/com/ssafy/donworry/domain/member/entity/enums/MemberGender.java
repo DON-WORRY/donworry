@@ -1,6 +1,6 @@
 package com.ssafy.donworry.domain.member.entity.enums;
 
-public enum Gender {
+public enum MemberGender {
     MALE,
     FEMALE
 }
