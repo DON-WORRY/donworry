@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 
+import SignupGenderBtn from './children/SignupGenderBtn';
+
 interface SignupBottomInputProps {
   setUserName: (userName: string) => void;
   setUserGender: (userGender: string) => void;
@@ -15,6 +17,11 @@ interface SignupBottomInputProps {
 }
 
 const SignupBottomInput: React.FC<SignupBottomInputProps> = (props) => {
+  const [selectedGender, setSelectedGender] = useState('성별');
+
+  useEffect(() => {
+    props.setUserGender(selectedGender);
+  }, [selectedGender]);
   return (
     <KeyboardAvoidingView>
       <TextInput
@@ -24,16 +31,16 @@ const SignupBottomInput: React.FC<SignupBottomInputProps> = (props) => {
           props.setUserName(text);
         }}
       />
+
+      <View style={[styles.input, styles.inputSecond]}>
+        <TextInput editable={false} placeholder={selectedGender} />
+        <SignupGenderBtn setSelectedGender={setSelectedGender} />
+      </View>
+
       <TextInput
-        style={[styles.input, styles.inputSecond]}
-        placeholder="성별"
-        onChangeText={(text) => {
-          props.setUserGender(text);
-        }}
-      />
-      <TextInput
+        keyboardType="numeric" // 숫자 키보드 설정
         style={[styles.input, styles.inputThird]}
-        placeholder="생년월일"
+        placeholder="생년월일 8자리"
         onChangeText={(text) => {
           props.setUserBirth(text);
         }}
@@ -46,11 +53,14 @@ const styles = StyleSheet.create({
   input: {
     width: screenWidth * 0.9,
     height: 50,
-    borderColor: 'gray',
+    borderColor: '#808080',
     borderLeftWidth: 1,
     borderRightWidth: 1,
     paddingLeft: 20,
     paddingRight: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   inputFirst: {
     borderTopWidth: 1,

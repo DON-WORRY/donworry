@@ -1,40 +1,30 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Button,
-  SafeAreaView,
-} from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import HomeAsset from '../../components/homes/HomeAsset';
 import HomeSpend from '../../components/homes/HomeSpend';
 import HomeCardSpend from '../../components/homes/HomeCardSpend';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
-import MainPageHeader from '../../components/MainPageHeader';
-type DrawerProps = {
-  navigation: {
-    openDrawer: () => void;
-  };
-};
+import ContentBox from '../../components/ContentBox';
+import ComponentsHeader from '../../components/ComponentsHeader';
 
-const HomeScreen: React.FC<DrawerProps> = () => {
-  const navigation = useNavigation<DrawerProps['navigation']>();
+const HomeScreen: React.FC = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <MainPageHeader />
-      <HomeAsset />
-      <TouchableOpacity
-        onPress={() => {
-          navigation.openDrawer();
-        }}
-      >
-        <Text>버튼</Text>
-      </TouchableOpacity>
-      <HomeSpend />
-      <HomeCardSpend />
-    </SafeAreaView>
+      <View style={styles.container}>
+        <ComponentsHeader />
+        <ScrollView contentContainerStyle={styles.scrollViewContainer}
+        showsVerticalScrollIndicator={false}
+        alwaysBounceHorizontal={true}
+        >
+          <ContentBox>
+            <HomeAsset />
+          </ContentBox>
+          <ContentBox>
+            <HomeSpend />
+          </ContentBox>
+          <ContentBox>
+            <HomeCardSpend />
+          </ContentBox>
+        </ScrollView>
+      </View>
   );
 };
 
@@ -42,6 +32,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 60,
+  },
+  scrollViewContainer: {
     alignItems: 'center',
   },
 });
