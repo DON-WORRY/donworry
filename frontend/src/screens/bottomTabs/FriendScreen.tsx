@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
-import FriendHeader from '../../components/friends/FriendHeader';
+import ComponentsHeader from '../../components/ComponentsHeader';
 import FriendMessage from '../../components/friends/FriendMessage';
 import FriendSpendKing from '../../components/friends/FriendSpendKing';
 import FriendList from '../../components/friends/FriendList';
@@ -13,7 +13,7 @@ const FriendScreen: React.FC = () => {
       showsVerticalScrollIndicator={false}
       alwaysBounceHorizontal={true}
     >
-      <FriendHeader />
+      <ComponentsHeader />
       <FriendMessage />
       <FriendSpendKing />
       <FriendList />

@@ -6,22 +6,27 @@ import FriendListItem from './children/FriendListItem';
 
 const dummyData = [
   {
+    id: 1,
     name: 'test',
     email: 'test@naver.com',
   },
   {
+    id: 2,
     name: 'test',
     email: 'test@naver.com',
   },
   {
+    id: 3,
     name: 'test',
     email: 'test@naver.com',
   },
   {
+    id: 4,
     name: 'test',
     email: 'test@naver.com',
   },
   {
+    id: 5,
     name: 'test',
     email: 'test@naver.com',
   },
@@ -54,7 +59,7 @@ const FriendList: React.FC = () => {
 
       {dummyData.map((dummy) => {
         return (
-          <View>
+          <View key={dummy.id}>
             <FriendListItem friend={dummy} />
           </View>
         );
