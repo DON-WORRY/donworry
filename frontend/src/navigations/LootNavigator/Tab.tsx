@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigation: React.FC = () => {
   return (
     <Tab.Navigator
-      initialRouteName="BottomTab"
+      initialRouteName="Home"
       screenOptions={{
         tabBarStyle: {
           height: Platform.OS === 'android' ? 60 : 95,
