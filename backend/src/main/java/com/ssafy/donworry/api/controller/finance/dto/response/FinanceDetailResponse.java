@@ -1,4 +1,4 @@
-package com.ssafy.donworry.api.service.finance.dto.request;
+package com.ssafy.donworry.api.controller.finance.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,7 +8,6 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class FinanceCreateServiceRequest {
+public class FinanceDetailResponse {
 
 }
-

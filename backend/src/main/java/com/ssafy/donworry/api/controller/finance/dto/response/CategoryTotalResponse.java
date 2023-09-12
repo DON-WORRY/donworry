@@ -1,4 +1,4 @@
-package com.ssafy.donworry.api.service.finance.dto.response;
+package com.ssafy.donworry.api.controller.finance.dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
