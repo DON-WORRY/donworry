@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 import ComponentsHeader from '../../components/ComponentsHeader';
-import FriendMessage from '../../components/friends/FriendMessage';
+import FriendMessage from '../../components/friends/FriendMessageComponents';
 import FriendSpendKing from '../../components/friends/FriendSpendKing';
 import FriendList from '../../components/friends/FriendList';
 
