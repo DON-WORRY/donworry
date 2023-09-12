@@ -37,7 +37,7 @@ const Login: React.FC = () => {
     // 로그인 시
     console.log(loginId);
     console.log(password);
-    navigation.replace('Layout', { screen: 'Home' });
+    navigation.replace('TabNavigation', { screen: 'Home' });
   }
 
   return (
