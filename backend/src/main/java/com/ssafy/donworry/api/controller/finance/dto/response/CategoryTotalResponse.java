@@ -1,15 +1,14 @@
 package com.ssafy.donworry.api.controller.finance.dto.response;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
-public class CategoryTotalResponse {
-
-    private Long total;
-    private CategoryAmountResponse categoryAmountResponse;
+public record CategoryTotalResponse(
+        @NotNull Long total,
+        @NotNull CategoryTotalResponse categoryTotalResponse
+) {
 
 }

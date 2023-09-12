@@ -15,7 +15,7 @@ import static lombok.AccessLevel.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor
 public class DutchPay {
     @Id
     @Column(name = "dutchpay_id")
@@ -23,10 +23,10 @@ public class DutchPay {
     private Long id;
 
     @NotNull
-    private Long reqAmount;
+    private Long dutchpayReqPrice;
 
     @NotNull
-    private Long receivedAmount;
+    private Long dutchpayReceivedPrice;
 
     @NotNull
     @Enumerated(STRING)

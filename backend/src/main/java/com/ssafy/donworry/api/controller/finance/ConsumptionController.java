@@ -36,7 +36,7 @@ public class ConsumptionController {
     @Operation(summary = "거래내역의 카테고리 변경", description = "해당 소비내역의 소비카테고리를 변경하는 API입니다.")
     @PutMapping("/modify")
     public ApiResult<Long> modifyCategory(@RequestBody CategoryModifyRequest categoryModifyRequest) {
-        log.info("modifyCategory : " + categoryModifyRequest.getConsumptionId());
+        log.info("modifyCategory : " + categoryModifyRequest.consumptionCategoryId());
 
         return null;
     }
