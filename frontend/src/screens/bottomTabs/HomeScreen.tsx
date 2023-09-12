@@ -4,10 +4,12 @@ import HomeAsset from '../../components/homes/HomeAsset';
 import HomeSpend from '../../components/homes/HomeSpend';
 import HomeCardSpend from '../../components/homes/HomeCardSpend';
 import ContentBox from '../../components/ContentBox';
+import ComponentsHeader from '../../components/ComponentsHeader';
 
 const HomeScreen: React.FC = () => {
   return (
       <View style={styles.container}>
+        <ComponentsHeader />
         <ScrollView contentContainerStyle={styles.scrollViewContainer}
         showsVerticalScrollIndicator={false}
         alwaysBounceHorizontal={true}
@@ -32,7 +34,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 60,
-    // backgroundColor: 'lightgrey',
   },
   scrollViewContainer: {
     alignItems: 'center',
