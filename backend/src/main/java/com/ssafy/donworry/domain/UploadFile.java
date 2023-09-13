@@ -1,16 +1,15 @@
-package com.ssafy.donworry.common.util.file;
+package com.ssafy.donworry.domain;
 
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static lombok.AccessLevel.*;
+import static lombok.AccessLevel.PROTECTED;
 
-@Getter
 @Embeddable
+@Getter
 @NoArgsConstructor(access = PROTECTED)
 public class UploadFile {
 
@@ -25,5 +24,4 @@ public class UploadFile {
         this.uploadFileName = uploadFileName;
         this.storeFileName = storeFileName;
     }
-
 }
