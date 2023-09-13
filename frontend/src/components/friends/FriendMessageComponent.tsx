@@ -13,15 +13,15 @@ type RootStackParamList = {
   FriendMessage: undefined;
 };
 
+interface FriendMessageProps {
+  setIsTrue: (isTrue: boolean) => void;
+}
+
 const screenWidth = Dimensions.get('screen').width;
 
-const FriendMessage: React.FC = () => {
+const FriendMessage: React.FC<FriendMessageProps> = (props) => {
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, 'Asset'>>().navigate;
-
-  function navigateMessage() {
-    navigation('FriendMessage');
-  }
 
   return (
     <View style={styles.container}>
@@ -30,7 +30,7 @@ const FriendMessage: React.FC = () => {
         name="angle-right"
         size={40}
         onPress={() => {
-          navigateMessage();
+          props.setIsTrue(false);
         }}
       />
     </View>
