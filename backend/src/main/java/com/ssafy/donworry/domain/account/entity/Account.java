@@ -48,4 +48,14 @@ public class Account extends BaseEntity {
         this.number = number;
         this.holdings = holdings;
     }
+
+    public static Account of(Member member, Bank bank, String number, Long holdings){
+        return Account.builder()
+                .member(member)
+                .bank(bank)
+                .number(number)
+                .holdings(holdings)
+                .build();
+    }
+
 }
