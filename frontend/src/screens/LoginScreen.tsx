@@ -40,10 +40,6 @@ const LoginPage: React.FC = () => {
     ]);
 
     moveAnimationSequence.start();
-
-    return () => {
-      moveAnimationSequence.stop();
-    };
   }, [moveAnimation, fadeInAnimation]);
 
   return (

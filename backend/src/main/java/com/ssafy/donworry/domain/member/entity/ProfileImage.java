@@ -1,7 +1,7 @@
 package com.ssafy.donworry.domain.member.entity;
 
-import com.ssafy.donworry.common.util.file.UploadFile;
 import com.ssafy.donworry.domain.BaseEntity;
+import com.ssafy.donworry.domain.UploadFile;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

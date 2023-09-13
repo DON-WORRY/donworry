@@ -23,10 +23,10 @@ public class Notification extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private Long payment;
+    private Long notificationPayment;
 
     @NotNull
-    private String content;
+    private String notificationContent;
 
     @NotNull
     @Enumerated(STRING)
