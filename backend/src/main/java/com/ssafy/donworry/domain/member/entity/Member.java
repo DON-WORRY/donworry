@@ -24,7 +24,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@ToString
 public class Member extends BaseEntity {
 
     @Id

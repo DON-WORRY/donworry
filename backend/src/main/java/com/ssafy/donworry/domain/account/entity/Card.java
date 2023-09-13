@@ -36,7 +36,7 @@ public class Card extends BaseEntity {
 
     @NotNull
     @Size(max = 30)
-    private String number;
+    private String cardNumber;
 
     @NotNull
     @Enumerated(STRING)
@@ -47,12 +47,24 @@ public class Card extends BaseEntity {
     private CardStatus cardStatus;
 
     @Builder
-    public Card(Long id, @NotNull Account account, @NotNull CardCompany cardCompany, @NotNull String number, @NotNull CardType cardType, @NotNull CardStatus cardStatus) {
+    public Card(Long id, @NotNull Account account, @NotNull CardCompany cardCompany, @NotNull String cardNumber, @NotNull CardType cardType, @NotNull CardStatus cardStatus) {
         this.id = id;
         this.account = account;
         this.cardCompany = cardCompany;
-        this.number = number;
+        this.cardNumber = cardNumber;
         this.cardType = cardType;
         this.cardStatus = cardStatus;
+    }
+
+
+
+    public static Card of(Account account, CardCompany cardCompany, String cardNumber, CardType cardType, CardStatus cardStatus){
+        return Card.builder()
+                .account(account)
+                .cardCompany(cardCompany)
+                .cardNumber(cardNumber)
+                .cardType(cardType)
+                .cardStatus(cardStatus)
+                .build();
     }
 }
