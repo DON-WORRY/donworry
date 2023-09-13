@@ -6,7 +6,7 @@ import com.ssafy.donworry.api.controller.account.dto.response.AccountDetailRespo
 import com.ssafy.donworry.api.controller.account.dto.response.ConsumptionResponse;
 import com.ssafy.donworry.api.controller.account.dto.response.StatisticsResponse;
 import com.ssafy.donworry.api.service.account.query.AccountQueryService;
-import com.ssafy.donworry.api.service.member.command.MemberService;
+import com.ssafy.donworry.api.service.member.MemberService;
 import com.ssafy.donworry.common.api.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

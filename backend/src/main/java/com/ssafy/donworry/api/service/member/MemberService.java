@@ -3,7 +3,7 @@ package com.ssafy.donworry.api.service.member;
 
 import com.ssafy.donworry.common.error.NotFoundException;
 import com.ssafy.donworry.domain.member.entity.Member;
-import com.ssafy.donworry.domain.member.repository.repo.MemberRepository;
+import com.ssafy.donworry.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
