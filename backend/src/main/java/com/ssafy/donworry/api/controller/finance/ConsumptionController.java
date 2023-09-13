@@ -22,6 +22,7 @@ public class ConsumptionController {
     public ApiResult<CategoryTotalResponse> searchCategoryTotal(@PathVariable("id") Long memberId) {
         log.info("searchCategoryTotal - memberId : " + memberId);
 
+
         return null;
     }
 

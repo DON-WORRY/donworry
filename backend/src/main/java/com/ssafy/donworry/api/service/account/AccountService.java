@@ -7,7 +7,7 @@ import com.ssafy.donworry.domain.account.repository.AccountRepository;
 import com.ssafy.donworry.domain.account.repository.BankRepository;
 import com.ssafy.donworry.domain.account.repository.CardRepository;
 import com.ssafy.donworry.domain.member.entity.Member;
-import com.ssafy.donworry.domain.member.repository.repo.MemberRepository;
+import com.ssafy.donworry.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
