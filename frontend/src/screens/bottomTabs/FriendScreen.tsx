@@ -2,23 +2,26 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 import ComponentsHeader from '../../components/ComponentsHeader';
-import FriendMessage from '../../components/friends/FriendMessageComponents';
+import FriendMessageComponent from '../../components/friends/FriendMessageComponent';
 import FriendSpendKing from '../../components/friends/FriendSpendKing';
 import FriendList from '../../components/friends/FriendList';
 
+import FriendMessageScreen from '../friends/FriendMessageScreen';
+
 const FriendScreen: React.FC = () => {
   return (
-    <View style={styles.container}>
-      <ComponentsHeader />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        alwaysBounceHorizontal={true}
-      >
-        <FriendMessage />
-        <FriendSpendKing />
-        <FriendList />
-      </ScrollView>
-    </View>
+    <FriendMessageScreen />
+    // <View style={styles.container}>
+    //   <ComponentsHeader />
+    //   <ScrollView
+    //     showsVerticalScrollIndicator={false}
+    //     alwaysBounceHorizontal={true}
+    //   >
+    //     <FriendMessageComponent />
+    //     <FriendSpendKing />
+    //     <FriendList />
+    //   </ScrollView>
+    // </View>
   );
 };
 
