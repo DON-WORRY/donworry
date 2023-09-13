@@ -10,23 +10,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.*;
-import static lombok.AccessLevel.PROTECTED;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor
 public class Consumption extends BaseEntity {
     @Id
-    @Column(name = "consumprion_id")
+    @Column(name = "consumption_id")
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @NotNull
-    private String detail;
+    private String consumptionDetail;
 
     @NotNull
-    private Long price;
+    private Long consumptionPrice;
+
+    @NotNull
+    private Long consumptionRemainedAmount;
 
     @NotNull
     @ManyToOne(fetch = LAZY)

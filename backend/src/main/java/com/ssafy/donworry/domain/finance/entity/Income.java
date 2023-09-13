@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor
 public class Income extends BaseEntity {
     @Id
     @Column(name = "income_id")
@@ -22,10 +22,13 @@ public class Income extends BaseEntity {
     private Long id;
 
     @NotNull
-    private String detail;
+    private String incomeDetail;
 
     @NotNull
-    private Long price;
+    private Long incomePrice;
+
+    @NotNull
+    private Long incomeRemainedAmount;
 
     @NotNull
     @ManyToOne(fetch = LAZY)

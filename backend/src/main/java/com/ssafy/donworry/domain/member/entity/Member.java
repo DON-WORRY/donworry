@@ -1,8 +1,8 @@
 package com.ssafy.donworry.domain.member.entity;
 
 import com.ssafy.donworry.domain.BaseEntity;
-import com.ssafy.donworry.domain.member.entity.enums.ActivateStatus;
-import com.ssafy.donworry.domain.member.entity.enums.Gender;
+import com.ssafy.donworry.domain.member.entity.enums.MemberActivateStatus;
+import com.ssafy.donworry.domain.member.entity.enums.MemberGender;
 import com.ssafy.donworry.domain.member.entity.enums.MemberRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
+@ToString
 public class Member extends BaseEntity {
 
     @Id
@@ -32,19 +34,19 @@ public class Member extends BaseEntity {
 
     @Size(max = 20)
     @NotNull
-    private String name;
+    private String memberName;
 
     @Email
     @Size(max = 40)
     @NotNull
-    private String email;
+    private String memberEmail;
 
     @NotNull
-    private String password;
+    private String memberPassword;
 
     @NotNull
     @Enumerated(STRING)
-    private Gender gender;
+    private MemberGender memberGender;
 
     @NotNull
     @Enumerated(STRING)
@@ -52,16 +54,16 @@ public class Member extends BaseEntity {
 
     @NotNull
     @Enumerated(STRING)
-    private ActivateStatus activateStatus;
+    private MemberActivateStatus memberActivateStatus;
 
     @NotNull
-    private LocalDate birthDate;
+    private LocalDate memberBirthDate;
 
     @OneToOne(mappedBy = "member", cascade = ALL, orphanRemoval = true)
     private ProfileImage profileImage;
 
     @OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
-    private List<Goal> goals = new ArrayList<>();
+    private List<Goal> goals;
 
     @OneToMany(mappedBy = "receiver", cascade = ALL, orphanRemoval = true)
     private List<FriendRelationship> relationshipReceivers;
