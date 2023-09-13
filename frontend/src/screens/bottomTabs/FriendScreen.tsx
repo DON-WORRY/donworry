@@ -1,25 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 import ComponentsHeader from '../../components/ComponentsHeader';
-import FriendMessage from '../../components/friends/FriendMessage';
+import FriendMessageComponent from '../../components/friends/FriendMessageComponent';
 import FriendSpendKing from '../../components/friends/FriendSpendKing';
 import FriendList from '../../components/friends/FriendList';
 
-const FriendScreen: React.FC = () => {
-  return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-      alwaysBounceHorizontal={true}
-    >
-      <ComponentsHeader />
-      <FriendMessage />
-      <FriendSpendKing />
-      <FriendList />
+import FriendMessageScreen from '../friends/FriendMessageScreen';
 
-    </ScrollView>
-  );
+const FriendScreen: React.FC = () => {
+  const [isTrue, setIsTrue] = useState(true);
+  if (isTrue) {
+    return (
+      <View style={styles.container}>
+        <ComponentsHeader />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          alwaysBounceHorizontal={true}
+        >
+          <FriendMessageComponent setIsTrue={setIsTrue} />
+          <FriendSpendKing />
+          <FriendList />
+        </ScrollView>
+      </View>
+    );
+  } else {
+    return <FriendMessageScreen setIsTrue={setIsTrue} />;
+  }
 };
 
 const styles = StyleSheet.create({
