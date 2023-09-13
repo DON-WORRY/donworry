@@ -1,35 +1,24 @@
-//package com.ssafy.donworry.common.config;
-//
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import springfox.documentation.builders.ApiInfoBuilder;
-//import springfox.documentation.builders.PathSelectors;
-//import springfox.documentation.builders.RequestHandlerSelectors;
-//import springfox.documentation.service.ApiInfo;
-//import springfox.documentation.spi.DocumentationType;
-//import springfox.documentation.spring.web.plugins.Docket;
-//import springfox.documentation.swagger2.annotations.EnableSwagger2;
-//
-//@Configuration
-//@EnableSwagger2
-//public class SwaggerConfig {
-//
-//    @Bean
-//    public Docket restAPI() {
-//        return new Docket(DocumentationType.SWAGGER_2)
-//                .apiInfo(apiInfo())
-//                .select()
-//                .apis(RequestHandlerSelectors.basePackage("com.shinhan.shbhack.ijoa.api.controller"))
-//                .paths(PathSelectors.any())
-//                .build();
-//    }
-//
-//    private ApiInfo apiInfo() {
-//        return new ApiInfoBuilder()
-//                .title("아이조아 API")
-//                .version("1.0.0")
-//                .description("아이 친화적인 자산 관리 플랫폼 ijoa api 입니다.")
-//                .build();
-//    }
-//}
-//
+package com.ssafy.donworry.common.config;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SwaggerConfig {
+
+    //localhost:8001/demo-ui.html
+
+    @Bean
+    public OpenAPI openAPI() {
+
+        Info info = new Info()
+                .version("v1.0.0")
+                .title("API 타이틀")
+                .description("API Description");
+
+        return new OpenAPI()
+                .info(info);
+    }
+}
