@@ -83,7 +83,9 @@ public class AccountService {
             char randomChar = charset.charAt(randomIndex);
             randomAccountNumber.append(randomChar);
         }
-
+        if(accountRepository.existsByAccountNumber(randomAccountNumber.toString())){
+            return randomAccountNumber();
+        }
         return randomAccountNumber.toString();
     }
 
@@ -98,16 +100,16 @@ public class AccountService {
         // 사용할 문자셋
         String charset = "0123456789";
         int length = 16;
-        StringBuilder randomAccountNumber = new StringBuilder(length);
+        StringBuilder randomCardNumber = new StringBuilder(length);
         SecureRandom random = new SecureRandom();
 
         for (int i = 0; i < length; i++) {
             int randomIndex = random.nextInt(charset.length());
             char randomChar = charset.charAt(randomIndex);
-            randomAccountNumber.append(randomChar);
+            randomCardNumber.append(randomChar);
         }
-
-        return randomAccountNumber.toString();
+        if(cardRepository.existsByCardNumber(randomCardNumber.toString()));
+        return randomCardNumber.toString();
     }
 
 }
