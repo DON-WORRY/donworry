@@ -38,7 +38,7 @@ public class MemberQueryService {
     }
 
     public MemberLoginResponse loginMember(MemberLoginServiceRequest request){
-        Member member = memberRepository.fineByMemberEmail(request.memberEmail())
+        Member member = memberRepository.findByMemberEmail(request.memberEmail())
                 .orElseThrow(
                         () -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
                 );
