@@ -1,8 +1,8 @@
 package com.ssafy.donworry.api.controller.finance;
 
 import com.ssafy.donworry.api.controller.finance.dto.request.CategoryModifyRequest;
-import com.ssafy.donworry.api.service.finance.dto.response.CategoryHistoryResponse;
-import com.ssafy.donworry.api.service.finance.dto.response.CategoryTotalResponse;
+import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
+import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
 import com.ssafy.donworry.common.api.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class ConsumptionController {
     public ApiResult<CategoryTotalResponse> searchCategoryTotal(@PathVariable("id") Long memberId) {
         log.info("searchCategoryTotal - memberId : " + memberId);
 
+
         return null;
     }
 
@@ -36,7 +37,7 @@ public class ConsumptionController {
     @Operation(summary = "거래내역의 카테고리 변경", description = "해당 소비내역의 소비카테고리를 변경하는 API입니다.")
     @PutMapping("/modify")
     public ApiResult<Long> modifyCategory(@RequestBody CategoryModifyRequest categoryModifyRequest) {
-        log.info("modifyCategory : " + categoryModifyRequest.getConsumptionId());
+        log.info("modifyCategory : " + categoryModifyRequest.consumptionCategoryId());
 
         return null;
     }

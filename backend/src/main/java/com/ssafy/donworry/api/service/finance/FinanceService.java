@@ -1,4 +1,4 @@
-package com.ssafy.donworry.api.service.finance.command;
+package com.ssafy.donworry.api.service.finance;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

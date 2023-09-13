@@ -48,12 +48,11 @@ logging:
       hibernate:
         SQL: trace
     com:
-      shinhan:
-        shbhack:
-          ijoa: debug
+      ssafy:
+        donworry:
   file:
     name: /log.log
 
 ## image file 설정
 file:
-  dir: /dev/
+  dir: /var/images/

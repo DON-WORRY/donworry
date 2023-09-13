@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, SafeAreaView, StyleSheet } from 'react-native';
 import MyPageClose from './MyPageClose';
 import MypageOpen from './MypageOpen';
+import MyPageMenu from './MyPageMenu';
 
 const MyPage: React.FC = () => {
   const [clickView, setClickView] = useState(false);
@@ -19,6 +20,9 @@ const MyPage: React.FC = () => {
         <MyPageClose onClickViewOpen={openView} />
       )}
       <HorizonLine />
+      <MyPageMenu imageName="bell" text="내소식" />
+      <MyPageMenu imageName2="piggy-bank" text="계좌선택" />
+      <MyPageMenu imageName="send" text="송금하기" />
     </SafeAreaView>
   );
 };
