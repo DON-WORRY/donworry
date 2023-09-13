@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.TimeZone;
 
-@SpringBootApplication
 @EnableJpaAuditing
+@SpringBootApplication
 public class DonworryApplication {
 
 	@PostConstruct
