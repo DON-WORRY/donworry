@@ -1,5 +1,6 @@
-package com.ssafy.donworry.common.util.file;
+package com.ssafy.donworry.common.util;
 
+import com.ssafy.donworry.domain.UploadFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,10 +12,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-public class FileStore {
+public class FileUtil {
 
     @Value("${file.dir}")
     public String fileDir;
+
+    // TODO: 2023-09-10 리팩토링 필요 
 
     public String getFullPath(String filename) {
         return fileDir + filename;
@@ -55,5 +58,4 @@ public class FileStore {
         return originalFilename.substring(pos + 1);
 
     }
-
 }
