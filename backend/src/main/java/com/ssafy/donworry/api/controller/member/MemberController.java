@@ -2,6 +2,7 @@ package com.ssafy.donworry.api.controller.member;
 
 import com.ssafy.donworry.api.controller.member.dto.request.MemberJoinRequest;
 import com.ssafy.donworry.api.controller.member.dto.request.MemberLoginRequest;
+import com.ssafy.donworry.api.controller.member.dto.response.MemberLoginResponse;
 import com.ssafy.donworry.api.service.member.MemberService;
 import com.ssafy.donworry.api.service.member.query.MemberQueryService;
 import com.ssafy.donworry.api.service.member.request.MemberJoinServiceRequest;
@@ -34,7 +35,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ApiData<> loginMember(@RequestBody MemberLoginRequest request){
-        memberQueryService.loginMember(MemberLoginServiceRequest.of(request));
+    public ApiData<MemberLoginResponse> loginMember(@RequestBody MemberLoginRequest request){
+        return ApiData.of(memberQueryService.loginMember(MemberLoginServiceRequest.of(request)));
     }
 }
