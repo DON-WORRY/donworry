@@ -4,7 +4,7 @@ import com.ssafy.donworry.api.controller.finance.dto.request.CategoryModifyReque
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
-import com.ssafy.donworry.common.api.ApiResult;
+import com.ssafy.donworry.common.response.ApiData;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ssafy.donworry.common.api.ApiResult.OK;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/consumption")
@@ -24,18 +22,18 @@ public class ConsumptionController {
 
     @Operation(summary = "카테고리별 소비합계 조회", description = "각 카테고리별 소비합계를 조회하는 API입니다.")
     @GetMapping("/total/{id}")
-    public ApiResult<CategoryTotalResponse> searchCategoryTotal(@PathVariable("id") Long memberId) {
+    public ApiData<CategoryTotalResponse> searchCategoryTotal(@PathVariable("id") Long memberId) {
         log.info("searchCategoryTotal - memberId : " + memberId);
 
         CategoryAmountResponse categoryAmountResponse = new CategoryAmountResponse(10l, 20l, 30l ,40l ,50l, 60l);
         CategoryTotalResponse categoryTotalResponse = new CategoryTotalResponse(3l, categoryAmountResponse);
 
-        return OK(categoryTotalResponse);
+        return ApiData.of(categoryTotalResponse);
     }
 
     @Operation(summary = "카테고리별 소비내역 조회", description = "각 카테고리별 소비내역을 조회하는 API입니다.")
     @GetMapping("/history/{id}")
-    public ApiResult<List<CategoryHistoryResponse>> searchCategoryHistory(@PathVariable("id") Long memberId) {
+    public ApiData<List<CategoryHistoryResponse>> searchCategoryHistory(@PathVariable("id") Long memberId) {
         log.info("searchCategoryHistory - memberId : " + memberId);
 
         List<CategoryHistoryResponse> historyResponseList = new ArrayList<>();
@@ -44,16 +42,16 @@ public class ConsumptionController {
             historyResponseList.add(categoryHistoryResponse);
         }
 
-        return OK(historyResponseList);
+        return ApiData.of(historyResponseList);
     }
 
     @Operation(summary = "거래내역의 카테고리 변경", description = "해당 소비내역의 소비카테고리를 변경하는 API입니다.")
     @PutMapping("/modify")
-    public ApiResult<Long> modifyCategory(@RequestBody CategoryModifyRequest categoryModifyRequest) {
+    public ApiData<Long> modifyCategory(@RequestBody CategoryModifyRequest categoryModifyRequest) {
         Long id = categoryModifyRequest.consumptionCategoryId();
         log.info("modifyCategory : " + id);
 
-        return OK(id);
+        return ApiData.of(id);
     }
 
 

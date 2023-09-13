@@ -1,6 +1,11 @@
 package com.ssafy.donworry.domain.member.entity;
 
+import com.ssafy.donworry.api.service.member.request.MemberJoinServiceRequest;
 import com.ssafy.donworry.domain.BaseEntity;
+import com.ssafy.donworry.domain.account.entity.Account;
+import com.ssafy.donworry.domain.finance.entity.Consumption;
+import com.ssafy.donworry.domain.finance.entity.DutchPay;
+import com.ssafy.donworry.domain.finance.entity.Income;
 import com.ssafy.donworry.domain.member.entity.enums.MemberActivateStatus;
 import com.ssafy.donworry.domain.member.entity.enums.MemberGender;
 import com.ssafy.donworry.domain.member.entity.enums.MemberRole;
@@ -8,6 +13,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -24,7 +30,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@ToString
 public class Member extends BaseEntity {
 
     @Id
@@ -83,6 +88,51 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "sender", cascade = ALL, orphanRemoval = true)
     private List<Notification> notificationSenders;
 
-    // TODO: 2023-09-04 income, consumption, account 연관관계 맵핑 추가 + @Builder 추가
+    @OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
+    private List<DutchPay> dutchPays;
 
+    @OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
+    private List<Income> incomes;
+
+    @OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
+    private List<Consumption> consumptions;
+
+    @OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
+    private List<Account> accounts;
+
+    @Builder
+    public Member(Long id, String memberName, String memberEmail, String memberPassword, MemberGender memberGender, MemberRole memberRole, MemberActivateStatus memberActivateStatus, LocalDate memberBirthDate, ProfileImage profileImage, List<Goal> goals, List<FriendRelationship> relationshipReceivers, List<FriendRelationship> relationshipSenders, List<FriendRequest> requestReceivers, List<FriendRequest> requestSenders, List<Notification> notificationReceivers, List<Notification> notificationSenders, List<DutchPay> dutchPays, List<Income> incomes, List<Consumption> consumptions, List<Account> accounts) {
+        this.id = id;
+        this.memberName = memberName;
+        this.memberEmail = memberEmail;
+        this.memberPassword = memberPassword;
+        this.memberGender = memberGender;
+        this.memberRole = memberRole;
+        this.memberActivateStatus = memberActivateStatus;
+        this.memberBirthDate = memberBirthDate;
+        this.profileImage = profileImage;
+        this.goals = goals;
+        this.relationshipReceivers = relationshipReceivers;
+        this.relationshipSenders = relationshipSenders;
+        this.requestReceivers = requestReceivers;
+        this.requestSenders = requestSenders;
+        this.notificationReceivers = notificationReceivers;
+        this.notificationSenders = notificationSenders;
+        this.dutchPays = dutchPays;
+        this.incomes = incomes;
+        this.consumptions = consumptions;
+        this.accounts = accounts;
+    }
+
+    public static Member of(MemberJoinServiceRequest request){
+        return Member.builder()
+                .memberName(request.memberName())
+                .memberEmail(request.memberEmail())
+                .memberPassword(request.memberPassword())
+                .memberGender(request.memberGender())
+                .memberRole(request.memberRole())
+                .memberActivateStatus(request.memberActivateStatus())
+                .memberBirthDate(request.memberBirthDate())
+                .build();
+    }
 }

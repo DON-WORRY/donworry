@@ -35,25 +35,26 @@ public class Account extends BaseEntity {
 
     @NotNull
     @Size(max = 30)
-    private String number;
+    private String accountNumber;
 
     @NotNull
     private Long holdings;
 
     @Builder
-    public Account(Long id, Member member, Bank bank, String number, Long holdings) {
+    public Account(Long id, @NotNull Member member, @NotNull Bank bank, @NotNull String accountNumber, @NotNull Long holdings) {
         this.id = id;
         this.member = member;
         this.bank = bank;
-        this.number = number;
+        this.accountNumber = accountNumber;
         this.holdings = holdings;
     }
 
-    public static Account of(Member member, Bank bank, String number, Long holdings){
+
+    public static Account of(Member member, Bank bank, String accountNumber, Long holdings){
         return Account.builder()
                 .member(member)
                 .bank(bank)
-                .number(number)
+                .accountNumber(accountNumber)
                 .holdings(holdings)
                 .build();
     }

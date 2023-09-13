@@ -1,6 +1,7 @@
 package com.ssafy.donworry.common.model;
 
 
+import com.ssafy.donworry.domain.member.entity.Member;
 import com.ssafy.donworry.domain.member.entity.enums.MemberRole;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,5 +22,14 @@ public class JwtCreateModel {
         this.name = name;
         this.email = email;
         this.memberRole = memberRole;
+    }
+
+    public static JwtCreateModel of(Member member){
+        return JwtCreateModel.builder()
+                .id(member.getId())
+                .name(member.getMemberName())
+                .email(member.getMemberEmail())
+                .memberRole(member.getMemberRole())
+                .build();
     }
 }

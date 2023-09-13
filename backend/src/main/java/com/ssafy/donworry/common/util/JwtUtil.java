@@ -1,7 +1,7 @@
 package com.ssafy.donworry.common.util;
 
 
-import com.ssafy.donworry.api.controller.member.dto.response.MemberTokenResponse;
+import com.ssafy.donworry.api.controller.member.dto.response.MemberLoginResponse;
 import com.ssafy.donworry.common.error.ErrorCode;
 import com.ssafy.donworry.common.error.exception.InvalidValueException;
 import com.ssafy.donworry.common.model.JwtCreateModel;
@@ -30,11 +30,11 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public MemberTokenResponse generateAllToken(JwtCreateModel model){
+    public MemberLoginResponse generateAllToken(JwtCreateModel model){
         String accessToken = generateToken(model, ACCESS_TOKEN_EXPIRE_TIME);
         String refreshToken = generateToken(model, REFRESH_TOKEN_EXPIRE_TIME);
 
-        return MemberTokenResponse.of(accessToken, refreshToken, model);
+        return MemberLoginResponse.of(accessToken, refreshToken, model);
     }
 
     public String generateToken(Claims claims, Long expireTime){
