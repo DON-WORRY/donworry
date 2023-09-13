@@ -40,8 +40,7 @@ out/
 /src/main/generated/**
 
 ### Private Files ###
-/src/main/resources/application-db.yml
-/src/main/resources/application-email.yml
-/src/main/resources/application-oauth.yml
-/src/main/resources/application-openapi.yml
-/src/main/resources/application-jwt.yml
+/src/main/resources/application-env.yml
+
+### Templates Files ###
+src/main/resources/templates/**

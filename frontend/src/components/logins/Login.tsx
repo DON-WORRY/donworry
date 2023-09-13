@@ -14,6 +14,7 @@ interface InputboxProps {
   value: string;
   onChangeText: (text: string) => void;
   secureTextEntry: boolean;
+  keyboardType?: 'email-address';
 }
 
 interface ButtonProps {
@@ -36,7 +37,7 @@ const Login: React.FC = () => {
     // 로그인 시
     console.log(loginId);
     console.log(password);
-    navigation.replace('Layout', { screen: 'Home' });
+    navigation.replace('TabNavigation', { screen: 'Home' });
   }
 
   return (
@@ -46,6 +47,7 @@ const Login: React.FC = () => {
         value={loginId}
         onChangeText={(text) => setloginId(text)}
         secureTextEntry={false}
+        keyboardType="email-address"
       />
       <Inputbox
         placeholder="비밀번호"
@@ -67,6 +69,7 @@ const Inputbox: React.FC<InputboxProps> = (props) => {
       value={props.value}
       onChangeText={props.onChangeText}
       secureTextEntry={props.secureTextEntry}
+      keyboardType={props.keyboardType}
     />
   );
 };
@@ -89,13 +92,7 @@ const GoToSignup: React.FC = () => {
     navigation.navigate('SignUp');
   }
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 10,
-      }}
-    >
+    <View style={styles.bottom_view}>
       <Text>아직 회원이 아니신가요?</Text>
       <TouchableOpacity onPress={handleGoToSignup} activeOpacity={0.8}>
         <Text style={styles.bottom_text}>회원가입</Text>
@@ -128,6 +125,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
     fontWeight: 'bold',
+  },
+  bottom_view: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
   },
   bottom_text: {
     marginLeft: 10,
