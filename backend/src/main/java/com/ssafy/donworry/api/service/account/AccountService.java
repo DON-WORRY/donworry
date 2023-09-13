@@ -1,5 +1,6 @@
 package com.ssafy.donworry.api.service.account;
 
+import com.ssafy.donworry.common.util.StoreDataUtil;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.account.entity.Card;
 import com.ssafy.donworry.domain.account.entity.Bank;
@@ -10,6 +11,7 @@ import com.ssafy.donworry.domain.account.repository.AccountRepository;
 import com.ssafy.donworry.domain.account.repository.BankRepository;
 import com.ssafy.donworry.domain.account.repository.CardCompanyRepository;
 import com.ssafy.donworry.domain.account.repository.CardRepository;
+import com.ssafy.donworry.domain.finance.entity.Consumption;
 import com.ssafy.donworry.domain.member.entity.Member;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,7 @@ public class AccountService {
     private final MemberRepository memberRepository;
     private final CardRepository cardRepository;
     private final CardCompanyRepository cardCompanyRepository;
-
+    private final StoreDataUtil storeDataUtil;
 
     public void createMemberInitAccount(Long memberId) {
 
@@ -55,6 +57,13 @@ public class AccountService {
         Card card = Card.of(account, cardCompany, randomCardNumber(), CardType.CHECK_CARD, CardStatus.USING);
         cardRepository.save(card);
 
+        createMemberInitConsumption(memberId, accountId, card.getId());
+    }
+
+    public void createMemberInitConsumption(Long memberId, Long accountId, Long cardId){
+        StoreDataUtil.RandomConsumption randomConsumption = storeDataUtil.randomStoreName();
+        System.out.println(randomConsumption.toString());
+        System.out.println("===========출력==============");
     }
 
 
