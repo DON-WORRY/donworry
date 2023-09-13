@@ -1,4 +1,4 @@
-package com.ssafy.donworry.domain.account.repository.repo;
+package com.ssafy.donworry.domain.account.repository;
 
 import com.ssafy.donworry.domain.account.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;

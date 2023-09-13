@@ -7,38 +7,52 @@ spring:
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  redis:
+    host: localhost
+    port: 6379
   jpa:
     hibernate:
       ddl-auto: update
-
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
         highlight_sql: true
         default_batch_fetch_size: 100
-
         ## reserved words error config (add backticks)
         auto_quote_keyword: true
         globally_quoted_identifiers: true
-
     ## ddl-auto 먼저 진행 후 script 진행
     defer-datasource-initialization: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_ID}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    auth-code-expiration-millis: 1800000  # 30 * 60 * 1000 == 30분
 
-## log 설정
+## log 설정 trace -> debug -> info -> warn -> error -> fatal
 logging:
   level:
     org:
       hibernate:
         SQL: trace
     com:
-      shinhan:
-        shbhack:
-          ijoa: debug
+      ssafy:
+        donworry:
   file:
     name: /log.log
 
 ## image file 설정
 file:
-  dir: /dev/
+  dir: /var/images/
