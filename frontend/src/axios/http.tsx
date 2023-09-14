@@ -1,0 +1,45 @@
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// 토큰 가져오기 함수
+const getData = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+// Authorization이 필요없는 인스턴스
+export const axiosWithoutAuth = axios.create({
+  baseURL: 'https://i9c107.p.ssafy.io/api',
+  headers: {
+    'Content-Type': 'application/json;charset=utf-8',
+  },
+});
+
+// Authorization이 필요한 인스턴스
+export const axiosWithAuth = axios.create({
+  baseURL: 'https://i9c107.p.ssafy.io/api',
+  headers: {
+    'Content-Type': 'application/json;charset=utf-8',
+    'Authorization': '', // 이곳에 토큰이나 필요한 인증 정보를 추가
+  },
+});
+
+axiosWithAuth.interceptors.request.use(
+  (config) => {
+    const myToken = getData('myToken');
+    const token = myToken; // 동적으로 토큰 가져오기. 실제로는 스토리지나 다른 방법을 사용하여 가져올 수 있습니다.
+    if (token) {
+      config.headers['Authorization'] = 'Bearer ' + token;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
