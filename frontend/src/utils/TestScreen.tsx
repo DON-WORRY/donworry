@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 
 // user api
@@ -20,20 +20,51 @@ import {
 
 // friend api
 import {
-    friendListInquiry,
-    friendRequest,
-    friendAccept,
-    friendReject,
-    friendDelete
-} from "./FriendFunctions"
+  friendListInquiry,
+  friendRequest,
+  friendAccept,
+  friendReject,
+  friendDelete,
+} from './FriendFunctions';
 
+// consumption api
+import {
+  consumptionCategoryTotal,
+  consumptionCategoryHistory,
+  consumptionCategoryModify,
+  consumptionDutchPayInquiry,
+  consumptionDutchPayRequest,
+  consumptionDutchPayComplete,
+  consumptionDutchPayAllComplete,
+} from './ConsumptionFunctions';
 
+// account api
+import {
+  accountTradeTotal,
+  accountTradeHistory,
+  accountCardTotal,
+  accountCardHistory,
+  accountCardListInquiry,
+  accountPerMonthAsset,
+  accountSetGoal,
+  accountGoalInquiry,
+  accountAssetRankInquiry,
+} from './AccountFunctions';
+
+// transfer api
+import { transfer } from './TransferFunctions';
+
+// notification api
+import {
+  notificationSend,
+  notificationInquiry,
+  notificationDelete,
+} from './NotificationFunctions';
 
 const TestScreen: React.FC = () => {
-    // 함수 실행
-    // 회원가입 => 로그인 => 함수 => 회원탈퇴 순서
-    
-  return <View></View>;
+  // 함수 실행
+  // 회원가입 => 로그인 => 함수 => 회원탈퇴 순서
+  return <></>;
 };
 
 export default TestScreen;

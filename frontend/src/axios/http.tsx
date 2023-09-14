@@ -15,7 +15,7 @@ const getData = async (key: string) => {
 
 // Authorization이 필요없는 인스턴스
 export const axiosWithoutAuth = axios.create({
-  baseURL: 'https://i9c107.p.ssafy.io/api',
+  baseURL: 'https://j9c210.p.ssafy.io',
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
   },
@@ -31,11 +31,10 @@ export const axiosWithAuth = axios.create({
 });
 
 axiosWithAuth.interceptors.request.use(
-  (config) => {
-    const myToken = getData('myToken');
-    const token = myToken; // 동적으로 토큰 가져오기. 실제로는 스토리지나 다른 방법을 사용하여 가져올 수 있습니다.
-    if (token) {
-      config.headers['Authorization'] = 'Bearer ' + token;
+  async (config) => {
+    const myToken = await getData('myToken'); // await를 사용하여 토큰 값을 가져옵니다.
+    if (myToken) {
+      config.headers['Authorization'] = 'Bearer ' + myToken;
     }
     return config;
   },

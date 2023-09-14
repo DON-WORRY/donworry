@@ -26,14 +26,15 @@ const storeData = async (key: string, value: string) => {
 };
 
 // 회원가입
-export function userSignup(data: SignupParams) {
-  axiosWithoutAuth
+export function userSignup(data: SignupParams): Promise<void> {
+  return axiosWithoutAuth
     .post('/api/user/signup', data)
     .then((r) => {
       console.log(r);
     })
     .catch((e) => {
       console.error(e);
+      throw e;
     });
 }
 
@@ -76,16 +77,40 @@ export function userLogin(data: LoginParams): Promise<void> {
 
 // 소셜 로그인
 // 아직 잘 몰라서 보류
-export function userSocialLogin() {
-  axiosWithoutAuth.post('/api/user/?login');
+export function userSocialLogin(): Promise<void> {
+  return axiosWithoutAuth
+    .post('/api/user/?login')
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }
 
 // 비밀번호 재발급
-export function userFindPassword() {
-  axiosWithAuth.get('/api/user/findpw');
+export function userFindPassword(): Promise<void> {
+  return axiosWithAuth
+    .get('/api/user/findpw')
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }
 
 // 로그아웃
-export function userLogout() {
-  axiosWithAuth.get('/api/user/logout');
+export function userLogout(): Promise<void> {
+  return axiosWithAuth
+    .get('/api/user/logout')
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }

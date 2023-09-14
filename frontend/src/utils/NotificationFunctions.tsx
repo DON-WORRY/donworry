@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
-// 알림 전송
 
+// 데이터 가져오기
 const getData = async (key: string) => {
   try {
     const value = await AsyncStorage.getItem(key);
@@ -14,15 +14,39 @@ const getData = async (key: string) => {
   }
 };
 
-export function NotificationSend() {
-  axiosWithAuth.post('/api/notification');
+// 알림 전송
+export function notificationSend(): Promise<void> {
+  return axiosWithAuth
+    .post('/api/notification')
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((e) => {
+      console.error(e);
+    });
 }
 // 알림 조회
-export function NotificationInquiry() {
+export function notificationInquiry(): Promise<void> {
   const id = getData('memberId');
-  axiosWithAuth.get(`/api/notification/${id}`);
+  return axiosWithAuth
+    .get(`/api/notification/${id}`)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }
 // 알림 삭제
-export function NotificationDelete() {
-  axiosWithAuth.delete('/api/notification');
+export function notificationDelete(): Promise<void> {
+  return axiosWithAuth
+    .delete('/api/notification')
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }
