@@ -1,7 +1,7 @@
 ##db
-MYSQL_USER: ssafy
-MYSQL_PASSWORD: ssafy
-MYSQL_URL: jdbc:mysql://localhost:3306/donworry?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
+MYSQL_USER: donworry
+MYSQL_PASSWORD: donworry678
+MYSQL_URL: jdbc:mysql://j9c210.p.ssafy.io/donworry?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
 
 ##jwt
 JWT_SECRET: oasijfoawiejglawkjsdfousdhofijqwekgjoasijfoaisdjfowhef
@@ -23,9 +23,9 @@ spring:
       on-profile: dev
 
 ##db
-MYSQL_USER: ssafy
-MYSQL_PASSWORD: ssafy
-MYSQL_URL: jdbc:mysql://localhost:3306/donworry?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
+MYSQL_USER: donworry
+MYSQL_PASSWORD: donworry678
+MYSQL_URL: jdbc:mysql://j9c210.p.ssafy.io/donworry?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
 
 ---
 
@@ -36,6 +36,6 @@ spring:
       on-profile: server
 
 ##db
-MYSQL_USER: ssafy
-MYSQL_PASSWORD: ssafy
-MYSQL_URL: jdbc:mysql://localhost:3306/donworry?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
+MYSQL_USER: donworry
+MYSQL_PASSWORD: donworry678
+MYSQL_URL: jdbc:mysql://j9c210.p.ssafy.io/donworry?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
