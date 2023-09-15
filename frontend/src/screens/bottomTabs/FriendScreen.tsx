@@ -6,11 +6,7 @@ import FriendMessageComponent from '../../components/friends/FriendMessageCompon
 import FriendSpendKing from '../../components/friends/FriendSpendKing';
 import FriendList from '../../components/friends/FriendList';
 
-import FriendMessageScreen from '../friends/FriendMessageScreen';
-
 const FriendScreen: React.FC = () => {
-  const [isTrue, setIsTrue] = useState(true);
-  if (isTrue) {
     return (
       <View style={styles.container}>
         <ComponentsHeader />
@@ -18,15 +14,13 @@ const FriendScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
           alwaysBounceHorizontal={true}
         >
-          <FriendMessageComponent setIsTrue={setIsTrue} />
+          <FriendMessageComponent/>
           <FriendSpendKing />
           <FriendList />
         </ScrollView>
       </View>
     );
-  } else {
-    return <FriendMessageScreen setIsTrue={setIsTrue} />;
-  }
+
 };
 
 const styles = StyleSheet.create({
