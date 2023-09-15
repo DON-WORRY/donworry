@@ -14,14 +14,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width * 0.9,
     backgroundColor: '#fff',
     borderRadius: 13,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 4,
-      height: 4,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    // elevation: 7, // Android에서 그림자 효과를 추가
     padding: 20,
     marginBottom: 20,
   },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import HomeSpend from '../../components/homes/HomeSpend';
-import AssetAsset from '../../components/assetComponents/AssetAsset'
+import AssetAsset from '../../components/assetComponents/AssetAsset';
+import AssetChart from '../../components/assetComponents/AssetChart';
 import ContentBox from '../../components/ContentBox';
 import ComponentsHeader from '../../components/ComponentsHeader';
 
@@ -16,6 +16,9 @@ function AssetScreen() {
       >
         <ContentBox>
           <AssetAsset />
+        </ContentBox>
+        <ContentBox>
+          <AssetChart />
         </ContentBox>
       </ScrollView>
     </View>
