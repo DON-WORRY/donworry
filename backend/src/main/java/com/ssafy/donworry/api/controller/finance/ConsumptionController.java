@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConsumptionController {
 
+    // test
     @Operation(summary = "카테고리별 소비합계 조회", description = "각 카테고리별 소비합계를 조회하는 API입니다.")
     @GetMapping("/total/{id}")
     public ApiData<CategoryTotalResponse> searchCategoryTotal(@PathVariable("id") Long memberId) {
