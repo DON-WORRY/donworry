@@ -17,7 +17,7 @@ const FriendCubes: React.FC<FriendCubesProps> = (props) => {
         </View>
         <View style={styles.smallBox}>
           <FontAwesome name="cube" size={100} style={styles.goldCube} />
-          <Text style={styles.nameText}>소비왕</Text>
+          <Text style={styles.nameText}>절약왕</Text>
           <Text style={styles.subNameText}>각 소비별 절약 1등</Text>
         </View>
       </View>
