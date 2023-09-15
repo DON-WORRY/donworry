@@ -11,9 +11,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import FriendRequest from '../../components/friends/FriendRequest';
 import FriendResponse from '../../components/friends/FriendResponse';
+import { useNavigation } from '@react-navigation/native';
 
-interface FriendMessageScreenProps {
-  setIsTrue: (isTrue: boolean) => void;
+interface ScreenProps {
+  navigation: {
+    navigate: (screen: string, params?: any) => void;
+    replace: (screen: string, params?: any) => void;
+  };
 }
 
 const requestData = [
@@ -40,22 +44,22 @@ const requestData = [
   {
     email: 'oooo@naver.com',
     name: 'test',
-    time: "2023-08-31"
+    time: '2023-08-31',
   },
   {
     email: 'oooo@naver.com',
     name: 'test',
-    time: "2023-08-31"
+    time: '2023-08-31',
   },
   {
     email: 'oooo@naver.com',
     name: 'test',
-    time: "2023-08-31"
+    time: '2023-08-31',
   },
   {
     email: 'oooo@naver.com',
     name: 'test',
-    time: "2023-08-31"
+    time: '2023-08-31',
   },
 ];
 
@@ -83,33 +87,38 @@ const responseData = [
   {
     email: 'oooo@naver.com',
     name: 'test',
-    time: "2023-08-31"
+    time: '2023-08-31',
   },
   {
     email: 'oooo@naver.com',
     name: 'test',
-    time: "2023-08-31"
+    time: '2023-08-31',
   },
   {
     email: 'oooo@naver.com',
     name: 'test',
-    time: "2023-08-31"
+    time: '2023-08-31',
   },
   {
     email: 'oooo@naver.com',
     name: 'test',
-    time: "2023-09-01"
+    time: '2023-09-01',
   },
 ];
 
-const FriendMessageScreen: React.FC<FriendMessageScreenProps> = (props) => {
+const FriendMessageScreen: React.FC = () => {
   const blackLogo = require('../../assets/logo/BlackLogo.png');
+  const navigation = useNavigation<ScreenProps['navigation']>();
   return (
     <View style={styles.container}>
       <View style={styles.headerBox}>
-        <MaterialCommunityIcons name="arrow-left" size={30} onPress={() => {
-          props.setIsTrue(true)
-        }}/>
+        <MaterialCommunityIcons
+          name="arrow-left"
+          size={30}
+          onPress={() => {
+            navigation.replace('TabNavigation', { screen: 'Friend' });
+          }}
+        />
         <Image source={blackLogo} style={styles.logo} />
       </View>
       <View>
@@ -122,10 +131,14 @@ const FriendMessageScreen: React.FC<FriendMessageScreenProps> = (props) => {
         <ScrollView style={styles.largeBox}>
           {requestData.map((data, index) => {
             return (
-            <View key={index}>
-              <FriendRequest email={data.email} name={data.name} time={data.time}/>
-            </View>
-            )
+              <View key={index}>
+                <FriendRequest
+                  email={data.email}
+                  name={data.name}
+                  time={data.time}
+                />
+              </View>
+            );
           })}
         </ScrollView>
       </View>
@@ -133,15 +146,17 @@ const FriendMessageScreen: React.FC<FriendMessageScreenProps> = (props) => {
         <Text style={styles.subTitle}>수신 메시지</Text>
         <View style={styles.line}></View>
         <ScrollView style={styles.largeBox}>
-          {
-            responseData.map((data, index) => {
-              return (
-                <View key={index}>
-                  <FriendResponse email={data.email} name={data.name} time={data.time}/>
-                </View>
-              )
-            })
-          }
+          {responseData.map((data, index) => {
+            return (
+              <View key={index}>
+                <FriendResponse
+                  email={data.email}
+                  name={data.name}
+                  time={data.time}
+                />
+              </View>
+            );
+          })}
         </ScrollView>
       </View>
     </View>
@@ -166,7 +181,6 @@ const styles = StyleSheet.create({
     height: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // alignContent: 'space-between',
     width: screenWidth - 40,
   },
   headerText: {

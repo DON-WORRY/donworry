@@ -1,39 +1,35 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 
-type RootStackParamList = {
-  Home: undefined;
-  Spend: undefined;
-  Asset: undefined;
-  Comparison: undefined;
-  Friend: undefined;
-  FriendMessage: undefined;
-};
-
-interface FriendMessageProps {
-  setIsTrue: (isTrue: boolean) => void;
+interface ScreenProps {
+  navigation: {
+    navigate: (screen: string, params?: any) => void;
+    replace: (screen: string, params?: any) => void;
+  };
 }
 
 const screenWidth = Dimensions.get('screen').width;
-
-const FriendMessage: React.FC<FriendMessageProps> = (props) => {
-  const navigation =
-    useNavigation<StackNavigationProp<RootStackParamList, 'Asset'>>().navigate;
+const FriendMessage: React.FC = () => {
+  const navigation = useNavigation<ScreenProps['navigation']>();
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        navigation.navigate('StackNavigation', { screen: 'Message' });
+      }}
+    >
       <Text style={styles.text}>친구 요청 및 수신 메시지</Text>
-      <FontAwesome
-        name="angle-right"
-        size={40}
-        onPress={() => {
-          props.setIsTrue(false);
-        }}
-      />
-    </View>
+      <FontAwesome name="angle-right" size={40} />
+    </TouchableOpacity>
   );
 };
 
