@@ -12,7 +12,6 @@ function AssetScreen() {
       <ScrollView
         contentContainerStyle={styles.scrollViewContainer}
         showsVerticalScrollIndicator={false}
-        alwaysBounceHorizontal={true}
       >
         <ContentBox>
           <AssetAsset />

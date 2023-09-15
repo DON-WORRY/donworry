@@ -12,7 +12,6 @@ const HomeScreen: React.FC = () => {
         <ComponentsHeader />
         <ScrollView contentContainerStyle={styles.scrollViewContainer}
         showsVerticalScrollIndicator={false}
-        alwaysBounceHorizontal={true}
         >
           <ContentBox>
             <HomeAsset />
