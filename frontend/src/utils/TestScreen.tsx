@@ -61,9 +61,26 @@ import {
   notificationDelete,
 } from './NotificationFunctions';
 
+
+const sampleSignup = {
+  email: "test@naver.com",
+  password: "123123",
+  name: "Lee",
+  
+}
+
 const TestScreen: React.FC = () => {
   // 함수 실행
   // 회원가입 => 로그인 => 함수 => 회원탈퇴 순서
+  const data = {
+    email: "e@e.com",
+    name: "",
+    password: "",
+    birthday: "",
+    gender: ""
+  }
+  userSignup(data)
+
   return <></>;
 };
 

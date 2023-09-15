@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
 
-// 회원가입 params
-type SignupParams = {
+// 회원가입 data
+type SignupData = {
   email: string;
   name: string;
   password: string;
@@ -11,7 +11,7 @@ type SignupParams = {
 };
 
 // 로그인 params
-type LoginParams = {
+type LoginData = {
   email: string;
   password: string;
 };
@@ -26,9 +26,9 @@ const storeData = async (key: string, value: string) => {
 };
 
 // 회원가입
-export function userSignup(data: SignupParams): Promise<void> {
+export function userSignup(data: SignupData): Promise<void> {
   return axiosWithoutAuth
-    .post('/api/user/signup', data)
+    .post('/api/user/signup', { data: data })
     .then((r) => {
       console.log(r);
     })
@@ -57,9 +57,9 @@ export function userSignup(data: SignupParams): Promise<void> {
 //   storeData(key, myToken);
 // }
 
-export function userLogin(data: LoginParams): Promise<void> {
+export function userLogin(data: LoginData): Promise<void> {
   return axiosWithAuth
-    .post('/api/user/login', data)
+    .post('/api/user/login', { data: data })
     .then((response) => {
       console.log(response);
 
