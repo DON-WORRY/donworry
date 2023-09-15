@@ -22,8 +22,8 @@ public class CardController {
 
 
     @Operation(summary = "카드별 소비내역", description = "소지한 카드들의 카드별 소비내역을 조회하는 API입니다.")
-    @GetMapping("/{id}")
-    public ApiData<ConsumptionResponse> searchCardConsumption(@PathVariable("id") Long memberId) {
+    @GetMapping("/{user_id}")
+    public ApiData<ConsumptionResponse> searchCardConsumption(@PathVariable("user_id") Long memberId) {
         log.info("searchCardConsumption - memberId : " + memberId);
         ConsumptionResponse list = null;
         return ApiData.of(list);
