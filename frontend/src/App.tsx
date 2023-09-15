@@ -3,13 +3,17 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import LootNavigator from './navigations/RootNavigator';
+import { Provider } from 'react-redux';
+import { store } from './store/Store';
 
 const App: React.FC = () => {
   return (
-    <NavigationContainer>
-      <LootNavigator />
-      <StatusBar style="auto" />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <LootNavigator />
+        <StatusBar style="auto" />
+      </NavigationContainer>
+    </Provider>
   );
 };
 

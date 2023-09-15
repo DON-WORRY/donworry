@@ -8,13 +8,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import MypageImage from './MypageImage';
+import { useDispatch } from 'react-redux';
+import { setMypageModal } from '../../store/Modal';
 
-interface clickProps {
-  onClickViewOpen: () => void;
-}
-const MyPageClose: React.FC<clickProps> = (props) => {
+const MyPageClose: React.FC = () => {
+  const dispatch = useDispatch();
   function handleDownClick() {
-    props.onClickViewOpen();
+    dispatch(setMypageModal(true));
   }
   return (
     <View style={styles.container}>

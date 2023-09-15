@@ -12,7 +12,6 @@ import { useNavigation } from '@react-navigation/native';
 interface ScreenProps {
   navigation: {
     navigate: (screen: string, params?: any) => void;
-    replace: (screen: string, params?: any) => void;
   };
 }
 
