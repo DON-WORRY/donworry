@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -109,9 +110,10 @@ const responseData = [
 const FriendMessageScreen: React.FC = () => {
   const blackLogo = require('../../assets/logo/BlackLogo.png');
   const navigation = useNavigation<ScreenProps['navigation']>();
+  const [isFirst, setIsFirst] = useState(true);
   return (
     <View style={styles.container}>
-      <View style={styles.headerBox}>
+      <View style={styles.header_box}>
         <MaterialCommunityIcons
           name="arrow-left"
           size={30}
@@ -122,42 +124,77 @@ const FriendMessageScreen: React.FC = () => {
         <Image source={blackLogo} style={styles.logo} />
       </View>
       <View>
-        <Text style={styles.headerText}>친구 요청 및 수신</Text>
+        <Text style={styles.header_text}>친구 요청 및 수신</Text>
       </View>
       <View>
-        <Text style={styles.subTitle}>요청 메시지</Text>
+        <View style={styles.sub_title_box}>
+          <TouchableOpacity
+            onPress={() => {
+              setIsFirst(true);
+            }}
+          >
+            <Text
+              style={[styles.sub_title, isFirst ? styles.selected_title : null]}
+            >
+              요청 메시지
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setIsFirst(false);
+            }}
+          >
+            <Text
+              style={[styles.sub_title, isFirst ? null : styles.selected_title]}
+            >
+              수신 메시지
+            </Text>
+          </TouchableOpacity>
+        </View>
         {/* 막대선 */}
         <View style={styles.line}></View>
-        <ScrollView style={styles.largeBox}>
-          {requestData.map((data, index) => {
-            return (
-              <View key={index}>
-                <FriendRequest
-                  email={data.email}
-                  name={data.name}
-                  time={data.time}
-                />
-              </View>
-            );
-          })}
-        </ScrollView>
-      </View>
-      <View>
-        <Text style={styles.subTitle}>수신 메시지</Text>
-        <View style={styles.line}></View>
-        <ScrollView style={styles.largeBox}>
-          {responseData.map((data, index) => {
-            return (
-              <View key={index}>
-                <FriendResponse
-                  email={data.email}
-                  name={data.name}
-                  time={data.time}
-                />
-              </View>
-            );
-          })}
-        </ScrollView>
+
+        {isFirst ? (
+          <>
+            <ScrollView
+              style={styles.large_box}
+              showsVerticalScrollIndicator={false}
+              alwaysBounceHorizontal={true}
+            >
+              {responseData.map((data, index) => {
+                return (
+                  <View key={index}>
+                    <FriendResponse
+                      email={data.email}
+                      name={data.name}
+                      time={data.time}
+                    />
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </>
+        ) : (
+          <>
+            <ScrollView
+              style={styles.large_box}
+              showsVerticalScrollIndicator={false}
+              alwaysBounceHorizontal={true}
+            >
+              {requestData.map((data, index) => {
+                return (
+                  <View key={index}>
+                    <FriendRequest
+                      email={data.email}
+                      name={data.name}
+                      time={data.time}
+                    />
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </>
+        )}
       </View>
     </View>
   );
@@ -177,21 +214,23 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
   },
-  headerBox: {
+  header_box: {
     height: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: screenWidth - 40,
   },
-  headerText: {
+  header_text: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 30,
   },
-  subTitle: {
+  sub_title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    marginRight: 5,
+    borderRadius: 5,
   },
   line: {
     height: 0,
@@ -199,8 +238,14 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     marginBottom: 10,
   },
-  largeBox: {
-    height: screenHeight / 4,
+  large_box: {
+    height: (screenHeight * 2) / 3,
+  },
+  sub_title_box: {
+    flexDirection: 'row',
+  },
+  selected_title: {
+    color: '#7777F3',
   },
 });
 

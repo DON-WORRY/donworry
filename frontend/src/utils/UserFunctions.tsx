@@ -1,13 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
 
+/*
+  {
+  "memberName": "string",
+  "memberEmail": "string",
+  "memberPassword": "pL?5ONLg0L#",
+  "memberGender": "MALE",
+  "memberBirthDate": "2023-09-15"
+  } 
+  */
 // 회원가입 data
 type SignupData = {
-  email: string;
-  name: string;
-  password: string;
-  gender: string;
-  birthday: string;
+  memberEmail: string;
+  memberName: string;
+  memberPassword: string;
+  memberGender: string;
+  memberBirthDate: string;
 };
 
 // 로그인 params
@@ -28,7 +37,7 @@ const storeData = async (key: string, value: string) => {
 // 회원가입
 export function userSignup(data: SignupData): Promise<void> {
   return axiosWithoutAuth
-    .post('/api/user/signup', { data: data })
+    .post('/api/members/join', { data: data })
     .then((r) => {
       console.log(r);
     })
