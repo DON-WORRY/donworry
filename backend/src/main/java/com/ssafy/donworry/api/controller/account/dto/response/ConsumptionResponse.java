@@ -1,5 +1,10 @@
 package com.ssafy.donworry.api.controller.account.dto.response;
 
-public class ConsumptionResponse {
+import java.util.List;
+
+public record ConsumptionResponse(
+        Long cardConsumptionTotalPrice,
+        List<eachCardConsumptionTotalPrice> eachCardConsumptionTotalPriceList
+) {
 
 }

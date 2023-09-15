@@ -1,13 +1,13 @@
 package com.ssafy.donworry.api.controller.account.dto.response;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
-import static lombok.AccessLevel.PROTECTED;
-
-@Getter
-@NoArgsConstructor(access = PROTECTED)
-public class AccountDetailResponse {
+public record AccountDetailResponse(
+        String consumptionDetail,
+        Long consumptionPrice,
+        Long consumptionRemainedAmount,
+        LocalDateTime createTime,
+        String cardName
+) {
 
 }

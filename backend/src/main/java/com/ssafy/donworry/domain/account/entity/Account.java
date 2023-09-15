@@ -1,5 +1,6 @@
 package com.ssafy.donworry.domain.account.entity;
 
+import com.ssafy.donworry.api.controller.account.dto.response.AccountAllResponse;
 import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -38,24 +39,24 @@ public class Account extends BaseEntity {
     private String accountNumber;
 
     @NotNull
-    private Long holdings;
+    private Long accountAmount;
 
     @Builder
-    public Account(Long id, @NotNull Member member, @NotNull Bank bank, @NotNull String accountNumber, @NotNull Long holdings) {
+    public Account(Long id, @NotNull Member member, @NotNull Bank bank, @NotNull String accountNumber, @NotNull Long accountAmount) {
         this.id = id;
         this.member = member;
         this.bank = bank;
         this.accountNumber = accountNumber;
-        this.holdings = holdings;
+        this.accountAmount = accountAmount;
     }
 
 
-    public static Account of(Member member, Bank bank, String accountNumber, Long holdings){
+    public static Account of(Member member, Bank bank, String accountNumber, Long accountAmount){
         return Account.builder()
                 .member(member)
                 .bank(bank)
                 .accountNumber(accountNumber)
-                .holdings(holdings)
+                .accountAmount(accountAmount)
                 .build();
     }
 

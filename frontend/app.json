@@ -15,9 +15,7 @@
       "backgroundColor": "#FFFFFF",
       "barStyle": "dark-content"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -31,8 +29,6 @@
     "web": {
       "favicon": "./src/assets/logo/donLogo.png"
     },
-    "plugins": [
-      "expo-router"
-    ]
+    "plugins": ["expo-router"]
   }
 }
