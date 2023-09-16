@@ -10,15 +10,8 @@ import {
 import MypageImage from './MypageImage';
 import MypageText from './MypageText';
 import MypageButton from './MyPageButton';
-interface clickProps {
-  onClickViewClose: () => void;
-}
-const MypageOpen: React.FC<clickProps> = (props) => {
-  useEffect(() => {
-    setTimeout(() => {
-      props.onClickViewClose();
-    }, 4000);
-  }, []);
+
+const MypageOpen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>000님의 정보</Text>
@@ -32,12 +25,12 @@ const MypageOpen: React.FC<clickProps> = (props) => {
       <View style={styles.info_Button}>
         <MypageButton
           title="수정하기"
-          onPress={() => console.log('ㅎ')}
+          onPress={() => console.log('수정')}
           color="#7777F3"
         />
         <MypageButton
           title="로그아웃"
-          onPress={() => console.log('ㅎ')}
+          onPress={() => console.log('로그아웃')}
           color="#FF0000"
         />
       </View>
