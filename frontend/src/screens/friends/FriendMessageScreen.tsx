@@ -15,8 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 
 interface ScreenProps {
   navigation: {
-    navigate: (screen: string, params?: any) => void;
-    replace: (screen: string, params?: any) => void;
+    goBack: (screen: string, params?: any) => void;
   };
 }
 
@@ -116,7 +115,7 @@ const FriendMessageScreen: React.FC = () => {
           name="arrow-left"
           size={30}
           onPress={() => {
-            navigation.replace('TabNavigation', { screen: 'Friend' });
+            navigation.goBack('TabNavigation', { screen: 'Friend' });
           }}
         />
         <Image source={blackLogo} style={styles.logo} />

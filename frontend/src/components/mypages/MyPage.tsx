@@ -3,22 +3,19 @@ import { View, SafeAreaView, StyleSheet } from 'react-native';
 import MyPageClose from './MyPageClose';
 import MypageOpen from './MypageOpen';
 import MyPageMenu from './MyPageMenu';
+import { useSelector } from 'react-redux';
 
+interface RootState {
+  Modal: {
+    mypageModal: boolean;
+  };
+}
 const MyPage: React.FC = () => {
-  const [clickView, setClickView] = useState(false);
-  function openView() {
-    setClickView(true);
-  }
-  function closeView() {
-    setClickView(false);
-  }
+  const clickView = useSelector((state: RootState) => state.Modal.mypageModal);
+
   return (
     <SafeAreaView style={styles.container}>
-      {clickView ? (
-        <MypageOpen onClickViewClose={closeView} />
-      ) : (
-        <MyPageClose onClickViewOpen={openView} />
-      )}
+      {clickView ? <MypageOpen /> : <MyPageClose />}
       <HorizonLine />
       <MyPageMenu imageName="bell" text="내소식" />
       <MyPageMenu imageName2="piggy-bank" text="계좌선택" />

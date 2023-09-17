@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { setMypageModal } from '../store/Modal';
 
 type DrawerProps = {
   navigation: {
@@ -20,8 +22,10 @@ const screenWidth = Dimensions.get('screen').width;
 
 const ComponentsHeader: React.FC = () => {
   const navigation = useNavigation<DrawerProps['navigation']>();
+  const dispatch = useDispatch();
 
   function handleMenuClick() {
+    dispatch(setMypageModal(false));
     navigation.openDrawer();
   }
 

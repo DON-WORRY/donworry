@@ -8,7 +8,6 @@ import {
   Text,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
 interface InputboxProps {
   placeholder: string;
   value: string;
@@ -28,6 +27,7 @@ interface ScreenProps {
     replace: (screen: string, params?: any) => void;
   };
 }
+
 const Login: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [loginId, setloginId] = useState('');
