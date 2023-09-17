@@ -14,7 +14,7 @@ public record CategoryHistoryResponse(
         @NotNull Long id,
         @NotNull String detail,
         @NotNull String bankName,
-        @NotNull Long amount,
+        @NotNull Long price,
         @NotNull LocalDateTime dateTime
 ) {
 //    public CategoryHistoryResponse(Consumption consumption) {

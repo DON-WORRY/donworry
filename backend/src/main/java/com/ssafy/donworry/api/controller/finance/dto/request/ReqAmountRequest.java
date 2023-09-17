@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 
 public record ReqAmountRequest(
         @NotNull Long memberId,
-        @NotNull Long amount
+        @NotNull Long price
 ) {
 }
