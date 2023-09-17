@@ -25,11 +25,11 @@ public class ConsumptionController {
     @GetMapping("/total/{id}")
     public ApiData<CategoryTotalResponse> searchCategoryTotal(@PathVariable("id") Long memberId) {
         log.info("searchCategoryTotal - memberId : " + memberId);
+        CategoryTotalResponse categoryTotal = financeQueryService.searchCategoryTotal(memberId);
+//        CategoryAmountResponse categoryAmountResponse = new CategoryAmountResponse(10l, 20l, 30l ,40l ,50l, 60l);
+//        CategoryTotalResponse categoryTotalResponse = new CategoryTotalResponse(financeQueryService.searchCategoryTotal(memberId), categoryAmountResponse);
 
-        CategoryAmountResponse categoryAmountResponse = new CategoryAmountResponse(10l, 20l, 30l ,40l ,50l, 60l);
-        CategoryTotalResponse categoryTotalResponse = new CategoryTotalResponse(financeQueryService.searchCategoryTotal(memberId), categoryAmountResponse);
-
-        return ApiData.of(categoryTotalResponse);
+        return ApiData.of(categoryTotal);
     }
 
 

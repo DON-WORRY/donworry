@@ -1,7 +1,9 @@
 package com.ssafy.donworry.domain.finance.repository.query;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.donworry.domain.finance.entity.Consumption;
+import com.ssafy.donworry.domain.finance.entity.ConsumptionCategory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.ssafy.donworry.domain.finance.entity.QConsumption.consumption;
+import static com.ssafy.donworry.domain.finance.entity.QConsumptionCategory.consumptionCategory;
 
 
 @Repository
@@ -17,13 +20,14 @@ import static com.ssafy.donworry.domain.finance.entity.QConsumption.consumption;
 public class ConsumptionQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public Long findTotalByMemberId(Long memberId) {
-        log.info("memberId : " + memberId);
+    public List<Tuple> findTotalByMemberId(Long memberId) {
         return jpaQueryFactory
-                .select(consumption.consumptionPrice.sum())
+                .select(consumption.consumptionCategory.consumptionCategoryName, consumption.consumptionPrice.sum())
                 .from(consumption)
-//                .where(consumption.consumptionCategory.id.eq(1l))
-                .fetchOne();
+                .join(consumption.consumptionCategory, consumptionCategory)
+                .groupBy(consumptionCategory.consumptionCategoryName)
+                .where(consumption.member.id.eq(memberId))
+                .fetch();
 
     }
 }

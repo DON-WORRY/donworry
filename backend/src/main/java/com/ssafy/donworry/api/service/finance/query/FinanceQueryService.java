@@ -1,5 +1,6 @@
 package com.ssafy.donworry.api.service.finance.query;
 
+import com.querydsl.core.Tuple;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
 import com.ssafy.donworry.common.response.ApiError;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -20,14 +22,19 @@ import java.util.Optional;
 public class FinanceQueryService {
     private final MemberRepository memberRepository;
     private final ConsumptionQueryRepository consumptionQueryRepository;
-    public Long searchCategoryTotal(Long memberId) {
+    public CategoryTotalResponse searchCategoryTotal(Long memberId) {
         Optional<Member> findMember = memberRepository.findById(memberId);
         if(findMember.isEmpty()) {
-            log.info("why?");
             return null;
             // TODO: 2023-09-17 (017) 예외 처리
         }
-        return consumptionQueryRepository.findTotalByMemberId(memberId);
+        List<Tuple> list = consumptionQueryRepository.findTotalByMemberId(memberId);
+//        CategoryAmountResponse categoryAmount = new
+        for(Tuple t: list) {
+            log.info("1" + t.get(0, Long.class));
+            log.info("2" + t.get(1, Long.class));
+        }
+        return null;
 
     }
 }
