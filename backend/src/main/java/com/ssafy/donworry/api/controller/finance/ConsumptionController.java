@@ -20,6 +20,7 @@ import java.util.List;
 @RequestMapping("/api/consumption")
 @RequiredArgsConstructor
 public class ConsumptionController {
+    //test
     private final FinanceQueryService financeQueryService;
     @Operation(summary = "카테고리별 소비합계 조회", description = "각 카테고리별 소비합계를 조회하는 API입니다.")
     @GetMapping("/total/{id}")
