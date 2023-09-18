@@ -23,11 +23,6 @@ public class FinanceQueryService {
     private final MemberRepository memberRepository;
     private final ConsumptionQueryRepository consumptionQueryRepository;
     public CategoryTotalResponse searchCategoryTotal(Long memberId) {
-        Optional<Member> findMember = memberRepository.findById(memberId);
-        if(findMember.isEmpty()) {
-            return null;
-            // TODO: 2023-09-17 (017) 예외 처리
-        }
         List<Tuple> list = consumptionQueryRepository.findTotalByMemberId(memberId);
 //        CategoryAmountResponse categoryAmount = new
         String s = list.get(0).get(0, String.class);
