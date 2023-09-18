@@ -1,14 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Dimensions,
-  StyleSheet,
-  Image,
-  ScrollView,
-} from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import { View, Text, Dimensions, StyleSheet, ScrollView } from 'react-native';
+import BackHeader from '../../components/BackHeader';
 import FriendRequest from '../../components/friends/FriendRequest';
 import FriendResponse from '../../components/friends/FriendResponse';
 import { useNavigation } from '@react-navigation/native';
@@ -106,20 +98,9 @@ const responseData = [
 ];
 
 const FriendMessageScreen: React.FC = () => {
-  const blackLogo = require('../../assets/logo/BlackLogo.png');
-  const navigation = useNavigation<ScreenProps['navigation']>();
   return (
     <View style={styles.container}>
-      <View style={styles.headerBox}>
-        <MaterialCommunityIcons
-          name="arrow-left"
-          size={30}
-          onPress={() => {
-            navigation.goBack('TabNavigation', { screen: 'Friend' });
-          }}
-        />
-        <Image source={blackLogo} style={styles.logo} />
-      </View>
+      <BackHeader screen="Friend" />
       <View>
         <Text style={styles.headerText}>친구 요청 및 수신</Text>
       </View>
@@ -162,7 +143,6 @@ const FriendMessageScreen: React.FC = () => {
   );
 };
 
-const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
 
 const styles = StyleSheet.create({
@@ -171,16 +151,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     backgroundColor: 'light-gray',
-  },
-  logo: {
-    height: 40,
-    width: 40,
-  },
-  headerBox: {
-    height: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: screenWidth - 40,
   },
   headerText: {
     fontSize: 24,
