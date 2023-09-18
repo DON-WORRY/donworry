@@ -49,17 +49,20 @@ public class EmailQueryService {
     }
 
     private String createAuthCode() {
-        int lenth = 6;
-        try {
-            Random random = SecureRandom.getInstanceStrong();
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < lenth; i++) {
-                builder.append(random.nextInt(10));
-            }
-            return builder.toString();
-        } catch (NoSuchAlgorithmException e) {
-            log.debug("랜덤 값 생성 실패");
-            throw new InvalidValueException(ErrorCode.INVALID_INPUT_VALUE);
+        int length = 6;
+        final int leftLimit = 48;
+        // 소문자 'z'
+        final int rightLimit = 122;
+
+        Random random = new Random();
+        try{
+            return random.ints(leftLimit, rightLimit + 1)
+                    .filter(x -> (x <= 57 || x >= 65) && (x <= 90 || x >= 97))
+                    .limit(length)
+                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                    .toString();
+        } catch(InvalidValueException e){
+            throw new InvalidValueException(ErrorCode.RANDOM_CODE_ERROR);
         }
     }
 
