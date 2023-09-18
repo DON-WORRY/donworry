@@ -1,7 +1,7 @@
 package com.ssafy.donworry.api.controller.account;
 
 import com.ssafy.donworry.api.controller.account.dto.response.AccountAllResponse;
-import com.ssafy.donworry.api.controller.account.dto.response.AccountDetailResponse;
+import com.ssafy.donworry.api.controller.account.dto.response.AccountHistoryResponse;
 import com.ssafy.donworry.api.controller.account.dto.response.StatisticsResponse;
 import com.ssafy.donworry.api.service.account.AccountService;
 import com.ssafy.donworry.api.service.account.query.AccountQueryService;
@@ -36,9 +36,10 @@ public class AccountController {
     }
     @Operation(summary = "계좌 거래내역", description = "계좌별 거래내역을 불러오는 API입니다.")
     @GetMapping("/{account_id}")
-    public ApiData<List<AccountDetailResponse>> searchAccount(@PathVariable("account_id") Long memberId) {
-        log.info("searchAccount - memberId : "+ memberId);
-        List<AccountDetailResponse> list = null;
+    public ApiData<AccountHistoryResponse> searchAccount(@PathVariable("account_id") Long accountId) {
+        log.info("searchAccount - memberId : "+ accountId);
+        AccountHistoryResponse list = accountQueryService.searchAccountDetailList(accountId);
+
         return ApiData.of(list);
     }
 
