@@ -50,6 +50,7 @@ const SignupScreen: React.FC = () => {
       <SignupHeader />
       <SignupMiddleInput
         setEmail={setEmail}
+        email={email}
         setPassword={setPassword}
         setCheckPassword={setCheckPassword}
         setIsCertificated={setIsCertificated}

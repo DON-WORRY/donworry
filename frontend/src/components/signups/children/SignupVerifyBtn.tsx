@@ -1,20 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { userEmailCheck } from '../../../utils/UserFunctions';
 
 interface SignupVerifyBtnProps {
   setIsActive: (isActive: boolean) => void;
   setIsCertificated: (isCertificated: boolean) => void;
-  issuedNumber: number;
-  certificationNumber: number;
+  certificationNumber: string;
+  email: string;
 }
 
 const SignupVerifyBtn: React.FC<SignupVerifyBtnProps> = (props) => {
   function handleVerify() {
     props.setIsActive(false);
-    // 발급받은 숫자랑 현재 숫자가 같으면
-    if (props.issuedNumber === props.certificationNumber) {
-      // 버튼도 둘 다 비활성화 되어야 함
+    console.log(props.email)
+    console.log(props.certificationNumber)
+    const emailCheckData = {
+      email: props.email,
+      authCode: props.certificationNumber,
     }
+    userEmailCheck(emailCheckData).then((res) => {
+      console.log("ok")
+      // 유효하기 때문에 이메일 인증 버튼 비활성화
+    }).catch((e) => {
+      console.log("error")
+      // 유효하지 않기 때문에 확인을 요구하는 모달이나 alert실행
+    })
     props.setIsCertificated(true);
   }
 

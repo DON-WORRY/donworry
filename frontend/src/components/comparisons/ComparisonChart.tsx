@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import {
   VictoryChart,
   VictoryLine,
@@ -9,16 +9,39 @@ import {
   VictoryArea,
 } from 'victory-native';
 
+const screenWidth = Dimensions.get('screen').width;
+
 const RadarChartExample: React.FC = () => {
-  const adjustLabelPosition = (angle: number, distance: number) => {
-    // 각도를 라디안으로 변환합니다.
-    const radians = (angle / 180) * Math.PI;
-
-    // 각도에 따라 x와 y 방향으로 이동할 값을 계산합니다.
-    const dx = 20 * Math.cos(radians);
-    const dy = 20 * Math.sin(radians);
-
-    return { dx, dy };
+  const adjustLabelPosition = (
+    x: number | undefined,
+    y: number | undefined,
+    distance: number,
+  ) => {
+    const centerX = screenWidth / 2;
+    const centerY = 175;
+    if (x != undefined) {
+      const tmp = centerX - x
+      if (-10 < tmp && tmp < 10) {
+        if (y != undefined) {
+          if (y > centerY) {
+            return { dx: 0, dy: distance };
+          } else {
+            return { dx: 0, dy: -distance };
+          }
+        }
+      } else if (x > centerX && y != undefined && y > centerY) {
+        return { dx: distance / 2, dy: distance / 2 };
+      } else if (x < centerX && y != undefined && y > centerY) {
+        return { dx: -distance / 2, dy: distance / 2 };
+      } else if (x < centerX && y != undefined && y < centerY) {
+        return { dx: -distance / 2, dy: -distance / 2 };
+      } else if (x > centerX && y != undefined && y < centerY) {
+        return { dx: distance / 2, dy: -distance / 2 };
+      } else {
+        return { dx: 0, dy: 0 };
+      }
+    }
+    return { dx: 0, dy: 0 };
   };
 
   const data = [
@@ -40,13 +63,15 @@ const RadarChartExample: React.FC = () => {
   ];
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={styles.container}>
       <VictoryChart
         polar
         theme={VictoryTheme.material}
         domain={{ y: [0, 5] }}
         startAngle={30}
         endAngle={390}
+        // height={screenWidth * 0.9}
+        // width={screenWidth * 0.9}
       >
         <VictoryPolarAxis
           dependentAxis
@@ -71,9 +96,9 @@ const RadarChartExample: React.FC = () => {
           }}
           tickLabelComponent={
             <VictoryLabel
-              style={[{ fontSize: 25 }]}
-              dx={(d) => adjustLabelPosition(d.angle, 20).dx}
-              dy={(d) => adjustLabelPosition(d.angle, 20).dy}
+              style={[{ fontSize: 16 }]}
+              dx={(d) => adjustLabelPosition(d.x, d.y, 20).dx}
+              dy={(d) => adjustLabelPosition(d.x, d.y, 20).dy}
             />
           }
         />
@@ -107,5 +132,14 @@ const RadarChartExample: React.FC = () => {
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height : screenWidth * 0.9,
+    width : screenWidth * 0.9,
+  },
+});
 
 export default RadarChartExample;

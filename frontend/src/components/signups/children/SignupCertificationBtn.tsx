@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { userEmailJoin} from '../../../utils/UserFunctions';
 
 interface SignupCertificationBtnProps {
   setIsActive: (isActive: boolean) => void;
   isActive: boolean;
   setMinutes: (minutes: number) => void;
   setSeconds: (seconds: number) => void;
-  setIssuedNumber: (issuedNumber: number) => void
+  email: string;
 }
 
 const SignupCertificationBtn: React.FC<SignupCertificationBtnProps> = (
@@ -16,12 +17,20 @@ const SignupCertificationBtn: React.FC<SignupCertificationBtnProps> = (
   function handleCertification() {
     props.setIsActive(true);
     setButtonText('재발급');
+    userEmailJoin(props.email)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+        throw e;
+      });
 
     // 발급 실행
-    props.setIssuedNumber(1010)
+    // props.setIssuedNumber(1010);
 
     if (props.isActive) {
-      props.setMinutes(3);
+      props.setMinutes(30);
       props.setSeconds(0);
     }
   }

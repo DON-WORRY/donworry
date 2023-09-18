@@ -15,16 +15,16 @@ interface SignupMiddleInputProps {
   setPassword: (password: string) => void;
   setCheckPassword: (checkPassword: string) => void;
   setIsCertificated: (isCertificated: boolean) => void;
+  email: string;
 }
 
 const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
-  const [minutes, setMinutes] = useState(3);
+  const [minutes, setMinutes] = useState(30);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   // 발급받은 번호
-  const [issuedNumber, setIssuedNumber] = useState(0);
   // 입력한 번호
-  const [certificationNumber, setCertificationNumber] = useState(0);
+  const [certificationNumber, setCertificationNumber] = useState("");
 
   useEffect(() => {
     if (isActive) {
@@ -36,7 +36,7 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
           setSeconds(59);
         } else {
           setIsActive(false);
-          setMinutes(3);
+          setMinutes(30);
           setSeconds(0);
           clearInterval(interval);
         }
@@ -60,28 +60,21 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
           setIsActive={setIsActive}
           isActive={isActive}
           setMinutes={setMinutes}
-          setIssuedNumber={setIssuedNumber}
+          email={props.email}
         />
       </View>
       <View style={[styles.input, styles.inputSecond]}>
         <TextInput
-          keyboardType="numeric" // 숫자 키보드 설정
           placeholder={isActive ? `인증번호 ${minutes}:${seconds}` : '인증번호'}
           onChangeText={(text) => {
-            const number = parseInt(text, 10); // 문자열을 숫자로 변환
-            if (!isNaN(number)) {
-              // 변환된 값이 숫자인지 확인
-              setCertificationNumber(number);
-            } else {
-              setCertificationNumber(0); // 또는 다른 기본 값
-            }
+            setCertificationNumber(text)
           }}
         />
         <SignupVerifyBtn
           setIsActive={setIsActive}
           setIsCertificated={props.setIsCertificated}
-          issuedNumber={issuedNumber}
           certificationNumber={certificationNumber}
+          email={props.email}
         />
       </View>
 

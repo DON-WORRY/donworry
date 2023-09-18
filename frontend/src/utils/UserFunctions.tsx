@@ -12,8 +12,8 @@ import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
   */
 // 회원가입 data
 type SignupData = {
-  memberEmail: string;
   memberName: string;
+  memberEmail: string;
   memberPassword: string;
   memberGender: string;
   memberBirthDate: string;
@@ -21,8 +21,13 @@ type SignupData = {
 
 // 로그인 params
 type LoginData = {
+  memberEmail: string;
+  memberPassword: string;
+};
+
+type EmailCheckData = {
   email: string;
-  password: string;
+  authCode: string;
 };
 
 // 토큰 저장하기
@@ -37,7 +42,7 @@ const storeData = async (key: string, value: string) => {
 // 회원가입
 export function userSignup(data: SignupData): Promise<void> {
   return axiosWithoutAuth
-    .post('/api/members/join', { data: data })
+    .post('/api/members/join', data)
     .then((r) => {
       console.log(r);
     })
@@ -67,13 +72,13 @@ export function userSignup(data: SignupData): Promise<void> {
 // }
 
 export function userLogin(data: LoginData): Promise<void> {
-  return axiosWithAuth
-    .post('/api/user/login', { data: data })
+  return axiosWithoutAuth
+    .post('/api/members/login', data)
     .then((response) => {
       console.log(response);
 
-      const refreshToken = response.data.refreshToken;
-      const memberId = response.data.memberId;
+      const refreshToken = response.data.data.refreshToken;
+      const memberId = response.data.data.memberId.toString();
 
       storeData('refreshToken', refreshToken);
       storeData('memberId', memberId);
@@ -115,6 +120,33 @@ export function userFindPassword(): Promise<void> {
 export function userLogout(): Promise<void> {
   return axiosWithAuth
     .get('/api/user/logout')
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
+}
+
+// Email Api
+// 이메일 인증번호 발송
+export function userEmailJoin(email: string): Promise<void> {
+  return axiosWithoutAuth
+    .post(`/api/emails/join?email=${email}`)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
+}
+
+// 이메일 인증번호 유효성 검증
+export function userEmailCheck(data: EmailCheckData): Promise<void> {
+  return axiosWithoutAuth
+    .post('/api/emails/check', data)
     .then((res) => {
       console.log(res);
     })

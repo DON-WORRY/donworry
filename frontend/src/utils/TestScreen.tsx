@@ -62,25 +62,29 @@ import {
   notificationDelete,
 } from './NotificationFunctions';
 
-const sampleSignup = {
-  email: 'test@naver.com',
-  password: '123123',
-  name: 'Lee',
-};
 
 const TestScreen: React.FC = () => {
   // 함수 실행
   // 회원가입 => 로그인 => 함수 => 회원탈퇴 순서
   /*
   {
-  "memberName": "string",
-  "memberEmail": "string",
-  "memberPassword": "pL?5ONLg0L#",
-  "memberGender": "MALE",
-  "memberBirthDate": "2023-09-15"
+    "memberName": "string",
+    "memberEmail": "string",
+    "memberPassword": "pL?5ONLg0L#",
+    "memberGender": "MALE",
+    "memberBirthDate": "2023-09-15"
   } 
+
+  {
+  "memberEmail": "string",
+  "memberPassword": "string"
+}
   */
-  const dataSignup = {
+ const dataLogin = {
+  memberEmail: 'ga1754@naver.com',
+  memberPassword: '12341234',
+ };
+ const dataSignup = {
     memberEmail: 'ga1754@naver.com',
     memberName: '홍길동',
     memberPassword: '12341234',
@@ -93,29 +97,25 @@ const TestScreen: React.FC = () => {
     <View>
       <TouchableOpacity
         style={styles.container}
+        // onPress={() => {
+        //   userSignup(dataSignup)
+        //     .then((res) => {
+        //       console.log(res);
+        //     })
+        //     .catch((error) => {
+        //       console.log(error)
+        //       console.error('Signup error:', error);
+        //     });
+        // }}
         onPress={() => {
-          userSignup(dataSignup)
+          userLogin(dataLogin)
             .then((res) => {
               console.log(res);
             })
             .catch((error) => {
               console.log(error)
-              console.error('Signup error:', error);
+              console.error('Login error:', error);
             });
-        }}
-      >
-        <Text>함수 실행</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity
-        style={styles.container}
-        onPress={() => {
-          axios.get("https://j9c210.p.ssafy.io/api/members/join", {data: dataSignup})
-          .then((res) => {console.log(res)})
-          .catch((e) => {
-            console.error(e)
-
-          })
         }}
       >
         <Text>함수 실행</Text>
