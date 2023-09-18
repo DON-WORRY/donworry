@@ -1,0 +1,44 @@
+package com.ssafy.donworry.common.error;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum ErrorCode {
+
+    // Common
+    INVALID_INPUT_VALUE(400, "C001", "올바르지 않은 입력 입니다."),
+    INVALID_TYPE_VALUE(400, "C002", "값 형식이 올바르지 않습니다."),
+    ENTITY_NOT_FOUND(400, "C003", "해당 엔티티를 찾지 못했습니다."),
+    INTERNAL_SERVER_ERROR(500, "C004", "서버에 접근이 불가능합니다."),
+    HANDLE_ACCESS_DENIED(403, "C005", "접근이 거부되었습니다."),
+    
+    // Member
+    MEMBER_NOT_FOUND(400, "M001", "회원을 찾지 못했습니다."),
+    MEMBER_DUPLICATE(400, "M002", "중복된 회원입니다."),
+    MEMBER_SAVE_ERROR(400, "M003", "회원등록에 실패하였습니다."),
+    PASSWORD_NOT_MATCH(400, "M004", "비밀번호가 일치하지 않습니다."),
+
+    // Email
+    RANDOM_CODE_ERROR(400, "E001", "이메일 인증 코드 만들기에 실패했습니다."),
+    EMAIL_FORM_ERROR(400, "E002", "이메일 양식 만들기에 실패하였습니다."),
+    EMAIL_NOT_FOUND(400, "E003", "이메일을 찾지 못했습니다."),
+    AUTH_CODE_ERROR(400, "E004", "인증번호가 일치하지 않습니다"),
+
+    // Token
+    INVALID_TOKEN(401, "T001", "올바르지 않은 토큰입니다!"),
+    NOT_FOUND_TOKEN(400, "T002", "일치하는 토큰을 찾지 못했습니다!"),
+
+    // Mission
+    NOTMATCH_MISSION_ID(400, "MI001", "존재하지 않는 미션입니다!"),
+
+    // File
+    INVALID_FILE(400, "F001", "업로드 할 수 없는 파일입니다!");
+
+    private final int status;
+    private final String code;
+    private final String message;
+
+
+}
