@@ -26,17 +26,18 @@ public class CardCompany extends BaseEntity {
 
     @NotNull
     @Size(max = 30)
-    private String company;
+    private String cardCompanyName;
 
     @NotNull
     @Size(max = 10)
-    private String companyCode;
+    private String cardCompanyCode;
 
 
     @Builder
-    public CardCompany(Long id, @NotNull String company, @NotNull String companyCode) {
+
+    public CardCompany(Long id, @NotNull String cardCompanyName, @NotNull String cardCompanyCode) {
         this.id = id;
-        this.company = company;
-        this.companyCode = companyCode;
+        this.cardCompanyName = cardCompanyName;
+        this.cardCompanyCode = cardCompanyCode;
     }
 }

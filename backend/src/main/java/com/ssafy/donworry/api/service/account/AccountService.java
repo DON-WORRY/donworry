@@ -12,6 +12,10 @@ import com.ssafy.donworry.domain.account.repository.AccountRepository;
 import com.ssafy.donworry.domain.account.repository.BankRepository;
 import com.ssafy.donworry.domain.account.repository.CardCompanyRepository;
 import com.ssafy.donworry.domain.account.repository.CardRepository;
+import com.ssafy.donworry.domain.finance.entity.Consumption;
+import com.ssafy.donworry.domain.finance.entity.ConsumptionCategory;
+import com.ssafy.donworry.domain.finance.repository.ConsumptionCategoryRepository;
+import com.ssafy.donworry.domain.finance.repository.ConsumptionRepository;
 import com.ssafy.donworry.domain.member.entity.Member;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +24,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -36,6 +42,8 @@ public class AccountService {
     private final CardRepository cardRepository;
     private final CardCompanyRepository cardCompanyRepository;
     private final StoreDataUtil storeDataUtil;
+    private final ConsumptionCategoryRepository consumptionCategoryRepository;
+    private final ConsumptionRepository consumptionRepository;
 
     public void createMemberInitAccount(Long memberId) {
 
@@ -62,11 +70,45 @@ public class AccountService {
     }
 
     public void createMemberInitConsumption(Long memberId, Long accountId, Long cardId){
-        StoreDataUtil.RandomConsumption randomConsumption = storeDataUtil.randomStoreName();
-        System.out.println(randomConsumption.toString());
-        System.out.println("===========출력==============");
+        LocalDateTime nowTime = LocalDateTime.now();
+        LocalDateTime history = LocalDateTime.now().minusMonths(2);
+
+        while(history.isBefore(nowTime)){
+
+            StoreDataUtil.RandomConsumption randomConsumption = storeDataUtil.randomStoreName();
+            String consumptionDetail = randomConsumption.getValue();
+            Long consumptionPrice = randomInitHolding() % 100000;
+            if(consumptionPrice == 0) consumptionPrice = 43000L;
+
+            Account account = accountRepository.findById(accountId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 계좌정보 입니다."));
+            Long consumptionRemainedAmount = account.getAccountAmount() - consumptionPrice;
+            Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원정보 입니다."));
+            Card card = cardRepository.findById(cardId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 카드정보입니다."));
+            ConsumptionCategory consumptionCategory = consumptionCategoryRepository.findById(Long.valueOf(randomConsumption.getI())).orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리 항목입니다."));
+
+            if(consumptionRemainedAmount > consumptionPrice) {
+                System.out.print("Month() = " + history.getMonth());
+                System.out.print("DayOfMonth() = " + history.getDayOfMonth());
+                System.out.print("Hour() = " + history.getHour());
+                System.out.println("Minute() = " + history.getMinute());
+                System.out.println("history.toString() = " + history.toString());
+                Consumption consumption = Consumption.of(consumptionDetail, consumptionPrice, consumptionRemainedAmount, member, account, null, card, consumptionCategory);
+                System.out.println("consumption.toString() = " + consumption.toString());
+                consumptionRepository.save(consumption);
+                consumption.update(history, history);
+
+            }
+            history = history.plusHours(randomTime());
+            history = history.plusMinutes(randomTime()* 10 + randomTime());
+            while (history.getHour() < 8) history = history.plusHours(randomTime());
+        }
     }
 
+    public int randomTime(){
+        Random random = new Random();
+        int i = random.nextInt(6) + 1;
+        return i;
+    }
 
     private Long randomBankId() {
         Random random = new Random();
