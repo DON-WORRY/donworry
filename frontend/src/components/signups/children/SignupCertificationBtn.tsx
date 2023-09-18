@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { userEmailJoin} from '../../../utils/UserFunctions';
+import { userEmailJoin } from '../../../utils/UserFunctions';
 
 interface SignupCertificationBtnProps {
   setIsActive: (isActive: boolean) => void;
@@ -14,25 +14,22 @@ const SignupCertificationBtn: React.FC<SignupCertificationBtnProps> = (
   props
 ) => {
   const [buttonText, setButtonText] = useState('인증');
+
   function handleCertification() {
-    props.setIsActive(true);
-    setButtonText('재발급');
     userEmailJoin(props.email)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        props.setIsActive(true);
+        setButtonText('재발급');
+        // 발급 실행
+        // props.setIssuedNumber(1010);
+        if (props.isActive) {
+          props.setMinutes(30);
+          props.setSeconds(0);
+        }
       })
-      .catch((e) => {
-        console.log(e);
-        throw e;
+      .catch(() => {
+        return alert('이메일을 작성해주세요.');
       });
-
-    // 발급 실행
-    // props.setIssuedNumber(1010);
-
-    if (props.isActive) {
-      props.setMinutes(30);
-      props.setSeconds(0);
-    }
   }
   return (
     <TouchableOpacity style={styles.button} onPress={handleCertification}>

@@ -24,7 +24,12 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
   const [isActive, setIsActive] = useState(false);
   // 발급받은 번호
   // 입력한 번호
-  const [certificationNumber, setCertificationNumber] = useState("");
+  const [certificationNumber, setCertificationNumber] = useState('');
+
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isCheckFocused, setIsCheckFocused] = useState(false);
+  const [isCertifyFocused, setIsCertifyFocused] = useState(false);
 
   useEffect(() => {
     if (isActive) {
@@ -48,12 +53,32 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
 
   return (
     <KeyboardAvoidingView>
-      <View style={[styles.input, styles.inputFirst]}>
+      <View
+        style={[
+          styles.input,
+          styles.inputFirst,
+          isEmailFocused ? styles.isFocused : null,
+        ]}
+      >
         <TextInput
+          style={[
+            styles.innerText,
+            isEmailFocused ? styles.innerFocusedText : null,
+          ]}
           placeholder="이메일"
           onChangeText={(text) => {
             props.setEmail(text);
           }}
+          inputMode="email"
+          onFocus={() => {
+            setIsEmailFocused(true);
+          }}
+          onBlur={() => {
+            setIsEmailFocused(false);
+          }}
+          placeholderTextColor={
+            isEmailFocused ? '#7777F3' : 'rgb(156, 156, 156)'
+          }
         />
         <SignupCertificationBtn
           setSeconds={setSeconds}
@@ -63,12 +88,31 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
           email={props.email}
         />
       </View>
-      <View style={[styles.input, styles.inputSecond]}>
+      <View
+        style={[
+          styles.input,
+          styles.inputSecond,
+          isCertifyFocused ? styles.isFocused : null,
+        ]}
+      >
         <TextInput
+          style={[
+            styles.innerText,
+            isCertifyFocused ? styles.innerFocusedText : null,
+          ]}
           placeholder={isActive ? `인증번호 ${minutes}:${seconds}` : '인증번호'}
           onChangeText={(text) => {
-            setCertificationNumber(text)
+            setCertificationNumber(text);
           }}
+          onFocus={() => {
+            setIsCertifyFocused(true);
+          }}
+          onBlur={() => {
+            setIsCertifyFocused(false);
+          }}
+          placeholderTextColor={
+            isCertifyFocused ? '#7777F3' : 'rgb(156, 156, 156)'
+          }
         />
         <SignupVerifyBtn
           setIsActive={setIsActive}
@@ -79,18 +123,42 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
       </View>
 
       <TextInput
-        style={[styles.input, styles.inputThird]}
+        style={[
+          styles.input,
+          styles.inputThird,
+          isPasswordFocused ? styles.isFocused : null,
+        ]}
         placeholder="비밀번호"
         onChangeText={(text) => {
           props.setPassword(text);
         }}
+        onFocus={() => {
+          setIsPasswordFocused(true);
+        }}
+        onBlur={() => {
+          setIsPasswordFocused(false);
+        }}
+        placeholderTextColor={
+          isPasswordFocused ? '#7777F3' : 'rgb(156, 156, 156)'
+        }
       />
       <TextInput
-        style={[styles.input, styles.inputFourth]}
+        style={[
+          styles.input,
+          styles.inputFourth,
+          isCheckFocused ? styles.isFocused : null,
+        ]}
         placeholder="비밀번호 재확인"
         onChangeText={(text) => {
           props.setCheckPassword(text);
         }}
+        onFocus={() => {
+          setIsCheckFocused(true);
+        }}
+        onBlur={() => {
+          setIsCheckFocused(false);
+        }}
+        placeholderTextColor={isCheckFocused ? '#7777F3' : 'rgb(156, 156, 156)'}
       />
     </KeyboardAvoidingView>
   );
@@ -114,19 +182,36 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     marginTop: 10,
+    borderBottomWidth: 0.5,
   },
   inputSecond: {
-    borderTopWidth: 1,
+    borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
   },
   inputThird: {
-    borderTopWidth: 1,
+    borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
   },
   inputFourth: {
-    borderTopWidth: 1,
+    borderTopWidth: 0.5,
     borderBottomWidth: 1,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     marginBottom: 20,
+  },
+  innerText: {
+    width: screenWidth * 0.57,
+  },
+  isFocused: {
+    borderColor: '#7777F3',
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderLeftWidth: 2,
+    borderRightWidth: 2,
+    fontWeight: 'bold',
+  },
+  innerFocusedText: {
+    fontWeight: 'bold',
   },
 });
 export default SignupMiddleInput;
