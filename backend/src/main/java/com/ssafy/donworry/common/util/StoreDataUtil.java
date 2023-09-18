@@ -9,7 +9,7 @@ import java.util.Random;
 @Component
 
 public class StoreDataUtil {
-    // 교통, 생활, 식비, 쇼핑,
+    // 교통, 생활, 식비, 쇼핑,여가
     String[][] data = {{
             "대한교통공사", "한국교통공사", "서울교통공사", "타다", "고속버스",
             "티웨이항공", "아시아나항공", "대한항공", "카카오택시", "롯데렌터카",
@@ -90,9 +90,9 @@ public class StoreDataUtil {
 
     public RandomConsumption randomStoreName() {
         Random random = new Random();
-        int i = random.nextInt(5);
-        int j = random.nextInt(data[i].length);
-        return new RandomConsumption(i, data[i][j]);
+        int i = random.nextInt(5)+1; // 1~5의 난수
+        int j = random.nextInt(data[i-1].length); //
+        return new RandomConsumption(i, data[i-1][j]);
     }
     @Getter
     @ToString
