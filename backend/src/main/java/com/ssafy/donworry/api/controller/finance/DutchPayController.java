@@ -42,7 +42,7 @@ public class DutchPayController {
 
     @Operation(summary = "더치페이 완료", description = "더치페이에서 한 멤버의 상태를 완료할 수 있는 API입니다.")
     @PutMapping("/complete/{id}")
-    public ApiData<Long> completeDutchpay(@PathVariable("id") Long dutchpayId,
+    public ApiData<Long> completePersonDutchpay(@PathVariable("id") Long dutchpayId,
                                           @RequestParam Long memberId){
         log.info("completeDutchpay1 : " + memberId);
         return null;

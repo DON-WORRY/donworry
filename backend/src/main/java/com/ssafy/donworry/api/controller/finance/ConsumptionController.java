@@ -4,6 +4,7 @@ import com.ssafy.donworry.api.controller.finance.dto.request.CategoryModifyReque
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
+import com.ssafy.donworry.api.service.finance.query.FinanceQueryService;
 import com.ssafy.donworry.common.response.ApiData;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +20,18 @@ import java.util.List;
 @RequestMapping("/api/consumption")
 @RequiredArgsConstructor
 public class ConsumptionController {
-
+    private final FinanceQueryService financeQueryService;
     @Operation(summary = "카테고리별 소비합계 조회", description = "각 카테고리별 소비합계를 조회하는 API입니다.")
     @GetMapping("/total/{id}")
     public ApiData<CategoryTotalResponse> searchCategoryTotal(@PathVariable("id") Long memberId) {
         log.info("searchCategoryTotal - memberId : " + memberId);
+        CategoryTotalResponse categoryTotal = financeQueryService.searchCategoryTotal(memberId);
+//        CategoryAmountResponse categoryAmountResponse = new CategoryAmountResponse(10l, 20l, 30l ,40l ,50l, 60l);
+//        CategoryTotalResponse categoryTotalResponse = new CategoryTotalResponse(financeQueryService.searchCategoryTotal(memberId), categoryAmountResponse);
 
-        CategoryAmountResponse categoryAmountResponse = new CategoryAmountResponse(10l, 20l, 30l ,40l ,50l, 60l);
-        CategoryTotalResponse categoryTotalResponse = new CategoryTotalResponse(3l, categoryAmountResponse);
-
-        return ApiData.of(categoryTotalResponse);
+        return ApiData.of(categoryTotal);
     }
+
 
     @Operation(summary = "카테고리별 소비내역 조회", description = "각 카테고리별 소비내역을 조회하는 API입니다.")
     @GetMapping("/history/{id}")
