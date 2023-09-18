@@ -27,6 +27,8 @@ import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
+import static com.ssafy.donworry.domain.account.entity.QAccount.account;
+
 @Slf4j
 @Service
 @Transactional
@@ -43,16 +45,21 @@ public class AccountService {
     private final ConsumptionRepository consumptionRepository;
 
     public void createMemberInitAccount(Long memberId) {
-
-        Bank bank = bankRepository.findById(randomBankId())
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 은행입니다."));
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
-        String accountNumber = randomAccountNumber();
-        Account account = Account.of(member, bank, accountNumber, randomInitHolding());
-        accountRepository.save(account);
-        Long accountId = account.getId();
-        createMemberInitCard(member.getId(), account.getId());
+
+        for(int i = 0; i < 3; i++){
+            Bank bank = bankRepository.findById(randomBankId())
+                    .orElseThrow(() -> new NoSuchElementException("존재하지 않는 은행입니다."));
+            String accountNumber = randomAccountNumber();
+            while(accountRepository.findByAccountNumber(accountNumber) != null){
+                accountNumber = randomAccountNumber();
+            }
+            Account account = Account.of(member, bank, accountNumber, randomInitHolding());
+            accountRepository.save(account);
+            Long accountId = account.getId();
+            createMemberInitCard(member.getId(), account.getId());
+        }
     }
 
     public void createMemberInitCard(Long memberId, Long accountId) {

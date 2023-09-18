@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface AccountRepository  extends JpaRepository<Account, Long>{
 
-    Long findByAccountNumber(String accountNumber);
+    Account findByAccountNumber(String accountNumber);
 
-    boolean existsByAccountNumber(String string);
+    boolean existsByAccountNumber(String accountNumber);
 
 }
