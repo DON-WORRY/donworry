@@ -30,10 +30,13 @@ public class FinanceQueryService {
         }
         List<Tuple> list = consumptionQueryRepository.findTotalByMemberId(memberId);
 //        CategoryAmountResponse categoryAmount = new
+        String s = list.get(0).get(0, String.class);
+        log.info("스트링 : " + s);
         for(Tuple t: list) {
-            log.info("1" + t.get(0, Long.class));
-            log.info("2" + t.get(1, Long.class));
+            log.info("카테고리 : " + t.get(0, Long.class));
+            log.info("합계 : " + t.get(1, Long.class));
         }
+
         return null;
 
     }
