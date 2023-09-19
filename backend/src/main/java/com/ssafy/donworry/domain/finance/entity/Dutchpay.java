@@ -4,19 +4,17 @@ import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 import com.ssafy.donworry.domain.member.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.*;
-import static lombok.AccessLevel.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class DutchPay {
+public class Dutchpay {
     @Id
     @Column(name = "dutchpay_id")
     @GeneratedValue(strategy = IDENTITY)

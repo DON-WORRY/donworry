@@ -18,9 +18,9 @@ import static com.ssafy.donworry.domain.finance.entity.QConsumptionCategory.cons
 public class ConsumptionQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<Tuple> findTotalByMemberId(Long memberId) {
+    public List<Tuple> findConsumptionByMemberId(Long memberId) {
         return jpaQueryFactory
-                .select(consumption.consumptionCategory.consumptionCategoryName, consumption.consumptionPrice.sum())
+                .select(consumptionCategory.consumptionCategoryName, consumption.consumptionPrice.sum())
                 .from(consumption)
                 .join(consumption.consumptionCategory, consumptionCategory)
                 .groupBy(consumptionCategory.consumptionCategoryName)

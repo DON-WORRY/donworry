@@ -4,7 +4,7 @@ import com.ssafy.donworry.api.service.member.request.MemberJoinServiceRequest;
 import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.finance.entity.Consumption;
-import com.ssafy.donworry.domain.finance.entity.DutchPay;
+import com.ssafy.donworry.domain.finance.entity.Dutchpay;
 import com.ssafy.donworry.domain.finance.entity.Income;
 import com.ssafy.donworry.domain.member.entity.enums.MemberActivateStatus;
 import com.ssafy.donworry.domain.member.entity.enums.MemberGender;
@@ -89,7 +89,7 @@ public class Member extends BaseEntity {
     private List<Notification> notificationSenders;
 
     @OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
-    private List<DutchPay> dutchPays;
+    private List<Dutchpay> dutchpays;
 
     @OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
     private List<Income> incomes;
@@ -101,7 +101,7 @@ public class Member extends BaseEntity {
     private List<Account> accounts;
 
     @Builder
-    public Member(Long id, String memberName, String memberEmail, String memberPassword, MemberGender memberGender, MemberRole memberRole, MemberActivateStatus memberActivateStatus, LocalDate memberBirthDate, ProfileImage profileImage, List<Goal> goals, List<FriendRelationship> relationshipReceivers, List<FriendRelationship> relationshipSenders, List<FriendRequest> requestReceivers, List<FriendRequest> requestSenders, List<Notification> notificationReceivers, List<Notification> notificationSenders, List<DutchPay> dutchPays, List<Income> incomes, List<Consumption> consumptions, List<Account> accounts) {
+    public Member(Long id, String memberName, String memberEmail, String memberPassword, MemberGender memberGender, MemberRole memberRole, MemberActivateStatus memberActivateStatus, LocalDate memberBirthDate, ProfileImage profileImage, List<Goal> goals, List<FriendRelationship> relationshipReceivers, List<FriendRelationship> relationshipSenders, List<FriendRequest> requestReceivers, List<FriendRequest> requestSenders, List<Notification> notificationReceivers, List<Notification> notificationSenders, List<Dutchpay> dutchpays, List<Income> incomes, List<Consumption> consumptions, List<Account> accounts) {
         this.id = id;
         this.memberName = memberName;
         this.memberEmail = memberEmail;
@@ -118,7 +118,7 @@ public class Member extends BaseEntity {
         this.requestSenders = requestSenders;
         this.notificationReceivers = notificationReceivers;
         this.notificationSenders = notificationSenders;
-        this.dutchPays = dutchPays;
+        this.dutchpays = dutchpays;
         this.incomes = incomes;
         this.consumptions = consumptions;
         this.accounts = accounts;
