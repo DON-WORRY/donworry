@@ -32,9 +32,9 @@ public class FinanceQueryService {
         for(Tuple t: incomeList) {
             log.info("카테고리 : " + t.get(0, Long.class));
             log.info("합계 : " + t.get(1, Long.class));
-
         // 2. 더치페이 아이디가 있는 소득 카테고리별로 정리 된 데이터 가져오기
         // ( 데이터 가져올 때 존재유무 상관없이 모든 카테고리 별 금액 가져오기 )
+
         // 3. 카테고리 별로 소비 - 소득 계산
         // 4. 소비 내역 정렬
         // 5. 총합 계산 후 dto 생성
