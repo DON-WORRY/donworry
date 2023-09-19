@@ -131,11 +131,11 @@ export function userLogout(): Promise<void> {
 
 // Email Api
 // 이메일 인증번호 발송
-export function userEmailJoin(email: string): Promise<void> {
+export function userEmailJoin(email: string): Promise<string> {
   return axiosWithoutAuth
     .post(`/api/emails/join?email=${email}`)
     .then((res) => {
-      console.log(res);
+      return res.headers.date
     })
     .catch((e) => {
       console.error(e);

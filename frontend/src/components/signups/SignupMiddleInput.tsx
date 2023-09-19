@@ -16,6 +16,10 @@ interface SignupMiddleInputProps {
   setCheckPassword: (checkPassword: string) => void;
   setIsCertificated: (isCertificated: boolean) => void;
   email: string;
+  password: string;
+  checkPassword: string;
+  isCertificated: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
@@ -69,6 +73,7 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
           onChangeText={(text) => {
             props.setEmail(text);
           }}
+          value={props.email}
           inputMode="email"
           onFocus={() => {
             setIsEmailFocused(true);
@@ -79,6 +84,7 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
           placeholderTextColor={
             isEmailFocused ? '#7777F3' : 'rgb(156, 156, 156)'
           }
+          editable={!props.isCertificated}
         />
         <SignupCertificationBtn
           setSeconds={setSeconds}
@@ -86,6 +92,8 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
           isActive={isActive}
           setMinutes={setMinutes}
           email={props.email}
+          isCertificated={props.isCertificated}
+          setIsLoading={props.setIsLoading}
         />
       </View>
       <View
@@ -100,6 +108,7 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
             styles.innerText,
             isCertifyFocused ? styles.innerFocusedText : null,
           ]}
+          value={certificationNumber}
           placeholder={isActive ? `인증번호 ${minutes}:${seconds}` : '인증번호'}
           onChangeText={(text) => {
             setCertificationNumber(text);
@@ -113,12 +122,14 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
           placeholderTextColor={
             isCertifyFocused ? '#7777F3' : 'rgb(156, 156, 156)'
           }
+          editable={!props.isCertificated}
         />
         <SignupVerifyBtn
           setIsActive={setIsActive}
           setIsCertificated={props.setIsCertificated}
           certificationNumber={certificationNumber}
           email={props.email}
+          isCertificated={props.isCertificated}
         />
       </View>
 
@@ -129,6 +140,7 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
           isPasswordFocused ? styles.isFocused : null,
         ]}
         placeholder="비밀번호"
+        value={props.password}
         onChangeText={(text) => {
           props.setPassword(text);
         }}
@@ -141,6 +153,7 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
         placeholderTextColor={
           isPasswordFocused ? '#7777F3' : 'rgb(156, 156, 156)'
         }
+        secureTextEntry={true}
       />
       <TextInput
         style={[
@@ -148,6 +161,7 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
           styles.inputFourth,
           isCheckFocused ? styles.isFocused : null,
         ]}
+        value={props.checkPassword}
         placeholder="비밀번호 재확인"
         onChangeText={(text) => {
           props.setCheckPassword(text);
@@ -159,6 +173,7 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
           setIsCheckFocused(false);
         }}
         placeholderTextColor={isCheckFocused ? '#7777F3' : 'rgb(156, 156, 156)'}
+        secureTextEntry={true}
       />
     </KeyboardAvoidingView>
   );
@@ -166,7 +181,7 @@ const SignupMiddleInput: React.FC<SignupMiddleInputProps> = (props) => {
 const screenWidth = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   input: {
-    width: screenWidth * 0.9,
+    width: screenWidth - 40,
     height: 50,
     borderColor: '#808080',
     borderLeftWidth: 1,

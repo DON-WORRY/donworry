@@ -14,6 +14,8 @@ interface SignupBottomInputProps {
   setUserName: (userName: string) => void;
   setUserGender: (userGender: string) => void;
   setUserBirth: (userBirth: string) => void;
+  userName: string;
+  userBirth: string;
 }
 
 const SignupBottomInput: React.FC<SignupBottomInputProps> = (props) => {
@@ -34,6 +36,7 @@ const SignupBottomInput: React.FC<SignupBottomInputProps> = (props) => {
           styles.inputFirst,
           isNameFocused ? styles.isFocused : null,
         ]}
+        value={props.userName}
         placeholder="이름"
         placeholderTextColor={isNameFocused ? '#7777F3' : 'rgb(156, 156, 156)'}
         onChangeText={(text) => {
@@ -79,6 +82,7 @@ const SignupBottomInput: React.FC<SignupBottomInputProps> = (props) => {
           styles.inputThird,
           isBirthFocused ? styles.isFocused : null,
         ]}
+        value={props.userBirth}
         placeholder="생년월일 8자리"
         placeholderTextColor={isBirthFocused ? '#7777F3' : 'rgb(156, 156, 156)'}
         onChangeText={(text) => {
@@ -98,7 +102,7 @@ const SignupBottomInput: React.FC<SignupBottomInputProps> = (props) => {
 const screenWidth = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   input: {
-    width: screenWidth * 0.9,
+    width: screenWidth - 40,
     height: 50,
     borderColor: '#808080',
     borderLeftWidth: 1,
