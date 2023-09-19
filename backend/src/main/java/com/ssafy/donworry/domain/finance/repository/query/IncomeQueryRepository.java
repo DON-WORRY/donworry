@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.ssafy.donworry.domain.finance.entity.QConsumptionCategory.consumptionCategory;
+import static com.ssafy.donworry.domain.finance.entity.QDutchpay.dutchpay;
 import static com.ssafy.donworry.domain.finance.entity.QIncome.income;
 
 @Repository
@@ -16,12 +17,15 @@ public class IncomeQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-//    public List<Tuple> findIncomeByMemberId(Long memberId) {
-//        return jpaQueryFactory
-//                .select(consumptionCategory.consumptionCategoryName, income.incomePrice.sum())
-//                .from(income)
-//                .join(income.dutchpay, dutchpay)
-//
-//    }
+    public List<Tuple> findIncomeByMemberId(Long memberId) {
+        return jpaQueryFactory
+                .select(consumptionCategory.consumptionCategoryName, income.incomePrice.sum())
+                .from(income)
+                .join(income.dutchpay.consumption.consumptionCategory, consumptionCategory)
+                .groupBy(consumptionCategory.consumptionCategoryName)
+                .where(income.member.id.eq(memberId))
+                .fetch();
+
+    }
 
 }

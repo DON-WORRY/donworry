@@ -28,7 +28,10 @@ public class FinanceQueryService {
     public CategoryTotalResponse searchCategoryTotal(Long memberId) {
         List<Tuple> consumptionList = consumptionQueryRepository.findConsumptionByMemberId(memberId);
         // 1. 소비 데이터 가져오기
-//        List<Tuple> incomeList = incomeQueryRepository.findIncomeByMemberId(memberId);
+        List<Tuple> incomeList = incomeQueryRepository.findIncomeByMemberId(memberId);
+        for(Tuple t: incomeList) {
+            log.info("카테고리 : " + t.get(0, Long.class));
+            log.info("합계 : " + t.get(1, Long.class));
 
         // 2. 더치페이 아이디가 있는 소득 카테고리별로 정리 된 데이터 가져오기
         // ( 데이터 가져올 때 존재유무 상관없이 모든 카테고리 별 금액 가져오기 )
@@ -36,11 +39,11 @@ public class FinanceQueryService {
         // 4. 소비 내역 정렬
         // 5. 총합 계산 후 dto 생성
 //        CategoryAmountResponse categoryAmount = new
-        String s = consumptionList.get(0).get(0, String.class);
-        log.info("스트링 : " + s);
-        for(Tuple t: consumptionList) {
-            log.info("카테고리 : " + t.get(0, Long.class));
-            log.info("합계 : " + t.get(1, Long.class));
+//        String s = consumptionList.get(0).get(0, String.class);
+//        log.info("스트링 : " + s);
+//        for(Tuple t: consumptionList) {
+//            log.info("카테고리 : " + t.get(0, Long.class));
+//            log.info("합계 : " + t.get(1, Long.class));
         }
 
         return null;
