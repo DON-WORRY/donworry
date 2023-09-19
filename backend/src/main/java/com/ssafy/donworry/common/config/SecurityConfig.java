@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeRequests(authorize -> authorize
 //                        .requestMatchers("/**").permitAll()
-                        .requestMatchers("/api/auth/kakao", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/api/auth/**", "/swagger-ui/**", "/swagger-ui.html/**", "/demo-ui.html/**", "/api-docs/**").permitAll()
                         .requestMatchers("/api/emails/**", "/api/members/join", "/api/members/login").permitAll()
                         .anyRequest().authenticated()
                 )
