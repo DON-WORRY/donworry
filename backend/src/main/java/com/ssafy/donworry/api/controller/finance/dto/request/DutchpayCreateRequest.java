@@ -8,7 +8,7 @@ import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
 
-public record DutchPayCreateRequest(
+public record DutchpayCreateRequest(
         @NotNull Long id,
         @NotNull List<ReqAmountRequest> reqAmountList
 ) {

@@ -1,0 +1,7 @@
+package com.ssafy.donworry.domain.finance.repository;
+
+import com.ssafy.donworry.domain.finance.entity.Dutchpay;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DutchpayRepository extends JpaRepository<Dutchpay, Long> {
+}

@@ -36,6 +36,7 @@ public class Income extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
@@ -46,7 +47,7 @@ public class Income extends BaseEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "dutchpay_id")
-    private DutchPay dutchPay;
+    private Dutchpay dutchpay;
 
     @Builder
     public Income(Long id, @NotNull String incomeDetail, @NotNull Long incomePrice, @NotNull Long incomeRemainedAmount, @NotNull Member member, Account account, Account senderAccount, DutchPay dutchPay) {
