@@ -2,6 +2,7 @@ package com.ssafy.donworry.api.service.member;
 
 
 import com.ssafy.donworry.api.controller.member.dto.response.MemberLoginResponse;
+import com.ssafy.donworry.api.service.account.AccountService;
 import com.ssafy.donworry.api.service.member.request.MemberJoinServiceRequest;
 import com.ssafy.donworry.api.service.member.request.MemberLoginServiceRequest;
 import com.ssafy.donworry.common.error.ErrorCode;
@@ -23,19 +24,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final BCryptPasswordEncoder encoder;
-    private final JwtUtil jwtUtil;
+    private final AccountService accountService;
 
     public void joinMember(MemberJoinServiceRequest request){
         if(memberRepository.existsByMemberEmail(request.memberEmail()))
             throw new EntityNotFoundException(ErrorCode.MEMBER_DUPLICATE);
 
         try{
-            memberRepository.save(Member.of(request));
+            Member member = Member.of(request);
+            memberRepository.save(member);
+            accountService.createMemberInitAccount(member.getId());
         } catch(Exception e){
             throw new EntityNotFoundException(ErrorCode.MEMBER_SAVE_ERROR);
         }
     }
-
 
 }

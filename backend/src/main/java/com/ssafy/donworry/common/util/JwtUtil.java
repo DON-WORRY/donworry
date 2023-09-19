@@ -37,7 +37,8 @@ public class JwtUtil {
         return MemberLoginResponse.of(accessToken, refreshToken, model);
     }
 
-    public String generateToken(Claims claims, Long expireTime){
+    // TODO: 2023-09-19 리팩토링 필요
+    public String generateAccessToken(Claims claims, Long expireTime){
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + expireTime);
 

@@ -7,15 +7,14 @@ import com.ssafy.donworry.api.service.member.MemberService;
 import com.ssafy.donworry.api.service.member.query.MemberQueryService;
 import com.ssafy.donworry.api.service.member.request.MemberJoinServiceRequest;
 import com.ssafy.donworry.api.service.member.request.MemberLoginServiceRequest;
+import com.ssafy.donworry.common.model.UserDetailsModel;
 import com.ssafy.donworry.common.response.ApiData;
 import com.ssafy.donworry.domain.member.repository.query.MemberQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -37,5 +36,11 @@ public class MemberController {
     @PostMapping("/login")
     public ApiData<MemberLoginResponse> loginMember(@RequestBody MemberLoginRequest request){
         return ApiData.of(memberQueryService.loginMember(MemberLoginServiceRequest.of(request)));
+    }
+
+    @GetMapping("/logout")
+    public ApiData<String> logoutMember(@AuthenticationPrincipal UserDetailsModel model){
+        memberQueryService.logoutMember(model.getId());
+        return ApiData.of("로그아웃에 성공하였습니다.");
     }
 }
