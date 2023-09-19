@@ -67,14 +67,14 @@ export function userSignup(data: SignupData): Promise<void> {
 export function userLogin(data: LoginData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/members/login', data)
-    .then((response) => {
+    .then(async (response) => {
       console.log("ok");
 
-      const refreshToken = response.data.data.refreshToken;
-      const memberId = response.data.data.memberId.toString();
+      const refreshToken = await response.data.data.refreshToken;
+      const memberId = await response.data.data.memberId.toString();
 
-      storeData('refreshToken', refreshToken);
-      storeData('memberId', memberId);
+      await storeData('refreshToken', refreshToken);
+      await storeData('memberId', memberId);
     })
     .catch((e) => {
       console.error(e);

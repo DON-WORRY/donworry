@@ -15,12 +15,12 @@ const RadarChartExample: React.FC = () => {
   const adjustLabelPosition = (
     x: number | undefined,
     y: number | undefined,
-    distance: number,
+    distance: number
   ) => {
     const centerX = screenWidth / 2;
     const centerY = 175;
     if (x != undefined) {
-      const tmp = centerX - x
+      const tmp = centerX - x;
       if (-10 < tmp && tmp < 10) {
         if (y != undefined) {
           if (y > centerY) {
@@ -137,8 +137,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height : screenWidth * 0.9,
-    width : screenWidth * 0.9,
+    height: screenWidth * 0.9,
+    width: screenWidth * 0.9,
   },
 });
 

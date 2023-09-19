@@ -2,21 +2,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
 
 type CategoryModifyData = {
-  id: number;
-  name: string;
+  /*
+  public record CategoryModifyRequest(
+        @NotNull Long consumptionId,
+        @NotNull Long consumptionCategoryId
+) {
+}
+  */
+  consumptionId: number;
+  consumptionCategoryId: number;
 };
 
 type DutchPayRequestData = {
-  id: number;
+  consumptionId: number;
+  friendId: number;
   price: number;
-};
-
-type DutchPayCompeleteData = {
-  dutchPayId: number;
-};
-
-type DutchPayAllCompleteData = {
-  dutchPayId: number;
 };
 
 // 값을 가져오기
@@ -34,12 +34,13 @@ const getData = async (key: string) => {
 };
 
 // 카테고리별 소비합계
-export function consumptionCategoryTotal(): Promise<void> {
-  const id = getData('memberId');
-  return axiosWithAuth
+export async function consumptionCategoryTotal(): Promise<void> {
+  const id = await getData('memberId');
+  return axiosWithoutAuth
     .get(`/api/consumption/total/${id}`)
     .then((res) => {
       console.log(res);
+      return res.data;
     })
     .catch((e) => {
       console.error(e);
@@ -48,12 +49,11 @@ export function consumptionCategoryTotal(): Promise<void> {
 }
 
 // 카테고리별 소비내역
-export function consumptionCategoryHistory(): Promise<void> {
-  const id = getData('memberId');
+export async function consumptionCategoryHistory(id: number): Promise<void> {
   return axiosWithAuth
     .get(`/api/consumption/history/${id}`)
     .then((res) => {
-      console.log(res);
+      return res.data;
     })
     .catch((e) => {
       console.error(e);
@@ -62,73 +62,94 @@ export function consumptionCategoryHistory(): Promise<void> {
 }
 
 // 카테고리 변경
-export function consumptionCategoryModify(
+export async function consumptionCategoryModify(
   data: CategoryModifyData
 ): Promise<void> {
   return axiosWithAuth
     .put('/api/consumption/modify', data)
     .then((res) => {
-      console.log(res);
+      return res.data;
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
+
 // 더치페이 조회
-export function consumptionDutchPayInquiry(): Promise<void> {
-  const id = getData('memberId');
+export async function consumptionDutchPayInquiry(): Promise<void> {
+  const id = await getData('memberId');
   return axiosWithAuth
     .get(`/api/dutchpay/${id}`)
     .then((res) => {
-      console.log(res);
+      console.log(res.data);
+      return res.data;
     })
     .catch((e) => {
       console.error(e);
       throw e;
     });
 }
+
 // 더치페이 요청
-export function consumptionDutchPayRequest(
-  data: DutchPayRequestData
+export async function consumptionDutchPayRequest(
+  tmpData: DutchPayRequestData
 ): Promise<void> {
+  // 받아온 memberId값이 string이기때문에 변환해줘야 한다.
+  // parseInt(stringValue, 10)
+  /*
+  {
+  "id": 0,
+  "reqAmountList": [
+    {
+      "memberId": 0,
+      "price": 0
+    }
+  ]
+} */
+  const data = {
+    id: tmpData.consumptionId,
+    reqAmountList: [
+      {
+        memberId: tmpData.friendId,
+        price: tmpData.price,
+      },
+    ],
+  };
   return axiosWithAuth
     .post('/api/dutchpay/create', data)
     .then((res) => {
-      console.log(res);
+      return res.data;
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
-// 더치페이 완료
-export function consumptionDutchPayComplete(
-  data: DutchPayCompeleteData
-): Promise<void> {
-  const id = getData('memberId');
+
+// 더치페이 완료 (친구에게 요청보낸다.)
+export async function consumptionDutchPayComplete(
+  dutchPayId: number,
+  friendId: number
+): Promise<number> {
   return axiosWithAuth
-    .put(`/api/dutchpay/complete/${id}`, data)
+    .put(`/api/dutchpay/complete/${dutchPayId}?memberId=${friendId}`)
     .then((res) => {
-      console.log(res);
+      return res.status;
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
-// 더치페이 전체완료
-export function consumptionDutchPayAllComplete(
-  data: DutchPayAllCompleteData
-): Promise<void> {
-  const id = getData('memberId');
+
+// 더치페이 전체완료 id : 더치페이 아이디
+export async function consumptionDutchPayAllComplete(
+  id: number
+): Promise<number> {
   return axiosWithAuth
-    .post(`/api/dutchpay/complete/${id}`, data)
+    .post(`/api/dutchpay/complete/${id}`)
     .then((res) => {
-      console.log(res);
+      return res.status
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }

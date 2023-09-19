@@ -3,11 +3,16 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 import ComparisonChart from '../../components/comparisons/ComparisonChart';
 import ComparisonBar from '../../components/comparisons/ComparisonBar';
+import ComponentsHeader from '../../components/ComponentsHeader';
 
 const ComparisonScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ComponentsHeader />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        alwaysBounceHorizontal={true}
+      >
         <ComparisonChart />
         <ComparisonBar />
       </ScrollView>
