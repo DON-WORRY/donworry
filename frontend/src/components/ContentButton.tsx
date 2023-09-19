@@ -1,13 +1,13 @@
 import React from 'react';
-import { TouchableOpacity, Dimensions, Text, StyleSheet } from 'react-native';
+import { View, Dimensions, Text, StyleSheet } from 'react-native';
 
 const { width } = Dimensions.get('screen');
 
 const MyButton = () => {
   return (
-    <TouchableOpacity style={styles.button} onPress={() => alert('Click!!!')}>
+    <View style={styles.button}>
       <Text style={styles.text}>내역</Text>
-    </TouchableOpacity>
+    </View>
   );
 };
 

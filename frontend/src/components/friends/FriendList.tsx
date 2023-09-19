@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 
 import FriendSearch from './children/FriendSearch';
 import FriendListItem from './children/FriendListItem';
@@ -59,9 +59,9 @@ const FriendList: React.FC = () => {
 
       {dummyData.map((dummy) => {
         return (
-          <View key={dummy.id}>
+          <TouchableOpacity key={dummy.id}>
             <FriendListItem friend={dummy} />
-          </View>
+          </TouchableOpacity>
         );
       })}
     </ScrollView>

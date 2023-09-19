@@ -1,19 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
-function ComparisonScreen() {
+import ComparisonChart from '../../components/comparisons/ComparisonChart';
+import ComparisonBar from '../../components/comparisons/ComparisonBar';
+
+const ComparisonScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>Comparison Screen</Text>
+      <ScrollView>
+        <ComparisonChart />
+        <ComparisonBar />
+      </ScrollView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingTop: 60,
+    paddingLeft: 20,
+    paddingRignt: 20,
   },
 });
 

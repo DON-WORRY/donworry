@@ -1,19 +1,33 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
 
+/*
+  {
+  "memberName": "string",
+  "memberEmail": "string",
+  "memberPassword": "pL?5ONLg0L#",
+  "memberGender": "MALE",
+  "memberBirthDate": "2023-09-15"
+  } 
+  */
 // 회원가입 data
 type SignupData = {
-  email: string;
-  name: string;
-  password: string;
-  gender: string;
-  birthday: string;
+  memberName: string;
+  memberEmail: string;
+  memberPassword: string;
+  memberGender: string;
+  memberBirthDate: string;
 };
 
 // 로그인 params
 type LoginData = {
+  memberEmail: string;
+  memberPassword: string;
+};
+
+type EmailCheckData = {
   email: string;
-  password: string;
+  authCode: string;
 };
 
 // 토큰 저장하기
@@ -28,14 +42,7 @@ const storeData = async (key: string, value: string) => {
 // 회원가입
 export function userSignup(data: SignupData): Promise<void> {
   return axiosWithoutAuth
-    .post('/api/user/signup', { data: data })
-    .then((r) => {
-      console.log(r);
-    })
-    .catch((e) => {
-      console.error(e);
-      throw e;
-    });
+    .post('/api/members/join', data)
 }
 
 // 로그인 (비동기 반환 x)
@@ -58,13 +65,13 @@ export function userSignup(data: SignupData): Promise<void> {
 // }
 
 export function userLogin(data: LoginData): Promise<void> {
-  return axiosWithAuth
-    .post('/api/user/login', { data: data })
+  return axiosWithoutAuth
+    .post('/api/members/login', data)
     .then((response) => {
-      console.log(response);
+      console.log("ok");
 
-      const refreshToken = response.data.refreshToken;
-      const memberId = response.data.memberId;
+      const refreshToken = response.data.data.refreshToken;
+      const memberId = response.data.data.memberId.toString();
 
       storeData('refreshToken', refreshToken);
       storeData('memberId', memberId);
@@ -108,6 +115,32 @@ export function userLogout(): Promise<void> {
     .get('/api/user/logout')
     .then((res) => {
       console.log(res);
+    })
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
+}
+
+// Email Api
+// 이메일 인증번호 발송
+export function userEmailJoin(email: string): Promise<string> {
+  return axiosWithoutAuth
+    .post(`/api/emails/join?email=${email}`)
+    .then((res) => {
+      return res.headers.date
+    })
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
+}
+
+// 이메일 인증번호 유효성 검증
+export function userEmailCheck(data: EmailCheckData): Promise<void> {
+  return axiosWithoutAuth
+    .post('/api/emails/check', data)
+    .then(() => {
     })
     .catch((e) => {
       console.error(e);

@@ -66,7 +66,7 @@ export function consumptionCategoryModify(
   data: CategoryModifyData
 ): Promise<void> {
   return axiosWithAuth
-    .put('/api/consumption/modify', { data: data })
+    .put('/api/consumption/modify', data)
     .then((res) => {
       console.log(res);
     })
@@ -93,7 +93,7 @@ export function consumptionDutchPayRequest(
   data: DutchPayRequestData
 ): Promise<void> {
   return axiosWithAuth
-    .post('/api/dutchpay/create', { data: data })
+    .post('/api/dutchpay/create', data)
     .then((res) => {
       console.log(res);
     })
@@ -108,7 +108,7 @@ export function consumptionDutchPayComplete(
 ): Promise<void> {
   const id = getData('memberId');
   return axiosWithAuth
-    .put(`/api/dutchpay/complete/${id}`, { data: data })
+    .put(`/api/dutchpay/complete/${id}`, data)
     .then((res) => {
       console.log(res);
     })
@@ -123,7 +123,7 @@ export function consumptionDutchPayAllComplete(
 ): Promise<void> {
   const id = getData('memberId');
   return axiosWithAuth
-    .post(`/api/dutchpay/complete/${id}`, { data: data })
+    .post(`/api/dutchpay/complete/${id}`, data)
     .then((res) => {
       console.log(res);
     })
