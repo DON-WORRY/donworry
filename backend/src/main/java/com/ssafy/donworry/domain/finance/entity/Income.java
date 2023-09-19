@@ -50,7 +50,7 @@ public class Income extends BaseEntity {
     private Dutchpay dutchpay;
 
     @Builder
-    public Income(Long id, @NotNull String incomeDetail, @NotNull Long incomePrice, @NotNull Long incomeRemainedAmount, @NotNull Member member, Account account, Account senderAccount, DutchPay dutchPay) {
+    public Income(Long id, @NotNull String incomeDetail, @NotNull Long incomePrice, @NotNull Long incomeRemainedAmount, @NotNull Member member, Account account, Account senderAccount, Dutchpay dutchpay) {
         this.id = id;
         this.incomeDetail = incomeDetail;
         this.incomePrice = incomePrice;
@@ -58,11 +58,11 @@ public class Income extends BaseEntity {
         this.member = member;
         this.account = account;
         this.senderAccount = senderAccount;
-        this.dutchPay = dutchPay;
+        this.dutchpay = dutchpay;
     }
 
     public static Income of(String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member
-    , Account account, Account senderAccount, DutchPay dutchPay){
+    , Account account, Account senderAccount, Dutchpay dutchpay){
         return Income.builder()
                 .incomeDetail(incomeDetail)
                 .incomePrice(incomePrice)
@@ -70,7 +70,7 @@ public class Income extends BaseEntity {
                 .member(member)
                 .account(account)
                 .senderAccount(senderAccount)
-                .dutchPay(dutchPay)
+                .dutchpay(dutchpay)
                 .build();
     }
 }
