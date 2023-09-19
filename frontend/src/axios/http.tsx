@@ -23,7 +23,7 @@ export const axiosWithoutAuth = axios.create({
 
 // Authorization이 필요한 인스턴스
 export const axiosWithAuth = axios.create({
-  baseURL: 'https://i9c107.p.ssafy.io/api',
+  baseURL: 'https://j9c210.p.ssafy.io',
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
     'Authorization': '', // 이곳에 토큰이나 필요한 인증 정보를 추가

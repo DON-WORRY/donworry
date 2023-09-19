@@ -40,7 +40,7 @@ export function friendRequest(): Promise<void> {
 // 친구 요청 수락
 export function friendAccept(data: AcceptData): Promise<void> {
   return axiosWithAuth
-    .put('/api/friend/accept', { data: data })
+    .put('/api/friend/accept', )
     .then((res) => {
       console.log(res);
     })
@@ -53,7 +53,7 @@ export function friendAccept(data: AcceptData): Promise<void> {
 // 친구 요청 거절
 export function friendReject(data: RejectData): Promise<void> {
   return axiosWithAuth
-    .delete('/api/friend/reject', { data: data })
+    .delete('/api/friend/reject', )
     .then((res) => {
       console.log(res);
     })
@@ -66,7 +66,7 @@ export function friendReject(data: RejectData): Promise<void> {
 // 친구 제거
 export function friendDelete(data: DeleteData): Promise<void> {
   return axiosWithAuth
-    .delete('/api/friend/delete', { data: data })
+    .delete('/api/friend/delete', )
     .then((res) => {
       console.log(res);
     })
