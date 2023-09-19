@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import {
   Text,
   View,
@@ -13,10 +13,24 @@ import ContentBox from '../../components/ContentBox';
 import FriendSearch from '../../components/friends/children/FriendSearch';
 import FriendListItem from '../../components/friends/children/FriendListItem';
 import { Ionicons } from '@expo/vector-icons';
+import {
+  BottomSheetModalProvider,
+  BottomSheetModal,
+} from '@gorhom/bottom-sheet';
 
 interface ButtonProps {
   title: string;
   onPress?: () => void;
+}
+
+// type SheetRefType = {
+//   snapTo: (index: number) => void; // 예를 들어, snapTo 메서드가 숫자를 받는다면
+// };
+
+interface DummyProps {
+  id: number;
+  name: string;
+  email: string;
 }
 
 const dummyData = [
@@ -47,83 +61,114 @@ const dummyData = [
   },
 ];
 
-interface DummyProps {
-  id: number;
-  name: string;
-  email: string;
-}
 const DutchPayRequestScreen: React.FC = () => {
   const [selectedData, setSelectedData] = useState<DummyProps[]>([]);
+  const [isActive, setIsActive] = useState<Record<number, boolean>>({});
+  const bottomSheetModalRef: React.RefObject<any> = useRef(null);
+  const snapPoints = useMemo(() => ['50%'], []);
+
   function search(name: string) {
     console.log(name);
   }
   function handlePress(dummy: DummyProps) {
+    setIsActive({ ...isActive, [dummy.id]: true });
     setSelectedData([...selectedData, dummy]);
   }
+  function handleDelete(data: DummyProps) {
+    setIsActive({ ...isActive, [data.id]: false });
+    const updatedSelectedData = selectedData.filter((item) => item !== data);
+    setSelectedData(updatedSelectedData);
+  }
   return (
-    <SafeAreaView style={styles.container}>
-      <BackHeader screen="Spend" />
-      <ScrollView>
-        <Text>더치페이</Text>
-        <Text style={styles.amountText}>100,000원</Text>
-        <Text>수완초밥&참치</Text>
-        <ContentBox>
-          <FriendSearch search={search} />
-          {dummyData.map((dummy) => {
+    <BottomSheetModalProvider>
+      <SafeAreaView style={styles.container}>
+        <BackHeader screen="Spend" />
+        <ScrollView>
+          <Text>더치페이</Text>
+          <Text style={styles.amountText}>100,000원</Text>
+          <Text>수완초밥&참치</Text>
+          <ContentBox>
+            <FriendSearch search={search} />
+            {dummyData.map((dummy) => {
+              return (
+                <TouchableOpacity
+                  key={dummy.id}
+                  onPress={() => {
+                    if (!isActive[dummy.id]) {
+                      handlePress(dummy);
+                    }
+                  }}
+                  style={{
+                    pointerEvents: isActive[dummy.id] ? 'none' : 'auto',
+                  }}
+                >
+                  <FriendListItem
+                    friend={dummy}
+                    state={isActive[dummy.id] ? 'gray' : 'black'}
+                  />
+                </TouchableOpacity>
+              );
+            })}
+          </ContentBox>
+          <View style={styles.middleView}>
+            <View>
+              <Text style={styles.currentMemberText}>현재 인원 4명</Text>
+            </View>
+            <Text style={styles.remainingAmountText}>남은 금액 0</Text>
+          </View>
+          <MyRequestAccount />
+          {selectedData.map((data) => {
             return (
-              <TouchableOpacity
-                key={dummy.id}
-                onPress={() => {
-                  handlePress(dummy);
-                }}
-              >
-                <FriendListItem friend={dummy} />
-              </TouchableOpacity>
+              <View style={styles.bottomView} key={data.id}>
+                <ContentBox widthPercentage={0.75}>
+                  <View style={styles.bottomViewText}>
+                    <View>
+                      <Text style={styles.bottomTitleText}>{data.id}</Text>
+                    </View>
+                    <View>
+                      <Text style={styles.bottomAmountText}>
+                        요청금액 20000원
+                      </Text>
+                    </View>
+                  </View>
+                </ContentBox>
+                <TouchableOpacity
+                  style={styles.bottomViewImage}
+                  onPress={() => {
+                    handleDelete(data);
+                  }}
+                >
+                  <Ionicons
+                    name="remove-circle-outline"
+                    size={40}
+                    color="red"
+                  />
+                </TouchableOpacity>
+              </View>
             );
           })}
-        </ContentBox>
-        <View style={styles.middleView}>
-          <View>
-            <Text style={styles.currentMemberText}>현재 인원 4명</Text>
+          <View style={styles.buttonView}>
+            <Botton
+              title="더치페이 요청"
+              onPress={() => {
+                if (bottomSheetModalRef.current) {
+                  bottomSheetModalRef.current.present();
+                }
+              }}
+            />
           </View>
-          <Text style={styles.remainingAmountText}>남은 금액 0</Text>
+        </ScrollView>
+      </SafeAreaView>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        snapPoints={snapPoints}
+      >
+        <View>
+          <Text>Awesome 🎉</Text>
         </View>
-        <ContentBox>
-          <View style={styles.bottomViewText}>
-            <View>
-              <Text style={styles.bottomTitleText}>나</Text>
-            </View>
-            <View>
-              <Text style={styles.bottomAmountText}>요청금액 20000원</Text>
-            </View>
-          </View>
-        </ContentBox>
-        {selectedData.map((data) => {
-          return (
-            <View style={styles.bottomView} key={data.id}>
-              <ContentBox widthPercentage={0.75}>
-                <View style={styles.bottomViewText}>
-                  <View>
-                    <Text style={styles.bottomTitleText}>{data.id}</Text>
-                  </View>
-                  <View>
-                    <Text style={styles.bottomAmountText}>
-                      요청금액 20000원
-                    </Text>
-                  </View>
-                </View>
-              </ContentBox>
-              <View style={styles.bottomViewImage}>
-                <Ionicons name="remove-circle-outline" size={40} color="red" />
-              </View>
-            </View>
-          );
-        })}
-        <View style={styles.buttonView}>
-          <Botton title="더치페이 요청" />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      </BottomSheetModal>
+    </BottomSheetModalProvider>
   );
 };
 
@@ -139,13 +184,25 @@ const Botton: React.FC<ButtonProps> = (props) => {
   );
 };
 
+const MyRequestAccount: React.FC = () => {
+  return (
+    <ContentBox>
+      <View style={styles.bottomViewText}>
+        <View>
+          <Text style={styles.bottomTitleText}>나</Text>
+        </View>
+        <View>
+          <Text style={styles.bottomAmountText}>요청금액 20000원</Text>
+        </View>
+      </View>
+    </ContentBox>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    // paddingTop: 60,
-    // paddingLeft: 20,
-    // paddingRight: 20,
   },
   amountText: {
     fontWeight: '600',
@@ -175,7 +232,12 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
   },
-  bottomViewImage: {},
+  bottomViewImage: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    marginBottom: 20,
+  },
   bottomTitleText: {
     fontSize: 18,
     fontWeight: '500',
@@ -199,6 +261,7 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 20,
   },
 });
