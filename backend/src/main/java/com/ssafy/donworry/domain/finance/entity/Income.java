@@ -5,6 +5,7 @@ import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.member.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -48,4 +49,28 @@ public class Income extends BaseEntity {
     @JoinColumn(name = "dutchpay_id")
     private Dutchpay dutchpay;
 
+    @Builder
+    public Income(Long id, @NotNull String incomeDetail, @NotNull Long incomePrice, @NotNull Long incomeRemainedAmount, @NotNull Member member, Account account, Account senderAccount, DutchPay dutchPay) {
+        this.id = id;
+        this.incomeDetail = incomeDetail;
+        this.incomePrice = incomePrice;
+        this.incomeRemainedAmount = incomeRemainedAmount;
+        this.member = member;
+        this.account = account;
+        this.senderAccount = senderAccount;
+        this.dutchPay = dutchPay;
+    }
+
+    public static Income of(String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member
+    , Account account, Account senderAccount, DutchPay dutchPay){
+        return Income.builder()
+                .incomeDetail(incomeDetail)
+                .incomePrice(incomePrice)
+                .incomeRemainedAmount(incomeRemainedAmount)
+                .member(member)
+                .account(account)
+                .senderAccount(senderAccount)
+                .dutchPay(dutchPay)
+                .build();
+    }
 }

@@ -13,8 +13,10 @@ import com.ssafy.donworry.domain.account.repository.CardCompanyRepository;
 import com.ssafy.donworry.domain.account.repository.CardRepository;
 import com.ssafy.donworry.domain.finance.entity.Consumption;
 import com.ssafy.donworry.domain.finance.entity.ConsumptionCategory;
+import com.ssafy.donworry.domain.finance.entity.Income;
 import com.ssafy.donworry.domain.finance.repository.ConsumptionCategoryRepository;
 import com.ssafy.donworry.domain.finance.repository.ConsumptionRepository;
+import com.ssafy.donworry.domain.finance.repository.IncomeRepository;
 import com.ssafy.donworry.domain.member.entity.Member;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,8 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Random;
+
+import static com.ssafy.donworry.domain.account.entity.QAccount.account;
 
 @Slf4j
 @Service
@@ -41,18 +45,24 @@ public class AccountService {
     private final StoreDataUtil storeDataUtil;
     private final ConsumptionCategoryRepository consumptionCategoryRepository;
     private final ConsumptionRepository consumptionRepository;
+    private final IncomeRepository incomeRepository;
 
     public void createMemberInitAccount(Long memberId) {
-
-        Bank bank = bankRepository.findById(randomBankId())
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 은행입니다."));
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
-        String accountNumber = randomAccountNumber();
-        Account account = Account.of(member, bank, accountNumber, randomInitHolding());
-        accountRepository.save(account);
-        Long accountId = account.getId();
-        createMemberInitCard(member.getId(), account.getId());
+
+        for(int i = 0; i < 3; i++){
+            Bank bank = bankRepository.findById(randomBankId())
+                    .orElseThrow(() -> new NoSuchElementException("존재하지 않는 은행입니다."));
+            String accountNumber = randomAccountNumber();
+            while(accountRepository.findByAccountNumber(accountNumber) != null){
+                accountNumber = randomAccountNumber();
+            }
+            Account account = Account.of(member, bank, accountNumber, randomInitHolding());
+            accountRepository.save(account);
+            Long accountId = account.getId();
+            createMemberInitCard(member.getId(), account.getId());
+        }
     }
 
     public void createMemberInitCard(Long memberId, Long accountId) {
@@ -70,17 +80,29 @@ public class AccountService {
         LocalDateTime nowTime = LocalDateTime.now();
         LocalDateTime history = LocalDateTime.now().minusMonths(2);
 
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 계좌정보 입니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원정보 입니다."));
+        Card card = cardRepository.findById(cardId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 카드정보입니다."));
+
         while (history.isBefore(nowTime)) {
+            if(history.getDayOfMonth() == 15){
+                history = LocalDateTime.of(history.getYear(), history.getMonth(), 15, 14, 0);
+                Long incomePrice = 5374800L;
+                Income income = Income.of("(주) 삼성전자", incomePrice, account.getAccountAmount() + incomePrice, member, account, null, null);
+                incomeRepository.save(income);
+                income.update(history, history);
+                account.updateAmount(-incomePrice);
+
+                history = history.plusHours(9);
+                history = history.plusMinutes(55);
+            }
 
             StoreDataUtil.RandomConsumption randomConsumption = storeDataUtil.randomStoreName();
             String consumptionDetail = randomConsumption.getValue();
             Long consumptionPrice = randomInitHolding() % 100000;
             if (consumptionPrice == 0) consumptionPrice = 43000L;
 
-            Account account = accountRepository.findById(accountId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 계좌정보 입니다."));
             Long consumptionRemainedAmount = account.getAccountAmount() - consumptionPrice;
-            Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원정보 입니다."));
-            Card card = cardRepository.findById(cardId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 카드정보입니다."));
             ConsumptionCategory consumptionCategory = consumptionCategoryRepository.findById(Long.valueOf(randomConsumption.getI())).orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리 항목입니다."));
 
             if (consumptionRemainedAmount > consumptionPrice) {
