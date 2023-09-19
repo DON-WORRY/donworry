@@ -43,13 +43,6 @@ const storeData = async (key: string, value: string) => {
 export function userSignup(data: SignupData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/members/join', data)
-    .then((r) => {
-      console.log(r);
-    })
-    .catch((e) => {
-      console.error(e);
-      throw e;
-    });
 }
 
 // 로그인 (비동기 반환 x)
@@ -75,7 +68,7 @@ export function userLogin(data: LoginData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/members/login', data)
     .then((response) => {
-      console.log(response);
+      console.log("ok");
 
       const refreshToken = response.data.data.refreshToken;
       const memberId = response.data.data.memberId.toString();
@@ -147,8 +140,7 @@ export function userEmailJoin(email: string): Promise<string> {
 export function userEmailCheck(data: EmailCheckData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/emails/check', data)
-    .then((res) => {
-      console.log(res);
+    .then(() => {
     })
     .catch((e) => {
       console.error(e);
