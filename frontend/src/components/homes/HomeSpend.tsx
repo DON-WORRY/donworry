@@ -10,6 +10,13 @@ import {
 } from 'react-native';
 import ContentButton from '../ContentButton';
 import { images } from '../../assets/bank&card';
+import { useNavigation } from '@react-navigation/native';
+
+interface ScreenProps {
+  navigation: {
+    navigate: (screen: string, params?: any) => void;
+  };
+}
 
 const { width } = Dimensions.get('screen');
 
@@ -18,6 +25,7 @@ const formatAmount = (amount: string): string => {
 };
 
 const HomeSpend: React.FC = () => {
+  const navigation = useNavigation<ScreenProps['navigation']>();
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
 
@@ -62,7 +70,13 @@ const HomeSpend: React.FC = () => {
                   </Text>
                 </View>
               </View>
-              <ContentButton />
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('StackNavigation', { screen: 'History' });
+                }}
+              >
+                <ContentButton />
+              </TouchableOpacity>
             </View>
           );
         }

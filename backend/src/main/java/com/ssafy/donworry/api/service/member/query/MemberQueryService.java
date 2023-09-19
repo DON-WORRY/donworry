@@ -30,13 +30,6 @@ public class MemberQueryService {
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
 
-    public UserDetailsModel loadUserById(Long id){
-        return redisUtil.getUser(id).orElseGet(
-                () -> memberQueryRepository.findUserDetailsById(id).orElseThrow(
-                        () -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND))
-        );
-    }
-
     public MemberLoginResponse loginMember(MemberLoginServiceRequest request){
         Member member = memberRepository.findByMemberEmail(request.memberEmail())
                 .orElseThrow(
@@ -48,9 +41,28 @@ public class MemberQueryService {
 
         MemberLoginResponse response = jwtUtil.generateAllToken(JwtCreateModel.of(member));
 
-        redisUtil.setToken(response.memberId(), response.refreshToken());
+        try{
+            redisUtil.setToken(response.memberId(), response.refreshToken());
+            redisUtil.setUser(loadUserById(response.memberId()));
+            redisUtil.deleteBlackList(response.memberId());
+        } catch (Exception e){
+            throw new InvalidValueException(ErrorCode.REDIS_CONN_ERROR);
+        }
 
         return response;
+    }
+
+    public UserDetailsModel loadUserById(Long id){
+        return redisUtil.getUser(id).orElseGet(
+                () -> memberQueryRepository.findUserDetailsById(id).orElseThrow(
+                        () -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND))
+        );
+    }
+
+    public void logoutMember(Long memberId){
+        redisUtil.deleteToken(memberId);
+        redisUtil.deleteUser(memberId);
+        redisUtil.setBlackList(memberId);
     }
 
 }
