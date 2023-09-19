@@ -26,9 +26,6 @@ public class ConsumptionController {
     public ApiData<CategoryTotalResponse> searchCategoryTotal(@PathVariable("id") Long memberId) {
         log.info("searchCategoryTotal - memberId : " + memberId);
         CategoryTotalResponse categoryTotal = financeQueryService.searchCategoryTotal(memberId);
-//        CategoryAmountResponse categoryAmountResponse = new CategoryAmountResponse(10l, 20l, 30l ,40l ,50l, 60l);
-//        CategoryTotalResponse categoryTotalResponse = new CategoryTotalResponse(financeQueryService.searchCategoryTotal(memberId), categoryAmountResponse);
-
         return ApiData.of(categoryTotal);
     }
 
@@ -38,7 +35,7 @@ public class ConsumptionController {
     public ApiData<List<CategoryHistoryResponse>> searchCategoryHistory(@PathVariable("id") Long memberId) {
         log.info("searchCategoryHistory - memberId : " + memberId);
 
-        List<CategoryHistoryResponse> historyResponseList = new ArrayList<>();
+        List<CategoryHistoryResponse> historyResponseList = financeQueryService.searchCategoryHistory(memberId);
         for (Long i = 1l; i <= 3; i++) {
             CategoryHistoryResponse categoryHistoryResponse = new CategoryHistoryResponse(i, "신쭈꾸미 수완점", "KB국민은행", i, LocalDateTime.now());
             historyResponseList.add(categoryHistoryResponse);

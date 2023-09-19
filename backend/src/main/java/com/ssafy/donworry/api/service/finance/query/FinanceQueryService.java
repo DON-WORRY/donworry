@@ -2,6 +2,7 @@ package com.ssafy.donworry.api.service.finance.query;
 
 import com.querydsl.core.Tuple;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResponse;
+import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
 import com.ssafy.donworry.common.response.ApiError;
 import com.ssafy.donworry.domain.finance.repository.query.ConsumptionQueryRepository;
@@ -57,6 +58,16 @@ public class FinanceQueryService {
         return new CategoryTotalResponse(total, categoryAmountList);
     }
 
+    public List<CategoryHistoryResponse> searchCategoryHistory(Long memberId) {
+
+        // 소비내역에서 더치페이가 된 소비내역은 더치페이아이디가 가지고 있는 소득을 찾아 더치페이 아이디를 통해 소비아이디를 찾아 해당 소비에서 소득내역 빼기
+
+        // 소득에 소비id를 추가 ??
+        return new ArrayList<>();
+    }
+
+
+    // 함수
     private Long createTotal(List<CategoryAmountResponse> categoryAmountList) {
         Long total = 0l;
         for (CategoryAmountResponse categoryAmountResponse : categoryAmountList) {
