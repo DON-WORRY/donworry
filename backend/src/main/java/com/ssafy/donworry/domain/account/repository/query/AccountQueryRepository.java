@@ -20,6 +20,7 @@ import static com.ssafy.donworry.domain.member.entity.QMember.member;
 public class AccountQueryRepository {
     private final JPAQueryFactory queryFactory;
 
+    // TODO: 2023-09-19 시간날때 repository 내장 함수 쓰는걸로 바꿀것 
     public List<Account> findByMemberId(Long memberId) {
         return  queryFactory
                 .select(account)
