@@ -30,7 +30,9 @@ public class SecurityConfig {
                 .formLogin(login -> login.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/**", "/api/auth/kakao", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+//                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/api/auth/kakao", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/api/emails/**", "/api/members/join", "/api/members/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
