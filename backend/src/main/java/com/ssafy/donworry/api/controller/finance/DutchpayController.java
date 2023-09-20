@@ -23,7 +23,7 @@ public class DutchpayController {
     public ApiData<List<DutchpayPersonResponse>> searchDutchpayPerson(@PathVariable("id") Long memberId) {
         log.info("searchDutchpayPerson : " + memberId);
         List<DutchpayPersonResponse> dutchpayPersonResponseList = new ArrayList<>();
-        dutchpayPersonResponseList.add(new DutchpayPersonResponse("김동현", DutchpayStatus.COMPLETE, 3l, 10l));
+        dutchpayPersonResponseList.add(new DutchpayPersonResponse(memberId, "김동현", DutchpayStatus.COMPLETE, 3l, 10l));
 
         return ApiData.of(dutchpayPersonResponseList);
     }
@@ -35,7 +35,7 @@ public class DutchpayController {
         log.info("createDutchpay : " + dutchpayCreateRequest.reqAmountList().get(0).memberId());
 
         List<DutchpayPersonResponse> dutchpayPersonResponseList = new ArrayList<>();
-        dutchpayPersonResponseList.add(new DutchpayPersonResponse("김동현", DutchpayStatus.COMPLETE, 3l, 10l));
+        dutchpayPersonResponseList.add(new DutchpayPersonResponse(1l, "김동현", DutchpayStatus.COMPLETE, 3l, 10l));
 
         return ApiData.of(dutchpayPersonResponseList);
     }
