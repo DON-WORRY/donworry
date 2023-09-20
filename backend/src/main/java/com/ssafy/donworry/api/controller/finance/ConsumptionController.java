@@ -5,10 +5,12 @@ import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResp
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
 import com.ssafy.donworry.api.service.finance.query.FinanceQueryService;
+import com.ssafy.donworry.common.model.UserDetailsModel;
 import com.ssafy.donworry.common.response.ApiData;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -32,10 +34,11 @@ public class ConsumptionController {
 
     @Operation(summary = "카테고리별 소비내역 조회", description = "각 카테고리별 소비내역을 조회하는 API입니다.")
     @GetMapping("/history/{id}")
-    public ApiData<List<CategoryHistoryResponse>> searchCategoryHistory(@PathVariable("id") Long memberId) {
+    public ApiData<List<CategoryHistoryResponse>> searchCategoryHistory(@AuthenticationPrincipal UserDetailsModel userDetailsModel, @PathVariable("id") Long dutchpayId) {
+        Long memberId = userDetailsModel.getId();
         log.info("searchCategoryHistory - memberId : " + memberId);
 
-        List<CategoryHistoryResponse> historyResponseList = financeQueryService.searchCategoryHistory(memberId);
+        List<CategoryHistoryResponse> historyResponseList = financeQueryService.searchCategoryHistory(memberId, dutchpayId);
         for (Long i = 1l; i <= 3; i++) {
             CategoryHistoryResponse categoryHistoryResponse = new CategoryHistoryResponse(i, "신쭈꾸미 수완점", "KB국민은행", i, LocalDateTime.now());
             historyResponseList.add(categoryHistoryResponse);

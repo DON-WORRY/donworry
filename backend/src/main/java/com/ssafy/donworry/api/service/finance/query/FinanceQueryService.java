@@ -5,6 +5,7 @@ import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResp
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
 import com.ssafy.donworry.common.response.ApiError;
+import com.ssafy.donworry.domain.finance.entity.Consumption;
 import com.ssafy.donworry.domain.finance.repository.query.ConsumptionQueryRepository;
 import com.ssafy.donworry.domain.finance.repository.query.IncomeQueryRepository;
 import com.ssafy.donworry.domain.member.entity.Member;
@@ -27,7 +28,7 @@ public class FinanceQueryService {
 
     public CategoryTotalResponse searchCategoryTotal(Long memberId) {
         // 1. 소비 데이터 가져오기
-        List<Tuple> consumptionList = consumptionQueryRepository.findConsumptionByMemberId(memberId);
+        List<Tuple> consumptionList = consumptionQueryRepository.findConsumptionCategoryTotal(memberId);
 //        for(Tuple t: consumptionList) {
 //            log.info("카테고리 : " + t.get(0, Long.class));
 //            log.info("합계 : " + t.get(1, Long.class));
@@ -43,9 +44,9 @@ public class FinanceQueryService {
 
         // 3. 카테고리 별로 소비 - 소득 계산
         List<CategoryAmountResponse> categoryAmountList = createCategoryAmountList(consumptionList, incomeList);
-//        for (CategoryAmountResponse categoryAmountResponse : categoryAmountList) {
-//            log.info("Name : {}, Amount : {}", categoryAmountResponse.category(), categoryAmountResponse.amount());
-//        }
+        for (CategoryAmountResponse categoryAmountResponse : categoryAmountList) {
+            log.info("Name : {}, Amount : {}", categoryAmountResponse.category(), categoryAmountResponse.amount());
+        }
 
         // 4. 소비 내역 정렬
         Collections.sort(categoryAmountList, (o1, o2) -> Math.toIntExact(o2.amount() - o1.amount()));
@@ -58,9 +59,14 @@ public class FinanceQueryService {
         return new CategoryTotalResponse(total, categoryAmountList);
     }
 
-    public List<CategoryHistoryResponse> searchCategoryHistory(Long memberId) {
+    public List<CategoryHistoryResponse> searchCategoryHistory(Long memberId, Long categoryId) {
 
+        // 모든 소비내역 불러오기
+        List<CategoryHistoryResponse> categoryHistoryList = consumptionQueryRepository.findConsumptionCategoryHistory(memberId, categoryId);
         // 소비내역에서 더치페이가 된 소비내역은 더치페이아이디가 가지고 있는 소득을 찾아 더치페이 아이디를 통해 소비아이디를 찾아 해당 소비에서 소득내역 빼기
+        for(CategoryHistoryResponse categoryHistory : categoryHistoryList) {
+            log.info("id : {}, detail : {}, price : {}", categoryHistory.id(), categoryHistory.detail(), categoryHistory.price());
+        }
 
         // 소득에 소비id를 추가 ??
         return new ArrayList<>();
