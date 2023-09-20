@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -60,8 +62,32 @@ public class AccountQueryService {
     }
 
     public List<StatisticsResponse> searchStatisticsResponseList(Long memberId) {
-        for(int month = 1; month < 12; month++){
-            List<StatisticsResponse> fullAccountStatisticsList = accountQueryRepository.findStatistics(memberId, month);
+        List<StatisticsResponse> fullMonthConsumption;
+        List<StatisticsResponse> fullMonthIncome ;
+        List<StatisticsResponse> result = new ArrayList<>();
+        LocalDate date = LocalDate.now();
+        for(int month = 11; month >= 0; month--){
+            fullMonthConsumption = accountQueryRepository.findStatisticsOfConsumption(memberId, date.minusMonths(month));
+            fullMonthIncome = accountQueryRepository.findStatisticsOfInCome(memberId, date.minusMonths(month));
+            Long totalConsumption = 0L;
+            Long totalIncome = 0L;
+            for(int i = 0; i < fullMonthConsumption.size(); i++) {
+                totalConsumption += fullMonthConsumption.get(i).accountAmount();
+            }
+            for(int i = 0; i < fullMonthIncome.size(); i++){
+                totalIncome += fullMonthIncome.get(i).accountAmount();
+            }
+            Long value = totalConsumption > totalIncome ? totalConsumption : totalIncome;
+            if(value == 0L && month != 11) value = result.get(10-month).accountAmount();
+            result.add(StatisticsResponse.of(null,
+                    LocalDate.of(date.minusMonths(month).getYear(), date.minusMonths(month).getMonth(), date.minusMonths(month).getDayOfMonth())
+                    ,value));
+
+        }
+
+
+        for(int i = 0; i < result.size(); i++){
+            System.out.println(result.get(i).toString());
         }
         return null;
     }
