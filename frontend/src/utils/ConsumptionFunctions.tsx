@@ -129,11 +129,11 @@ export async function consumptionDutchPayRequest(
 export async function consumptionDutchPayComplete(
   dutchPayId: number,
   friendId: number
-): Promise<number> {
+): Promise<void> {
   return axiosWithAuth
     .put(`/api/dutchpay/complete/${dutchPayId}?memberId=${friendId}`)
     .then((res) => {
-      return res.status;
+      return res.data;
     })
     .catch((e) => {
       throw e;
@@ -143,11 +143,11 @@ export async function consumptionDutchPayComplete(
 // 더치페이 전체완료 id : 더치페이 아이디
 export async function consumptionDutchPayAllComplete(
   id: number
-): Promise<number> {
+): Promise<void> {
   return axiosWithAuth
     .post(`/api/dutchpay/complete/${id}`)
     .then((res) => {
-      return res.status
+      return res.data
     })
     .catch((e) => {
       throw e;

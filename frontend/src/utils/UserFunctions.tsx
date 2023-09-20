@@ -41,8 +41,7 @@ const storeData = async (key: string, value: string) => {
 
 // 회원가입
 export function userSignup(data: SignupData): Promise<void> {
-  return axiosWithoutAuth
-    .post('/api/members/join', data)
+  return axiosWithoutAuth.post('/api/members/join', data);
 }
 
 // 로그인 (비동기 반환 x)
@@ -68,13 +67,19 @@ export function userLogin(data: LoginData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/members/login', data)
     .then(async (response) => {
-      console.log("ok");
-
-      const refreshToken = await response.data.data.refreshToken;
+      const accessToken = await response.data.data.accessToken;
+      const memberEmail = await response.data.data.memberRole;
       const memberId = await response.data.data.memberId.toString();
+      const memberName = await response.data.data.memberName;
+      const memberRole = await response.data.data.memberRole;
+      const refreshToken = await response.data.data.refreshToken;
 
-      await storeData('refreshToken', refreshToken);
+      await storeData('accessToken', accessToken);
+      await storeData('memberEmail', memberEmail);
       await storeData('memberId', memberId);
+      await storeData('memberName', memberName);
+      await storeData('memberRole', memberRole);
+      await storeData('refreshToken', refreshToken);
     })
     .catch((e) => {
       console.error(e);
@@ -124,11 +129,11 @@ export function userLogout(): Promise<void> {
 
 // Email Api
 // 이메일 인증번호 발송
-export function userEmailJoin(email: string): Promise<string> {
+export function userEmailJoin(email: string): Promise<void> {
   return axiosWithoutAuth
     .post(`/api/emails/join?email=${email}`)
     .then((res) => {
-      return res.headers.date
+      return res.data;
     })
     .catch((e) => {
       console.error(e);
@@ -140,8 +145,7 @@ export function userEmailJoin(email: string): Promise<string> {
 export function userEmailCheck(data: EmailCheckData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/emails/check', data)
-    .then(() => {
-    })
+    .then(() => {})
     .catch((e) => {
       console.error(e);
       throw e;

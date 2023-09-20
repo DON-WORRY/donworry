@@ -106,7 +106,7 @@ const RadarChartExample: React.FC = () => {
         <VictoryArea
           data={data}
           style={{
-            data: { fill: 'rgba(0, 0, 255, 0.5)' },
+            data: { fill: 'rgba(119, 119, 243, 0.5)' },
           }}
         />
         <VictoryLine
@@ -119,7 +119,7 @@ const RadarChartExample: React.FC = () => {
         <VictoryArea
           data={data2}
           style={{
-            data: { fill: 'rgba(255, 0, 0, 0.5)' },
+            data: { fill: 'rgba(246, 148, 150, 0.5)' },
           }}
         />
         <VictoryLine
