@@ -72,8 +72,18 @@ public class FinanceQueryService {
         for(Tuple t : incomeList) {
             log.info("id : {}, price : {}", t.get(0, Long.class), t.get(1, Long.class));
         }
-        // 소득에 소비id를 추가 ??
-        return new ArrayList<>();
+        for(Tuple t : incomeList) {
+            for(CategoryHistoryResponse ch : categoryHistoryList) {
+                if(t.get(0, Long.class).equals(ch.getId())) {
+                    ch.updatePrice(t.get(1, Long.class));
+                    break;
+                }
+            }
+        }
+
+        // 계산된 소비내역 시간 순으로 정렬
+        Collections.sort(categoryHistoryList, (o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
+        return new ArrayList<>(categoryHistoryList);
     }
 
 

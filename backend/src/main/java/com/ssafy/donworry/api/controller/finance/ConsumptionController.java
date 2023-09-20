@@ -34,15 +34,15 @@ public class ConsumptionController {
 
     @Operation(summary = "카테고리별 소비내역 조회", description = "각 카테고리별 소비내역을 조회하는 API입니다.")
     @GetMapping("/history/{id}")
-    public ApiData<List<CategoryHistoryResponse>> searchCategoryHistory(@AuthenticationPrincipal UserDetailsModel userDetailsModel, @PathVariable("id") Long dutchpayId) {
+    public ApiData<List<CategoryHistoryResponse>> searchCategoryHistory(@AuthenticationPrincipal UserDetailsModel userDetailsModel, @PathVariable("id") Long categoryId) {
         Long memberId = userDetailsModel.getId();
         log.info("searchCategoryHistory - memberId : " + memberId);
 
-        List<CategoryHistoryResponse> historyResponseList = financeQueryService.searchCategoryHistory(memberId, dutchpayId);
-        for (Long i = 1l; i <= 3; i++) {
-            CategoryHistoryResponse categoryHistoryResponse = new CategoryHistoryResponse(i, "신쭈꾸미 수완점", "KB국민은행", i, LocalDateTime.now());
-            historyResponseList.add(categoryHistoryResponse);
-        }
+        List<CategoryHistoryResponse> historyResponseList = financeQueryService.searchCategoryHistory(memberId, categoryId);
+//        for (Long i = 1l; i <= 3; i++) {
+//            CategoryHistoryResponse categoryHistoryResponse = new CategoryHistoryResponse(i, "신쭈꾸미 수완점", "KB국민은행", i, LocalDateTime.now());
+//            historyResponseList.add(categoryHistoryResponse);
+//        }
 
         return ApiData.of(historyResponseList);
     }
