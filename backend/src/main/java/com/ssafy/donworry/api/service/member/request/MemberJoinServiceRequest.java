@@ -21,6 +21,8 @@ public record MemberJoinServiceRequest(
 
         String memberPassword,
 
+        String memberSimplePassword,
+
         MemberGender memberGender,
 
         LocalDate memberBirthDate,
@@ -29,11 +31,12 @@ public record MemberJoinServiceRequest(
 
         MemberActivateStatus memberActivateStatus
 ) {
-    public static MemberJoinServiceRequest of(MemberJoinRequest request, String memberPassword){
+    public static MemberJoinServiceRequest of(MemberJoinRequest request, String memberPassword, String memberSimplePassword){
         return new MemberJoinServiceRequest(
                 request.memberName(),
                 request.memberEmail(),
                 memberPassword,
+                memberSimplePassword,
                 request.memberGender(),
                 request.memberBirthDate(),
                 MemberRole.USER,
