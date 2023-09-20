@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 public record FriendCheckRequest(
 
         @NotNull
+        Long friendRequestId,
+
+        @NotNull
         Long friendId,
 
         @NotNull

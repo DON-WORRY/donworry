@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 public record FriendRequestResponse(
 
         @NotNull
+        Long friendRequestId,
+
+        @NotNull
         Long memberId,
 
         @NotNull
@@ -21,8 +24,9 @@ public record FriendRequestResponse(
         LocalDateTime createdTime
 ) {
 
-    public static FriendRequestResponse of(Member member){
+    public static FriendRequestResponse of(Member member, Long requestId){
         return new FriendRequestResponse(
+                requestId,
                 member.getId(),
                 member.getMemberEmail(),
                 member.getMemberName(),

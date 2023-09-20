@@ -70,7 +70,9 @@ public class MemberQueryService {
     }
 
     public List<MemberSearchResponse> searchMember(String memberName){
-        memberQueryRepository
+        return memberRepository.findByMemberNameStartsWith(memberName).stream().map(
+                (member) -> MemberSearchResponse.of(member)
+        ).collect(Collectors.toList());
     }
 
 }
