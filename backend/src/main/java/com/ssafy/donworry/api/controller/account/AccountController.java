@@ -47,11 +47,9 @@ public class AccountController {
     @GetMapping("/statistics/{id}")
     public ApiData<List<StatisticsResponse>> searchStatistics(@PathVariable("id") Long memberId) {
         log.info("searchStatistics - memberID : " + memberId);
-        List<StatisticsResponse> list = null;
+        List<StatisticsResponse> list = accountQueryService.searchStatisticsResponseList(memberId);
         return ApiData.of(list);
     }
-
-
 
 
     @Operation(summary = "테스트", description = "사용자 계정 생성 시 테스트 진행")
