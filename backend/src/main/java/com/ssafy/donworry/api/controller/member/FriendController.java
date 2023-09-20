@@ -1,5 +1,6 @@
 package com.ssafy.donworry.api.controller.member;
 
+import com.ssafy.donworry.api.controller.member.dto.request.FriendCheckRequest;
 import com.ssafy.donworry.api.controller.member.dto.request.FriendRequesRequest;
 import com.ssafy.donworry.api.controller.member.dto.response.FriendRequestListResponse;
 import com.ssafy.donworry.api.service.member.FriendService;
@@ -35,10 +36,10 @@ public class FriendController {
         return ApiData.of("친구 요청에 성공하였습니다.");
     }
 
-//    @PostMapping("/check")
-//    @Operation(summary = "친구 수락 or 거절", description = "친구 수락 혹은 거절요청을 보내는 API 입니다.")
-//    public ApiData<String> checkFriend(@RequestBody FriendCheckRequest request, @AuthenticationPrincipal UserDetailsModel model){
-//
-//    }
+    @PostMapping("/check")
+    @Operation(summary = "친구 수락 or 거절", description = "친구 수락 혹은 거절요청을 보내는 API 입니다.")
+    public ApiData<String> checkFriend(@RequestBody FriendCheckRequest request, @AuthenticationPrincipal UserDetailsModel model){
+        return null;
+    }
 
 }
