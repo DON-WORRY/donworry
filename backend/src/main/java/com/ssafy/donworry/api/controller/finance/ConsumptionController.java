@@ -24,8 +24,9 @@ import java.util.List;
 public class ConsumptionController {
     private final FinanceQueryService financeQueryService;
     @Operation(summary = "카테고리별 소비합계 조회", description = "각 카테고리별 소비합계를 조회하는 API입니다.")
-    @GetMapping("/total/{id}")
-    public ApiData<CategoryTotalResponse> searchCategoryTotal(@PathVariable("id") Long memberId) {
+    @GetMapping("/total")
+    public ApiData<CategoryTotalResponse> searchCategoryTotal(@AuthenticationPrincipal UserDetailsModel userDetailsModel) {
+        Long memberId = userDetailsModel.getId();
         log.info("searchCategoryTotal - memberId : " + memberId);
         CategoryTotalResponse categoryTotal = financeQueryService.searchCategoryTotal(memberId);
         return ApiData.of(categoryTotal);

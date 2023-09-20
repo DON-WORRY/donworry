@@ -68,7 +68,7 @@ public class FinanceQueryService {
 //        }
 
         // 유저 더치페이가 된 소득내역 불러오기
-        List<Tuple> incomeList = incomeQueryRepository.findIncomeDutchpayPriceByMemberId(memberId);
+        List<Tuple> incomeList = incomeQueryRepository.findIncomeDutchpayPriceByMemberId(memberId, categoryId);
         for(Tuple t : incomeList) {
             log.info("id : {}, price : {}", t.get(0, Long.class), t.get(1, Long.class));
         }

@@ -32,7 +32,7 @@ public class IncomeQueryRepository {
 
     }
 
-    public List<Tuple> findIncomeDutchpayPriceByMemberId(Long memberId) {
+    public List<Tuple> findIncomeDutchpayPriceByMemberId(Long memberId, Long categoryId) {
         return jpaQueryFactory
                 .select(income.dutchpay.consumption.id, income.incomePrice)
                 .from(income)
