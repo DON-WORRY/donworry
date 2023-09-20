@@ -35,9 +35,8 @@ const getData = async (key: string) => {
 
 // 카테고리별 소비합계
 export async function consumptionCategoryTotal(): Promise<void> {
-  const id = await getData('memberId');
-  return axiosWithoutAuth
-    .get(`/api/consumption/total/${id}`)
+  return axiosWithAuth
+    .get(`/api/consumption/total/`)
     .then((res) => {
       console.log(res);
       return res.data;

@@ -126,7 +126,7 @@ const TestScreen: React.FC = () => {
 
 
     // ============================== 다시 점검해야함 =================================
-    카테고리별 소비합계 실패
+    카테고리별 소비합계 실행할것.
         consumptionCategoryTotal()
       .then((res) => {
         console.log(res);
