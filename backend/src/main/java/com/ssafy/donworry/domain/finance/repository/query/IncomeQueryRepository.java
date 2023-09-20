@@ -18,7 +18,7 @@ public class IncomeQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<Tuple> findIncomeByMemberId(Long memberId) {
+    public List<Tuple> findIncomeCategoryTotal(Long memberId) {
         return jpaQueryFactory
                 .select(consumptionCategory.consumptionCategoryName, income.incomePrice.sum())
                 .from(income)
@@ -30,6 +30,15 @@ public class IncomeQueryRepository {
                 .groupBy(consumptionCategory.consumptionCategoryName)
                 .fetch();
 
+    }
+
+    public List<Tuple> findIncomeDutchpayPriceByMemberId(Long memberId) {
+        return jpaQueryFactory
+                .select(income.dutchpay.consumption.id, income.incomePrice)
+                .from(income)
+                .where(income.member.id.eq(memberId)
+                        .and(income.dutchpay.isNotNull()))
+                .fetch();
     }
 
 }

@@ -35,7 +35,7 @@ public class FinanceQueryService {
 //        }
 
         // 2. 더치페이 아이디가 있는 소득 카테고리별로 정리 된 데이터 가져오기
-        List<Tuple> incomeList = incomeQueryRepository.findIncomeByMemberId(memberId);
+        List<Tuple> incomeList = incomeQueryRepository.findIncomeCategoryTotal(memberId);
         // ["식비", 1000], ["교통", 2000] ...
 //        for(Tuple t: incomeList) {
 //            log.info("카테고리 : " + t.get(0, Long.class));
@@ -61,13 +61,17 @@ public class FinanceQueryService {
 
     public List<CategoryHistoryResponse> searchCategoryHistory(Long memberId, Long categoryId) {
 
-        // 모든 소비내역 불러오기
+        // 유저 소비내역 불러오기
         List<CategoryHistoryResponse> categoryHistoryList = consumptionQueryRepository.findConsumptionCategoryHistory(memberId, categoryId);
-        // 소비내역에서 더치페이가 된 소비내역은 더치페이아이디가 가지고 있는 소득을 찾아 더치페이 아이디를 통해 소비아이디를 찾아 해당 소비에서 소득내역 빼기
-        for(CategoryHistoryResponse categoryHistory : categoryHistoryList) {
-            log.info("id : {}, detail : {}, price : {}", categoryHistory.id(), categoryHistory.detail(), categoryHistory.price());
-        }
+//        for(CategoryHistoryResponse categoryHistory : categoryHistoryList) {
+//            log.info("id : {}, detail : {}, price : {}", categoryHistory.id(), categoryHistory.detail(), categoryHistory.price());
+//        }
 
+        // 유저 더치페이가 된 소득내역 불러오기
+        List<Tuple> incomeList = incomeQueryRepository.findIncomeDutchpayPriceByMemberId(memberId);
+        for(Tuple t : incomeList) {
+            log.info("id : {}, price : {}", t.get(0, Long.class), t.get(1, Long.class));
+        }
         // 소득에 소비id를 추가 ??
         return new ArrayList<>();
     }
