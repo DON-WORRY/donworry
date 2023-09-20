@@ -32,9 +32,11 @@ export const axiosWithAuth = axios.create({
 
 axiosWithAuth.interceptors.request.use(
   async (config) => {
-    const myToken = await getData('myToken'); // await를 사용하여 토큰 값을 가져옵니다.
-    if (myToken) {
-      config.headers['Authorization'] = 'Bearer ' + myToken;
+    console.log('ok');
+
+    const refreshToken = await getData('refreshToken'); // await를 사용하여 토큰 값을 가져옵니다.
+    if (refreshToken) {
+      config.headers['Authorization'] = 'Bearer ' + refreshToken;
     }
     return config;
   },

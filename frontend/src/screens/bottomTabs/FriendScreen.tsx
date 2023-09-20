@@ -7,20 +7,19 @@ import FriendSpendKing from '../../components/friends/FriendSpendKing';
 import FriendList from '../../components/friends/FriendList';
 
 const FriendScreen: React.FC = () => {
-    return (
-      <View style={styles.container}>
-        <ComponentsHeader />
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          alwaysBounceHorizontal={true}
-        >
-          <FriendMessageComponent/>
-          <FriendSpendKing />
-          <FriendList />
-        </ScrollView>
-      </View>
-    );
-
+  return (
+    <View style={styles.container}>
+      <ComponentsHeader />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        alwaysBounceHorizontal={true}
+      >
+        <FriendMessageComponent />
+        <FriendSpendKing />
+        <FriendList />
+      </ScrollView>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 import FriendCubes from './children/FriendCubes';
 import FriendSpendHeader from './children/FriendSpendHeader';
 import FriendSpendChart from './children/FriendSpendChart';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// 토큰 가져오기 함수
+const getData = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
 /*
 public class CategoryAmountResponse {
     private Long food;
@@ -37,7 +49,15 @@ const friendsNumber = 5;
 const rank = 3;
 
 const FriendSpendKing: React.FC = () => {
-  const [myName, setMyName] = useState('Lee');
+  const [myName, setMyName] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    const fetchMyName = async () => {
+      const tmpName = await getData('memberName');
+      setMyName(tmpName);
+    };
+
+    fetchMyName();
+  }, []); // 빈 배열을 전달하여 한 번만 실행되도록 함
   return (
     <View style={styles.container}>
       <FriendSpendHeader friendsNumber={friendsNumber} rank={rank} />

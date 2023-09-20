@@ -15,7 +15,9 @@ const getData = async (key: string) => {
 };
 
 // 알림 전송
-export function notificationSend(): Promise<void> {
+export async function notificationSend(): Promise<void> {
+  const memberId = await getData('memberId');
+  const refreshToken = await getData('refreshToken');
   return axiosWithAuth
     .post('/api/notification')
     .then((res) => {
@@ -26,7 +28,7 @@ export function notificationSend(): Promise<void> {
     });
 }
 // 알림 조회
-export function notificationInquiry(): Promise<void> {
+export async function notificationInquiry(): Promise<void> {
   const id = getData('memberId');
   return axiosWithAuth
     .get(`/api/notification/${id}`)
@@ -39,7 +41,7 @@ export function notificationInquiry(): Promise<void> {
     });
 }
 // 알림 삭제
-export function notificationDelete(): Promise<void> {
+export async function notificationDelete(): Promise<void> {
   return axiosWithAuth
     .delete('/api/notification')
     .then((res) => {
