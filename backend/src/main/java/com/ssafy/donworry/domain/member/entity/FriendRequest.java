@@ -38,6 +38,12 @@ public class FriendRequest extends BaseEntity {
         this.sender = sender;
     }
 
+    public static FriendRequest of(Member receiver, Member sender){
+        return FriendRequest.builder()
+                .receiver(receiver)
+                .sender(sender)
+                .build();
+    }
 
 
 }
