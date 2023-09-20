@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { userSignup } from '../utils/UserFunctions';
 
-import Modal from '../components/modals/Modal';
+import Modal from '../components/modals/LoaderModal';
 
 import SignupHeader from '../components/signups/SignupHeader';
 import SignupMiddleInput from '../components/signups/SignupMiddleInput';
