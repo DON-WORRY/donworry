@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 interface FriendCubesProps {
-  myName: string;
+  myName: string | undefined;
 }
 
 const FriendCubes: React.FC<FriendCubesProps> = (props) => {

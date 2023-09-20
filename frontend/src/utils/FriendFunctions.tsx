@@ -12,7 +12,7 @@ type DeleteData = {
 };
 
 // 친구 목록 조회
-export function friendListInquiry(): Promise<void> {
+export async function friendListInquiry(): Promise<void> {
   return axiosWithAuth
     .get('/api/friend/list')
     .then((res) => {
@@ -25,7 +25,7 @@ export function friendListInquiry(): Promise<void> {
 }
 
 // 친구 요청
-export function friendRequest(): Promise<void> {
+export async function friendRequest(): Promise<void> {
   return axiosWithAuth
     .post('/api/friend/request')
     .then((res) => {
@@ -38,7 +38,7 @@ export function friendRequest(): Promise<void> {
 }
 
 // 친구 요청 수락
-export function friendAccept(data: AcceptData): Promise<void> {
+export async function friendAccept(data: AcceptData): Promise<void> {
   return axiosWithAuth
     .put('/api/friend/accept', )
     .then((res) => {
@@ -51,7 +51,7 @@ export function friendAccept(data: AcceptData): Promise<void> {
 }
 
 // 친구 요청 거절
-export function friendReject(data: RejectData): Promise<void> {
+export async function friendReject(data: RejectData): Promise<void> {
   return axiosWithAuth
     .delete('/api/friend/reject', )
     .then((res) => {
@@ -64,7 +64,7 @@ export function friendReject(data: RejectData): Promise<void> {
 }
 
 // 친구 제거
-export function friendDelete(data: DeleteData): Promise<void> {
+export async function friendDelete(data: DeleteData): Promise<void> {
   return axiosWithAuth
     .delete('/api/friend/delete', )
     .then((res) => {
