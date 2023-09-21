@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import FriendRequest from '../../components/friends/FriendRequest';
 import FriendResponse from '../../components/friends/FriendResponse';
@@ -105,11 +106,39 @@ const responseData = [
     time: '2023-09-01',
   },
 ];
+// 값을 가져오기
+const getData = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    // 읽기 에러
+    console.error(e);
+    throw e;
+  }
+};
 
 const FriendMessageScreen: React.FC = () => {
   const blackLogo = require('../../assets/logo/BlackLogo.png');
   const navigation = useNavigation<ScreenProps['navigation']>();
-  const [isFirst, setIsFirst] = useState(true);
+  const [newMemberId, setNewMemberId] = useState('');
+  const [howCompoShow, setHowCompoShow] = useState({
+    isFirst: true,
+    isSecond: false,
+    isThird: false,
+  });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const memberId = await getData('memberId');
+      if (memberId !== undefined) {
+        await setNewMemberId(memberId);
+      }
+    };
+    fetch();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.header_box}>
@@ -129,31 +158,63 @@ const FriendMessageScreen: React.FC = () => {
         <View style={styles.sub_title_box}>
           <TouchableOpacity
             onPress={() => {
-              setIsFirst(true);
+              setHowCompoShow({
+                isFirst: true,
+                isSecond: false,
+                isThird: false,
+              });
             }}
           >
             <Text
-              style={[styles.sub_title, isFirst ? styles.selected_title : null]}
+              style={[
+                styles.sub_title,
+                howCompoShow.isFirst ? styles.selected_title : null,
+              ]}
             >
               요청 메시지
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              setIsFirst(false);
+              setHowCompoShow({
+                isFirst: false,
+                isSecond: true,
+                isThird: false,
+              });
             }}
           >
             <Text
-              style={[styles.sub_title, isFirst ? null : styles.selected_title]}
+              style={[
+                styles.sub_title,
+                howCompoShow.isSecond ? styles.selected_title : null,
+              ]}
             >
               수신 메시지
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setHowCompoShow({
+                isFirst: false,
+                isSecond: false,
+                isThird: true,
+              });
+            }}
+          >
+            <Text
+              style={[
+                styles.sub_title,
+                howCompoShow.isThird ? styles.selected_title : null,
+              ]}
+            >
+              친구 요청하기
             </Text>
           </TouchableOpacity>
         </View>
         {/* 막대선 */}
         <View style={styles.line}></View>
 
-        {isFirst ? (
+        {howCompoShow.isFirst ? (
           <>
             <ScrollView
               style={styles.large_box}
@@ -173,7 +234,7 @@ const FriendMessageScreen: React.FC = () => {
               })}
             </ScrollView>
           </>
-        ) : (
+        ) : howCompoShow.isSecond ? (
           <>
             <ScrollView
               style={styles.large_box}
@@ -193,6 +254,8 @@ const FriendMessageScreen: React.FC = () => {
               })}
             </ScrollView>
           </>
+        ) : (
+          <></>
         )}
       </View>
     </View>
@@ -229,6 +292,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     marginRight: 5,
+    marginLeft: 5,
     borderRadius: 5,
   },
   line: {
@@ -242,6 +306,7 @@ const styles = StyleSheet.create({
   },
   sub_title_box: {
     flexDirection: 'row',
+    // justifyContent: "space-between"
   },
   selected_title: {
     color: '#7777F3',

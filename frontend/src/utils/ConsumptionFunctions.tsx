@@ -34,12 +34,10 @@ const getData = async (key: string) => {
 };
 
 // 카테고리별 소비합계
-export async function consumptionCategoryTotal(): Promise<void> {
-  const id = await getData('memberId');
-  return axiosWithoutAuth
-    .get(`/api/consumption/total/${id}`)
+export async function consumptionCategoryTotal(month: number): Promise<void> {
+  return axiosWithAuth
+    .get(`/api/consumption/total?month=${month}`)
     .then((res) => {
-      console.log(res);
       return res.data;
     })
     .catch((e) => {
@@ -129,11 +127,11 @@ export async function consumptionDutchPayRequest(
 export async function consumptionDutchPayComplete(
   dutchPayId: number,
   friendId: number
-): Promise<void> {
+): Promise<number> {
   return axiosWithAuth
     .put(`/api/dutchpay/complete/${dutchPayId}?memberId=${friendId}`)
     .then((res) => {
-      return res.data;
+      return res.status;
     })
     .catch((e) => {
       throw e;
@@ -143,11 +141,11 @@ export async function consumptionDutchPayComplete(
 // 더치페이 전체완료 id : 더치페이 아이디
 export async function consumptionDutchPayAllComplete(
   id: number
-): Promise<void> {
+): Promise<number> {
   return axiosWithAuth
     .post(`/api/dutchpay/complete/${id}`)
     .then((res) => {
-      return res.data
+      return res.status;
     })
     .catch((e) => {
       throw e;
