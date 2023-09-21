@@ -40,7 +40,15 @@ public enum ErrorCode {
     INVALID_FILE(400, "F001", "업로드 할 수 없는 파일입니다."),
 
     // Redis
-    REDIS_CONN_ERROR(400, "R001", "레디스 연결에 실패하였습니다.");
+    REDIS_CONN_ERROR(400, "R001", "레디스 연결에 실패하였습니다."),
+
+    // Consumption
+    CONSUMPTION_NOT_FOUND(400, "CS001", "존재하지 않는 소비입니다!"),
+
+    // ConsumptionCategory
+    CONSUMPTION_CATEGORY_NOT_FOUND(400, "CC001", "존재하지 않는 소비카테고리입니다!");
+
+
 
     private final int status;
     private final String code;

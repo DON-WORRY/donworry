@@ -4,6 +4,7 @@ import com.ssafy.donworry.api.controller.finance.dto.request.CategoryModifyReque
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
+import com.ssafy.donworry.api.service.finance.FinanceService;
 import com.ssafy.donworry.api.service.finance.query.FinanceQueryService;
 import com.ssafy.donworry.common.model.UserDetailsModel;
 import com.ssafy.donworry.common.response.ApiData;
@@ -23,6 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConsumptionController {
     private final FinanceQueryService financeQueryService;
+    private final FinanceService financeService;
+
     @Operation(summary = "카테고리별 소비합계 조회", description = "각 카테고리별 소비합계를 조회하는 API입니다.")
     @GetMapping("/total")
     public ApiData<CategoryTotalResponse> searchCategoryTotal(@AuthenticationPrincipal UserDetailsModel userDetailsModel, @RequestParam int month) {
@@ -53,7 +56,11 @@ public class ConsumptionController {
     @Operation(summary = "거래내역의 카테고리 변경", description = "해당 소비내역의 소비카테고리를 변경하는 API입니다.")
     @PutMapping("/modify")
     public ApiData<Long> modifyCategory(@RequestBody CategoryModifyRequest categoryModifyRequest) {
-        Long id = categoryModifyRequest.consumptionCategoryId();
+
+        Long consumptionId = categoryModifyRequest.consumptionId();
+        Long categoryId = categoryModifyRequest.consumptionCategoryId();
+
+        Long id = financeService.modifyCategory(consumptionId, categoryId);
         log.info("modifyCategory : " + id);
 
         return ApiData.of(id);
