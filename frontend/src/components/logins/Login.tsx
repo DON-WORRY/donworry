@@ -8,6 +8,8 @@ import {
   Text,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { userLogin } from '../../utils/UserFunctions';
+
 interface InputboxProps {
   placeholder: string;
   value: string;
@@ -35,9 +37,16 @@ const Login: React.FC = () => {
 
   function handleLogin() {
     // 로그인 시
-    console.log(loginId);
-    console.log(password);
-    navigation.replace('TabNavigation', { screen: 'Home' });
+    const data = {
+      memberEmail: loginId,
+      memberPassword: password
+    }
+    userLogin(data).then(() => {
+      navigation.replace('TabNavigation', { screen: 'Home' });
+    }).catch((e) => {
+      console.log(e)
+      return alert("아이디 또는 비밀번호가 유효하지 않습니다.")
+    })
   }
 
   return (

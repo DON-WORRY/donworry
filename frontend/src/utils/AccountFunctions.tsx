@@ -1,116 +1,135 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
+import { axiosWithAuth } from '../axios/http';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 // 목표를 설정하면 올해까지만 해당되게 하려고 생각했었음.
 type Goal = {
   goalAmount: number;
 };
+const getData = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    // 읽기 에러
+    throw e;
+  }
+};
 
 // 계좌별 거래 합계
-export function accountTradeTotal(): Promise<void> {
+export async function accountTradeTotal(): Promise<void> {
   return axiosWithAuth
     .get('/api/account/account')
     .then((res) => {
       console.log(res);
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
 // 계좌별 거래 내역
-export function accountTradeHistory(): Promise<void> {
+export async function accountTradeHistory(): Promise<void> {
   return axiosWithAuth
     .get('/api/account/account/trade')
     .then((res) => {
       console.log(res);
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
+
 // 카드별 소비합계
-export function accountCardTotal(): Promise<void> {
+export async function accountCardTotal(): Promise<void> {
   return axiosWithAuth
     .get('/api/account/card/total')
     .then((res) => {
       console.log(res);
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
 // 카드별 소비 내역
-export function accountCardHistory(): Promise<void> {
+export async function accountCardHistory(): Promise<void> {
+  const memberId = await getData('memberId');
   return axiosWithAuth
-    .get('/api/account/card/history')
+    .get(`/api/card/${memberId}`)
     .then((res) => {
-      console.log(res);
+      return res.data;
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
-// 보유 카드 목록 조회
-export function accountCardListInquiry(): Promise<void> {
+// 상세카드 소비내역
+export async function accountCardDetail(cardId: number): Promise<void> {
   return axiosWithAuth
-    .get('/api/account/card/cardlist')
+    .get(`/api/card/detail/${cardId}`)
     .then((res) => {
-      console.log(res);
+      return res.data;
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
+
+// 사용자 카드 불러오기
+export async function accountCardList(): Promise<void> {
+  const memberId = await getData('memberId');
+  return axiosWithAuth
+    .get(`/api/card/list/${memberId}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((e) => {
+      throw e;
+    });
+}
+
 // 월별 순 자산
-export function accountPerMonthAsset(): Promise<void> {
+export async function accountPerMonthAsset(): Promise<void> {
   return axiosWithAuth
     .get('/api/account/statistics')
     .then((res) => {
       console.log(res);
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
 // 목표 설정
-export function accountSetGoal(data: Goal): Promise<void> {
+export async function accountSetGoal(data: Goal): Promise<void> {
   return axiosWithAuth
     .post('/api/account/goal', data)
     .then((res) => {
       console.log(res);
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
 // 목표 조회
-export function accountGoalInquiry(): Promise<void> {
+export async function accountGoalInquiry(): Promise<void> {
   return axiosWithAuth
     .get('/api/account/goal')
     .then((res) => {
       console.log(res);
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
 // 내 자산 순위 조회
-export function accountAssetRankInquiry(): Promise<void> {
+export async function accountAssetRankInquiry(): Promise<void> {
   return axiosWithAuth
     .get('/api/account/rank')
     .then((res) => {
       console.log(res);
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }

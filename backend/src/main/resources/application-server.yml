@@ -49,7 +49,7 @@ logging:
         SQL: trace
     com:
       ssafy:
-        donworry:
+        donworry: debug
   file:
     name: /log.log
 

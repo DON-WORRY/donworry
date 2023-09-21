@@ -41,6 +41,8 @@ const MypageOpen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
+    paddingTop: 60,
+    height: 600
   },
   text: {
     fontSize: 35,

@@ -7,12 +7,9 @@ import lombok.NoArgsConstructor;
 import static lombok.AccessLevel.PROTECTED;
 
 public record CategoryAmountResponse(
-        @NotNull Long food,
-        @NotNull Long transport,
-        @NotNull Long life,
-        @NotNull Long hobby,
-        @NotNull Long style,
-        @NotNull Long etc
+
+        @NotNull String category,
+        @NotNull Long amount
 
 ) {
 
