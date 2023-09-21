@@ -6,6 +6,12 @@ interface ScreenProps {
     navigate: (screen: string, params?: any) => void;
   };
 }
+const consumptionData = {
+  conId: 1,
+  conName: '수완초밥&참치',
+  conMoney: 100000,
+};
+
 function SpendScreen() {
   const navigation = useNavigation<ScreenProps['navigation']>();
   return (
@@ -14,7 +20,10 @@ function SpendScreen() {
       <TouchableOpacity
         style={{ backgroundColor: 'gray', padding: 30 }}
         onPress={() => {
-          navigation.navigate('StackNavigation', { screen: 'DutchPayRequest' });
+          navigation.navigate('StackNavigation', {
+            screen: 'DutchPayRequest',
+            params: consumptionData,
+          });
         }}
       >
         <Text>소비 내역 중 하나</Text>
