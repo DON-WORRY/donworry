@@ -4,8 +4,8 @@ import com.ssafy.donworry.api.controller.finance.dto.request.CategoryModifyReque
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
-import com.ssafy.donworry.api.service.finance.FinanceService;
-import com.ssafy.donworry.api.service.finance.query.FinanceQueryService;
+import com.ssafy.donworry.api.service.finance.ConsumptionService;
+import com.ssafy.donworry.api.service.finance.query.ConsumptionQueryService;
 import com.ssafy.donworry.common.model.UserDetailsModel;
 import com.ssafy.donworry.common.response.ApiData;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,15 +23,15 @@ import java.util.List;
 @RequestMapping("/api/consumption")
 @RequiredArgsConstructor
 public class ConsumptionController {
-    private final FinanceQueryService financeQueryService;
-    private final FinanceService financeService;
+    private final ConsumptionQueryService consumptionQueryService;
+    private final ConsumptionService consumptionService;
 
     @Operation(summary = "카테고리별 소비합계 조회", description = "각 카테고리별 소비합계를 조회하는 API입니다.")
     @GetMapping("/total")
     public ApiData<CategoryTotalResponse> searchCategoryTotal(@AuthenticationPrincipal UserDetailsModel userDetailsModel, @RequestParam int month) {
         Long memberId = userDetailsModel.getId();
         log.info("searchCategoryTotal - memberId : " + memberId);
-        CategoryTotalResponse categoryTotal = financeQueryService.searchCategoryTotal(memberId, month);
+        CategoryTotalResponse categoryTotal = consumptionQueryService.searchCategoryTotal(memberId, month);
         return ApiData.of(categoryTotal);
     }
 
@@ -44,7 +44,7 @@ public class ConsumptionController {
         Long memberId = userDetailsModel.getId();
         log.info("searchCategoryHistory - memberId : " + memberId);
 
-        List<CategoryHistoryResponse> historyResponseList = financeQueryService.searchCategoryHistory(memberId, categoryId, month);
+        List<CategoryHistoryResponse> historyResponseList = consumptionQueryService.searchCategoryHistory(memberId, categoryId, month);
 //        for (Long i = 1l; i <= 3; i++) {
 //            CategoryHistoryResponse categoryHistoryResponse = new CategoryHistoryResponse(i, "신쭈꾸미 수완점", "KB국민은행", i, LocalDateTime.now());
 //            historyResponseList.add(categoryHistoryResponse);
@@ -60,7 +60,7 @@ public class ConsumptionController {
         Long consumptionId = categoryModifyRequest.consumptionId();
         Long categoryId = categoryModifyRequest.consumptionCategoryId();
 
-        Long id = financeService.modifyCategory(consumptionId, categoryId);
+        Long id = consumptionService.modifyCategory(consumptionId, categoryId);
         log.info("modifyCategory : " + id);
 
         return ApiData.of(id);

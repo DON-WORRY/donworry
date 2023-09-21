@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class FinanceService {
+public class ConsumptionService {
     private final ConsumptionRepository consumptionRepository;
     private final ConsumptionCategoryRepository consumptionCategoryRepository;
     public Long modifyCategory(Long consumptionId, Long categoryId) {
