@@ -52,7 +52,7 @@ public class MemberController {
 
     @GetMapping("/search")
     @Operation(summary = "이름으로 검색", description = "회원 리스트 이름으로 검색")
-    public ApiData<List<MemberSearchResponse>> searchMember(@RequestParam(required = false) String memberName){
-        return ApiData.of(memberQueryService.searchMember(memberName));
+    public ApiData<List<MemberSearchResponse>> searchMember(@RequestParam(required = false) String memberName, @AuthenticationPrincipal UserDetailsModel model){
+        return ApiData.of(memberQueryService.searchMember(memberName, model.getEmail()));
     }
 }

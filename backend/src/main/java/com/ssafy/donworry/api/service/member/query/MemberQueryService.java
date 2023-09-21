@@ -69,10 +69,13 @@ public class MemberQueryService {
         redisUtil.setBlackList(memberId);
     }
 
-    public List<MemberSearchResponse> searchMember(String memberName){
-        return memberRepository.findByMemberNameStartsWith(memberName).stream().map(
-                (member) -> MemberSearchResponse.of(member)
-        ).collect(Collectors.toList());
+    public List<MemberSearchResponse> searchMember(String memberName, String userEmail){
+        return memberRepository.findByMemberNameStartsWith(memberName).stream()
+                .filter(member -> member.getMemberEmail() != userEmail)
+                .map(
+                        (member) -> MemberSearchResponse.of(member)
+                )
+                .collect(Collectors.toList());
     }
 
 }
