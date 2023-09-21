@@ -15,11 +15,35 @@ import FriendRequest from '../../components/friends/FriendRequest';
 import FriendResponse from '../../components/friends/FriendResponse';
 import { useNavigation } from '@react-navigation/native';
 
+// 함수 입력
+import { friendRequestList } from '../../utils/FriendFunctions';
+
 interface ScreenProps {
   navigation: {
     goBack: (screen: string, params?: any) => void;
   };
 }
+
+type ReceivedRequest = {
+  friendRequestId: number;
+  memberId: number;
+  memberEmail: string;
+  memberName: string;
+  createdTime: string;
+};
+
+type SendRequest = {
+  friendRequestId: number;
+  memberId: number;
+  memberEmail: string;
+  memberName: string;
+  createdTime: string;
+};
+
+type CheckResponseData = {
+  receivedRequest: ReceivedRequest[];
+  sendRequest: SendRequest[];
+};
 
 const requestData = [
   {
@@ -106,36 +130,44 @@ const responseData = [
     time: '2023-09-01',
   },
 ];
-// 값을 가져오기
-const getData = async (key: string) => {
-  try {
-    const value = await AsyncStorage.getItem(key);
-    if (value !== null) {
-      return value;
-    }
-  } catch (e) {
-    // 읽기 에러
-    console.error(e);
-    throw e;
-  }
-};
+// // 값을 가져오기
+// const getData = async (key: string) => {
+//   try {
+//     const value = await AsyncStorage.getItem(key);
+//     if (value !== null) {
+//       return value;
+//     }
+//   } catch (e) {
+//     // 읽기 에러
+//     console.error(e);
+//     throw e;
+//   }
+// };
 
 const FriendMessageScreen: React.FC = () => {
   const blackLogo = require('../../assets/logo/BlackLogo.png');
   const navigation = useNavigation<ScreenProps['navigation']>();
-  const [newMemberId, setNewMemberId] = useState('');
+  // const [newMemberId, setNewMemberId] = useState('');
   const [howCompoShow, setHowCompoShow] = useState({
     isFirst: true,
     isSecond: false,
     isThird: false,
   });
+  const [receivedRequest, setReceivedRequest] = useState<ReceivedRequest[]>([]);
+  const [sendRequest, setSendRequest] = useState<SendRequest[]>([]);
 
+  // 바로 렌더링 할 수 있게 하는 함수
   useEffect(() => {
     const fetch = async () => {
-      const memberId = await getData('memberId');
-      if (memberId !== undefined) {
-        await setNewMemberId(memberId);
-      }
+      const allRequstList = await friendRequestList()
+        .then((r) => {
+          return r.data;
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+      setReceivedRequest(allRequstList.receivedRequest);
+      setSendRequest(allRequstList.sendRequest);
     };
     fetch();
   }, []);
@@ -221,17 +253,23 @@ const FriendMessageScreen: React.FC = () => {
               showsVerticalScrollIndicator={false}
               alwaysBounceHorizontal={true}
             >
-              {responseData.map((data, index) => {
-                return (
-                  <View key={index}>
-                    <FriendResponse
-                      email={data.email}
-                      name={data.name}
-                      time={data.time}
-                    />
-                  </View>
-                );
-              })}
+              {sendRequest.length > 0 ? (
+                <>
+                  {sendRequest.map((data, index) => {
+                    return (
+                      <View key={index}>
+                        <FriendResponse
+                          email={data.memberEmail}
+                          name={data.memberName}
+                          time={data.createdTime}
+                        />
+                      </View>
+                    );
+                  })}
+                </>
+              ) : (
+                <></>
+              )}
             </ScrollView>
           </>
         ) : howCompoShow.isSecond ? (
@@ -241,17 +279,23 @@ const FriendMessageScreen: React.FC = () => {
               showsVerticalScrollIndicator={false}
               alwaysBounceHorizontal={true}
             >
-              {requestData.map((data, index) => {
-                return (
-                  <View key={index}>
-                    <FriendRequest
-                      email={data.email}
-                      name={data.name}
-                      time={data.time}
-                    />
-                  </View>
-                );
-              })}
+              {receivedRequest.length > 0 ? (
+                <>
+                  {receivedRequest.map((data, index) => {
+                    return (
+                      <View key={index}>
+                        <FriendRequest
+                          email={data.memberEmail}
+                          name={data.memberName}
+                          time={data.createdTime}
+                        />
+                      </View>
+                    );
+                  })}
+                </>
+              ) : (
+                <></>
+              )}
             </ScrollView>
           </>
         ) : (

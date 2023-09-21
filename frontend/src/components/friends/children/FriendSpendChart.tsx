@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Dimensions, Text, StyleSheet } from 'react-native';
 
 /*
@@ -13,66 +13,59 @@ public class CategoryAmountResponse {
 */
 
 const screenWidth = Dimensions.get('screen').width;
-type CategoryAmount = {
-  food: number;
-  transport: number;
-  life: number;
-  hobby: number;
-  style: number;
-  etc: number;
-  [key: string]: number;
-};
 
-const categoryKey = ['food', 'transport', 'life', 'hobby', 'style', 'etc'];
-const categoryName: {
-  food: string;
-  transport: string;
-  life: string;
-  hobby: string;
-  style: string;
-  etc: string;
-  [key: string]: string;
-} = {
-  food: '식비',
-  transport: '교통',
-  life: '생활',
-  hobby: '취미',
-  style: '의류',
-  etc: '기타',
+type CategoryAmountList = CategoryAmount[];
+
+type CategoryAmount = {
+  amount: number;
+  category: string;
 };
 
 interface FriendSpendChartProps {
-  myAmount: CategoryAmount;
-  kingsAmount: CategoryAmount;
+  myAmount: CategoryAmountList;
+  kingsAmount: CategoryAmountList;
 }
-
+const indexList = [0, 1, 2, 3, 4, 5];
 const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
+  const [myAmount, setMyAmount] = useState<CategoryAmountList>([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    async function fetch() {
+      const nowAmount = props.myAmount;
+      setMyAmount(nowAmount);
+      setLoading(true);
+    }
+    fetch();
+  }, [props.myAmount, props.kingsAmount]);
   return (
     <View>
-      {categoryKey.map((name: string) => {
-        const cName = categoryName[name];
-        return (
-          <View key={name} style={styles.lineBox}>
-            <View style={styles.leftStickBox}>
-              <Text style={styles.amountLeftText}>{props.myAmount[name]}</Text>
-              <View style={styles.leftStickTop}></View>
-              <View style={styles.leftStickBottom}></View>
-            </View>
-            <View style={styles.categoryBox}>
-              <View style={styles.category}>
-                <Text style={styles.categoryText}>{cName}</Text>
+      {myAmount.length > 0 ? (
+        indexList.map((indexNumber: number) => {
+          const cName = myAmount[indexNumber].category;
+          return (
+            <View key={indexNumber} style={styles.lineBox}>
+              <View style={styles.leftStickBox}>
+                <Text style={styles.amountLeftText}>{myAmount[indexNumber].amount}</Text>
+                <View style={styles.leftStickTop}></View>
+                <View style={styles.leftStickBottom}></View>
+              </View>
+              <View style={styles.categoryBox}>
+                <View style={styles.category}>
+                  <Text style={styles.categoryText}>{cName}</Text>
+                </View>
+              </View>
+              <View style={styles.rightStickBox}>
+                <Text style={styles.amountRightText}>{myAmount[indexNumber].amount}</Text>
+                <View style={styles.rightStickTop}></View>
+                <View style={styles.rightStickBottom}>
+                </View>
               </View>
             </View>
-            <View style={styles.rightStickBox}>
-              <Text style={styles.amountRightText}>{props.kingsAmount[name]}</Text>
-              <View style={styles.rightStickTop}></View>
-              <View style={styles.rightStickBottom}>
-                <Text></Text>
-              </View>
-            </View>
-          </View>
-        );
-      })}
+          );
+        })
+      ) : (
+        <></>
+      )}
     </View>
   );
 };
