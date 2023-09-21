@@ -59,16 +59,16 @@ public class FinanceQueryService {
         return new CategoryTotalResponse(total, categoryAmountList);
     }
 
-    public List<CategoryHistoryResponse> searchCategoryHistory(Long memberId, Long categoryId) {
+    public List<CategoryHistoryResponse> searchCategoryHistory(Long memberId, Long categoryId, int month) {
 
         // 유저 소비내역 불러오기
-        List<CategoryHistoryResponse> categoryHistoryList = consumptionQueryRepository.findConsumptionCategoryHistory(memberId, categoryId);
+        List<CategoryHistoryResponse> categoryHistoryList = consumptionQueryRepository.findConsumptionCategoryHistory(memberId, categoryId, month);
 //        for(CategoryHistoryResponse categoryHistory : categoryHistoryList) {
 //            log.info("id : {}, detail : {}, price : {}", categoryHistory.id(), categoryHistory.detail(), categoryHistory.price());
 //        }
 
         // 유저 더치페이가 된 소득내역 불러오기
-        List<Tuple> incomeList = incomeQueryRepository.findIncomeDutchpayPriceByMemberId(memberId, categoryId);
+        List<Tuple> incomeList = incomeQueryRepository.findIncomeDutchpayPriceByMemberId(memberId, categoryId, month);
         for(Tuple t : incomeList) {
             log.info("id : {}, price : {}", t.get(0, Long.class), t.get(1, Long.class));
         }
@@ -87,7 +87,10 @@ public class FinanceQueryService {
     }
 
 
-    // 함수
+    /**
+     * 비즈니스 로직
+      */
+
     private Long createTotal(List<CategoryAmountResponse> categoryAmountList) {
         Long total = 0l;
         for (CategoryAmountResponse categoryAmountResponse : categoryAmountList) {
