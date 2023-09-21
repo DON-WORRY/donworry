@@ -67,7 +67,6 @@ export function userLogin(data: LoginData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/members/login', data)
     .then(async (response) => {
-      console.log(response.data)
       const accessToken = await response.data.data.accessToken;
       const memberEmail = await response.data.data.memberEmail;
       const memberId = await response.data.data.memberId.toString();
@@ -83,8 +82,7 @@ export function userLogin(data: LoginData): Promise<void> {
       await storeData('refreshToken', refreshToken);
     })
     .catch((e) => {
-      console.error(e);
-      throw e; // 에러를 다시 던져서, 함수를 호출하는 측에서 catch 가능하도록 합니다.
+      throw e.response.data; // 에러를 다시 던져서, 함수를 호출하는 측에서 catch 가능하도록 합니다.
     });
 }
 

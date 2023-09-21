@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Text,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { userLogin } from '../../utils/UserFunctions';
@@ -39,14 +40,16 @@ const Login: React.FC = () => {
     // 로그인 시
     const data = {
       memberEmail: loginId,
-      memberPassword: password
-    }
-    userLogin(data).then(() => {
-      navigation.replace('TabNavigation', { screen: 'Home' });
-    }).catch((e) => {
-      console.log(e)
-      return alert("아이디 또는 비밀번호가 유효하지 않습니다.")
-    })
+      memberPassword: password,
+    };
+    userLogin(data)
+      .then(() => {
+        navigation.replace('TabNavigation', { screen: 'Home' });
+      })
+      .catch((e) => {
+        console.error(e);
+        return Alert.alert('로그인 실패', `${e.message}`);
+      });
   }
 
   return (
