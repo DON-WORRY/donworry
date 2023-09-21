@@ -1,7 +1,7 @@
 spring:
   profiles:
-    include: dev, env  #dev
-#    include: server, env  #server
+#    include: dev, env  #dev
+    include: server, env  #server
 
   ## 이미지 파일 크기 제한
   servlet:
