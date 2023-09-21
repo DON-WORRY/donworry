@@ -24,10 +24,10 @@ public class FriendRequestQueryRepository {
         return queryFactory
                 .select(Projections.constructor(FriendRequestResponse.class,
                         friendRequest.id,
-                        member.id,
-                        member.memberEmail,
-                        member.memberName,
-                        member.createdTime
+                        friendRequest.receiver.id,
+                        friendRequest.receiver.memberEmail,
+                        friendRequest.receiver.memberName,
+                        friendRequest.receiver.createdTime
                 ))
                 .from(friendRequest)
                 .join(friendRequest.sender, member)
@@ -44,10 +44,10 @@ public class FriendRequestQueryRepository {
         return queryFactory
                 .select(Projections.constructor(FriendRequestResponse.class,
                         friendRequest.id,
-                        member.id,
-                        member.memberEmail,
-                        member.memberName,
-                        member.createdTime
+                        friendRequest.sender.id,
+                        friendRequest.sender.memberEmail,
+                        friendRequest.sender.memberName,
+                        friendRequest.sender.createdTime
                 ))
                 .from(friendRequest)
                 .join(friendRequest.receiver, member)
