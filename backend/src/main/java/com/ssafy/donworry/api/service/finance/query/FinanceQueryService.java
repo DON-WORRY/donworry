@@ -26,16 +26,16 @@ public class FinanceQueryService {
     private final ConsumptionQueryRepository consumptionQueryRepository;
     private final IncomeQueryRepository incomeQueryRepository;
 
-    public CategoryTotalResponse searchCategoryTotal(Long memberId) {
+    public CategoryTotalResponse searchCategoryTotal(Long memberId, int month) {
         // 1. 소비 데이터 가져오기
-        List<Tuple> consumptionList = consumptionQueryRepository.findConsumptionCategoryTotal(memberId);
+        List<Tuple> consumptionList = consumptionQueryRepository.findConsumptionCategoryTotal(memberId, month);
 //        for(Tuple t: consumptionList) {
 //            log.info("카테고리 : " + t.get(0, Long.class));
 //            log.info("합계 : " + t.get(1, Long.class));
 //        }
 
         // 2. 더치페이 아이디가 있는 소득 카테고리별로 정리 된 데이터 가져오기
-        List<Tuple> incomeList = incomeQueryRepository.findIncomeCategoryTotal(memberId);
+        List<Tuple> incomeList = incomeQueryRepository.findIncomeCategoryTotal(memberId, month);
         // ["식비", 1000], ["교통", 2000] ...
 //        for(Tuple t: incomeList) {
 //            log.info("카테고리 : " + t.get(0, Long.class));
@@ -44,9 +44,9 @@ public class FinanceQueryService {
 
         // 3. 카테고리 별로 소비 - 소득 계산
         List<CategoryAmountResponse> categoryAmountList = createCategoryAmountList(consumptionList, incomeList);
-        for (CategoryAmountResponse categoryAmountResponse : categoryAmountList) {
-            log.info("Name : {}, Amount : {}", categoryAmountResponse.category(), categoryAmountResponse.amount());
-        }
+//        for (CategoryAmountResponse categoryAmountResponse : categoryAmountList) {
+//            log.info("Name : {}, Amount : {}", categoryAmountResponse.category(), categoryAmountResponse.amount());
+//        }
 
         // 4. 소비 내역 정렬
         Collections.sort(categoryAmountList, (o1, o2) -> Math.toIntExact(o2.amount() - o1.amount()));
