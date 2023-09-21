@@ -96,6 +96,7 @@ public class EmailQueryService {
         if(!authCode.isPresent()) throw new InvalidValueException(ErrorCode.EMAIL_NOT_FOUND);
         if(!authCode.get().equals(request.authCode())) throw new InvalidValueException(ErrorCode.AUTH_CODE_ERROR);
 
+        redisUtil.deleteEmail(request.email());
     }
 
 }

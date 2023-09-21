@@ -13,12 +13,12 @@ import java.util.List;
 import static com.ssafy.donworry.domain.account.entity.QAccount.account;
 import static com.ssafy.donworry.domain.finance.entity.QConsumption.consumption;
 import static com.ssafy.donworry.domain.finance.entity.QIncome.income;
-
 @Repository
 @RequiredArgsConstructor
 public class AccountQueryRepository {
     private final JPAQueryFactory queryFactory;
 
+    // TODO: 2023-09-19 시간날때 repository 내장 함수 쓰는걸로 바꿀것 
     public List<Account> findByMemberId(Long memberId) {
         return  queryFactory
                 .select(account)
@@ -26,6 +26,7 @@ public class AccountQueryRepository {
                 .where(account.member.id.eq(memberId))
                 .fetch();
     }
+<<<<<<< backend/src/main/java/com/ssafy/donworry/domain/account/repository/query/AccountQueryRepository.java
 
     public List<Account> findByAccountId(Long accountId) {
         return queryFactory
@@ -76,4 +77,6 @@ public class AccountQueryRepository {
                 .fetch();
         return list;
     }
+=======
+>>>>>>> backend/src/main/java/com/ssafy/donworry/domain/account/repository/query/AccountQueryRepository.java
 }

@@ -2,6 +2,8 @@ package com.ssafy.donworry.common.config;
 
 //import com.ssafy.donworry.common.filter.JwtAuthenticationFilter;
 
+import com.ssafy.donworry.common.filter.InvalidTokenEntryPoint;
+import com.ssafy.donworry.common.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +18,7 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    //    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CorsFilter corsFilter;
 
     @Bean
@@ -28,9 +30,15 @@ public class SecurityConfig {
                 .formLogin(login -> login.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/**", "/api/auth/kakao", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .anyRequest().authenticated());
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/swagger-ui/**", "/swagger-ui.html/**", "/demo-ui.html/**", "/api-docs/**").permitAll()
+                        .requestMatchers("/api/emails/**", "/api/members/join", "/api/members/login").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.authenticationEntryPoint(new InvalidTokenEntryPoint())
+                );
         return http.build();
     }
 
