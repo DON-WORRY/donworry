@@ -10,7 +10,10 @@ import {
   Alert,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+// 함수 모음
 import { userLogin } from '../../utils/UserFunctions';
+import { friendRequest } from '../../utils/FriendFunctions';
+// 로컬 스토리지
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const addFriendImg = require('../../assets/friends/AddFriend3.png');
@@ -34,8 +37,17 @@ const getData = async (key: string) => {
   }
 };
 
-const FriendSendRequest: React.FC = () => {
+interface FriendSendRequestProps {
+  setHowCompoShow: (howCompo: {
+    isFirst: boolean;
+    isSecond: boolean;
+    isThird: boolean;
+  }) => void;
+}
+
+const FriendSendRequest: React.FC<FriendSendRequestProps> = (props) => {
   const [friendEmail, setFriendEmail] = useState('');
+  // 친구 있는지 확인
   async function searchFriend(friendEmail: string) {
     const memberEmail = await getData('memberEmail');
     const data = {
@@ -47,12 +59,33 @@ const FriendSendRequest: React.FC = () => {
       if (friendEmail == memberEmail) {
         return Alert.alert(
           'Error',
-          '자기 자신에게 친구 요청을 보낼 수는 없습니다.'
+          '자기 자신에게 친구 요청을 보낼 수는 없습니다.',
+          [{ text: '확인', onPress: () => {} }]
         );
       }
       if (Code == 'M004') {
         console.log('ok');
-        return Alert.alert('친구 요청', '친구 요청을 보내시겠습니까?');
+        return Alert.alert('친구 요청', '친구 요청을 보내시겠습니까?', [
+          {
+            text: '요청 보내기',
+            onPress: () => {
+              requestEmail()
+                .then(async (r) => {
+                  console.log(r);
+                  await setFriendEmail("")
+                  await props.setHowCompoShow({
+                    isFirst: true,
+                    isSecond: false,
+                    isThird: false,
+                  });
+                })
+                .catch((e) => {
+                  console.error(e);
+                });
+            },
+          },
+          { text: '취소하기', onPress: () => {} },
+        ]);
       } else {
         console.log('not ok');
         return Alert.alert(
@@ -62,6 +95,19 @@ const FriendSendRequest: React.FC = () => {
       }
       // return Alert.alert("존재하지 않는 이메일")
     });
+  }
+  // 친구 요청 함수
+  async function requestEmail() {
+    const requestData = {
+      memberEmails: [friendEmail],
+    };
+    friendRequest(requestData)
+      .then((r) => {
+        console.log(r);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }
   return (
     <KeyboardAvoidingView style={styles.container}>

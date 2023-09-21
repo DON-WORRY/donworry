@@ -10,12 +10,21 @@ import {
 import MypageImage from './MypageImage';
 import { useDispatch } from 'react-redux';
 import { setMypageModal } from '../../store/Modal';
+type UserData = {
+  memberId: string;
+  memberEmail: string;
+  memberName: string;
+};
+interface MyPageCloseProps {
+  data: UserData;
+}
 
-const MyPageClose: React.FC = () => {
+const MyPageClose: React.FC<MyPageCloseProps> = (props) => {
   const dispatch = useDispatch();
   function handleDownClick() {
     dispatch(setMypageModal(true));
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.header_view}>
@@ -23,8 +32,8 @@ const MyPageClose: React.FC = () => {
           <MypageImage style={styles.profile_image} />
         </View>
         <View style={styles.text_view}>
-          <Text style={styles.text_name}>나종현</Text>
-          <Text style={styles.text_email}>i0364842@naver.com</Text>
+          <Text style={styles.text_name}>{props.data.memberName}</Text>
+          <Text style={styles.text_email}>{props.data.memberEmail}</Text>
         </View>
         <View style={styles.icon_view}>
           <TouchableOpacity onPress={handleDownClick}>

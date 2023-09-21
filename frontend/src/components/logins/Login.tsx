@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { userLogin } from '../../utils/UserFunctions';
-
+import { useDispatch } from 'react-redux';
+import { setMypageModal } from '../../store/Modal';
 interface InputboxProps {
   placeholder: string;
   value: string;
@@ -35,7 +36,7 @@ const Login: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [loginId, setloginId] = useState('');
   const [password, setPassword] = useState('');
-
+  const dispatch = useDispatch();
   function handleLogin() {
     // 로그인 시
     const data = {
@@ -44,6 +45,7 @@ const Login: React.FC = () => {
     };
     userLogin(data)
       .then(() => {
+        dispatch(setMypageModal(true));
         navigation.replace('TabNavigation', { screen: 'Home' });
       })
       .catch((e) => {

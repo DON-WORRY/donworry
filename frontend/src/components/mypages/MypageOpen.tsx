@@ -10,17 +10,32 @@ import {
 import MypageImage from './MypageImage';
 import MypageText from './MypageText';
 import MypageButton from './MyPageButton';
+import { useNavigation } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { DrawerActions } from '@react-navigation/native';
+import { userLogout } from '../../utils/UserFunctions';
 
-const MypageOpen: React.FC = () => {
+type UserData = {
+  memberId: string;
+  memberEmail: string;
+  memberName: string;
+};
+interface MyPageOpenProps {
+  data: UserData;
+}
+
+const MypageOpen: React.FC<MyPageOpenProps> = (props) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>000님의 정보</Text>
+      <Text style={styles.text}>{props.data.memberName}님의 정보</Text>
       <MypageImage style={styles.image} />
       <View style={styles.info_View}>
-        <MypageText title="이름" content="나종현" />
-        <MypageText title="생년월일" content="1998.01.13" />
-        <MypageText title="이메일" content="i0364842@naver.com" />
-        <MypageText title="전화번호" content="010-4064-3297" />
+        <MypageText title="이름" content={props.data.memberName} />
+        {/* <MypageText title="생년월일" content="1998.01.13" /> */}
+        <MypageText title="이메일" content={props.data.memberEmail} />
+        {/* <MypageText title="전화번호" content="010-4064-3297" /> */}
       </View>
       <View style={styles.info_Button}>
         <MypageButton
@@ -30,7 +45,26 @@ const MypageOpen: React.FC = () => {
         />
         <MypageButton
           title="로그아웃"
-          onPress={() => console.log('로그아웃')}
+          onPress={() => {
+            userLogout();
+            navigation.dispatch(DrawerActions.closeDrawer());
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: 'StackNavigation', // 외부 내비게이터 이름
+                    state: {
+                      index: 0,
+                      routes: [
+                        { name: 'Login' }, // 중첩된 내비게이터에서의 라우트
+                      ],
+                    },
+                  },
+                ],
+              })
+            );
+          }}
           color="#FF0000"
         />
       </View>
@@ -42,7 +76,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     paddingTop: 60,
-    height: 600
+    height: 500,
   },
   text: {
     fontSize: 35,

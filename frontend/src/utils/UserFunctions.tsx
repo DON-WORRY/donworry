@@ -114,14 +114,14 @@ export function userFindPassword(): Promise<void> {
 }
 
 // 로그아웃
-export function userLogout(): Promise<void> {
+export async function userLogout(): Promise<void> {
   return axiosWithAuth
-    .get('/api/user/logout')
+    .get('/api/members/logout')
     .then((res) => {
-      console.log(res);
+      AsyncStorage.clear();
+      return res.data;
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }

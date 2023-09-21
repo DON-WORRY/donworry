@@ -302,7 +302,7 @@ const FriendMessageScreen: React.FC = () => {
             </>
           ) : (
             <>
-              <FriendSendRequest />
+              <FriendSendRequest setHowCompoShow={setHowCompoShow} />
             </>
           )}
         </View>
