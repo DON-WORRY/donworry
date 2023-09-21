@@ -1,6 +1,7 @@
 package com.ssafy.donworry.domain.member.entity;
 
 import com.ssafy.donworry.domain.BaseEntity;
+import com.ssafy.donworry.domain.member.entity.enums.FriendRequestStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -22,6 +23,9 @@ public class FriendRequest extends BaseEntity {
     private Long id;
 
     @NotNull
+    private FriendRequestStatus friendRequestStatus;
+
+    @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "receiver_id")
     private Member receiver;
@@ -32,17 +36,23 @@ public class FriendRequest extends BaseEntity {
     private Member sender;
 
     @Builder
-    public FriendRequest(Long id, Member receiver, Member sender) {
+    public FriendRequest(Long id, FriendRequestStatus friendRequestStatus, Member receiver, Member sender) {
         this.id = id;
+        this.friendRequestStatus = friendRequestStatus;
         this.receiver = receiver;
         this.sender = sender;
     }
 
     public static FriendRequest of(Member receiver, Member sender){
         return FriendRequest.builder()
+                .friendRequestStatus(FriendRequestStatus.ACTIVE)
                 .receiver(receiver)
                 .sender(sender)
                 .build();
+    }
+
+    public void updateStatus(){
+        this.friendRequestStatus = FriendRequestStatus.INACTIVE;
     }
 
 

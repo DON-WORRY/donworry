@@ -20,7 +20,8 @@ public enum ErrorCode {
     PASSWORD_NOT_MATCH(400, "M004", "비밀번호가 일치하지 않습니다."),
 
     // Friend
-    FRIEND_REQUEST_SAVE_ERROR(400, "F001", "친구 요청 저장에 실패했습니다"),
+    FRIEND_REQUEST_SAVE_ERROR(400, "F001", "친구 요청 저장에 실패했습니다."),
+    FRIEND_REQUEST_NOT_FOUND(400, "F002", "친구 요청을 찾는데 실패했습니다."),
 
     // Email
     RANDOM_CODE_ERROR(400, "E001", "이메일 인증 코드 만들기에 실패했습니다."),
