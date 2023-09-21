@@ -1,6 +1,7 @@
 package com.ssafy.donworry.api.service.member.query;
 
 import com.ssafy.donworry.api.controller.member.dto.response.MemberLoginResponse;
+import com.ssafy.donworry.api.controller.member.dto.response.MemberSearchResponse;
 import com.ssafy.donworry.api.service.member.request.MemberLoginServiceRequest;
 import com.ssafy.donworry.common.error.ErrorCode;
 import com.ssafy.donworry.common.error.exception.EntityNotFoundException;
@@ -17,6 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -63,6 +67,15 @@ public class MemberQueryService {
         redisUtil.deleteToken(memberId);
         redisUtil.deleteUser(memberId);
         redisUtil.setBlackList(memberId);
+    }
+
+    public List<MemberSearchResponse> searchMember(String memberName, String userEmail){
+        return memberRepository.findByMemberNameStartsWith(memberName).stream()
+                .filter(member -> member.getMemberEmail() != userEmail)
+                .map(
+                        (member) -> MemberSearchResponse.of(member)
+                )
+                .collect(Collectors.toList());
     }
 
 }

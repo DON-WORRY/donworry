@@ -23,7 +23,7 @@ public class DutchpayController {
     public ApiData<List<DutchpayPersonResponse>> searchDutchpayPerson(@PathVariable("id") Long memberId) {
         log.info("searchDutchpayPerson : " + memberId);
         List<DutchpayPersonResponse> dutchpayPersonResponseList = new ArrayList<>();
-        dutchpayPersonResponseList.add(new DutchpayPersonResponse("김동현", DutchpayStatus.COMPLETE, 3l, 10l));
+        dutchpayPersonResponseList.add(new DutchpayPersonResponse(memberId, "김동현", DutchpayStatus.COMPLETE, 3l, 10l));
 
         return ApiData.of(dutchpayPersonResponseList);
     }
@@ -35,7 +35,7 @@ public class DutchpayController {
         log.info("createDutchpay : " + dutchpayCreateRequest.reqAmountList().get(0).memberId());
 
         List<DutchpayPersonResponse> dutchpayPersonResponseList = new ArrayList<>();
-        dutchpayPersonResponseList.add(new DutchpayPersonResponse("김동현", DutchpayStatus.COMPLETE, 3l, 10l));
+        dutchpayPersonResponseList.add(new DutchpayPersonResponse(1l, "김동현", DutchpayStatus.COMPLETE, 3l, 10l));
 
         return ApiData.of(dutchpayPersonResponseList);
     }
@@ -55,5 +55,8 @@ public class DutchpayController {
         log.info("completeDutchpay2 : " + dutchpayId);
         return null;
     }
+
+//    @Operation(summary = "더치페이 송금", description = "더치페이에 대한 송금을 할 수 있는 API입니다.")
+//    @PostMapping("/transfer")
 
 }

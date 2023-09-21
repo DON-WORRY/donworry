@@ -1,5 +1,6 @@
 package com.ssafy.donworry.domain.finance.entity;
 
+import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 import com.ssafy.donworry.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import static jakarta.persistence.GenerationType.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Dutchpay {
+public class Dutchpay extends BaseEntity {
     @Id
     @Column(name = "dutchpay_id")
     @GeneratedValue(strategy = IDENTITY)

@@ -27,6 +27,9 @@ public record MemberJoinRequest(
         String memberPassword,
 
         @NotNull
+        String memberSimplePassword,
+
+        @NotNull
         MemberGender memberGender,
 
         @NotNull
