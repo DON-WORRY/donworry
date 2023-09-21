@@ -38,6 +38,13 @@ public class FriendRelationship extends BaseEntity {
         this.sender = sender;
     }
 
+    public static FriendRelationship of(FriendRequest request){
+        return FriendRelationship.builder()
+                .receiver(request.getReceiver())
+                .sender(request.getSender())
+                .build();
+    }
+
 
 
 }

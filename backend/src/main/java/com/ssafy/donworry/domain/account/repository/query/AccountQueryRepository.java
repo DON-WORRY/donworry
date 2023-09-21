@@ -26,8 +26,6 @@ public class AccountQueryRepository {
                 .where(account.member.id.eq(memberId))
                 .fetch();
     }
-<<<<<<< backend/src/main/java/com/ssafy/donworry/domain/account/repository/query/AccountQueryRepository.java
-
     public List<Account> findByAccountId(Long accountId) {
         return queryFactory
                 .select(account)
@@ -77,6 +75,4 @@ public class AccountQueryRepository {
                 .fetch();
         return list;
     }
-=======
->>>>>>> backend/src/main/java/com/ssafy/donworry/domain/account/repository/query/AccountQueryRepository.java
 }
