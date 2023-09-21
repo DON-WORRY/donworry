@@ -4,12 +4,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.donworry.api.controller.account.dto.response.StatisticsResponse;
 import com.ssafy.donworry.domain.account.entity.Account;
-import com.ssafy.donworry.domain.finance.entity.QConsumption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.ssafy.donworry.domain.account.entity.QAccount.account;
