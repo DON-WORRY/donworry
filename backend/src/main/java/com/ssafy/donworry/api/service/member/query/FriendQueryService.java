@@ -32,21 +32,22 @@ public class FriendQueryService {
 
         // TODO: 2023-09-20 로직 맞는지 검증 필요
 
-//        List<FriendRequestResponse> receiverResponse = friendRequestQueryRepository.findSenders(member);
+        List<FriendRequestResponse> receiverResponse = friendRequestQueryRepository.findReceivers(member);
+        List<FriendRequestResponse> senderResponse = friendRequestQueryRepository.findSenders(member);
 
-        List<FriendRequestResponse> receiverResponse =  member.getRequestSenders().stream().map(
-                (friendRequest) -> {
-                    Member receivers = friendRequest.getReceiver();
-                    return FriendRequestResponse.of(receivers, friendRequest.getId());
-                }
-        ).collect(Collectors.toList());
-
-        List<FriendRequestResponse> senderResponse = member.getRequestReceivers().stream().map(
-                (friendRequest) -> {
-                    Member senders = friendRequest.getSender();
-                    return FriendRequestResponse.of(senders, friendRequest.getId());
-                }
-        ).collect(Collectors.toList());
+//        List<FriendRequestResponse> receiverResponse =  member.getRequestSenders().stream().map(
+//                (friendRequest) -> {
+//                    Member receivers = friendRequest.getReceiver();
+//                    return FriendRequestResponse.of(receivers, friendRequest.getId());
+//                }
+//        ).collect(Collectors.toList());
+//
+//        List<FriendRequestResponse> senderResponse = member.getRequestReceivers().stream().map(
+//                (friendRequest) -> {
+//                    Member senders = friendRequest.getSender();
+//                    return FriendRequestResponse.of(senders, friendRequest.getId());
+//                }
+//        ).collect(Collectors.toList());
 
         return FriendRequestListResponse.of(receiverResponse, senderResponse);
     }
