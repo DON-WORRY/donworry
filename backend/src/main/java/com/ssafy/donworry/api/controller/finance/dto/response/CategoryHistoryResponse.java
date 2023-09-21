@@ -27,6 +27,7 @@ public class CategoryHistoryResponse {
         this.bankName = bankName;
         this.price = price;
         this.dateTime = dateTime;
+        // TODO: 2023-09-21 dataTime -> 소비날짜 변수명으로 변경
     }
 
     public void updatePrice(Long incomePrice) {
