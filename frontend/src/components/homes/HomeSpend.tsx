@@ -11,12 +11,27 @@ import {
 import ContentButton from '../ContentButton';
 import { images } from '../../assets/bank&card';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { consumptionCategoryTotal } from '../../utils/ConsumptionFunctions';
 
 interface ScreenProps {
   navigation: {
     navigate: (screen: string, params?: any) => void;
   };
 }
+
+const getData = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    // 읽기 에러
+    console.error(e);
+    throw e;
+  }
+};
 
 const { width } = Dimensions.get('screen');
 
@@ -25,7 +40,9 @@ const formatAmount = (amount: string): string => {
 };
 
 const HomeSpend: React.FC = () => {
+  const [memberId, setMemberId] = useState('');
   const navigation = useNavigation<ScreenProps['navigation']>();
+  const [totalSpend, setTotalSpend] = useState<Array<{ amount: number; category: string }>>([]);
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
 
@@ -35,18 +52,41 @@ const HomeSpend: React.FC = () => {
     }
   }, [isFocused]);
 
-  const data = [
-    { bank: '취미', money: -200000 },
-    { bank: '식비', money: -342500 },
-    { bank: '생활', money: -120000 },
-    { bank: '쇼핑', money: -485000 },
-    { bank: '기타', money: -79400 },
-  ].sort((a, b) => a.money - b.money);
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const today = new Date(); 
+        const currentMonth = today.getMonth() + 1;
+
+        const newMemberId = await getData('memberId');
+        const newTotalSpend: any = await consumptionCategoryTotal(currentMonth); 
+        if (newMemberId) {
+          setMemberId(newMemberId);
+        }
+        if (newTotalSpend && newTotalSpend.data && Array.isArray(newTotalSpend.data.categoryAmountList)) {
+          setTotalSpend(newTotalSpend.data.categoryAmountList);
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    };
+    fetch();
+  }, []);
+
   const handleToggle = () => {
     setIsExpanded((prevState) => !prevState);
-  };
+  };  
 
-  const totalAmount = data.reduce((sum, item) => sum + item.money, 0);
+  const processedData = (totalSpend || [])
+    .map((item) => ({
+      category: item.category,
+      amount: -item.amount, // 음수로 표시하려면 '-'를 붙여야 함
+    }))
+    .sort((a, b) => a.amount - b.amount);
+
+  const totalAmount = processedData.reduce((sum, item) => sum + item.amount, 0);
+
+  console.log(memberId)
 
   return (
     <View style={styles.container}>
@@ -57,16 +97,19 @@ const HomeSpend: React.FC = () => {
         </Text>
       </View>
 
-      {data.map((item, index) => {
+      {processedData.map((item, index) => {
         if (index < 4 || isExpanded) {
           return (
             <View key={index} style={styles.row}>
               <View style={styles.imageTextContainer}>
-                <Image style={styles.imageStyle} source={images[item.bank]} />
+                <Image
+                  style={styles.imageStyle}
+                  source={images[item.category]}
+                />
                 <View style={styles.textContainer}>
-                  <Text style={styles.cardContent}>{item.bank}</Text>
+                  <Text style={styles.cardContent}>{item.category}</Text>
                   <Text style={styles.spendContent}>
-                    {formatAmount(item.money.toString())}
+                    {formatAmount(item.amount.toString())}
                   </Text>
                 </View>
               </View>
@@ -82,8 +125,7 @@ const HomeSpend: React.FC = () => {
         }
         return null;
       })}
-
-      {data.length > 4 && (
+      {processedData.length > 4 && (
         <TouchableOpacity onPress={handleToggle}>
           <Text>{isExpanded ? '접기' : '더보기'}</Text>
         </TouchableOpacity>
@@ -116,7 +158,6 @@ const styles = StyleSheet.create({
     width: width * 0.13,
     height: width * 0.13,
     borderRadius: (width * 0.13) / 2,
-    // backgroundColor: 'purple'
   },
   imageTextContainer: {
     flexDirection: 'row',

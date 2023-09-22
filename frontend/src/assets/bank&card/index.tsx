@@ -19,10 +19,12 @@ export const images: { [key: string]: any } = {
   하나카드: require('./하나카드.png'),
   현대카드: require('./현대카드.png'),
   BC카드: require('./BC카드.png'),
+  대신은행: require('./대신은행.png'),
+  대화은행: require('./대화은행.png'),
   교통: require('./교통.png'),
   기타: require('./기타.png'),
   생활: require('./생활.png'),
   쇼핑: require('./쇼핑.png'),
   식비: require('./식비.png'),
-  취미: require('./취미.png'),
+  여가: require('./여가.png'),
 };

@@ -2,13 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
 
 type CategoryModifyData = {
-  /*
-  public record CategoryModifyRequest(
-        @NotNull Long consumptionId,
-        @NotNull Long consumptionCategoryId
-) {
-}
-  */
   consumptionId: number;
   consumptionCategoryId: number;
 };
@@ -19,7 +12,6 @@ type DutchPayRequestData = {
   price: number;
 };
 
-// 값을 가져오기
 const getData = async (key: string) => {
   try {
     const value = await AsyncStorage.getItem(key);
@@ -27,7 +19,6 @@ const getData = async (key: string) => {
       return value;
     }
   } catch (e) {
-    // 읽기 에러
     console.error(e);
     throw e;
   }
