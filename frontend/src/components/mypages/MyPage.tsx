@@ -25,10 +25,9 @@ const MyPage: React.FC = () => {
         {clickView ? <MypageOpen /> : <MyPageClose />}
         <HorizonLine />
         <View>
-
-        <MyPageMenu imageName="bell" text="내소식" />
-        <MyPageMenu imageName2="piggy-bank" text="계좌선택" />
-        <MyPageMenu imageName="send" text="송금하기" />
+          <MyPageMenu imageName="bell" text="내소식" />
+          <MyPageMenu imageName2="piggy-bank" text="계좌선택" />
+          <MyPageMenu imageName="send" text="송금하기" />
         </View>
       </ScrollView>
     </SafeAreaView>

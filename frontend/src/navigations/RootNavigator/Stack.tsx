@@ -5,7 +5,7 @@ import SignupScreen from '../../screens/SignupScreen';
 import FriendMessageScreen from '../../screens/friends/FriendMessageScreen';
 import DutchpayRequestScreen from '../../screens/consumptions/DutchpayRequestScreen';
 import HistoryScreen from '../../screens/historys/HistoryScreen';
-
+import ConsumptionScreen from '../../screens/consumptions/ConsumptionScreen';
 const Stack = createStackNavigator();
 
 const StackNavigation: React.FC = () => {
@@ -32,13 +32,18 @@ const StackNavigation: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="History"
+        component={HistoryScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="DutchpayRequest"
         component={DutchpayRequestScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="History"
-        component={HistoryScreen}
+        name="Consumption"
+        component={ConsumptionScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

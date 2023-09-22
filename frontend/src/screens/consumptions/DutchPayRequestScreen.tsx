@@ -43,7 +43,15 @@ interface MyRequestProps {
 
 type DutchpayRequestScreenProps = {
   route: RouteProp<
-    { DutchpayRequest: { conId: number; conName: string; conMoney: number } },
+    {
+      DutchpayRequest: {
+        bankName: string;
+        detail: string;
+        price: number;
+        dateTime: string;
+        id: number;
+      };
+    },
     'DutchpayRequest'
   >;
 };
@@ -76,6 +84,11 @@ const dummyData = [
   },
 ];
 
+function formattedPrice(inputPrice: number) {
+  const price = new Intl.NumberFormat('en-US').format(inputPrice);
+  return price;
+}
+
 const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
   route,
 }) => {
@@ -90,14 +103,9 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
   const snapPoints = useMemo(() => ['58%'], []);
 
   const consumptionData = route.params;
-  const formattedMoney = new Intl.NumberFormat('en-US').format(
-    consumptionData.conMoney
-  );
   const [inputValue, setInputValue] = useState('');
   const [currentMember, setCurrentMember] = useState(1);
-  const [remainingAmount, setRemainingAmount] = useState(
-    consumptionData.conMoney
-  );
+  const [remainingAmount, setRemainingAmount] = useState(consumptionData.price);
   const [myRequestAccount, setMyRequestAccount] = useState('');
   const [disabled, setDisabled] = useState(true);
   const handleInputChange = (newValue: string) => {
@@ -206,8 +214,10 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
         <BackHeader screen="Spend" />
         <ScrollView>
           <Text>더치페이</Text>
-          <Text style={styles.amountText}>{formattedMoney}원</Text>
-          <Text>{consumptionData.conName}</Text>
+          <Text style={styles.amountText}>
+            {formattedPrice(consumptionData.price)}원
+          </Text>
+          <Text>{consumptionData.detail}</Text>
           <ContentBox>
             <FriendSearch search={search} />
             {dummyData.map((dummy) => {
@@ -452,4 +462,4 @@ const styles = StyleSheet.create({
 });
 
 export default DutchpayRequestScreen;
-export { MemberProps };
+export { MemberProps, DutchpayRequestScreenProps };

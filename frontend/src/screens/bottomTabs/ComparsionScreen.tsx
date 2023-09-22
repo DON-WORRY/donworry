@@ -48,9 +48,9 @@ const ComparisonScreen: React.FC = () => {
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
-        alwaysBounceHorizontal={true}
+        alwaysBounceHorizontal={false}
       >
-      <ComparisonHeader />
+        <ComparisonHeader />
         <ComparisonChart />
         {modeKey.map((keyName) => {
           return (

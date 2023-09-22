@@ -19,6 +19,16 @@ type DutchPayRequestData = {
   price: number;
 };
 
+interface ConsumptionDataProps {
+  categoryHistoryResponseList: {
+    bankName: string;
+    detail: string;
+    price: number;
+    dateTime: string;
+    id: number;
+  }[];
+}
+
 // 값을 가져오기
 const getData = async (key: string) => {
   try {
@@ -47,17 +57,21 @@ export async function consumptionCategoryTotal(month: number): Promise<void> {
 }
 
 // 카테고리별 소비내역
-export async function consumptionCategoryHistory(id: number): Promise<void> {
+export async function consumptionCategoryHistory(
+  id: number,
+  month: number
+): Promise<ConsumptionDataProps> {
   return axiosWithAuth
-    .get(`/api/consumption/history/${id}`)
+    .get(`/api/consumption/history/${id}?month=${month}`)
     .then((res) => {
-      return res.data;
+      return res.data.data;
     })
     .catch((e) => {
       console.error(e);
       throw e;
     });
 }
+export { ConsumptionDataProps };
 
 // 카테고리 변경
 export async function consumptionCategoryModify(
