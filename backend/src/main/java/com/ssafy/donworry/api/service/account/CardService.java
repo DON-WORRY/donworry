@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 @Service
@@ -36,8 +35,8 @@ public class CardService {
         return ConsumptionResponse.of(totalRemained, list);
     }
 
-    public List<ConsumtionDetailResponse> findEachCardOfMonthDetailConsumption(Long cardId, Long month) {
-        List<ConsumtionDetailResponse> list = cardQueryRepository.findEachCardOfMonthDetailConsumption(cardId, month);
+    public List<ConsumtionDetailResponse> findEachCardOfMonthDetailConsumption(Long cardId, Long year, Long month) {
+        List<ConsumtionDetailResponse> list = cardQueryRepository.findEachCardOfMonthDetailConsumption(cardId, year, month);
         return list;
     }
 }
