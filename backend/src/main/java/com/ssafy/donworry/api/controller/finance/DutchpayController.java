@@ -38,20 +38,13 @@ public class DutchpayController {
 
     @Operation(summary = "더치페이 조회", description = "현재 사용자가 요청한 더치페이 항목을 조회할 수 있는 API입니다.")
     @GetMapping("")
-    public ApiData<List<List<DutchpayPersonResponse>>> searchDutchpayPerson(@AuthenticationPrincipal UserDetailsModel userDetailsModel) {
+    public ApiData<List<DutchpayTotalResponse>> searchDutchpayTotal(@AuthenticationPrincipal UserDetailsModel userDetailsModel) {
         Long memberId = userDetailsModel.getId();
         log.info("searchDutchpayPerson : " + memberId);
-        List<List<DutchpayPersonResponse>> dutchpayPersonResponseList = dutchpayQueryService.searchDutchpay(memberId);
+//        List<DutchpayTotalResponse> dutchpayPersonResponseList = dutchpayQueryService.searchDutchpay(memberId);
+        List<DutchpayTotalResponse> dutchpayPersonResponseList = null;
 
         return ApiData.of(dutchpayPersonResponseList);
-    }
-
-    @Operation(summary = "더치페이 완료", description = "더치페이에서 한 멤버의 상태를 완료할 수 있는 API입니다.")
-    @PutMapping("/complete/{id}")
-    public ApiData<Long> completePersonDutchpay(@PathVariable("id") Long dutchpayId,
-                                          @RequestParam Long memberId){
-        log.info("completeDutchpay1 : " + memberId);
-        return null;
     }
 
     @Operation(summary = "더치페이 전체 완료", description = "해당 더치페이를 완료할 수 있는 API입니다.")
@@ -61,7 +54,12 @@ public class DutchpayController {
         return null;
     }
 
-//    @Operation(summary = "더치페이 송금", description = "더치페이에 대한 송금을 할 수 있는 API입니다.")
-//    @PostMapping("/transfer")
+    @Operation(summary = "더치페이 송금", description = "더치페이에 대한 송금을 할 수 있는 API입니다.")
+    @PostMapping("/transfer")
+    public ApiData<Long> transfer() {
+        // 송금 할 시 간편비밀번호 확인
+
+        return ApiData.of(0l);
+    }
 
 }
