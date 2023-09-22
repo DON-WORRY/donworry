@@ -1,18 +1,18 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
 
 // // 친구 목록 조회
-// export async function friendListInquiry(): Promise<void> {
-//   return axiosWithAuth
-//     .get('/api/friend/list')
-//     .then((res) => {
-//       console.log(res);
-//     })
-//     .catch((e) => {
-//       console.error(e);
-//       throw e;
-//     });
-// }
+export async function friendListInquiry(): Promise<any> {
+  return axiosWithAuth
+    .get('/api/friends/list')
+    .then((res) => {
+      return res.data
+    })
+    .catch((e) => {
+      // console.error(e);
+      throw e;
+    });
+}
 
 // 친구 요청 리스트
 export async function friendRequestList() {
@@ -39,7 +39,6 @@ export async function friendRequest(data: FriendRequestData): Promise<void> {
       return res.data;
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
@@ -58,6 +57,8 @@ export async function friendCheck(data: FriendCheckdata): Promise<void> {
       return res.data;
     })
     .catch((e) => {
+      // if e.data.message 만료된 토큰
+      // axiosWithAuth => refresh
       throw e;
     });
 }

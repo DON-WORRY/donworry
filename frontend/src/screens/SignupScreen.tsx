@@ -179,7 +179,7 @@ const SignupScreen: React.FC = () => {
               <SignupBtn signupOper={signupOper} />
             </>
           ) : (
-            <>{pageData.b ? <SignupSecond /> : <></>}</>
+            <>{pageData.b ? <SignupSecond setPageData={setPageData}/> : <></>}</>
           )}
         </KeyboardAwareScrollView>
       )}

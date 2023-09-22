@@ -1,15 +1,39 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { friendCheck } from '../../utils/FriendFunctions';
+import SelectDropdown from 'react-native-select-dropdown';
 
 interface FriendResponseProps {
   email: string;
   name: string;
   time: string;
+  friendRequestId: number;
+  memberId: number;
+  setRendering: (render: boolean) => void;
 }
+
+type FriendCheckdata = {
+  isAccept: boolean;
+  friendRequestId: number;
+  friendId: number;
+};
 
 const FriendResponse: React.FC<FriendResponseProps> = (props) => {
   function cancelHandle() {
+    const data = {
+      isAccept: false,
+      friendRequestId: props.friendRequestId,
+      friendId: props.memberId,
+    }
+    // console.log(data.friendRequestId)
+    // console.log(data.friendId)
+    friendCheck(data).then((r) => {
+      console.log(r)
+      props.setRendering(false)
+    }).catch((e) => {
+      console.error(e)
+    })
     console.log('cancel');
   }
   return (

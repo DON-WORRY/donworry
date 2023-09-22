@@ -156,6 +156,7 @@ const FriendMessageScreen: React.FC = () => {
   });
   const [receivedRequest, setReceivedRequest] = useState<ReceivedRequest[]>([]);
   const [sendRequest, setSendRequest] = useState<SendRequest[]>([]);
+  const [rendering, setRendering] = useState(true);
 
   // 바로 렌더링 할 수 있게 하는 함수
   useEffect(() => {
@@ -169,9 +170,10 @@ const FriendMessageScreen: React.FC = () => {
         });
       setReceivedRequest(allRequstList.receivedRequest);
       setSendRequest(allRequstList.sendRequest);
+      setRendering(true);
     };
     fetch();
-  }, []);
+  }, [rendering == false]);
   return (
     <KeyboardAwareScrollView>
       <View style={styles.container}>
@@ -264,6 +266,9 @@ const FriendMessageScreen: React.FC = () => {
                             email={data.memberEmail}
                             name={data.memberName}
                             time={data.createdTime}
+                            friendRequestId={data.friendRequestId}
+                            memberId={data.memberId}
+                            setRendering={setRendering}
                           />
                         </View>
                       );
@@ -290,6 +295,9 @@ const FriendMessageScreen: React.FC = () => {
                             email={data.memberEmail}
                             name={data.memberName}
                             time={data.createdTime}
+                            friendRequestId={data.friendRequestId}
+                            memberId={data.memberId}
+                            setRendering={setRendering}
                           />
                         </View>
                       );
@@ -302,7 +310,10 @@ const FriendMessageScreen: React.FC = () => {
             </>
           ) : (
             <>
-              <FriendSendRequest setHowCompoShow={setHowCompoShow} />
+              <FriendSendRequest
+                setHowCompoShow={setHowCompoShow}
+                setRendering={setRendering}
+              />
             </>
           )}
         </View>

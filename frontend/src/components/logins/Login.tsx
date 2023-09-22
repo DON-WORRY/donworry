@@ -49,7 +49,6 @@ const Login: React.FC = () => {
         navigation.replace('TabNavigation', { screen: 'Home' });
       })
       .catch((e) => {
-        console.error(e);
         return Alert.alert('로그인 실패', `${e.message}`);
       });
   }

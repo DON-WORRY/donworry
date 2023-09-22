@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 
 import FriendSearch from './children/FriendSearch';
 import FriendListItem from './children/FriendListItem';
+
+import { friendListInquiry } from '../../utils/FriendFunctions';
 
 const dummyData = [
   {
@@ -30,6 +39,7 @@ const dummyData = [
     name: 'test',
     email: 'test@naver.com',
   },
+  
 ];
 
 type Friend = {
@@ -46,8 +56,24 @@ const FriendList: React.FC = () => {
   // 친구 숫자에 따라 다르게 나타나게 구현해야 한다.
   // 친구 숫자가 일정 수를 넘으면 height를 넘은 숫자 만큼 + 40해준다.
   function search(name: string) {
-    console.log(name)
+    console.log(name);
   }
+  useEffect(() => {
+    async function fetch() {
+      const data = await friendListInquiry()
+        .then((r) => {
+          return r.data.friendResponseList
+        })
+        .catch((e) => {
+          throw e;
+        });
+      console.log(data);
+      await setFriends(data)
+      return;
+    }
+    fetch();
+  }, []);
+
   return (
     <ScrollView
       style={styles.container}

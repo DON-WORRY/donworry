@@ -1,19 +1,46 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { friendCheck } from '../../utils/FriendFunctions';
 
 interface FriendRequestProps {
   email: string;
   name: string;
   time: string;
+  friendRequestId: number;
+  memberId: number;
+  setRendering: (render: boolean) => void;
 }
 
 const FriendRequest: React.FC<FriendRequestProps> = (props) => {
   function accessHandle() {
+    const accessData = {
+      isAccept: true,
+      friendRequestId: props.friendRequestId,
+      friendId: props.memberId,
+    }
+    friendCheck(accessData).then((r) => {
+      console.log(r)
+      props.setRendering(false)
+    }).catch((e) => {
+      console.error(e)
+    })
     console.log('access');
   }
 
   function cancelHandle() {
+    const cancelData = {
+      isAccept: true,
+      friendRequestId: props.friendRequestId,
+      friendId: props.memberId,
+    }
+    friendCheck(cancelData).then((r) => {
+      console.log(r)
+      props.setRendering(false)
+    }).catch((e) => {
+      console.error(e)
+    })
+
     console.log('cancel');
   }
 

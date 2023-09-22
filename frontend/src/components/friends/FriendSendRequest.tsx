@@ -43,6 +43,7 @@ interface FriendSendRequestProps {
     isSecond: boolean;
     isThird: boolean;
   }) => void;
+  setRendering: (render: boolean) => void;
 }
 
 const FriendSendRequest: React.FC<FriendSendRequestProps> = (props) => {
@@ -78,6 +79,7 @@ const FriendSendRequest: React.FC<FriendSendRequestProps> = (props) => {
                     isSecond: false,
                     isThird: false,
                   });
+                  await props.setRendering(false)
                 })
                 .catch((e) => {
                   console.error(e);
