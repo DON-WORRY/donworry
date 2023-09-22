@@ -17,6 +17,9 @@ interface Data {
   x: number;
   y: number;
 }
+interface AssetChartProps {
+  refreshKey: number;
+}
 
 const getData = async (key: string) => {
   try {
@@ -37,7 +40,8 @@ const formatAmount = (amount: string): string => {
   return parseInt(amount, 10).toLocaleString('ko-KR') + '원';
 };
 
-const AssetChart: React.FC = () => {
+const AssetChart: React.FC<AssetChartProps> = (props) => {
+  const { refreshKey } = props;
   const [userName, setUserName] = useState('');
   const [monthAmount, setMonthAmount] = useState(0);
   const [dataBar, setDataBar] = useState<Array<{ x: number; y: number }>>([]);
@@ -64,7 +68,7 @@ const AssetChart: React.FC = () => {
       }
     };
     fetch();
-  }, []);
+  }, [props.refreshKey]);
 
   return (
     <View
