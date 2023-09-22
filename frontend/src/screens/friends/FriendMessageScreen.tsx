@@ -18,6 +18,7 @@ import FriendSendRequest from '../../components/friends/FriendSendRequest';
 
 // 함수 입력
 import { friendRequestList } from '../../utils/FriendFunctions';
+import BackHeader from '../../components/BackHeader';
 
 interface ScreenProps {
   navigation: {
@@ -322,7 +323,7 @@ const FriendMessageScreen: React.FC = () => {
   );
 };
 
-const screenWidth = Dimensions.get('screen').width;
+const screenWidth = Dimensions.get("screen").width
 const screenHeight = Dimensions.get('screen').height;
 
 const styles = StyleSheet.create({
@@ -372,5 +373,7 @@ const styles = StyleSheet.create({
     color: '#7777F3',
   },
 });
+
+
 
 export default FriendMessageScreen;

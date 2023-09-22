@@ -78,7 +78,7 @@ const FriendList: React.FC = () => {
     <ScrollView
       style={styles.container}
       showsVerticalScrollIndicator={false}
-      alwaysBounceHorizontal={true}
+      alwaysBounceHorizontal={false}
     >
       <Text style={styles.header}>친구 목록</Text>
       <FriendSearch search={search} />

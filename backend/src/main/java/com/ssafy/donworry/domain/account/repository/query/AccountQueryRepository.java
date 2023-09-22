@@ -3,6 +3,7 @@ package com.ssafy.donworry.domain.account.repository.query;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.donworry.api.controller.account.dto.response.StatisticsResponse;
+import com.ssafy.donworry.api.controller.account.dto.response.UserRankResponse;
 import com.ssafy.donworry.domain.account.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -74,5 +75,15 @@ public class AccountQueryRepository {
                 .groupBy(income.account.id)
                 .fetch();
         return list;
+    }
+
+    public UserRankResponse findTotalAmountByUserId(Long memberId) {
+        Long totalAmount = queryFactory
+                .select(account.accountAmount.sum())
+                .from(account)
+                .where(account.member.id.eq(memberId))
+                .groupBy(account.member.id)
+                .fetchOne(); // 수정된 부분
+        return UserRankResponse.of(totalAmount);
     }
 }

@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../../screens/LoginScreen';
 import SignupScreen from '../../screens/SignupScreen';
 import FriendMessageScreen from '../../screens/friends/FriendMessageScreen';
+// import DutchpayRequestScreen from '../../screens/consumptions/DutchpayRequestScreen';
 import HistoryScreen from '../../screens/historys/HistoryScreen';
 
 const Stack = createStackNavigator();
@@ -30,6 +31,11 @@ const StackNavigation: React.FC = () => {
         component={FriendMessageScreen}
         options={{ headerShown: false }}
       />
+      {/* <Stack.Screen
+        name="DutchpayRequest"
+        component={DutchpayRequestScreen}
+        options={{ headerShown: false }}
+      /> */}
       <Stack.Screen
         name="History"
         component={HistoryScreen}

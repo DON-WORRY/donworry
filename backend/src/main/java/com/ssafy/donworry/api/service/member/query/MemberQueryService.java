@@ -70,8 +70,8 @@ public class MemberQueryService {
     }
 
     public List<MemberSearchResponse> searchMember(String memberName, String userEmail){
-        return memberRepository.findByMemberNameStartsWith(memberName).stream()
-                .filter(member -> member.getMemberEmail() != userEmail)
+        log.debug("userEmail: {}", userEmail);
+        return memberRepository.findByMemberNameStartsWithAndMemberEmailNot(memberName, userEmail).stream()
                 .map(
                         (member) -> MemberSearchResponse.of(member)
                 )

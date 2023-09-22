@@ -8,13 +8,18 @@ type friendType = {
 
 interface FriendListItemProps {
   friend: friendType;
+  state: string;
 }
 
 const FriendListItem: React.FC<FriendListItemProps> = (props) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{props.friend.name}</Text>
-      <Text style={styles.text}>{props.friend.email}</Text>
+      <Text style={[styles.text, { color: props.state }]}>
+        {props.friend.name}
+      </Text>
+      <Text style={[styles.text, { color: props.state }]}>
+        {props.friend.email}
+      </Text>
     </View>
   );
 };
