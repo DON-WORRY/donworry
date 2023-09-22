@@ -59,14 +59,18 @@ public class FriendService {
 
         friendRequest.updateStatus();
 
-        if(friendRequest.getReceiver().getId() == request.friendId()){
+        log.debug("request.reqId:{}, request.Id: {}, memberId: {}", request.friendRequestId(), request.friendId(), memberId);
+
+        log.debug("receiverId: {}, accept:{}", friendRequest.getReceiver().getId(), request.isAccept());
+        if(friendRequest.getReceiver().getId() == memberId){
+
             if(request.isAccept()){
                 friendRelationshipRepository.save(FriendRelationship.of(friendRequest));
                 return "친구요청을 수락하였습니다.";
             }
             else return "친구요청을 거절하였습니다.";
         }
-        else if(friendRequest.getSender().getId() == memberId){
+        else if(friendRequest.getSender().getId() == request.friendId()){
             return "친구요청을 취소했습니다.";
         }
         else throw new InvalidValueException(ErrorCode.INVALID_INPUT_VALUE);
