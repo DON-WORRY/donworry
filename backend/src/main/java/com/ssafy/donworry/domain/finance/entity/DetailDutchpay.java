@@ -53,13 +53,13 @@ public class DetailDutchpay extends BaseEntity {
         this.dutchpay = dutchpay;
     }
 
-//    public static DetailDutchpay of(ReqAmountRequest req, Member member, Dutchpay dutchpay) {
-//        return DetailDutchpay.builder()
-//                .dutchpayReqPrice(req.price())
-//                .dutchpayReceivedPrice(0l)
-//                .dutchpayStatus(DutchpayStatus.INCOMPLETE)
-//                .member(member)
-//                .dutchpay(dutchpay)
-//                .build();
-//    }
+    public static DetailDutchpay of(ReqAmountRequest req, Member member, Dutchpay dutchpay) {
+        return DetailDutchpay.builder()
+                .dutchpayReqPrice(req.price())
+                .dutchpayReceivedPrice(0l)
+                .dutchpayStatus(DutchpayStatus.PROGRESS)
+                .member(member)
+                .dutchpay(dutchpay)
+                .build();
+    }
 }

@@ -42,4 +42,12 @@ public class Dutchpay extends BaseEntity {
         this.member = member;
         this.consumption = consumption;
     }
+
+    public static Dutchpay of(Consumption consumption, Member member) {
+        return Dutchpay.builder()
+                .dutchpayStatus(DutchpayStatus.PROGRESS)
+                .member(member)
+                .consumption(consumption)
+                .build();
+    }
 }

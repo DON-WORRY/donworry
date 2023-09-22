@@ -49,7 +49,13 @@ public enum ErrorCode {
     CONSUMPTION_CATEGORY_NOT_FOUND(400, "CC001", "존재하지 않는 소비카테고리입니다!"),
 
     // Dutchpay
-    Dutchpay_SAVE_ERROR(400, "D001", "더치페이 생성에 실패하였습니다."),
+    DUTCHPAY_SAVE_ERROR(400, "D001", "더치페이 생성에 실패하였습니다."),
+    DUTCHPAY_DUPLICATE(400, "D002", "더치페이를 요청한 이력이 있습니다."),
+
+    // DetailDutchpay
+    DETAIL_DUTCHPAY_SAVE_ERROR(400, "DD001", "세부 더치페이 생성에 실패하였습니다.")
+
+
 
     ;
 

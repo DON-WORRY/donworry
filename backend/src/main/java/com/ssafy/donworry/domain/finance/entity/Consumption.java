@@ -97,4 +97,8 @@ public class Consumption extends BaseEntity {
     public void modifyCategory(ConsumptionCategory consumptionCategory) {
         this.consumptionCategory = consumptionCategory;
     }
+
+    public void updateDutchpayStatus(DutchpayStatus dutchpayStatus) {
+        this.dutchpayStatus = dutchpayStatus;
+    }
 }
