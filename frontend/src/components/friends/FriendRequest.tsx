@@ -29,7 +29,7 @@ const FriendRequest: React.FC<FriendRequestProps> = (props) => {
       <View style={styles.bottomBox}>
         <View style={styles.textBox}>
           <Text style={styles.nameText}>{props.name}</Text>
-          <Text> 님이 친구 요청을 보냈습니다.</Text>
+          <Text> 님의 요청입니다.</Text>
         </View>
         <View style={styles.btnBox}>
           {/* 버튼 */}

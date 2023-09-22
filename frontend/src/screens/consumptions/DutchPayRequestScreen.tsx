@@ -41,10 +41,10 @@ interface MyRequestProps {
   onPress: () => void;
 }
 
-type DutchPayRequestScreenProps = {
+type DutchpayRequestScreenProps = {
   route: RouteProp<
-    { DutchPayRequest: { conId: number; conName: string; conMoney: number } },
-    'DutchPayRequest'
+    { DutchpayRequest: { conId: number; conName: string; conMoney: number } },
+    'DutchpayRequest'
   >;
 };
 
@@ -76,7 +76,7 @@ const dummyData = [
   },
 ];
 
-const DutchPayRequestScreen: React.FC<DutchPayRequestScreenProps> = ({
+const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
   route,
 }) => {
   const [selectedMemberList, setSelectedMemberList] = useState<MemberProps[]>(
@@ -451,5 +451,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DutchPayRequestScreen;
+export default DutchpayRequestScreen;
 export { MemberProps };

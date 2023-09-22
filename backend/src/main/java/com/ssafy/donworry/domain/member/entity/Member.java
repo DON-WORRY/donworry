@@ -4,7 +4,7 @@ import com.ssafy.donworry.api.service.member.request.MemberJoinServiceRequest;
 import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.finance.entity.Consumption;
-import com.ssafy.donworry.domain.finance.entity.DutchPay;
+import com.ssafy.donworry.domain.finance.entity.Dutchpay;
 import com.ssafy.donworry.domain.finance.entity.Income;
 import com.ssafy.donworry.domain.member.entity.enums.MemberActivateStatus;
 import com.ssafy.donworry.domain.member.entity.enums.MemberGender;
@@ -50,6 +50,9 @@ public class Member extends BaseEntity {
     private String memberPassword;
 
     @NotNull
+    private String memberSimplePassword;
+
+    @NotNull
     @Enumerated(STRING)
     private MemberGender memberGender;
 
@@ -89,7 +92,7 @@ public class Member extends BaseEntity {
     private List<Notification> notificationSenders;
 
     @OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
-    private List<DutchPay> dutchPays;
+    private List<Dutchpay> dutchpays;
 
     @OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
     private List<Income> incomes;
@@ -101,11 +104,12 @@ public class Member extends BaseEntity {
     private List<Account> accounts;
 
     @Builder
-    public Member(Long id, String memberName, String memberEmail, String memberPassword, MemberGender memberGender, MemberRole memberRole, MemberActivateStatus memberActivateStatus, LocalDate memberBirthDate, ProfileImage profileImage, List<Goal> goals, List<FriendRelationship> relationshipReceivers, List<FriendRelationship> relationshipSenders, List<FriendRequest> requestReceivers, List<FriendRequest> requestSenders, List<Notification> notificationReceivers, List<Notification> notificationSenders, List<DutchPay> dutchPays, List<Income> incomes, List<Consumption> consumptions, List<Account> accounts) {
+    public Member(Long id, String memberName, String memberEmail, String memberPassword, String memberSimplePassword, MemberGender memberGender, MemberRole memberRole, MemberActivateStatus memberActivateStatus, LocalDate memberBirthDate, ProfileImage profileImage, List<Goal> goals, List<FriendRelationship> relationshipReceivers, List<FriendRelationship> relationshipSenders, List<FriendRequest> requestReceivers, List<FriendRequest> requestSenders, List<Notification> notificationReceivers, List<Notification> notificationSenders, List<Dutchpay> dutchpays, List<Income> incomes, List<Consumption> consumptions, List<Account> accounts) {
         this.id = id;
         this.memberName = memberName;
         this.memberEmail = memberEmail;
         this.memberPassword = memberPassword;
+        this.memberSimplePassword = memberSimplePassword;
         this.memberGender = memberGender;
         this.memberRole = memberRole;
         this.memberActivateStatus = memberActivateStatus;
@@ -118,7 +122,7 @@ public class Member extends BaseEntity {
         this.requestSenders = requestSenders;
         this.notificationReceivers = notificationReceivers;
         this.notificationSenders = notificationSenders;
-        this.dutchPays = dutchPays;
+        this.dutchpays = dutchpays;
         this.incomes = incomes;
         this.consumptions = consumptions;
         this.accounts = accounts;
@@ -129,6 +133,7 @@ public class Member extends BaseEntity {
                 .memberName(request.memberName())
                 .memberEmail(request.memberEmail())
                 .memberPassword(request.memberPassword())
+                .memberSimplePassword(request.memberSimplePassword())
                 .memberGender(request.memberGender())
                 .memberRole(request.memberRole())
                 .memberActivateStatus(request.memberActivateStatus())

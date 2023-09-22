@@ -1,7 +1,7 @@
 package com.ssafy.donworry.api.controller.account;
 
 import com.ssafy.donworry.api.controller.account.dto.response.AccountAllResponse;
-import com.ssafy.donworry.api.controller.account.dto.response.AccountDetailResponse;
+import com.ssafy.donworry.api.controller.account.dto.response.AccountHistoryResponse;
 import com.ssafy.donworry.api.controller.account.dto.response.StatisticsResponse;
 import com.ssafy.donworry.api.service.account.AccountService;
 import com.ssafy.donworry.api.service.account.query.AccountQueryService;
@@ -36,21 +36,20 @@ public class AccountController {
     }
     @Operation(summary = "계좌 거래내역", description = "계좌별 거래내역을 불러오는 API입니다.")
     @GetMapping("/{account_id}")
-    public ApiData<List<AccountDetailResponse>> searchAccount(@PathVariable("account_id") Long memberId) {
-        log.info("searchAccount - memberId : "+ memberId);
-        List<AccountDetailResponse> list = null;
+    public ApiData<AccountHistoryResponse> searchAccount(@PathVariable("account_id") Long accountId) {
+        log.info("searchAccount - memberId : "+ accountId);
+        AccountHistoryResponse list = accountQueryService.searchAccountDetailList(accountId);
+
         return ApiData.of(list);
     }
 
-    @Operation(summary = "월별 순자산", description = "사용자의 월변 순자산 변동사항 내역")
+    @Operation(summary = "월별 순자산", description = "사용자의 월별 순자산 변동사항 내역")
     @GetMapping("/statistics/{id}")
     public ApiData<List<StatisticsResponse>> searchStatistics(@PathVariable("id") Long memberId) {
         log.info("searchStatistics - memberID : " + memberId);
-        List<StatisticsResponse> list = null;
+        List<StatisticsResponse> list = accountQueryService.searchStatisticsResponseList(memberId);
         return ApiData.of(list);
     }
-
-
 
 
     @Operation(summary = "테스트", description = "사용자 계정 생성 시 테스트 진행")

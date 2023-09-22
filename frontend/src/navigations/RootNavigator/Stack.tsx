@@ -4,6 +4,8 @@ import LoginScreen from '../../screens/LoginScreen';
 import SignupScreen from '../../screens/SignupScreen';
 import FriendMessageScreen from '../../screens/friends/FriendMessageScreen';
 import DutchpayRequestScreen from '../../screens/consumptions/DutchpayRequestScreen';
+import HistoryScreen from '../../screens/historys/HistoryScreen';
+
 const Stack = createStackNavigator();
 
 const StackNavigation: React.FC = () => {
@@ -30,8 +32,13 @@ const StackNavigation: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="DutchPayRequest"
+        name="DutchpayRequest"
         component={DutchpayRequestScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="History"
+        component={HistoryScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

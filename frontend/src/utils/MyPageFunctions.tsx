@@ -15,7 +15,7 @@ const getData = async (key: string) => {
 };
 
 // 회원정보 조회
-export function mypageMemberInquiry(): Promise<void> {
+export async function mypageMemberInquiry(): Promise<void> {
   const id = getData('memberId');
   return axiosWithAuth
     .get(`/api/mypage/${id}`)
@@ -28,7 +28,7 @@ export function mypageMemberInquiry(): Promise<void> {
     });
 }
 // 회원정보 수정
-export function mypageMemberModify(): Promise<void> {
+export async function mypageMemberModify(): Promise<void> {
   return axiosWithAuth
     .put('/api/mypage/modify')
     .then((res) => {
@@ -40,7 +40,7 @@ export function mypageMemberModify(): Promise<void> {
     });
 }
 // 비밀번호 재설정
-export function mypagePasswordReset(): Promise<void> {
+export async function mypagePasswordReset(): Promise<void> {
   return axiosWithAuth
     .put('/api/mypage/reset')
     .then((res) => {
@@ -52,7 +52,7 @@ export function mypagePasswordReset(): Promise<void> {
     });
 }
 // 회원탈퇴
-export function mypageWithdrawal(): Promise<void> {
+export async function mypageWithdrawal(): Promise<void> {
   return axiosWithAuth
     .delete('/api/mypage/leave')
     .then((res) => {

@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import TestScreen from '../../utils/TestScreen';
+
 interface ScreenProps {
   navigation: {
     navigate: (screen: string, params?: any) => void;
@@ -12,7 +14,7 @@ const consumptionData = {
   conMoney: 100000,
 };
 
-function SpendScreen() {
+const SpendScreen: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   return (
     <View style={styles.container}>
@@ -28,9 +30,10 @@ function SpendScreen() {
       >
         <Text>소비 내역 중 하나</Text>
       </TouchableOpacity>
+      <TestScreen />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,87 +1,34 @@
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// user api
-import {
-  userSignup,
-  userLogin,
-  userSocialLogin,
-  userFindPassword,
-  userLogout,
-} from './UserFunctions';
+import AccountController from './testUtils/AccountController';
+import CardController from './testUtils/CardController';
+import ConsumptionController from './testUtils/ConsumptionController';
+import DutchPayController from './testUtils/DutchPayController';
 
-// mypage api
-import {
-  mypageMemberInquiry,
-  mypageMemberModify,
-  mypagePasswordReset,
-  mypageWithdrawal,
-} from './MyPageFunctions';
-
-// friend api
-import {
-  friendListInquiry,
-  friendRequest,
-  friendAccept,
-  friendReject,
-  friendDelete,
-} from './FriendFunctions';
-
-// consumption api
-import {
-  consumptionCategoryTotal,
-  consumptionCategoryHistory,
-  consumptionCategoryModify,
-  consumptionDutchPayInquiry,
-  consumptionDutchPayRequest,
-  consumptionDutchPayComplete,
-  consumptionDutchPayAllComplete,
-} from './ConsumptionFunctions';
-
-// account api
-import {
-  accountTradeTotal,
-  accountTradeHistory,
-  accountCardTotal,
-  accountCardHistory,
-  accountCardListInquiry,
-  accountPerMonthAsset,
-  accountSetGoal,
-  accountGoalInquiry,
-  accountAssetRankInquiry,
-} from './AccountFunctions';
-
-// transfer api
-import { transfer } from './TransferFunctions';
-
-// notification api
-import {
-  notificationSend,
-  notificationInquiry,
-  notificationDelete,
-} from './NotificationFunctions';
-
-
-const sampleSignup = {
-  email: "test@naver.com",
-  password: "123123",
-  name: "Lee",
-  
-}
-
-const TestScreen: React.FC = () => {
-  // 함수 실행
-  // 회원가입 => 로그인 => 함수 => 회원탈퇴 순서
-  const data = {
-    email: "e@e.com",
-    name: "",
-    password: "",
-    birthday: "",
-    gender: ""
+// 값을 가져오기
+const getData = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    // 읽기 에러
+    console.error(e);
+    throw e;
   }
-  userSignup(data)
-
-  return <></>;
+};
+const TestScreen: React.FC = () => {
+  return (
+    <View>
+      <AccountController />
+      <CardController />
+      <ConsumptionController />
+      <DutchPayController />
+    </View>
+  );
 };
 
 export default TestScreen;

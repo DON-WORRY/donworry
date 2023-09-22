@@ -1,9 +1,19 @@
-import React from 'react';
-import { View, Text, Dimensions, StyleSheet, ScrollView } from 'react-native';
-import BackHeader from '../../components/BackHeader';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  Dimensions,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import FriendRequest from '../../components/friends/FriendRequest';
 import FriendResponse from '../../components/friends/FriendResponse';
 import { useNavigation } from '@react-navigation/native';
+import BackHeader from '../../components/BackHeader';
 
 interface ScreenProps {
   navigation: {
@@ -96,8 +106,40 @@ const responseData = [
     time: '2023-09-01',
   },
 ];
+// 값을 가져오기
+const getData = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    // 읽기 에러
+    console.error(e);
+    throw e;
+  }
+};
 
 const FriendMessageScreen: React.FC = () => {
+  const blackLogo = require('../../assets/logo/BlackLogo.png');
+  const navigation = useNavigation<ScreenProps['navigation']>();
+  const [newMemberId, setNewMemberId] = useState('');
+  const [howCompoShow, setHowCompoShow] = useState({
+    isFirst: true,
+    isSecond: false,
+    isThird: false,
+  });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const memberId = await getData('memberId');
+      if (memberId !== undefined) {
+        await setNewMemberId(memberId);
+      }
+    };
+    fetch();
+  }, []);
+
   return (
     <View style={styles.container}>
       <BackHeader screen="Friend" />
@@ -105,39 +147,108 @@ const FriendMessageScreen: React.FC = () => {
         <Text style={styles.headerText}>친구 요청 및 수신</Text>
       </View>
       <View>
-        <Text style={styles.subTitle}>요청 메시지</Text>
+        <View style={styles.sub_title_box}>
+          <TouchableOpacity
+            onPress={() => {
+              setHowCompoShow({
+                isFirst: true,
+                isSecond: false,
+                isThird: false,
+              });
+            }}
+          >
+            <Text
+              style={[
+                styles.sub_title,
+                howCompoShow.isFirst ? styles.selected_title : null,
+              ]}
+            >
+              요청 메시지
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setHowCompoShow({
+                isFirst: false,
+                isSecond: true,
+                isThird: false,
+              });
+            }}
+          >
+            <Text
+              style={[
+                styles.sub_title,
+                howCompoShow.isSecond ? styles.selected_title : null,
+              ]}
+            >
+              수신 메시지
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setHowCompoShow({
+                isFirst: false,
+                isSecond: false,
+                isThird: true,
+              });
+            }}
+          >
+            <Text
+              style={[
+                styles.sub_title,
+                howCompoShow.isThird ? styles.selected_title : null,
+              ]}
+            >
+              친구 요청하기
+            </Text>
+          </TouchableOpacity>
+        </View>
         {/* 막대선 */}
         <View style={styles.line}></View>
-        <ScrollView style={styles.largeBox}>
-          {requestData.map((data, index) => {
-            return (
-              <View key={index}>
-                <FriendRequest
-                  email={data.email}
-                  name={data.name}
-                  time={data.time}
-                />
-              </View>
-            );
-          })}
-        </ScrollView>
-      </View>
-      <View>
-        <Text style={styles.subTitle}>수신 메시지</Text>
-        <View style={styles.line}></View>
-        <ScrollView style={styles.largeBox}>
-          {responseData.map((data, index) => {
-            return (
-              <View key={index}>
-                <FriendResponse
-                  email={data.email}
-                  name={data.name}
-                  time={data.time}
-                />
-              </View>
-            );
-          })}
-        </ScrollView>
+
+        {howCompoShow.isFirst ? (
+          <>
+            <ScrollView
+              style={styles.large_box}
+              showsVerticalScrollIndicator={false}
+              alwaysBounceHorizontal={true}
+            >
+              {responseData.map((data, index) => {
+                return (
+                  <View key={index}>
+                    <FriendResponse
+                      email={data.email}
+                      name={data.name}
+                      time={data.time}
+                    />
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </>
+        ) : howCompoShow.isSecond ? (
+          <>
+            <ScrollView
+              style={styles.large_box}
+              showsVerticalScrollIndicator={false}
+              alwaysBounceHorizontal={true}
+            >
+              {requestData.map((data, index) => {
+                return (
+                  <View key={index}>
+                    <FriendRequest
+                      email={data.email}
+                      name={data.name}
+                      time={data.time}
+                    />
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </>
+        ) : (
+          <></>
+        )}
       </View>
     </View>
   );
@@ -157,10 +268,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 30,
   },
-  subTitle: {
+  sub_title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    marginRight: 5,
+    marginLeft: 5,
+    borderRadius: 5,
   },
   line: {
     height: 0,
@@ -168,8 +282,15 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     marginBottom: 10,
   },
-  largeBox: {
-    height: screenHeight / 4,
+  large_box: {
+    height: (screenHeight * 2) / 3,
+  },
+  sub_title_box: {
+    flexDirection: 'row',
+    // justifyContent: "space-between"
+  },
+  selected_title: {
+    color: '#7777F3',
   },
 });
 

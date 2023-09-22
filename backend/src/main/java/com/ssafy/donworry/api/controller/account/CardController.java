@@ -1,8 +1,8 @@
 package com.ssafy.donworry.api.controller.account;
 
-import com.ssafy.donworry.api.controller.account.dto.response.CardListResponse;
 import com.ssafy.donworry.api.controller.account.dto.response.ConsumptionResponse;
 import com.ssafy.donworry.api.controller.account.dto.response.ConsumtionDetailResponse;
+import com.ssafy.donworry.api.service.account.CardService;
 import com.ssafy.donworry.common.response.ApiData;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CardController {
 
+    private final CardService cardService;
 
     @Operation(summary = "카드별 소비내역", description = "소지한 카드들의 카드별 소비내역을 조회하는 API입니다.")
     @GetMapping("/{user_id}")
@@ -37,9 +38,9 @@ public class CardController {
 
     @Operation(summary = "사용자 카드 불러오기", description = "사용자가 보유한 카드를 조회하는 API입니다.")
     @GetMapping("/list/{id}")
-    public ApiData<List<CardListResponse>> searchCardList(@PathVariable("id") Long memberId) {
+    public ApiData<List<CardInfoResponse>> searchCardList(@PathVariable("id") Long memberId) {
         log.info("searchCardList - memberId : " + memberId);
-        List<CardListResponse> list = null;
-        return ApiData.of(list);
+        List<CardInfoResponse> cardInfoResponses = cardService.findCardInfoList(memberId);
+        return ApiData.of(cardInfoResponses);
     }
 }

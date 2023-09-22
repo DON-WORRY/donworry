@@ -3,12 +3,14 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 interface SignupGenderBtnProps {
   setSelectedGender: (selectedGender: string) => void;
+  setIsGenderFocused: (isGenderFocused: boolean) => void;
 }
 
 const SignupGenderBtn: React.FC<SignupGenderBtnProps> = (props) => {
   const [toggle, setToggle] = useState(0);
 
   function handleSelectGender(genderNumber: number) {
+    props.setIsGenderFocused(true);
     if (toggle == genderNumber) {
       setToggle(0);
       props.setSelectedGender('성별');
