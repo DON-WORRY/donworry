@@ -53,6 +53,14 @@ public class ConsumptionController {
         return ApiData.of(historyResponseList);
     }
 
+    @Operation(summary = "친구의 카테고리별 소비합계 조회", description = "친구의 각 카테고리별 소비내역을 조회하는 API입니다.")
+    @GetMapping("/comparison/{id}")
+    public ApiData<CategoryTotalResponse> searchCategoryTotal(@PathVariable("id") Long memberId,
+                                                              @RequestParam int month) {
+        CategoryTotalResponse categoryTotal = consumptionQueryService.searchCategoryTotal(memberId, month);
+        return ApiData.of(categoryTotal);
+    }
+
     @Operation(summary = "거래내역의 카테고리 변경", description = "해당 소비내역의 소비카테고리를 변경하는 API입니다.")
     @PutMapping("/modify")
     public ApiData<Long> modifyCategory(@RequestBody CategoryModifyRequest categoryModifyRequest) {
