@@ -53,6 +53,9 @@ public class AccountController {
         Long memberId = userDetailsModel.getId();
         log.info("searchStatistics - memberID : " + memberId);
         List<StatisticsResponse> list = accountQueryService.searchStatisticsResponseList(memberId);
+        AccountAllResponse accountInfo = accountQueryService.searchAccountList(memberId);
+        StatisticsResponse lastrs = new StatisticsResponse(list.get(list.size()-1).accountId(), list.get(list.size()-1).time(),accountInfo.total());
+        list.set(list.size()-1, lastrs);
         return ApiData.of(list);
     }
 
