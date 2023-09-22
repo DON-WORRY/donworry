@@ -86,4 +86,8 @@ public class Consumption extends BaseEntity {
                 .consumptionCategory(consumptionCategory)
                 .build();
     }
+
+    public void modifyCategory(ConsumptionCategory consumptionCategory) {
+        this.consumptionCategory = consumptionCategory;
+    }
 }
