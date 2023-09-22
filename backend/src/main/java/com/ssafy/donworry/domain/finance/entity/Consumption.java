@@ -94,6 +94,20 @@ public class Consumption extends BaseEntity {
                 .build();
     }
 
+    public static Consumption of(String consumptionDetail, Long consumptionPrice, Long consumptionRemainedAmount, DutchpayStatus dutchpayStatus,
+                                 Member member, Account account, Account receiverAccount, ConsumptionCategory consumptionCategory) {
+        return Consumption.builder()
+                .consumptionDetail(consumptionDetail)
+                .consumptionPrice(consumptionPrice)
+                .consumptionRemainedAmount(consumptionRemainedAmount)
+                .dutchpayStatus(dutchpayStatus)
+                .member(member)
+                .account(account)
+                .receiverAccount(receiverAccount)
+                .consumptionCategory(consumptionCategory)
+                .build();
+    }
+
     public void modifyCategory(ConsumptionCategory consumptionCategory) {
         this.consumptionCategory = consumptionCategory;
     }

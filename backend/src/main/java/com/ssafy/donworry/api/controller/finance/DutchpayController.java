@@ -1,7 +1,9 @@
 package com.ssafy.donworry.api.controller.finance;
 
 import com.ssafy.donworry.api.controller.finance.dto.request.DutchpayCreateRequest;
+import com.ssafy.donworry.api.controller.finance.dto.request.DutchpayTransferRequest;
 import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayPersonResponse;
+import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayTotalListResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayTotalResponse;
 import com.ssafy.donworry.api.service.finance.DutchpayService;
 import com.ssafy.donworry.api.service.finance.query.DutchpayQueryService;
@@ -38,13 +40,13 @@ public class DutchpayController {
 
     @Operation(summary = "더치페이 조회", description = "현재 사용자가 요청한 더치페이 항목을 조회할 수 있는 API입니다.")
     @GetMapping("")
-    public ApiData<List<DutchpayTotalResponse>> searchDutchpayTotal(@AuthenticationPrincipal UserDetailsModel userDetailsModel) {
+    public ApiData<DutchpayTotalListResponse> searchDutchpayTotal(@AuthenticationPrincipal UserDetailsModel userDetailsModel) {
         Long memberId = userDetailsModel.getId();
         log.info("searchDutchpayPerson : " + memberId);
-//        List<DutchpayTotalResponse> dutchpayPersonResponseList = dutchpayQueryService.searchDutchpay(memberId);
-        List<DutchpayTotalResponse> dutchpayPersonResponseList = null;
+//        DutchpayTotalListResponse dutchpayPersonResponseList = dutchpayQueryService.searchDutchpay(memberId);
+        DutchpayTotalListResponse dutchpayTotalList = null;
 
-        return ApiData.of(dutchpayPersonResponseList);
+        return ApiData.of(dutchpayTotalList);
     }
 
     @Operation(summary = "더치페이 전체 완료", description = "해당 더치페이를 완료할 수 있는 API입니다.")
@@ -56,10 +58,11 @@ public class DutchpayController {
 
     @Operation(summary = "더치페이 송금", description = "더치페이에 대한 송금을 할 수 있는 API입니다.")
     @PostMapping("/transfer")
-    public ApiData<Long> transfer() {
-        // 송금 할 시 간편비밀번호 확인
-
-        return ApiData.of(0l);
+    public ApiData<Long> transfer(@AuthenticationPrincipal UserDetailsModel userDetailsModel,
+                                  @RequestBody DutchpayTransferRequest dutchpayTransferRequest) {
+        Long memberId = userDetailsModel.getId();
+        Long l = dutchpayService.dutchpayTransfer(memberId, dutchpayTransferRequest);
+        return ApiData.of(l);
     }
 
 }

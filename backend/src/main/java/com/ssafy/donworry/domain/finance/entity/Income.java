@@ -1,5 +1,6 @@
 package com.ssafy.donworry.domain.finance.entity;
 
+import com.ssafy.donworry.api.controller.finance.dto.request.DutchpayTransferRequest;
 import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.member.entity.Member;

@@ -31,7 +31,7 @@ public class Dutchpay extends BaseEntity {
     private Member member;
 
     @NotNull
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "consumption_id")
     private Consumption consumption;
 

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record DutchpayTotalResponse(
+        Long consumptionId,
         String detail,
         String memberName,
         Long price,
@@ -14,6 +15,7 @@ public record DutchpayTotalResponse(
 ) {
     public static DutchpayTotalResponse of(Consumption consumption, List<DutchpayPersonResponse> dutchpayPersonList) {
         return new DutchpayTotalResponse(
+                consumption.getId(),
                 consumption.getConsumptionDetail(),
                 consumption.getMember().getMemberName(),
                 consumption.getConsumptionPrice(),
