@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Getter
 @NoArgsConstructor
 public class JwtCreateModel {
@@ -14,13 +16,15 @@ public class JwtCreateModel {
     Long id;
     String name;
     String email;
+    LocalDate birthDate;
     MemberRole memberRole;
 
     @Builder
-    public JwtCreateModel(Long id, String name, String email, MemberRole memberRole) {
+    public JwtCreateModel(Long id, String name, String email, LocalDate birthDate, MemberRole memberRole) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.birthDate = birthDate;
         this.memberRole = memberRole;
     }
 
@@ -29,6 +33,7 @@ public class JwtCreateModel {
                 .id(member.getId())
                 .name(member.getMemberName())
                 .email(member.getMemberEmail())
+                .birthDate(member.getMemberBirthDate())
                 .memberRole(member.getMemberRole())
                 .build();
     }

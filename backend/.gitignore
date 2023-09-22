@@ -40,7 +40,10 @@ out/
 /src/main/generated/**
 
 ### Private Files ###
+/src/main/resources/application.yml
+/src/main/resources/application-dev.yml
 /src/main/resources/application-env.yml
+/src/main/resources/application-server.yml
 
 ### Templates Files ###
 src/main/resources/templates/**
