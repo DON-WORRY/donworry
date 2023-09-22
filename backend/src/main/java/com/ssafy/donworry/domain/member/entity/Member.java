@@ -70,8 +70,8 @@ public class Member extends BaseEntity {
     @OneToOne(mappedBy = "member", cascade = ALL, orphanRemoval = true)
     private ProfileImage profileImage;
 
-    @OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
-    private List<Goal> goals;
+    @OneToOne(mappedBy = "member", cascade = ALL, orphanRemoval = true)
+    private Goal goals;
 
     @OneToMany(mappedBy = "receiver", cascade = ALL, orphanRemoval = true)
     private List<FriendRelationship> relationshipReceivers;
@@ -104,7 +104,7 @@ public class Member extends BaseEntity {
     private List<Account> accounts;
 
     @Builder
-    public Member(Long id, String memberName, String memberEmail, String memberPassword, String memberSimplePassword, MemberGender memberGender, MemberRole memberRole, MemberActivateStatus memberActivateStatus, LocalDate memberBirthDate, ProfileImage profileImage, List<Goal> goals, List<FriendRelationship> relationshipReceivers, List<FriendRelationship> relationshipSenders, List<FriendRequest> requestReceivers, List<FriendRequest> requestSenders, List<Notification> notificationReceivers, List<Notification> notificationSenders, List<Dutchpay> dutchpays, List<Income> incomes, List<Consumption> consumptions, List<Account> accounts) {
+    public Member(Long id, String memberName, String memberEmail, String memberPassword, String memberSimplePassword, MemberGender memberGender, MemberRole memberRole, MemberActivateStatus memberActivateStatus, LocalDate memberBirthDate, ProfileImage profileImage, Goal goals, List<FriendRelationship> relationshipReceivers, List<FriendRelationship> relationshipSenders, List<FriendRequest> requestReceivers, List<FriendRequest> requestSenders, List<Notification> notificationReceivers, List<Notification> notificationSenders, List<Dutchpay> dutchpays, List<Income> incomes, List<Consumption> consumptions, List<Account> accounts) {
         this.id = id;
         this.memberName = memberName;
         this.memberEmail = memberEmail;

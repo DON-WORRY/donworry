@@ -1,5 +1,6 @@
 package com.ssafy.donworry.domain.member.entity;
 
+import com.ssafy.donworry.api.service.member.request.GoalCreateServiceRequest;
 import com.ssafy.donworry.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -33,7 +34,7 @@ public class Goal extends BaseEntity {
     private LocalDateTime goalEndTime;
 
     @NotNull
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -44,5 +45,20 @@ public class Goal extends BaseEntity {
         this.goalStartTime = goalStartTime;
         this.goalEndTime = goalEndTime;
         this.member = member;
+    }
+
+    public static Goal of(GoalCreateServiceRequest request, Member member){
+        return Goal.builder()
+                .goalAmount(request.goalAmount())
+                .goalStartTime(request.goalStartTime())
+                .goalEndTime(request.goalEndTime())
+                .member(member)
+                .build();
+    }
+
+    public void update(GoalCreateServiceRequest request){
+        this.goalAmount = request.goalAmount();
+        this.goalStartTime = request.goalStartTime();
+        this.goalEndTime = request.goalEndTime();
     }
 }
