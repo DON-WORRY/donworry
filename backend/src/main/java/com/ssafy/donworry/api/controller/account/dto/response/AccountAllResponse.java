@@ -4,11 +4,6 @@ import java.util.List;
 
 public record AccountAllResponse(
 
-//        Member member,
-//        Long id,
-//        String bankName,
-//        Long accuntAmount
-
         Long total,
         List<AccountSummaryResponse> accounts
 ) {

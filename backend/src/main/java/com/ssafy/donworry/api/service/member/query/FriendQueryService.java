@@ -60,6 +60,7 @@ public class FriendQueryService {
     }
 
     public FriendListResponse searchFriend(Long memberId){
+        log.debug("memberId:{}", memberId);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         List<FriendResponse> senderFriend = friendRelationshipQueryRepository.findSenderFriend(member);

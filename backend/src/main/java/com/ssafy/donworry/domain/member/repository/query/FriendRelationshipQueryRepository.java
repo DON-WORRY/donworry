@@ -26,7 +26,7 @@ public class FriendRelationshipQueryRepository {
                         friendRelationship.sender.memberEmail
                 ))
                 .from(friendRelationship)
-                .join(friendRelationship.sender, member)
+                .join(friendRelationship.receiver, member)
                 .on(member.eq(sender))
                 .fetch();
     }
