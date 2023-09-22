@@ -19,7 +19,7 @@ public class Dutchpay extends BaseEntity {
     @Id
     @Column(name = "dutchpay_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long iid;
+    private Long id;
 
     @NotNull
     @Enumerated(STRING)
@@ -36,8 +36,8 @@ public class Dutchpay extends BaseEntity {
     private Consumption consumption;
 
     @Builder
-    public Dutchpay(Long iid, @NotNull DutchpayStatus dutchpayStatus, @NotNull Member member, @NotNull Consumption consumption) {
-        this.iid = iid;
+    public Dutchpay(Long id, @NotNull DutchpayStatus dutchpayStatus, @NotNull Member member, @NotNull Consumption consumption) {
+        this.id = id;
         this.dutchpayStatus = dutchpayStatus;
         this.member = member;
         this.consumption = consumption;
