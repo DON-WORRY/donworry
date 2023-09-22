@@ -14,6 +14,7 @@ import static com.ssafy.donworry.domain.account.entity.QAccount.account;
 import static com.ssafy.donworry.domain.account.entity.QCard.card;
 import static com.ssafy.donworry.domain.account.entity.QCardCompany.cardCompany;
 import static com.ssafy.donworry.domain.finance.entity.QConsumption.consumption;
+import static com.ssafy.donworry.domain.finance.entity.QConsumptionCategory.consumptionCategory;
 import static com.ssafy.donworry.domain.member.entity.QMember.member;
 
 @Repository
@@ -110,15 +111,19 @@ public class CardQueryRepository {
                         Projections.constructor(
                                 ConsumtionDetailResponse.class,
                                 consumption.id,
+                                consumption.consumptionCategory.consumptionCategoryName,
                                 consumption.consumptionDetail,
                                 consumption.consumptionPrice,
                                 consumption.createdTime
                         )
                 )
                 .from(consumption)
+                .join(consumptionCategory)
+                .on(consumption.consumptionCategory.id.eq(consumptionCategory.id))
                 .where(consumption.createdTime.month().eq(Math.toIntExact(month)),
                         consumption.createdTime.year().eq(Math.toIntExact(year)),
                         consumption.card.id.eq(cardId))
+                .orderBy(consumption.createdTime.desc())
                 .fetch();
         return result;
     }
