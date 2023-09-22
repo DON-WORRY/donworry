@@ -1,5 +1,6 @@
 package com.ssafy.donworry.api.service.account;
 
+import com.ssafy.donworry.api.controller.account.dto.response.UserRankResponse;
 import com.ssafy.donworry.common.util.StoreDataUtil;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.account.entity.Bank;
@@ -46,6 +47,8 @@ public class AccountService {
     private final ConsumptionCategoryRepository consumptionCategoryRepository;
     private final ConsumptionRepository consumptionRepository;
     private final IncomeRepository incomeRepository;
+
+
 
     public void createMemberInitAccount(Long memberId) {
         Member member = memberRepository.findById(memberId)
