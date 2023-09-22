@@ -3,6 +3,7 @@ package com.ssafy.donworry.api.controller.finance;
 import com.ssafy.donworry.api.controller.finance.dto.request.CategoryModifyRequest;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
+import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalHistoryResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
 import com.ssafy.donworry.api.service.finance.ConsumptionService;
 import com.ssafy.donworry.api.service.finance.query.ConsumptionQueryService;
@@ -38,19 +39,21 @@ public class ConsumptionController {
 
     @Operation(summary = "카테고리별 소비내역 조회", description = "각 카테고리별 소비내역을 조회하는 API입니다.")
     @GetMapping("/history/{id}")
-    public ApiData<List<CategoryHistoryResponse>> searchCategoryHistory(@AuthenticationPrincipal UserDetailsModel userDetailsModel,
-                                                                        @PathVariable("id") Long categoryId,
-                                                                        @RequestParam int month) {
+    public ApiData<CategoryTotalHistoryResponse> searchCategoryHistory(@AuthenticationPrincipal UserDetailsModel userDetailsModel,
+                                                                       @PathVariable("id") Long categoryId,
+                                                                       @RequestParam int month) {
         Long memberId = userDetailsModel.getId();
         log.info("searchCategoryHistory - memberId : " + memberId);
 
-        List<CategoryHistoryResponse> historyResponseList = consumptionQueryService.searchCategoryHistory(memberId, categoryId, month);
+        List<CategoryHistoryResponse> categoryHistoryList = consumptionQueryService.searchCategoryHistory(memberId, categoryId, month);
+
+        CategoryTotalHistoryResponse categoryTotalHistoryResponse = new CategoryTotalHistoryResponse(calTotal(categoryHistoryList), categoryHistoryList);
 //        for (Long i = 1l; i <= 3; i++) {
 //            CategoryHistoryResponse categoryHistoryResponse = new CategoryHistoryResponse(i, "신쭈꾸미 수완점", "KB국민은행", i, LocalDateTime.now());
 //            historyResponseList.add(categoryHistoryResponse);
 //        }
 
-        return ApiData.of(historyResponseList);
+        return ApiData.of(categoryTotalHistoryResponse);
     }
 
     @Operation(summary = "친구의 카테고리별 소비합계 조회", description = "친구의 각 카테고리별 소비내역을 조회하는 API입니다.")
@@ -74,5 +77,15 @@ public class ConsumptionController {
         return ApiData.of(id);
     }
 
+    /**
+     *  비즈니스 로직
+     */
 
+    private Long calTotal(List<CategoryHistoryResponse> categoryHistoryList) {
+        Long total = 0l;
+        for(CategoryHistoryResponse history : categoryHistoryList) {
+            total += history.getPrice();
+        }
+        return total;
+    }
 }
