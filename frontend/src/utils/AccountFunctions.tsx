@@ -19,9 +19,9 @@ const getData = async (key: string) => {
 };
 // 사용자 계좌 불러오기
 export async function accountSearchAccountList(): Promise<void> {
-  const memberId = await getData('memberId');
+  // const memberId = await getData('memberId');
   return axiosWithAuth
-    .get(`/api/account/list/${memberId}`)
+    .get(`/api/account/list`)
     .then((res) => {
       return res.data;
     })
@@ -44,11 +44,12 @@ export async function accountTradeHistory(account_id: number): Promise<void> {
 
 // 월별 순 자산
 export async function accountPerMonthAsset(): Promise<void> {
-  const memberId = await getData('memberId');
+  // const memberId = await getData('memberId');
   return axiosWithAuth
-    .get(`/api/account/statistics${memberId}`)
+    .get(`/api/account/statistics`)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
+      return res.data
     })
     .catch((e) => {
       throw e;
@@ -79,10 +80,10 @@ export async function accountPerMonthAsset(): Promise<void> {
 //     });
 // }
 // 카드별 소비 내역
-export async function accountCardHistory(): Promise<void> {
-  const memberId = await getData('memberId');
+export async function accountCardHistory(month: number): Promise<void> {
+  // const memberId = await getData('memberId');
   return axiosWithAuth
-    .get(`/api/card/${memberId}`)
+    .get(`/api/card/${month}`)
     .then((res) => {
       return res.data;
     })
@@ -91,10 +92,11 @@ export async function accountCardHistory(): Promise<void> {
       throw e;
     });
 }
+
 // 상세카드 소비내역
-export async function accountCardDetail(cardId: number): Promise<void> {
+export async function accountCardDetail(cardId: number, month: number): Promise<void> {
   return axiosWithAuth
-    .get(`/api/card/detail/${cardId}`)
+    .get(`/api/card/detail/${cardId}/${month}`)
     .then((res) => {
       return res.data;
     })
@@ -105,9 +107,9 @@ export async function accountCardDetail(cardId: number): Promise<void> {
 
 // 사용자 카드 불러오기
 export async function accountCardList(): Promise<void> {
-  const memberId = await getData('memberId');
+  // const memberId = await getData('memberId');
   return axiosWithAuth
-    .get(`/api/card/list/${memberId}`)
+    .get(`/api/card/list`)
     .then((res) => {
       return res.data;
     })

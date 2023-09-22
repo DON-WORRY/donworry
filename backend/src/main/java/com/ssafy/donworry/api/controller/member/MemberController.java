@@ -51,7 +51,7 @@ public class MemberController {
     }
 
     @GetMapping("/search")
-    @Operation(summary = "이름으로 검색", description = "회원 리스트 이름으로 검색")
+    @Operation(summary = "이름으로 전체 회원 검색", description = "회원 리스트 이름으로 검색 더치페이용")
     public ApiData<List<MemberSearchResponse>> searchMember(@RequestParam(required = false) String memberName, @AuthenticationPrincipal UserDetailsModel model){
         return ApiData.of(memberQueryService.searchMember(memberName, model.getEmail()));
     }

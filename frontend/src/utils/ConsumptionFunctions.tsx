@@ -2,13 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
 
 type CategoryModifyData = {
-  /*
-  public record CategoryModifyRequest(
-        @NotNull Long consumptionId,
-        @NotNull Long consumptionCategoryId
-) {
-}
-  */
   consumptionId: number;
   consumptionCategoryId: number;
 };
@@ -37,7 +30,6 @@ const getData = async (key: string) => {
       return value;
     }
   } catch (e) {
-    // 읽기 에러
     console.error(e);
     throw e;
   }

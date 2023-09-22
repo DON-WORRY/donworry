@@ -11,6 +11,7 @@ import {
 import ContentButton from '../ContentButton';
 import { images } from '../../assets/bank&card';
 import { useNavigation } from '@react-navigation/native';
+import { accountSearchAccountList } from '../../utils/AccountFunctions';
 
 interface ScreenProps {
   navigation: {
@@ -28,6 +29,10 @@ const AssetAsset: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
+  const [accounts, setAccounts] = useState<
+  Array<{ bankName: string; amount: number }>
+>([]);
+  const [accountsAmount, setAccountsAmount] = useState(0)
 
   useEffect(() => {
     if (!isFocused) {
@@ -35,38 +40,49 @@ const AssetAsset: React.FC = () => {
     }
   }, [isFocused]);
 
-  const data = [
-    { bank: '국민은행', money: 3500528 },
-    { bank: '신한은행', money: 1282999 },
-    { bank: '기업은행', money: 782600 },
-    { bank: '농협은행', money: 500000 },
-    { bank: '토스뱅크', money: 67500 },
-  ];
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+
+        const newAccounts: any = await accountSearchAccountList();
+        if (
+          newAccounts &&
+          newAccounts.data &&
+          Array.isArray(newAccounts.data.accounts)
+        ) {
+          setAccounts(newAccounts.data.accounts);
+          setAccountsAmount(newAccounts.data.total);
+        }
+      } catch (error) {
+        console.error('에러:', error);
+      }
+    };
+    fetch();
+  }, []);
+
   const handleToggle = () => {
     setIsExpanded((prevState) => !prevState);
   };
-
-  const totalAmount = data.reduce((sum, item) => sum + item.money, 0);
 
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <Text style={styles.headText}>자산</Text>
         <Text style={[styles.headText, styles.amountText]}>
-          {formatAmount(totalAmount.toString())}
+          {formatAmount(accountsAmount.toString())}
         </Text>
       </View>
 
-      {data.map((item, index) => {
+      {accounts.map((item, index) => {
         if (index < 4 || isExpanded) {
           return (
             <View key={index} style={styles.row}>
               <View style={styles.imageTextContainer}>
-                <Image style={styles.imageStyle} source={images[item.bank]} />
+                <Image style={styles.imageStyle} source={images[item.bankName]} />
                 <View style={styles.textContainer}>
-                  <Text style={styles.cardContent}>{item.bank}</Text>
+                  <Text style={styles.cardContent}>{item.bankName}</Text>
                   <Text style={styles.spendContent}>
-                    {formatAmount(item.money.toString())}
+                    {formatAmount(item.amount.toString())}
                   </Text>
                 </View>
               </View>
@@ -83,7 +99,7 @@ const AssetAsset: React.FC = () => {
         return null;
       })}
 
-      {data.length > 4 && (
+      {accounts.length > 4 && (
         <TouchableOpacity onPress={handleToggle}>
           <Text>{isExpanded ? '접기' : '더보기'}</Text>
         </TouchableOpacity>
@@ -116,6 +132,8 @@ const styles = StyleSheet.create({
     width: width * 0.13,
     height: width * 0.13,
     borderRadius: (width * 0.13) / 2,
+    borderColor: 'lightgrey',
+    borderWidth: 1,
   },
   imageTextContainer: {
     flexDirection: 'row',

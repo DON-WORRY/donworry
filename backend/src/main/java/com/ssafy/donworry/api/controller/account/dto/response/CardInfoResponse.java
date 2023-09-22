@@ -1,4 +1,4 @@
-package com.ssafy.donworry.api.controller.account;
+package com.ssafy.donworry.api.controller.account.dto.response;
 
 public record CardInfoResponse(
         Long cardId,

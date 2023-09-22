@@ -4,6 +4,8 @@ import com.ssafy.donworry.common.model.JwtCreateModel;
 import com.ssafy.donworry.domain.member.entity.enums.MemberRole;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
+
 public record MemberLoginResponse(
 
         @NotNull
@@ -22,6 +24,9 @@ public record MemberLoginResponse(
         String memberEmail,
 
         @NotNull
+        LocalDate memberBirthDate,
+
+        @NotNull
         MemberRole memberRole
 
 ) {
@@ -33,6 +38,7 @@ public record MemberLoginResponse(
                 model.getId(),
                 model.getName(),
                 model.getEmail(),
+                model.getBirthDate(),
                 model.getMemberRole()
         );
     }

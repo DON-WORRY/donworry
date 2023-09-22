@@ -21,7 +21,7 @@ import java.util.*;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class FinanceQueryService {
+public class ConsumptionQueryService {
     private final MemberRepository memberRepository;
     private final ConsumptionQueryRepository consumptionQueryRepository;
     private final IncomeQueryRepository incomeQueryRepository;
