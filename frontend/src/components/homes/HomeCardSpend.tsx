@@ -30,7 +30,7 @@ const HomeCardSpend: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
   const [cardSpend, setCardSpend] = useState<
-    Array<{ cardCompanyName: string; consumptionTotalPrice: number }>
+    Array<{ cardCompanyName: string; cardId: number; consumptionTotalPrice: number }>
   >([]);
   const [totalCardSpend, setTotalCardSpend] = useState(0);
 
@@ -43,7 +43,7 @@ const HomeCardSpend: React.FC = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const today = new Date(); 
+        const today = new Date();
         const currentMonth = today.getMonth() + 1;
 
         const newCardSpend: any = await accountCardHistory(currentMonth);
@@ -93,7 +93,10 @@ const HomeCardSpend: React.FC = () => {
               </View>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('StackNavigation', { screen: 'History' });
+                  navigation.navigate('StackNavigation', {
+                    screen: 'History',
+                    params: { cardId: item.cardId }, // 추가 정보를 params 속성을 통해 전달
+                  });
                 }}
               >
                 <ContentButton />

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRoute } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -28,139 +29,6 @@ const data = [
     name: '신쭈꾸미 수완점',
     money: 32000,
   },
-  {
-    card: '국민카드',
-    day: '20230919',
-    category: '쇼핑',
-    name: '신세계백화점 아디다스',
-    money: 198000,
-  },
-  {
-    card: '국민카드',
-    day: '20230919',
-    category: '교통',
-    name: '카카오 택시',
-    money: 6300,
-  },
-  {
-    card: '국민카드',
-    day: '20230919',
-    category: '식비',
-    name: '버거킹',
-    money: 11000,
-  },
-  {
-    card: '국민카드',
-    day: '20230918',
-    category: '여가',
-    name: 'Riot 게임즈',
-    money: 20000,
-  },
-  {
-    card: '국민카드',
-    day: '20230918',
-    category: '식비',
-    name: '한솥 도시락 수완점',
-    money: 9000,
-  },
-  {
-    card: '국민카드',
-    day: '20230918',
-    category: '쇼핑',
-    name: '무신사',
-    money: 45000,
-  },
-  {
-    card: '국민카드',
-    day: '20230917',
-    category: '교통',
-    name: '코레일',
-    money: 33200,
-  },
-  {
-    card: '국민카드',
-    day: '20230917',
-    category: '식비',
-    name: '컴포즈 커피',
-    money: 4000,
-  },
-  {
-    card: '국민카드',
-    day: '20230917',
-    category: '여가',
-    name: 'Riot 게임즈',
-    money: 15000,
-  },
-  {
-    card: '국민카드',
-    day: '20230917',
-    category: '식비',
-    name: 'GS 25',
-    money: 9000,
-  },
-  {
-    card: '국민카드',
-    day: '20230916',
-    category: '기타',
-    name: '네이버페이',
-    money: 50000,
-  },
-  {
-    card: '국민카드',
-    day: '20230916',
-    category: '교통',
-    name: '코레일',
-    money: 33200,
-  },
-  {
-    card: '국민카드',
-    day: '20230916',
-    category: '식비',
-    name: '스타벅스',
-    money: 14800,
-  },
-  {
-    card: '국민카드',
-    day: '20230915',
-    category: '여가',
-    name: 'Smilgate',
-    money: 55000,
-  },
-  {
-    card: '국민카드',
-    day: '20230915',
-    category: '식비',
-    name: '신쭈꾸미 수완점',
-    money: 32000,
-  },
-  {
-    card: '국민카드',
-    day: '20230914',
-    category: '기타',
-    name: '카카오페이',
-    money: 10000,
-  },
-  {
-    card: '국민카드',
-    day: '20230914',
-    category: '교통',
-    name: '카카오 택시',
-    money: 8700,
-  },
-  {
-    card: '국민카드',
-    day: '20230914',
-    category: '식비',
-    name: '나주 곰탕',
-    money: 12000,
-  },
-  {
-    card: '국민카드',
-    day: '20230913',
-    category: '식비',
-    name: '벌크 커피',
-    money: 2500,
-  },
 ];
 
 data.sort((a, b) => Number(b.day) - Number(a.day));
@@ -173,6 +41,9 @@ interface DataItem {
   money: number;
 }
 const HistoryScreen: React.FC = () => {
+  const route = useRoute<any>(); // useRoute hook을 통해 route 객체를 가져옴
+  const cardId = route.params ? route.params.cardId : null;
+
   const blackLogo = require('../../assets/logo/BlackLogo.png');
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [totalMoneys, setTotalMoneys] = useState<Record<string, number>>({});

@@ -18,14 +18,16 @@ interface ScreenProps {
     navigate: (screen: string, params?: any) => void;
   };
 }
-
+interface AssetAssetProps {
+  refreshKey: number;
+}
 const { width } = Dimensions.get('screen');
 
 const formatAmount = (amount: string): string => {
   return parseInt(amount, 10).toLocaleString('ko-KR') + '원';
 };
-
-const AssetAsset: React.FC = () => {
+const AssetAsset: React.FC<AssetAssetProps> = (props) => {
+  const { refreshKey } = props;
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
@@ -58,7 +60,7 @@ const AssetAsset: React.FC = () => {
       }
     };
     fetch();
-  }, []);
+  }, [props.refreshKey]);
 
   const handleToggle = () => {
     setIsExpanded((prevState) => !prevState);
