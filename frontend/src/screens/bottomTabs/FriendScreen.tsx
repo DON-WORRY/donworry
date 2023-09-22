@@ -12,7 +12,7 @@ const FriendScreen: React.FC = () => {
       <ComponentsHeader />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        alwaysBounceHorizontal={true}
+        alwaysBounceHorizontal={false}
       >
         <FriendMessageComponent />
         <FriendSpendKing />

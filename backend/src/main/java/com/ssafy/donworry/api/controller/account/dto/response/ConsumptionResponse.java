@@ -6,5 +6,8 @@ public record ConsumptionResponse(
         Long cardConsumptionTotalPrice,
         List<eachCardConsumptionTotalPrice> eachCardConsumptionTotalPriceList
 ) {
+    public static ConsumptionResponse of(Long cardConsumptionTotalPrice, List<eachCardConsumptionTotalPrice> eachCardConsumptionTotalPriceList) {
+        return new ConsumptionResponse(cardConsumptionTotalPrice, eachCardConsumptionTotalPriceList);
+    }
 
 }

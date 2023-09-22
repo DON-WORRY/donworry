@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import FriendRequest from '../../components/friends/FriendRequest';
 import FriendResponse from '../../components/friends/FriendResponse';
 import { useNavigation } from '@react-navigation/native';
+import BackHeader from '../../components/BackHeader';
 
 interface ScreenProps {
   navigation: {
@@ -139,20 +139,12 @@ const FriendMessageScreen: React.FC = () => {
     };
     fetch();
   }, []);
+
   return (
     <View style={styles.container}>
-      <View style={styles.header_box}>
-        <MaterialCommunityIcons
-          name="arrow-left"
-          size={30}
-          onPress={() => {
-            navigation.goBack('TabNavigation', { screen: 'Friend' });
-          }}
-        />
-        <Image source={blackLogo} style={styles.logo} />
-      </View>
+      <BackHeader screen="Friend" />
       <View>
-        <Text style={styles.header_text}>친구 요청 및 수신</Text>
+        <Text style={styles.headerText}>친구 요청 및 수신</Text>
       </View>
       <View>
         <View style={styles.sub_title_box}>
@@ -262,7 +254,6 @@ const FriendMessageScreen: React.FC = () => {
   );
 };
 
-const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
 
 const styles = StyleSheet.create({
@@ -272,17 +263,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     backgroundColor: 'light-gray',
   },
-  logo: {
-    height: 40,
-    width: 40,
-  },
-  header_box: {
-    height: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: screenWidth - 40,
-  },
-  header_text: {
+  headerText: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 30,

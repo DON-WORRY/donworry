@@ -87,4 +87,9 @@ public class AccountQueryService {
 
         return result;
     }
+
+    public UserRankResponse findTotalAmountByUserId(Long memberId) {
+        UserRankResponse userRankResponse = accountQueryRepository.findTotalAmountByUserId(memberId);
+        return userRankResponse;
+    }
 }
