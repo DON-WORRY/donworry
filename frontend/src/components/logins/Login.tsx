@@ -21,6 +21,8 @@ interface InputboxProps {
 interface ButtonProps {
   title: string;
   onPress: () => void;
+  widthPercentage?: number;
+  disabled?: boolean;
 }
 
 interface ScreenProps {
@@ -64,7 +66,7 @@ const Login: React.FC = () => {
         onChangeText={(text) => setPassword(text)}
         secureTextEntry={true}
       />
-      <Botton title="로그인" onPress={handleLogin} />
+      <Button title="로그인" onPress={handleLogin} />
       <GoToSignup />
     </View>
   );
@@ -83,14 +85,22 @@ const Inputbox: React.FC<InputboxProps> = (props) => {
   );
 };
 
-const Botton: React.FC<ButtonProps> = (props) => {
+const Button: React.FC<ButtonProps> = (props) => {
+  const { title, onPress, widthPercentage = 0.7, disabled } = props;
   return (
     <TouchableOpacity
-      style={styles.button}
-      onPress={props.onPress}
+      style={[
+        styles.button,
+        {
+          width: Dimensions.get('screen').width * widthPercentage,
+          backgroundColor: disabled ? 'gray' : '#7777F3',
+        },
+      ]}
+      onPress={onPress}
       activeOpacity={0.9}
+      disabled={disabled}
     >
-      <Text style={styles.button_text}>{props.title}</Text>
+      <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -101,10 +111,10 @@ const GoToSignup: React.FC = () => {
     navigation.navigate('SignUp');
   }
   return (
-    <View style={styles.bottom_view}>
+    <View style={styles.bottomView}>
       <Text>아직 회원이 아니신가요?</Text>
       <TouchableOpacity onPress={handleGoToSignup} activeOpacity={0.8}>
-        <Text style={styles.bottom_text}>회원가입</Text>
+        <Text style={styles.bottomText}>회원가입</Text>
       </TouchableOpacity>
     </View>
   );
@@ -123,24 +133,22 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 45,
-    width: Dimensions.get('screen').width * 0.7,
-    backgroundColor: '#7777F3',
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 15,
   },
-  button_text: {
+  buttonText: {
     fontSize: 20,
     color: 'white',
     fontWeight: 'bold',
   },
-  bottom_view: {
+  bottomView: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 10,
   },
-  bottom_text: {
+  bottomText: {
     marginLeft: 10,
     marginTop: 1,
     color: 'blue',
@@ -148,3 +156,4 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
+export { Button };
