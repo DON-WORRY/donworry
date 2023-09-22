@@ -8,6 +8,7 @@ import com.ssafy.donworry.common.error.ErrorCode;
 import com.ssafy.donworry.common.error.exception.EntityNotFoundException;
 import com.ssafy.donworry.common.error.exception.InvalidValueException;
 import com.ssafy.donworry.domain.finance.entity.Consumption;
+import com.ssafy.donworry.domain.finance.entity.DetailDutchpay;
 import com.ssafy.donworry.domain.finance.entity.Dutchpay;
 import com.ssafy.donworry.domain.finance.repository.ConsumptionRepository;
 import com.ssafy.donworry.domain.finance.repository.DutchpayRepository;
@@ -42,14 +43,14 @@ public class DutchpayService {
                     .orElseThrow(
                             () -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
                     );
-            try {
-                Dutchpay dutchpay = Dutchpay.of(req, member, consumption);
-                dutchpayRepository.save(dutchpay);
-                dutchpayPersonList.add(DutchpayPersonResponse.of(dutchpay));
-            }
-            catch (Exception e) {
-                throw new InvalidValueException(ErrorCode.Dutchpay_SAVE_ERROR);
-            }
+//            try {
+//                DetailDutchpay detailDutchpay = DetailDutchpay.of(req, member, consumption);
+//                dutchpayRepository.save(dutchpay);
+//                dutchpayPersonList.add(DutchpayPersonResponse.of(dutchpay));
+//            }
+//            catch (Exception e) {
+//                throw new InvalidValueException(ErrorCode.Dutchpay_SAVE_ERROR);
+//            }
         }
 
         return dutchpayPersonList;

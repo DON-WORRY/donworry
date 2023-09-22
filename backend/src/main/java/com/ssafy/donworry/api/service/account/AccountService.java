@@ -15,6 +15,7 @@ import com.ssafy.donworry.domain.account.repository.CardRepository;
 import com.ssafy.donworry.domain.finance.entity.Consumption;
 import com.ssafy.donworry.domain.finance.entity.ConsumptionCategory;
 import com.ssafy.donworry.domain.finance.entity.Income;
+import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 import com.ssafy.donworry.domain.finance.repository.ConsumptionCategoryRepository;
 import com.ssafy.donworry.domain.finance.repository.ConsumptionRepository;
 import com.ssafy.donworry.domain.finance.repository.IncomeRepository;
@@ -31,6 +32,7 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 
 import static com.ssafy.donworry.domain.account.entity.QAccount.account;
+import static com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus.NOTSTART;
 
 @Slf4j
 @Service
@@ -109,7 +111,7 @@ public class AccountService {
             ConsumptionCategory consumptionCategory = consumptionCategoryRepository.findById(Long.valueOf(randomConsumption.getI())).orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리 항목입니다."));
 
             if (consumptionRemainedAmount > consumptionPrice) {
-                Consumption consumption = Consumption.of(consumptionDetail, consumptionPrice, consumptionRemainedAmount, member, account, null, card, consumptionCategory);
+                Consumption consumption = Consumption.of(consumptionDetail, consumptionPrice, consumptionRemainedAmount, NOTSTART, member, account, null, card, consumptionCategory);
                 consumptionRepository.save(consumption);
                 consumption.update(history, history);
                 account.updateAmount(consumptionPrice);

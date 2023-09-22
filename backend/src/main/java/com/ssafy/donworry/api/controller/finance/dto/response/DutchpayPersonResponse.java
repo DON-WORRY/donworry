@@ -1,5 +1,6 @@
 package com.ssafy.donworry.api.controller.finance.dto.response;
 
+import com.ssafy.donworry.domain.finance.entity.DetailDutchpay;
 import com.ssafy.donworry.domain.finance.entity.Dutchpay;
 import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 
@@ -10,13 +11,13 @@ public record DutchpayPersonResponse(
         Long dutchpayReceivedPrice,
         Long dutchpayReqPrice
 ) {
-    public static DutchpayPersonResponse of(Dutchpay dutchpay) {
+    public static DutchpayPersonResponse of(DetailDutchpay detailDutchpay) {
         return new DutchpayPersonResponse(
-                dutchpay.getId(),
-                dutchpay.getMember().getMemberName(),
-                dutchpay.getDutchpayStatus(),
-                dutchpay.getDutchpayReceivedPrice(),
-                dutchpay.getDutchpayReqPrice()
+                detailDutchpay.getId(),
+                detailDutchpay.getMember().getMemberName(),
+                detailDutchpay.getDutchpayStatus(),
+                detailDutchpay.getDutchpayReceivedPrice(),
+                detailDutchpay.getDutchpayReqPrice()
         );
     }
 }
