@@ -1,6 +1,5 @@
 package com.ssafy.donworry.domain.account.repository.query;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.donworry.api.controller.account.dto.response.CardInfoResponse;
@@ -9,9 +8,7 @@ import com.ssafy.donworry.api.controller.account.dto.response.eachCardConsumptio
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.ssafy.donworry.domain.account.entity.QAccount.account;
 import static com.ssafy.donworry.domain.account.entity.QCard.card;
@@ -107,7 +104,7 @@ public class CardQueryRepository {
     }
 
 
-    public List<ConsumtionDetailResponse> findEachCardOfMonthDetailConsumption(Long cardId, Long month) {
+    public List<ConsumtionDetailResponse> findEachCardOfMonthDetailConsumption(Long cardId, Long year, Long month) {
         List<ConsumtionDetailResponse> result = queryFactory
                 .select(
                         Projections.constructor(
@@ -119,7 +116,9 @@ public class CardQueryRepository {
                         )
                 )
                 .from(consumption)
-                .where(consumption.createdTime.month().eq(Math.toIntExact(month)))
+                .where(consumption.createdTime.month().eq(Math.toIntExact(month)),
+                        consumption.createdTime.year().eq(Math.toIntExact(year)),
+                        consumption.card.id.eq(cardId))
                 .fetch();
         return result;
     }
