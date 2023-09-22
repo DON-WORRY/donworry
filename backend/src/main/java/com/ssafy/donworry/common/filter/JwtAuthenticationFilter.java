@@ -71,6 +71,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String accessToken = jwtUtil.generateAccessToken(jwtUtil.extractAllClaims(refreshToken), (long) (1000 * 60 * 60));
             response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+//            throw new InvalidValueException(ErrorCode.INVALID_TOKEN);
 
             userAuthorization(request, jwtUtil.getId(token));
         }
