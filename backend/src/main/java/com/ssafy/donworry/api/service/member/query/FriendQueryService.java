@@ -39,8 +39,8 @@ public class FriendQueryService {
 
         // TODO: 2023-09-20 로직 맞는지 검증 필요
 
-        List<FriendRequestResponse> receiverResponse = friendRequestQueryRepository.findReceivers(member);
-        List<FriendRequestResponse> senderResponse = friendRequestQueryRepository.findSenders(member);
+        List<FriendRequestResponse> senderResponse = friendRequestQueryRepository.findReceivers(member);
+        List<FriendRequestResponse> receiverResponse = friendRequestQueryRepository.findSenders(member);
 
 //        List<FriendRequestResponse> receiverResponse =  member.getRequestSenders().stream().map(
 //                (friendRequest) -> {
