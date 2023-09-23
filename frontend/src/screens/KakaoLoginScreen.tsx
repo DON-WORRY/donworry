@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet, Alert, Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
-// import { ENV_KAKAO_API_KEY, ENV_REDIRECT_URI } from "@env"
-
-const REST_API_KEY = process.env.ENV_KAKAO_API_KEY;
-const REDIRECT_URI = process.env.ENV_REDIRECT_URI;
+import { APP_ENV_KAKAO_API_KEY, APP_ENV_REDIRECT_URI } from '@env';
+console.log(APP_ENV_KAKAO_API_KEY);
+console.log(APP_ENV_REDIRECT_URI);
+const URI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${APP_ENV_KAKAO_API_KEY}&redirect_uri=${APP_ENV_REDIRECT_URI}&lang=ko`;
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 interface ScreenProps {
   navigation: {
@@ -27,9 +27,6 @@ const KakaoLogin: React.FC = () => {
       navigation.navigate('Login');
     }
   };
-  const REST_API_KEY = '6ef3e4850a7d806c33947b648f059446';
-  const REDIRECT_URI = 'http://localhost:8081';
-  // const REDIRECT_URI = 'http://localhost:19006';
   const screenWidth = Dimensions.get('screen').width;
   const screenHeight = Dimensions.get('screen').height;
 
@@ -41,19 +38,20 @@ const KakaoLogin: React.FC = () => {
           width: screenWidth,
           height: screenHeight,
           backgroundColor: 'white',
-          paddingTop: 200,
+          paddingTop: 100,
         }}
       >
         <WebView
           style={{ flex: 1 }}
           source={{
-            uri: `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&lang=ko`,
+            uri: URI,
           }}
           injectedJavaScript={INJECTED_JAVASCRIPT}
           javaScriptEnabled
           onMessage={(event) => {
-            // console.log('Received message:', event.nativeEvent);
+            console.log('Received message:', event.nativeEvent);
             const data = event.nativeEvent.url;
+            console.log(data);
             getCode(data);
           }}
         />

@@ -62,82 +62,98 @@ type Friend = {
 };
 
 const FriendSpendKing: React.FC = () => {
-  const [rank, setRank] = useState(0)
-  const [friendsNumber, setFriendsNumber] = useState(0)
+  const [rank, setRank] = useState(0);
+  const [friendsNumber, setFriendsNumber] = useState(0);
   const [myName, setMyName] = useState<string | undefined>(undefined);
   const [MycategoryList, setMyCategoryList] = useState<CategoryAmountList>([]);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [friendsMinValues, setFriendsMinValues] = useState<CategoryAmountList>(
     []
   );
+  // 1. 이름을 가져옵니다.
   useEffect(() => {
-    const fetch = async () => {
+    const fetchName = async () => {
       const newName = await getData('memberName');
-      const myCategoryListData = await consumptionCategoryTotal(nowMonth)
-        .then((r) => {
-          return r.data.categoryAmountList;
-        })
-        .catch((e) => {
-          console.error(e);
-        });
       setMyName(newName);
+    };
+    fetchName();
+  }, []);
+
+  // 2. 이름이 바뀌면 카테고리 리스트 데이터를 가져옵니다.
+  useEffect(() => {
+    const fetchCategoryList = async () => {
+      const myCategoryListData = await consumptionCategoryTotal(nowMonth)
+        .then((r) => r.data.categoryAmountList)
+        .catch((e) => console.error(e));
       setMyCategoryList(myCategoryListData);
+    };
+
+    if (myName) {
+      // 이름이 존재할 때만 실행
+      fetchCategoryList();
+    }
+  }, [myName]);
+
+  // 3. 카테고리 리스트 데이터가 바뀌면 친구 목록을 가져옵니다.
+  useEffect(() => {
+    const fetchFriendList = async () => {
       const data = await friendListInquiry()
-        .then((r) => {
-          // console.log(r)
-          return r.data.friendResponseList;
-        })
-        .catch((e) => {
-          throw e;
-        });
-      await setFriends(data);
-      await setFriendsNumber(data.length)
-      // 데이터를 가져온 다음에 새로 취합한다.
-      const AmountList = [];
+        .then((r) => r.data.friendResponseList)
+        .catch((e) => console.error(e));
+      setFriends(data);
+      setFriendsNumber(data.length);
+    };
+
+    if (MycategoryList) {
+      // 카테고리 리스트 데이터가 있을 때만 실행
+      fetchFriendList();
+    }
+  }, [MycategoryList]);
+
+  // 4. 친구 목록이 바뀌면 친구들의 지출 데이터를 가져옵니다.
+  useEffect(() => {
+    const fetchFriendExpenditure = async () => {
       const tmp = await Promise.all(
         friends.map(async (f) => {
-          // console.log("test", f)
           const smallData = {
             id: f.friendId,
             month: nowMonth,
           };
-          const nowValue = await friendTotalSpend(smallData)
-            .then((r) => {
-              return r.data.categoryAmountList;
-            })
-            .catch((e) => {
-              console.error(e);
-            });
-          // console.log(nowValue)
-          // console.log(MycategoryList)
-          return { value: nowValue };
+          return await friendTotalSpend(smallData)
+            .then((r) => ({ value: r.data.categoryAmountList }))
+            .catch((e) => console.error(e));
         })
       );
-      // await console.log('tmp', tmp);
-      const allValues = await tmp.flatMap((item) => item.value);
+      console.log('tmp', tmp);
+      const allValues = tmp.flatMap((item) => item.value);
+      console.log('allValues', allValues);
 
-      // 카테고리별로 데이터를 그룹화합니다.
-      const groupedByCategory = await Promise.all (allValues.reduce((acc, curr) => {
+      const groupedByCategory = allValues.reduce((acc, curr) => {
         if (!acc[curr.category]) {
           acc[curr.category] = [];
         }
         acc[curr.category].push(curr.amount);
         return acc;
-      }, {}));
-      console.log(groupedByCategory);
-      // 각 카테고리별로 최소값을 찾습니다.
-      const minValuesByCategory = [];
+      }, {});
 
+      console.log(groupedByCategory);
+
+      const minValuesByCategory = [];
       for (const category in groupedByCategory) {
         const minValue = Math.min(...groupedByCategory[category]);
         minValuesByCategory.push({ category, amount: minValue });
       }
 
-      console.log(minValuesByCategory);
-      await setFriendsMinValues(minValuesByCategory);
+      console.log('minvalue', minValuesByCategory);
+      setFriendsMinValues(minValuesByCategory);
     };
-    fetch();
-  }, []); // 빈 배열을 전달하여 한 번만 실행되도록 함
+
+    if (friends && friends.length > 0) {
+      // 친구 목록이 있을 때만 실행
+      fetchFriendExpenditure();
+    }
+  }, [friends]);
+  // 빈 배열을 전달하여 한 번만 실행되도록 함
   return (
     <View style={styles.container}>
       <FriendSpendHeader friendsNumber={friendsNumber} rank={rank} />

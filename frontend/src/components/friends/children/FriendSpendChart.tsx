@@ -32,15 +32,16 @@ const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function fetch() {
-      setMyAmount(props.myAmount);
-      setKingAmount(props.kingsAmount);
-      setLoading(true);
+      await setMyAmount(props.myAmount);
+      await setKingAmount(props.kingsAmount);
+      await setLoading(true);
+      await console.log('test', myAmount, kingAmount);
     }
     fetch();
   }, [props.myAmount, props.kingsAmount]);
   return (
     <View>
-      {myAmount.length > 0 ? (
+      {myAmount.length > 0 && kingAmount.length > 0 ? (
         indexList.map((indexNumber: number) => {
           const cName = myAmount[indexNumber].category;
           const rightValue = kingAmount[indexNumber].amount;
@@ -56,7 +57,7 @@ const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
               ? 100
               : 50 + (leftValue / rightValue) * 25;
           const leftPercent =
-          leftValue == 0
+            leftValue == 0
               ? 0
               : rightValue == 0
               ? 100
