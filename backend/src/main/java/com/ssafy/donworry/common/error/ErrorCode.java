@@ -12,6 +12,7 @@ public enum ErrorCode {
     ENTITY_NOT_FOUND(400, "C002", "해당 엔티티를 찾지 못했습니다."),
     INTERNAL_SERVER_ERROR(500, "C003", "서버에 접근이 불가능합니다."),
     HANDLE_ACCESS_DENIED(403, "C004", "접근이 거부되었습니다."),
+    ATUTHENTIFICATION_ERROR(401, "C005", "권한이 없습니다." ),
     
     // Member
     MEMBER_NOT_FOUND(400, "M001", "회원을 찾지 못했습니다."),
