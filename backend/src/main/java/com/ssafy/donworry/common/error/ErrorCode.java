@@ -23,6 +23,8 @@ public enum ErrorCode {
     // Friend
     FRIEND_REQUEST_SAVE_ERROR(400, "F001", "친구 요청 저장에 실패했습니다."),
     FRIEND_REQUEST_NOT_FOUND(400, "F002", "친구 요청을 찾는데 실패했습니다."),
+    ALREADY_FRIEND_RELATIONSHIP(400, "F003", "이미 친구 관계입니다."),
+    ALREADY_FRIEND_REQUEST(400, "F004", "이미 친구 요청을 보냈습니다."),
 
     // Goal
     GOAL_SAVE_ERROR(400, "G001", "목표 등록에 실패하였습니다."),

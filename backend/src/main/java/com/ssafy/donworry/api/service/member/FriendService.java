@@ -1,5 +1,6 @@
 package com.ssafy.donworry.api.service.member;
 
+import com.ssafy.donworry.api.service.member.query.FriendQueryService;
 import com.ssafy.donworry.api.service.member.request.FriendCheckServiceRequest;
 import com.ssafy.donworry.api.service.member.request.FriendRequestServiceRequest;
 import com.ssafy.donworry.common.error.ErrorCode;
@@ -8,9 +9,11 @@ import com.ssafy.donworry.common.error.exception.InvalidValueException;
 import com.ssafy.donworry.domain.member.entity.FriendRelationship;
 import com.ssafy.donworry.domain.member.entity.FriendRequest;
 import com.ssafy.donworry.domain.member.entity.Member;
+import com.ssafy.donworry.domain.member.entity.enums.FriendRequestStatus;
 import com.ssafy.donworry.domain.member.repository.FriendRelationshipRepository;
 import com.ssafy.donworry.domain.member.repository.FriendRequestRepository;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
+import com.ssafy.donworry.domain.member.repository.query.FriendRelationshipQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,8 @@ public class FriendService {
                             );
 
                     if(receiver == sender) throw new EntityNotFoundException(ErrorCode.MEMBER_DUPLICATE);
+                    if(checkAlreadyFriendRelationship(sender, receiver)  || checkAlreadyFriendRelationship(receiver, sender)) throw new InvalidValueException(ErrorCode.ALREADY_FRIEND_RELATIONSHIP);
+                    if(checkAlreadyFriendRequest(sender, receiver) || checkAlreadyFriendRequest(receiver, sender)) throw new InvalidValueException(ErrorCode.ALREADY_FRIEND_REQUEST);
 
                     try{
                         friendRequestRepository.save(FriendRequest.of(receiver, sender));
@@ -49,6 +54,16 @@ public class FriendService {
                     }
                 }
         );
+    }
+
+    private boolean checkAlreadyFriendRelationship(Member friend, Member member){
+        if(friendRelationshipRepository.findByReceiverAndSender(friend, member).isPresent()) return true;
+        return false;
+    }
+
+    private boolean checkAlreadyFriendRequest(Member friend, Member member){
+        if(friendRequestRepository.findByReceiverAndSenderAndFriendRequestStatus(friend, member, FriendRequestStatus.ACTIVE).isPresent()) return true;
+        return false;
     }
 
     public String checkFriend(FriendCheckServiceRequest request, Long memberId){
