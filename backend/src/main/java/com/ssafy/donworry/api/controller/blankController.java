@@ -14,5 +14,5 @@ public class blankController {
         return ResponseEntity.ok(null);
     }
 
-    @
+
 }

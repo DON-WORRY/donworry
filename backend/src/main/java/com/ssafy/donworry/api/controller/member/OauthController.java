@@ -20,8 +20,13 @@ public class OauthController {
 
     private final OauthService oauthService;
 
+//    @PostMapping("/kakao")
+//    public ApiData<MemberLoginResponse> loginKakao(@RequestBody OuathKakaoRequest request){
+//        return ApiData.of(oauthService.loginKakao(request.kakaoAuthToken()));
+//    }
+
     @PostMapping("/kakao")
-    public ApiData<MemberLoginResponse> loginKakao(@RequestBody OuathKakaoRequest request){
+    public ApiData<String> loginKakao(@RequestBody OuathKakaoRequest request){
         return ApiData.of(oauthService.loginKakao(request.kakaoAuthToken()));
     }
 
