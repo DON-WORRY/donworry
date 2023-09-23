@@ -34,11 +34,8 @@ public class FriendRequestQueryRepository {
                 ))
                 .from(friendRequest)
                 .join(friendRequest.receiver, member)
-                .on(
-                        friendRequest.friendRequestStatus.eq(FriendRequestStatus.ACTIVE)
-                                .and(
-                                        member.eq(member1)
-                                )
+                .on(friendRequest.friendRequestStatus.eq(FriendRequestStatus.ACTIVE)
+                        .and(member.eq(member1))
                 )
                 .fetch();
     }
@@ -54,11 +51,8 @@ public class FriendRequestQueryRepository {
                 ))
                 .from(friendRequest)
                 .join(friendRequest.sender, member)
-                .on(
-                        friendRequest.friendRequestStatus.eq(FriendRequestStatus.ACTIVE)
-                                .and(
-                                        member.eq(member1)
-                                )
+                .on(friendRequest.friendRequestStatus.eq(FriendRequestStatus.ACTIVE)
+                        .and(member.eq(member1))
                 )
                 .fetch();
     }
