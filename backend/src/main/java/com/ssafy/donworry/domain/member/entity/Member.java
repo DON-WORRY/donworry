@@ -9,6 +9,7 @@ import com.ssafy.donworry.domain.finance.entity.Income;
 import com.ssafy.donworry.domain.member.entity.enums.MemberActivateStatus;
 import com.ssafy.donworry.domain.member.entity.enums.MemberGender;
 import com.ssafy.donworry.domain.member.entity.enums.MemberRole;
+import com.ssafy.donworry.domain.member.entity.enums.OauthProvider;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -63,6 +64,9 @@ public class Member extends BaseEntity {
     @NotNull
     @Enumerated(STRING)
     private MemberActivateStatus memberActivateStatus;
+
+    @Enumerated(STRING)
+    private OauthProvider oauthProvider;
 
     @NotNull
     private LocalDate memberBirthDate;
