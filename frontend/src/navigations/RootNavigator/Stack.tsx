@@ -5,6 +5,7 @@ import SignupScreen from '../../screens/SignupScreen';
 import FriendMessageScreen from '../../screens/friends/FriendMessageScreen';
 // import DutchpayRequestScreen from '../../screens/consumptions/DutchpayRequestScreen';
 import HistoryScreen from '../../screens/historys/HistoryScreen';
+import KakaoLoginScreen from '../../screens/KakaoLoginScreen';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,11 @@ const StackNavigation: React.FC = () => {
       <Stack.Screen
         name="History"
         component={HistoryScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Kakao"
+        component={KakaoLoginScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

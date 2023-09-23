@@ -14,6 +14,7 @@ type UserData = {
   memberId: string;
   memberEmail: string;
   memberName: string;
+  memberBirthDate: string;
 };
 interface MyPageCloseProps {
   data: UserData;

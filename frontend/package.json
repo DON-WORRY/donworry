@@ -46,6 +46,7 @@
     "react-native-svg": "13.9.0",
     "react-native-vector-icons": "^10.0.0",
     "react-native-web": "~0.19.6",
+    "react-native-webview": "^13.6.0",
     "react-redux": "^8.1.2",
     "victory-native": "^36.6.11"
   },

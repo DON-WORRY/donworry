@@ -13,11 +13,11 @@ interface FriendResponseProps {
   setRendering: (render: boolean) => void;
 }
 
-type FriendCheckdata = {
-  isAccept: boolean;
-  friendRequestId: number;
-  friendId: number;
-};
+// type FriendCheckdata = {
+//   isAccept: boolean;
+//   friendRequestId: number;
+//   friendId: number;
+// };
 
 const FriendResponse: React.FC<FriendResponseProps> = (props) => {
   function cancelHandle() {
@@ -29,7 +29,7 @@ const FriendResponse: React.FC<FriendResponseProps> = (props) => {
     // console.log(data.friendRequestId)
     // console.log(data.friendId)
     friendCheck(data).then((r) => {
-      console.log(r)
+      // console.log(r)
       props.setRendering(false)
     }).catch((e) => {
       console.error(e)

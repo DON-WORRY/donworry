@@ -39,7 +39,6 @@ const dummyData = [
     name: 'test',
     email: 'test@naver.com',
   },
-  
 ];
 
 type Friend = {
@@ -62,13 +61,15 @@ const FriendList: React.FC = () => {
     async function fetch() {
       const data = await friendListInquiry()
         .then((r) => {
-          return r.data.friendResponseList
+          // console.log(r)
+          return r.data.friendResponseList;
         })
         .catch((e) => {
           throw e;
         });
-      console.log(data);
-      await setFriends(data)
+      // console.log('freinds', data);
+      await setFriends(data);
+      console.log(data)
       return;
     }
     fetch();
@@ -83,10 +84,10 @@ const FriendList: React.FC = () => {
       <Text style={styles.header}>친구 목록</Text>
       <FriendSearch search={search} />
 
-      {dummyData.map((dummy) => {
+      {friends.map((friend, index) => {
         return (
-          <TouchableOpacity key={dummy.id}>
-            <FriendListItem friend={dummy} />
+          <TouchableOpacity key={index}>
+            <FriendListItem friend={friend} />
           </TouchableOpacity>
         );
       })}

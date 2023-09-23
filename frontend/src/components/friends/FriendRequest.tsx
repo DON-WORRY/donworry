@@ -14,20 +14,20 @@ interface FriendRequestProps {
 
 const FriendRequest: React.FC<FriendRequestProps> = (props) => {
   function accessHandle() {
-
     const accessData = {
       isAccept: true,
-      friendRequestId: props.memberId,
-      friendId: props.friendRequestId,
-    }
-    console.log(accessData.friendId)
-    console.log(accessData.friendRequestId)
-    friendCheck(accessData).then((r) => {
-      console.log(r)
-      props.setRendering(false)
-    }).catch((e) => {
-      console.error(e)
-    })
+      friendRequestId: props.friendRequestId,
+      friendId: props.memberId,
+    };
+    console.log(accessData.friendId);
+    console.log(accessData.friendRequestId);
+    friendCheck(accessData)
+      .then((r) => {
+        props.setRendering(false);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
     console.log('access');
   }
 
@@ -36,13 +36,15 @@ const FriendRequest: React.FC<FriendRequestProps> = (props) => {
       isAccept: true,
       friendRequestId: props.friendRequestId,
       friendId: props.memberId,
-    }
-    friendCheck(cancelData).then((r) => {
-      console.log(r)
-      props.setRendering(false)
-    }).catch((e) => {
-      console.error(e)
-    })
+    };
+    friendCheck(cancelData)
+      .then((r) => {
+        console.log(r);
+        props.setRendering(false);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
 
     console.log('cancel');
   }

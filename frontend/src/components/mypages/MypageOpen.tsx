@@ -20,6 +20,7 @@ type UserData = {
   memberId: string;
   memberEmail: string;
   memberName: string;
+  memberBirthDate: string;
 };
 interface MyPageOpenProps {
   data: UserData;
@@ -33,16 +34,15 @@ const MypageOpen: React.FC<MyPageOpenProps> = (props) => {
       <MypageImage style={styles.image} />
       <View style={styles.info_View}>
         <MypageText title="이름" content={props.data.memberName} />
-        {/* <MypageText title="생년월일" content="1998.01.13" /> */}
+        <MypageText title="생년월일" content={props.data.memberBirthDate} />
         <MypageText title="이메일" content={props.data.memberEmail} />
-        {/* <MypageText title="전화번호" content="010-4064-3297" /> */}
       </View>
       <View style={styles.info_Button}>
-        <MypageButton
+        {/* <MypageButton
           title="수정하기"
           onPress={() => console.log('수정')}
           color="#7777F3"
-        />
+        /> */}
         <MypageButton
           title="로그아웃"
           onPress={() => {

@@ -22,6 +22,7 @@ type UserData = {
   memberId: string;
   memberEmail: string;
   memberName: string;
+  memberBirthDate: string
 };
 
 // 값을 가져오기
@@ -44,21 +45,25 @@ const MyPage: React.FC = () => {
     memberId: '-1',
     memberEmail: '1',
     memberName: '1',
+    memberBirthDate: "1"
   });
   useEffect(() => {
     async function fetch() {
       const memberId = await getData('memberId');
       const memberEmail = await getData('memberEmail');
       const memberName = await getData('memberName');
+      const memberBirthDate = await getData("memberBirthDate")
       if (
         memberId !== undefined &&
         memberEmail !== undefined &&
-        memberName !== undefined
+        memberName !== undefined &&
+        memberBirthDate != undefined
       ) {
         const tmpData = {
           memberId: memberId,
           memberEmail: memberEmail,
           memberName: memberName,
+          memberBirthDate: memberBirthDate
         };
         setData(tmpData);
       }

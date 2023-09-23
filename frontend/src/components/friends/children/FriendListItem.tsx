@@ -2,23 +2,23 @@ import React from 'react';
 import { View, Text, Dimensions, StyleSheet } from 'react-native';
 
 type friendType = {
-  name: string;
-  email: string;
+  friendId: number;
+  friendName: string;
+  friendEmail: string;
 };
 
 interface FriendListItemProps {
   friend: friendType;
-  state: string;
 }
 
 const FriendListItem: React.FC<FriendListItemProps> = (props) => {
   return (
     <View style={styles.container}>
-      <Text style={[styles.text, { color: props.state }]}>
-        {props.friend.name}
+      <Text style={[styles.text]}>
+        {props.friend.friendName}
       </Text>
-      <Text style={[styles.text, { color: props.state }]}>
-        {props.friend.email}
+      <Text style={[styles.text]}>
+        {props.friend.friendEmail}
       </Text>
     </View>
   );

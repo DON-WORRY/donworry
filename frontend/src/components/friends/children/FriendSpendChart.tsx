@@ -28,11 +28,12 @@ interface FriendSpendChartProps {
 const indexList = [0, 1, 2, 3, 4, 5];
 const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
   const [myAmount, setMyAmount] = useState<CategoryAmountList>([]);
+  const [kingAmount, setKingAmount] = useState<CategoryAmountList>([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function fetch() {
-      const nowAmount = props.myAmount;
-      setMyAmount(nowAmount);
+      setMyAmount(props.myAmount);
+      setKingAmount(props.kingsAmount);
       setLoading(true);
     }
     fetch();
@@ -42,12 +43,71 @@ const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
       {myAmount.length > 0 ? (
         indexList.map((indexNumber: number) => {
           const cName = myAmount[indexNumber].category;
+          const rightValue = kingAmount[indexNumber].amount;
+          const leftValue = myAmount[indexNumber].amount;
+          const rightPercent =
+            rightValue == 0
+              ? 0
+              : leftValue == 0
+              ? 100
+              : rightValue <= leftValue
+              ? 50
+              : rightValue >= leftValue * 2
+              ? 100
+              : 50 + (leftValue / rightValue) * 25;
+          const leftPercent =
+          leftValue == 0
+              ? 0
+              : rightValue == 0
+              ? 100
+              : leftValue <= rightValue
+              ? 50
+              : leftValue >= rightValue * 2
+              ? 100
+              : 50 + (rightValue / leftValue) * 25;
+
+          const innerStyles = StyleSheet.create({
+            //   left stick
+            leftStickTop: {
+              backgroundColor: '#ADADF8',
+              height: 10,
+              borderTopLeftRadius: 5,
+              borderTopRightRadius: 5,
+              paddingRight: 5,
+              width: `${leftPercent}%`,
+            },
+            leftStickBottom: {
+              height: 10,
+              backgroundColor: '#7777F3',
+              borderBottomLeftRadius: 5,
+              borderBottomRightRadius: 5,
+              paddingRight: 5,
+              width: `${leftPercent}%`,
+            },
+            //   right stick
+            rightStickTop: {
+              height: 10,
+              backgroundColor: '#FFE766',
+              borderTopLeftRadius: 5,
+              borderTopRightRadius: 5,
+              paddingRight: 5,
+              width: `${rightPercent}%`,
+            },
+            rightStickBottom: {
+              height: 10,
+              backgroundColor: '#FFD700',
+              borderBottomLeftRadius: 5,
+              borderBottomRightRadius: 5,
+              paddingRight: 5,
+              width: `${rightPercent}%`,
+            },
+          });
           return (
             <View key={indexNumber} style={styles.lineBox}>
               <View style={styles.leftStickBox}>
-                <Text style={styles.amountLeftText}>{myAmount[indexNumber].amount}</Text>
-                <View style={styles.leftStickTop}></View>
-                <View style={styles.leftStickBottom}></View>
+                <Text style={styles.amountLeftText}>{leftValue}</Text>
+                <View style={innerStyles.leftStickTop}></View>
+                <View style={innerStyles.leftStickBottom}></View>
               </View>
               <View style={styles.categoryBox}>
                 <View style={styles.category}>
@@ -55,10 +115,9 @@ const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
                 </View>
               </View>
               <View style={styles.rightStickBox}>
-                <Text style={styles.amountRightText}>{myAmount[indexNumber].amount}</Text>
-                <View style={styles.rightStickTop}></View>
-                <View style={styles.rightStickBottom}>
-                </View>
+                <Text style={styles.amountRightText}>{rightValue}</Text>
+                <View style={innerStyles.rightStickTop}></View>
+                <View style={innerStyles.rightStickBottom}></View>
               </View>
             </View>
           );
@@ -101,18 +160,20 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     paddingRight: 5,
+    width: '50%',
   },
   leftStickBottom: {
     height: 10,
     backgroundColor: '#7777F3',
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
+    width: '50%',
   },
   leftStickBox: {
     height: 40,
     width: (screenWidth - 150) / 2,
     justifyContent: 'center',
-    alignContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   //   right stick
   rightStickTop: {
@@ -121,18 +182,20 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     paddingRight: 5,
+    width: '50%',
   },
   rightStickBottom: {
     height: 10,
     backgroundColor: '#FFD700',
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
+    width: '50%',
   },
   rightStickBox: {
     height: 40,
     width: (screenWidth - 150) / 2,
     justifyContent: 'center',
-    alignContent: 'flex-start',
+    // alignContent: 'flex-start',
   },
   amountLeftText: {
     right: 5, // marginRight 대신에 right를 사용

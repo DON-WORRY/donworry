@@ -6,7 +6,7 @@ export async function friendListInquiry(): Promise<any> {
   return axiosWithAuth
     .get('/api/friends/list')
     .then((res) => {
-      return res.data
+      return res.data;
     })
     .catch((e) => {
       // console.error(e);
@@ -35,7 +35,7 @@ export async function friendRequest(data: FriendRequestData): Promise<void> {
   return axiosWithAuth
     .post('/api/friends/request', data)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       return res.data;
     })
     .catch((e) => {
@@ -53,7 +53,7 @@ export async function friendCheck(data: FriendCheckdata): Promise<void> {
   return axiosWithAuth
     .post('api/friends/check', data)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       return res.data;
     })
     .catch((e) => {
@@ -62,6 +62,22 @@ export async function friendCheck(data: FriendCheckdata): Promise<void> {
       throw e;
     });
 }
+
+export async function friendTotalSpend(data: FriendSpend): Promise<any> {
+  return axiosWithAuth
+    .get(`/api/consumption/comparison/${data.id}?month=${data.month}`)
+    .then((r) => {
+      return r.data;
+    })
+    .catch((e) => {
+      throw e;
+    });
+}
+
+type FriendSpend = {
+  id: number;
+  month: number;
+};
 
 type ReceivedRequest = {
   friendRequestId: 0;

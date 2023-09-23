@@ -72,7 +72,7 @@ const FriendSendRequest: React.FC<FriendSendRequestProps> = (props) => {
             onPress: () => {
               requestEmail()
                 .then(async (r) => {
-                  console.log(r);
+                  // console.log(r);
                   await setFriendEmail("")
                   await props.setHowCompoShow({
                     isFirst: true,
