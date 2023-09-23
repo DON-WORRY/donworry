@@ -94,9 +94,9 @@ export async function accountCardHistory(month: number): Promise<void> {
 }
 
 // 상세카드 소비내역
-export async function accountCardDetail(cardId: number, month: number): Promise<void> {
+export async function accountCardDetail(cardId: number, date: number): Promise<void> {
   return axiosWithAuth
-    .get(`/api/card/detail/${cardId}/${month}`)
+    .get(`/api/card/detail/${cardId}/${date}`)
     .then((res) => {
       return res.data;
     })

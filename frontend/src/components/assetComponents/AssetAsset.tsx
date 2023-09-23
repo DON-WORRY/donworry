@@ -21,20 +21,22 @@ interface ScreenProps {
 interface AssetAssetProps {
   refreshKey: number;
 }
+
 const { width } = Dimensions.get('screen');
 
 const formatAmount = (amount: string): string => {
   return parseInt(amount, 10).toLocaleString('ko-KR') + '원';
 };
+
 const AssetAsset: React.FC<AssetAssetProps> = (props) => {
-  const { refreshKey } = props;
+  // const { refreshKey } = props;
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
   const [accounts, setAccounts] = useState<
-  Array<{ bankName: string; amount: number }>
->([]);
-  const [accountsAmount, setAccountsAmount] = useState(0)
+    Array<{ accountId: number, bankName: string; amount: number }>
+  >([]);
+  const [accountsAmount, setAccountsAmount] = useState(0);
 
   useEffect(() => {
     if (!isFocused) {
@@ -45,7 +47,6 @@ const AssetAsset: React.FC<AssetAssetProps> = (props) => {
   useEffect(() => {
     const fetch = async () => {
       try {
-
         const newAccounts: any = await accountSearchAccountList();
         if (
           newAccounts &&
@@ -80,7 +81,10 @@ const AssetAsset: React.FC<AssetAssetProps> = (props) => {
           return (
             <View key={index} style={styles.row}>
               <View style={styles.imageTextContainer}>
-                <Image style={styles.imageStyle} source={images[item.bankName]} />
+                <Image
+                  style={styles.imageStyle}
+                  source={images[item.bankName]}
+                />
                 <View style={styles.textContainer}>
                   <Text style={styles.cardContent}>{item.bankName}</Text>
                   <Text style={styles.spendContent}>
@@ -90,7 +94,10 @@ const AssetAsset: React.FC<AssetAssetProps> = (props) => {
               </View>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('StackNavigation', { screen: 'History' });
+                  navigation.navigate('StackNavigation', {
+                    screen: 'AccountHistory',
+                    params: { accountId: item.accountId },
+                  });
                 }}
               >
                 <ContentButton />
