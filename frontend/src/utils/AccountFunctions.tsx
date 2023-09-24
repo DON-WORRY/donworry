@@ -3,20 +3,20 @@ import { axiosWithAuth } from '../axios/http';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 // 목표를 설정하면 올해까지만 해당되게 하려고 생각했었음.
-type Goal = {
-  goalAmount: number;
-};
-const getData = async (key: string) => {
-  try {
-    const value = await AsyncStorage.getItem(key);
-    if (value !== null) {
-      return value;
-    }
-  } catch (e) {
-    // 읽기 에러
-    throw e;
-  }
-};
+// type Goal = {
+//   goalAmount: number;
+// };
+// const getData = async (key: string) => {
+//   try {
+//     const value = await AsyncStorage.getItem(key);
+//     if (value !== null) {
+//       return value;
+//     }
+//   } catch (e) {
+//     // 읽기 에러
+//     throw e;
+//   }
+// };
 // 사용자 계좌 불러오기
 export async function accountSearchAccountList(): Promise<void> {
   // const memberId = await getData('memberId');
@@ -118,28 +118,35 @@ export async function accountCardList(): Promise<void> {
     });
 }
 
-// // 목표 설정
-// export async function accountSetGoal(data: Goal): Promise<void> {
-//   return axiosWithAuth
-//     .post('/api/account/goal', data)
-//     .then((res) => {
-//       console.log(res);
-//     })
-//     .catch((e) => {
-//       throw e;
-//     });
-// }
-// // 목표 조회
-// export async function accountGoalInquiry(): Promise<void> {
-//   return axiosWithAuth
-//     .get('/api/account/goal')
-//     .then((res) => {
-//       console.log(res);
-//     })
-//     .catch((e) => {
-//       throw e;
-//     });
-// }
+interface GoalData {
+  goalAmount: number;
+  goalStartTime: string;
+  goalEndTime: string;
+}
+
+// 목표 설정
+export async function accountSetGoal(data: GoalData): Promise<void> {
+  return axiosWithAuth
+    .post('/api/goals/create', data)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((e) => {
+      throw e;
+    });
+}
+
+// 목표 조회
+export async function accountGoalInquiry(): Promise<void> {
+  return axiosWithAuth
+    .get('/api/goals')
+    .then((res) => {
+      return res.data
+    })
+    .catch((e) => {
+      throw e;
+    });
+}
 // // 내 자산 순위 조회
 // export async function accountAssetRankInquiry(): Promise<void> {
 //   return axiosWithAuth
