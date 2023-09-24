@@ -58,7 +58,7 @@ public class AccountQueryService {
         List<AccountConsumptionDetailResponse> result = new ArrayList<>(consumptions);
         result.addAll(incomes);
         result.sort(Comparator.comparing(AccountConsumptionDetailResponse::getCreateTime).reversed());
-
+        log.debug("searchAccountDetailList, result.size() = " + result.size());
         return AccountHistoryResponse.of(result);
     }
 
