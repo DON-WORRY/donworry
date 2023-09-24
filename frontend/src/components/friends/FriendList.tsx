@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+} from 'react-native';
 
 import FriendSearch from './children/FriendSearch';
 import FriendListItem from './children/FriendListItem';
+
+import { friendListInquiry } from '../../utils/FriendFunctions';
 
 const dummyData = [
   {
@@ -48,20 +56,36 @@ const FriendList: React.FC = () => {
   function search(name: string) {
     console.log(name);
   }
+  useEffect(() => {
+    async function fetch() {
+      const data = await friendListInquiry()
+        .then((r) => {
+          // console.log(r)
+          return r.data.friendResponseList;
+        })
+        .catch((e) => {
+          throw e;
+        });
+      // console.log('freinds', data);
+      await setFriends(data);
+      console.log(data)
+      return;
+    }
+    fetch();
+  }, []);
+
   return (
     <ScrollView
       style={styles.container}
-      showsVerticalScrollIndicator={false}
-      alwaysBounceHorizontal={false}
     >
       <Text style={styles.header}>친구 목록</Text>
-      <FriendSearch search={search} />
+      <FriendSearch search={search} friends={friends}/>
 
-      {dummyData.map((dummy) => {
+      {friends.map((friend, index) => {
         return (
-          <TouchableOpacity key={dummy.id}>
-            <FriendListItem friend={dummy} />
-          </TouchableOpacity>
+          <View key={index}>
+            <FriendListItem friend={friend} />
+          </View>
         );
       })}
     </ScrollView>
@@ -70,7 +94,7 @@ const FriendList: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     height: 470,
     padding: 20,
     width: screenWidth - 40,

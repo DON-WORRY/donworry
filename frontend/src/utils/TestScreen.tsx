@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AccountController from './testUtils/AccountController';
 import CardController from './testUtils/CardController';
 import ConsumptionController from './testUtils/ConsumptionController';
 import DutchPayController from './testUtils/DutchPayController';
-
+import FriendController from './testUtils/FriendController';
 // 값을 가져오기
 const getData = async (key: string) => {
   try {
@@ -22,13 +22,20 @@ const getData = async (key: string) => {
 };
 const TestScreen: React.FC = () => {
   return (
-    <View>
+    <ScrollView style={styles.container}>
       <AccountController />
       <CardController />
       <ConsumptionController />
       <DutchPayController />
-    </View>
+      <FriendController />
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: 60,
+  },
+});
 
 export default TestScreen;
