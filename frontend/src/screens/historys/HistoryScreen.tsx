@@ -8,15 +8,9 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { images } from '../../assets/bank&card';
-
-interface ScreenProps {
-  navigation: {
-    goBack: (screen: string, params?: any) => void;
-  };
-}
+import BackHeader from '../../components/BackHeader';
 
 const width = Dimensions.get('screen').width;
 
@@ -173,8 +167,6 @@ interface DataItem {
   money: number;
 }
 const HistoryScreen: React.FC = () => {
-  const blackLogo = require('../../assets/logo/BlackLogo.png');
-  const navigation = useNavigation<ScreenProps['navigation']>();
   const [totalMoneys, setTotalMoneys] = useState<Record<string, number>>({});
   const [groupedData, setGroupedData] = useState<Array<[string, DataItem[]]>>(
     []
@@ -216,33 +208,30 @@ const HistoryScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.row, { width: '100%' }]}>
-        <MaterialCommunityIcons
-          name="arrow-left"
-          size={30}
-          onPress={() => {
-            navigation.goBack('TabNavigation', { screen: 'Friend' });
-          }}
-        />
-        <Image source={blackLogo} style={styles.logo} />
-      </View>
+      <BackHeader screen="Home" />
       <View
-  style={{
-    flexDirection: 'row', // This will arrange child items in a single row
-    justifyContent: 'flex-start', // This will evenly distribute items
-    alignItems: 'center', // This will center items vertically
-    width: '100%',
-    marginTop: width * 0.05,
-  }}
->
-  <MaterialIcons name="arrow-back-ios" size={width * 0.05} style={{marginTop: -width * 0.014 
-  }}/>
-  <Text style={styles.headText}>9월 소비</Text>
-  <MaterialIcons name="arrow-forward-ios" size={width * 0.05} style={{marginTop: -width * 0.014}}/>
-</View>
+        style={{
+          flexDirection: 'row', // This will arrange child items in a single row
+          justifyContent: 'flex-start', // This will evenly distribute items
+          alignItems: 'center', // This will center items vertically
+          width: '100%',
+          marginTop: width * 0.05,
+        }}
+      >
+        <MaterialIcons
+          name="arrow-back-ios"
+          size={width * 0.05}
+          style={{ marginTop: -width * 0.014 }}
+        />
+        <Text style={styles.headText}>9월 소비</Text>
+        <MaterialIcons
+          name="arrow-forward-ios"
+          size={width * 0.05}
+          style={{ marginTop: -width * 0.014 }}
+        />
+      </View>
 
-
-      <View style={[styles.row, { width: '100%'}]}>
+      <View style={[styles.row, { width: '100%' }]}>
         <Text style={styles.headText}>내역</Text>
         <Text style={styles.headText}>
           지출 {totalMoney.toLocaleString()}원

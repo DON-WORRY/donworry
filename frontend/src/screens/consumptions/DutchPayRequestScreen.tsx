@@ -22,6 +22,14 @@ import { Button } from '../../components/logins/Login';
 import { AntDesign } from '@expo/vector-icons';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
+import { RootStackParamList } from '../../navigations/RootNavigator/Stack';
+import { useNavigation } from '@react-navigation/native';
+
+interface ScreenProps {
+  navigation: {
+    navigate: (screen: string, params?: any) => void;
+  };
+}
 
 interface MemberProps {
   id: number;
@@ -41,19 +49,23 @@ interface MyRequestProps {
   onPress: () => void;
 }
 
+// type DutchpayRequestScreenProps = {
+//   route: RouteProp<
+//     {
+//       DutchpayRequest: {
+//         bankName: string;
+//         detail: string;
+//         price: number;
+//         dateTime: string;
+//         id: number;
+//       };
+//     },
+//     'DutchpayRequest'
+//   >;
+// };
+
 type DutchpayRequestScreenProps = {
-  route: RouteProp<
-    {
-      DutchpayRequest: {
-        bankName: string;
-        detail: string;
-        price: number;
-        dateTime: string;
-        id: number;
-      };
-    },
-    'DutchpayRequest'
-  >;
+  route: RouteProp<RootStackParamList, 'DutchpayRequest'>;
 };
 
 const dummyData = [
@@ -111,6 +123,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
   const handleInputChange = (newValue: string) => {
     setInputValue(newValue);
   };
+  const navigation = useNavigation<ScreenProps['navigation']>();
 
   useEffect(() => {
     if (selectedMemberList.length === 0 && myRequestAccount) {
@@ -291,7 +304,12 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
           <View style={styles.buttonView}>
             <Button
               title="더치페이 요청"
-              onPress={() => bottomSheetModalRef.current.present()}
+              onPress={() => {
+                navigation.navigate('StackNavigation', {
+                  screen: 'DutchpayState',
+                  params: consumptionData,
+                });
+              }}
               disabled={disabled}
             />
           </View>

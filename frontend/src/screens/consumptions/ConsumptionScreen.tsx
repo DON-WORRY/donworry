@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { consumptionCategoryHistory } from '../../utils/ConsumptionFunctions';
 import ConsumptionList from '../../components/consumptions/ConsumptionList';
+import { SelectList } from 'react-native-dropdown-select-list';
 
 interface ConsumptionDataProps {
   bankName: string;
@@ -13,18 +14,32 @@ interface ConsumptionDataProps {
   dateTime: string;
   id: number;
 }
+interface ConsumptionResponseProps {
+  categoryHistoryResponseList: ConsumptionDataProps[];
+  total: any;
+}
 const ConsumptionScreen: React.FC = () => {
-  const [consumptionData, setConSumptionData] = useState<
-    ConsumptionDataProps[]
-  >([]);
+  const [consumptionData, setConSumptionData] =
+    useState<ConsumptionResponseProps>();
+
+  const [categorySelected, setCategorySelected] = useState<number>(0);
+  const data = [
+    { key: '1', value: '전체' },
+    { key: '2', value: '식비' },
+  ];
 
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await consumptionCategoryHistory(0, 7);
         if (response) {
-          setConSumptionData(response.categoryHistoryResponseList);
-          console.log(response);
+          // setConSumptionData(response.categoryHistoryResponseList);
+          // setTotalSpendMoney(response.total);
+          setConSumptionData({
+            categoryHistoryResponseList: response.categoryHistoryResponseList,
+            total: response.total,
+          });
+          console.log(response.total);
         } else {
           console.error('API response does not contain data.');
         }
@@ -48,22 +63,39 @@ const ConsumptionScreen: React.FC = () => {
     return date.getDate();
   }
 
+  function formattedPrice(inputPrice: number) {
+    const formatter = new Intl.NumberFormat('en-US').format(inputPrice);
+    return formatter;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <BackHeader screen="Spend" />
       <View style={styles.subContainer}>
         <Text style={styles.headerTitleText}>소비</Text>
         <Text>9월</Text>
-        <View style={styles.headerAccountView}>
-          <Text>지출 : 370,000원</Text>
-          <Text>전체</Text>
+        <View style={styles.headerDateView}>
+          <SelectList
+            setSelected={(val: number) => setCategorySelected(val)}
+            data={data}
+            save="key"
+            search={false}
+            boxStyles={{ borderRadius: 10 }}
+            defaultOption={{ key: '1', value: '전체' }}
+          />
         </View>
+
+        <Text>지출 : {formattedPrice(consumptionData?.total)}원</Text>
+
         <ScrollView style={styles.listScrollView}>
-          {consumptionData.map((data, index) => (
+          {consumptionData?.categoryHistoryResponseList.map((data, index) => (
             <View key={data.id}>
               {index === 0 ||
               formattedDate(data.dateTime) !==
-                formattedDate(consumptionData[index - 1].dateTime) ? (
+                formattedDate(
+                  consumptionData?.categoryHistoryResponseList[index - 1]
+                    .dateTime
+                ) ? (
                 // 날짜가 바뀌면 날짜 표시
                 <View style={index === 0 ? null : styles.listDateView}>
                   <Text>{formattedDateDayOfTheWeek(data.dateTime)}</Text>
@@ -79,13 +111,15 @@ const ConsumptionScreen: React.FC = () => {
   );
 };
 
+const width = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
+    zIndex: 1,
   },
   subContainer: {
-    width: Dimensions.get('screen').width * 0.9,
+    width: width * 0.9,
     flex: 1,
   },
   headerTitleText: {
@@ -93,10 +127,19 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     alignSelf: 'flex-start',
   },
-  headerAccountView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  headerDateView: {
+    width: width * 0.3,
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    borderRadius: 10,
+    backgroundColor: 'white',
+    top: 20,
+    zIndex: 2,
   },
+  // headerAccountView: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  // },
   listScrollView: {
     marginTop: 20,
   },
