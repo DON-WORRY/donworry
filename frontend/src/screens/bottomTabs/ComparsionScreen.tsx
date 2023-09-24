@@ -43,13 +43,39 @@ type ComparisonScreenProps = {
 };
 
 const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
-  const friendPk = route.params.friendPk == undefined ? -1 : route.params.friendPk
+  // const ComparisonScreen: React.FC = () => {
+  const friendPk = route.params?.friendPk ?? -1;
   const [myData, setMyData] = useState<CategoryAmountList>([]);
   const [friendData, setFriendData] = useState<CategoryAmountList>([]);
   const [totalData, setTotalData] = useState<TotalDataType>({
     totalData: [
       {
-        categoryName: '',
+        categoryName: '여가',
+        myValue: 0,
+        friendsValue: 0,
+      },
+      {
+        categoryName: '쇼핑',
+        myValue: 0,
+        friendsValue: 0,
+      },
+      {
+        categoryName: '교통',
+        myValue: 0,
+        friendsValue: 0,
+      },
+      {
+        categoryName: '식비',
+        myValue: 0,
+        friendsValue: 0,
+      },
+      {
+        categoryName: '생활',
+        myValue: 0,
+        friendsValue: 0,
+      },
+      {
+        categoryName: '기타',
         myValue: 0,
         friendsValue: 0,
       },
@@ -57,17 +83,17 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
   });
   const [nowFriendId, setNowFriendId] = useState(-1);
 
-  // 소비 불러오기
-  useEffect(() => {
-    async function fetch() {
-      // 내 소비 불러오기
-      // 친구 리스트 불러오기
-    }
-  }, []);
-  useEffect(() => {
-    if (nowFriendId !== -1) {
-    }
-  }, [nowFriendId !== -1]);
+  // // 소비 불러오기
+  // useEffect(() => {
+  //   async function fetch() {
+  //     // 내 소비 불러오기
+  //     // 친구 리스트 불러오기
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   if (nowFriendId !== -1) {
+  //   }
+  // }, [nowFriendId !== -1]);
 
   return (
     <View style={styles.container}>
@@ -91,6 +117,8 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
           );
         })} */}
         <FlatList
+          disableScrollViewPanResponder={true}
+          scrollEnabled={false}
           keyExtractor={(c) => c.categoryName}
           data={totalData.totalData}
           // renderItem 정보를 추가해주어야 합니다. 예를 들면:
