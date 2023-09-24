@@ -39,6 +39,10 @@ public enum ErrorCode {
     INVALID_TOKEN(401, "T001", "올바르지 않은 토큰입니다!"),
     TOKEN_NOT_FOUND(400, "T002", "일치하는 토큰을 찾지 못했습니다!"),
 
+    // Oauth
+    ACCESS_TOKEN_NOT_FOUND(400, "O001", "어세스 토큰을 가져오는데 실패했습니다."),
+    USER_INFO_ACCESS_ERROR(400, "O002", "사용자 정보를 불러오는데 실패했습니다."),
+
     // Mission
     MISSION_NOT_FOUND(400, "MI001", "존재하지 않는 미션입니다!"),
 

@@ -43,6 +43,8 @@ public class MemberQueryService {
         if(!encoder.matches(request.memberPassword(), member.getMemberPassword()))
             throw new InvalidValueException(ErrorCode.PASSWORD_NOT_MATCH);
 
+        // TODO: 2023-09-25 Service Layer 분할 고민해보기
+        
         MemberLoginResponse response = jwtUtil.generateAllToken(JwtCreateModel.of(member));
 
         try{
