@@ -11,15 +11,17 @@ public record DutchpayTotalResponse(
         String memberName,
         Long price,
         int reqMemberSize,
+        Long myDetailDutchpayId,
         List<DutchpayPersonResponse> dutchpayPersonList
 ) {
-    public static DutchpayTotalResponse of(Consumption consumption, List<DutchpayPersonResponse> dutchpayPersonList) {
+    public static DutchpayTotalResponse of(Consumption consumption, Long myDetailDutchpayId, List<DutchpayPersonResponse> dutchpayPersonList) {
         return new DutchpayTotalResponse(
                 consumption.getId(),
                 consumption.getConsumptionDetail(),
                 consumption.getMember().getMemberName(),
                 consumption.getConsumptionPrice(),
                 dutchpayPersonList.size(),
+                myDetailDutchpayId,
                 dutchpayPersonList
         );
     }

@@ -41,12 +41,17 @@ public class DutchpayQueryService {
             List<DetailDutchpay> detailDutchpayList = detailDutchpayQueryRepository.searchDetailDutchpayList(sendDutchpayList.get(i).getId());
 
             List<DutchpayPersonResponse> dutchpayPersonList = new ArrayList<>();
+            Long myDetailDutchpayId = null;
             for(int j = 0; j < detailDutchpayList.size(); j++) {
-                dutchpayPersonList.add(DutchpayPersonResponse.of(detailDutchpayList.get(j)));
+                DetailDutchpay detailDutchpay = detailDutchpayList.get(j);
+                dutchpayPersonList.add(DutchpayPersonResponse.of(detailDutchpay));
+                if(detailDutchpay.getMember().getId().equals(memberId)) {
+                    myDetailDutchpayId = detailDutchpay.getId();
+                }
                 log.info("보내는 세부더치페이{}", dutchpayPersonList.get(j));
             }
 
-            sendDutchpayTotalList.add(DutchpayTotalResponse.of(sendDutchpayList.get(i).getConsumption(), dutchpayPersonList));
+            sendDutchpayTotalList.add(DutchpayTotalResponse.of(sendDutchpayList.get(i).getConsumption(), myDetailDutchpayId, dutchpayPersonList));
         }
 
         List<DutchpayTotalResponse> receiveDutchpayTotalList = new ArrayList<>();
@@ -64,7 +69,7 @@ public class DutchpayQueryService {
                 dutchpayPersonList.add(DutchpayPersonResponse.of(detailDutchpayList.get(j)));
                 log.info("보내는 세부더치페이{}", dutchpayPersonList.get(j));
             }
-            receiveDutchpayTotalList.add(DutchpayTotalResponse.of(receiveDutchpayList.get(i).getConsumption(), dutchpayPersonList));
+            receiveDutchpayTotalList.add(DutchpayTotalResponse.of(receiveDutchpayList.get(i).getConsumption(), null, dutchpayPersonList));
         }
 
         DutchpayTotalListResponse dutchpayTotalListResponse = DutchpayTotalListResponse.of(sendDutchpayTotalList, receiveDutchpayTotalList);
