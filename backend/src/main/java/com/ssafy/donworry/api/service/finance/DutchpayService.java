@@ -47,9 +47,8 @@ public class DutchpayService {
     private final AccountRepository accountRepository;
     private final IncomeRepository incomeRepository;
 
-    public DutchpayTotalResponse createDutchpay(DutchpayCreateRequest dutchpayCreateRequest,
+    public Long createDutchpay(DutchpayCreateRequest dutchpayCreateRequest,
                                                 Long memberId) {
-        List<DutchpayPersonResponse> dutchpayPersonList = new ArrayList<>();
         Consumption consumption = consumptionRepository.findById(dutchpayCreateRequest.consumptionId())
                 .orElseThrow(
                         () -> new EntityNotFoundException(ErrorCode.CONSUMPTION_NOT_FOUND)
@@ -84,15 +83,13 @@ public class DutchpayService {
             try {
                 DetailDutchpay detailDutchpay = DetailDutchpay.of(req, reqMember, dutchpay);
                 detailDutchpayRepository.save(detailDutchpay);
-                dutchpayPersonList.add(DutchpayPersonResponse.of(detailDutchpay));
             }
             catch (Exception e) {
                 throw new InvalidValueException(ErrorCode.DETAIL_DUTCHPAY_SAVE_ERROR);
             }
         }
-        DutchpayTotalResponse dutchpayTotalResponse = DutchpayTotalResponse.of(consumption, dutchpayPersonList);
 
-        return dutchpayTotalResponse;
+        return dutchpay.getId();
     }
 
     public Long dutchpayTransfer(Long memberId, DutchpayTransferRequest dutchpayTransferRequest) {
