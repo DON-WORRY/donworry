@@ -13,6 +13,7 @@ type DutchPayRequestData = {
 };
 
 interface ConsumptionDataProps {
+  total(total: any): unknown;
   categoryHistoryResponseList: {
     bankName: string;
     detail: string;
