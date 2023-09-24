@@ -21,6 +21,7 @@ import com.ssafy.donworry.domain.finance.repository.ConsumptionRepository;
 import com.ssafy.donworry.domain.finance.repository.DetailDutchpayRepository;
 import com.ssafy.donworry.domain.finance.repository.DutchpayRepository;
 import com.ssafy.donworry.domain.finance.repository.IncomeRepository;
+import com.ssafy.donworry.domain.finance.repository.query.DetailDutchpayQueryRepository;
 import com.ssafy.donworry.domain.finance.repository.query.IncomeQueryRepository;
 import com.ssafy.donworry.domain.member.entity.Member;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
@@ -34,6 +35,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus.COMPLETE;
+import static com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus.PROGRESS;
+
 @Slf4j
 @Service
 @Transactional
@@ -43,6 +47,7 @@ public class DutchpayService {
     private final MemberRepository memberRepository;
     private final DutchpayRepository dutchpayRepository;
     private final DetailDutchpayRepository detailDutchpayRepository;
+    private final DetailDutchpayQueryRepository detailDutchpayQueryRepository;
     private final BCryptPasswordEncoder encoder;
     private final AccountRepository accountRepository;
     private final IncomeRepository incomeRepository;
@@ -53,8 +58,8 @@ public class DutchpayService {
                 .orElseThrow(
                         () -> new EntityNotFoundException(ErrorCode.CONSUMPTION_NOT_FOUND)
                 );
-        if(consumption.getDutchpayStatus().equals(DutchpayStatus.PROGRESS)
-        || consumption.getDutchpayStatus().equals(DutchpayStatus.COMPLETE)) {
+        if(consumption.getDutchpayStatus().equals(PROGRESS)
+        || consumption.getDutchpayStatus().equals(COMPLETE)) {
             throw new DuplicateReqException(ErrorCode.DUTCHPAY_DUPLICATE);
         }
         Member member = memberRepository.findById(memberId)
@@ -71,7 +76,7 @@ public class DutchpayService {
             throw new InvalidValueException(ErrorCode.DUTCHPAY_SAVE_ERROR);
         }
 
-        consumption.updateDutchpayStatus(DutchpayStatus.PROGRESS);
+        consumption.updateDutchpayStatus(PROGRESS);
         consumptionRepository.save(consumption);
         log.info("update consumption dutchpayStatus : {}", consumption.getId());
 
@@ -118,20 +123,38 @@ public class DutchpayService {
         Long reqPrice = detailDutchpay.getDutchpayReqPrice();
         Long receivePrice = detailDutchpay.getDutchpayReceivedPrice();
 
-        DutchpayStatus dutchpayStatus = (reqPrice <= receivePrice + price) ? DutchpayStatus.COMPLETE : DutchpayStatus.PROGRESS;
+        DutchpayStatus dutchpayStatus = (reqPrice <= receivePrice + price) ? COMPLETE : PROGRESS;
         detailDutchpay.updateDetailDutchpay(price, dutchpayStatus);
         senderAccount.updateSendAmount(price);
         receiverAccount.updateReceiveAmount(price);
 
         /***/
 
-
         detailDutchpayRepository.save(detailDutchpay);
         log.info("save detailDutchpay : {}", detailDutchpay.getId());
+
+        List<DetailDutchpay> detailDutchpayList = detailDutchpayRepository.findByDutchpayId(detailDutchpay.getDutchpay().getId());
+        boolean flag = true;
+        for(DetailDutchpay dd : detailDutchpayList) {
+            if(dd.getDutchpayStatus().equals(PROGRESS)) {
+                flag = false;
+            }
+        }
+        if(flag) {
+            Consumption c = detailDutchpay.getDutchpay().getConsumption();
+            c.updateDutchpayStatus(COMPLETE);
+            Dutchpay d = detailDutchpay.getDutchpay();
+            d.updateDutchpayStatus(COMPLETE);
+
+            consumptionRepository.save(c);
+            dutchpayRepository.save(d);
+        }
         accountRepository.save(senderAccount);
         log.info("save senderAccount : {}", senderAccount.getId());
         accountRepository.save(receiverAccount);
         log.info("save receiverAccount : {}", receiverAccount.getId());
+
+
 
 
         Income income = Income.of(

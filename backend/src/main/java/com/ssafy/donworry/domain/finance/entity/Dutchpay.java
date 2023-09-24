@@ -50,4 +50,8 @@ public class Dutchpay extends BaseEntity {
                 .consumption(consumption)
                 .build();
     }
+
+    public void updateDutchpayStatus(DutchpayStatus dutchpayStatus) {
+        this.dutchpayStatus = dutchpayStatus;
+    }
 }
