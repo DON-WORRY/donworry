@@ -38,6 +38,7 @@ public class AccountController {
         AccountAllResponse list = accountQueryService.searchAccountList(memberId);
         return ApiData.of(list);
     }
+
     @Operation(summary = "계좌 거래내역", description = "선택한 계좌의 거래내역을 불러오는 API입니다.")
     @GetMapping("/{account_id}")
     public ApiData<AccountHistoryResponse> searchAccount(@PathVariable("account_id") Long accountId) {

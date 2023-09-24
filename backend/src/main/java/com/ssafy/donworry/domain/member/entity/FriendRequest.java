@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -23,6 +24,7 @@ public class FriendRequest extends BaseEntity {
     private Long id;
 
     @NotNull
+    @Enumerated(STRING)
     private FriendRequestStatus friendRequestStatus;
 
     @NotNull

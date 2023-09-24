@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ConsumptionRepository extends JpaRepository<Consumption, Long>{
 
-    List<Consumption> findByAccountId(Long accountId);
+
 }

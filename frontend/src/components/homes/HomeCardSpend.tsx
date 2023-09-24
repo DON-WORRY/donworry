@@ -94,8 +94,8 @@ const HomeCardSpend: React.FC = () => {
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('StackNavigation', {
-                    screen: 'History',
-                    params: { cardId: item.cardId }, // 추가 정보를 params 속성을 통해 전달
+                    screen: 'CardHistory',
+                    params: { cardId: item.cardId },
                   });
                 }}
               >

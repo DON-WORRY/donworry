@@ -1,5 +1,6 @@
 package com.ssafy.donworry.api.service.account.query;
 
+import com.querydsl.core.Tuple;
 import com.ssafy.donworry.api.controller.account.dto.response.*;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.account.repository.query.AccountQueryRepository;
@@ -7,6 +8,8 @@ import com.ssafy.donworry.domain.finance.entity.Consumption;
 import com.ssafy.donworry.domain.finance.entity.Income;
 import com.ssafy.donworry.domain.finance.repository.ConsumptionRepository;
 import com.ssafy.donworry.domain.finance.repository.IncomeRepository;
+import com.ssafy.donworry.domain.finance.repository.query.ConsumptionQueryRepository;
+import com.ssafy.donworry.domain.finance.repository.query.IncomeQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +30,8 @@ import java.util.stream.Stream;
 public class AccountQueryService {
     private final AccountQueryRepository accountQueryRepository;
     private final ConsumptionRepository consumptionRepository;
-    private final IncomeRepository incomeRepository;
+    private final ConsumptionQueryRepository consumptionQueryRepository;
+    private final IncomeQueryRepository incomeQueryRepository;
     public AccountAllResponse searchAccountList(Long memberId) {
         List<Account> list = accountQueryRepository.findByMemberId(memberId);
 
@@ -47,18 +51,15 @@ public class AccountQueryService {
 
 
     public AccountHistoryResponse searchAccountDetailList(Long accountId) {
-        List<Consumption> consumptions = consumptionRepository.findByAccountId(accountId);
-        List<Income> incomes = incomeRepository.findByAccountId(accountId);
+        List<AccountConsumptionDetailResponse> consumptions = consumptionQueryRepository.findAccountConsumptionDetailByAccountId(accountId);
+        List<AccountConsumptionDetailResponse> incomes = consumptionQueryRepository.findAccountIncomeDetailByAccountId(accountId);
+        log.debug("searchAccountDetailList, accountId = " + accountId);
 
-        List<AccountConsumptionDetailResponse> accountConsumptionDetailResponses = Stream.concat(
-                consumptions.stream().map(AccountConsumptionDetailResponse::of),
-                incomes.stream().map(AccountConsumptionDetailResponse::of)
-        ).collect(Collectors.toList());
+        List<AccountConsumptionDetailResponse> result = new ArrayList<>(consumptions);
+        result.addAll(incomes);
+        result.sort(Comparator.comparing(AccountConsumptionDetailResponse::getCreateTime).reversed());
 
-        accountConsumptionDetailResponses.sort(Comparator.comparing(AccountConsumptionDetailResponse::getCreateTime));
-
-
-        return AccountHistoryResponse.of(accountConsumptionDetailResponses);
+        return AccountHistoryResponse.of(result);
     }
 
     public List<StatisticsResponse> searchStatisticsResponseList(Long memberId) {
