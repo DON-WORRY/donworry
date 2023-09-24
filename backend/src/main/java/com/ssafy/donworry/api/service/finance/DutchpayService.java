@@ -134,6 +134,8 @@ public class DutchpayService {
         );
         log.info("save consumption : {}", consumption);
 
+        // TODO: 2023-09-24 (024) 에러 검증 추가하기
+
         return detailDutchpay.getId();
     }
 }

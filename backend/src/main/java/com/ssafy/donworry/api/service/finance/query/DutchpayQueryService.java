@@ -1,6 +1,7 @@
 package com.ssafy.donworry.api.service.finance.query;
 
 import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayPersonResponse;
+import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayTotalListResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayTotalResponse;
 import com.ssafy.donworry.domain.finance.entity.Dutchpay;
 import com.ssafy.donworry.domain.finance.repository.DutchpayRepository;
@@ -22,24 +23,25 @@ public class DutchpayQueryService {
     private final DutchpayQueryRepository dutchpayQueryRepository;
     private final DetailDutchpayQueryRepository detailDutchpayQueryRepository;
 
-    public List<DutchpayTotalResponse> searchDutchpay(Long memberId) {
-        // 더치페이 현황
-        // 1. 요청 받은 더치페이들 중 progress 만
-        List<DutchpayPersonResponse> dutchpayPersonList = detailDutchpayQueryRepository.searchDutchpayPersonList(memberId);
+    public DutchpayTotalListResponse searchDutchpay(Long memberId) {
+        // 내가 보내야 할 더치페이 리스트
+        List<DutchpayTotalResponse> sendDutchpayTotalList = new ArrayList<>();
+        
+        // 보내야 할 더치페이 가져오기
+        // 나의 멤버 아이디가 들어있는 세부더치페이의 더치페이 아이디 리스트 가져오기
+        List<Dutchpay> sendDutchpayList = detailDutchpayQueryRepository.searchSendDutchpayList(memberId);
+        for(int i = 0; i < sendDutchpayList.size(); i++) {
+            System.out.println(sendDutchpayList.get(i).getConsumption().getId());
+        }
+        // 리스트롤 통해 한 더치페이 현황 가져오기
 
-        // 2. 내가 요청한 더치페이들 중 progress 만
+        // 한 더치페이의 필요 값과 세부더치페이 리스트 가져오기
+        // 세부더치페이의 정보 리스트 가져오기
 
-//        List<Long> dutchpayConsumptionList = dutchpayQueryRepository.searchConsumptionList(memberId);
-//        for(Long l : dutchpayConsumptionList) {
-//            log.info("id : {}", l);
-//        }
-//        List<DutchpayPersonResponse> dutchpayPersonList = new ArrayList<>();
 
-//        List<Dutchpay> dutchpayList = dutchpayRepository.findAllByMemberId(memberId);
-//        for(Dutchpay dutchpay : dutchpayList) {
-//            DutchpayPersonResponse dutchpayPersonResponse = DutchpayPersonResponse.of(dutchpay);
-//            dutchpayPersonList.add(dutchpayPersonResponse);
-//        }
+        // 내가 받아야 할 더치페이 리스트 가져오기
+        List<DutchpayTotalResponse> receiveDutchpayList = new ArrayList<>();
+
         return null;
     }
 }

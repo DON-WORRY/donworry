@@ -43,8 +43,7 @@ public class DutchpayController {
     public ApiData<DutchpayTotalListResponse> searchDutchpayTotal(@AuthenticationPrincipal UserDetailsModel userDetailsModel) {
         Long memberId = userDetailsModel.getId();
         log.info("searchDutchpayPerson : " + memberId);
-//        DutchpayTotalListResponse dutchpayPersonResponseList = dutchpayQueryService.searchDutchpay(memberId);
-        DutchpayTotalListResponse dutchpayTotalList = null;
+        DutchpayTotalListResponse dutchpayTotalList = dutchpayQueryService.searchDutchpay(memberId);
 
         return ApiData.of(dutchpayTotalList);
     }
