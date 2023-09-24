@@ -15,6 +15,8 @@ import {
 // import { FontAwesome } from '@expo/vector-icons';
 // import SearchableDropdown from 'react-native-searchable-dropdown';
 // import Select from "react-select"
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 type Friend = {
   friendId: number;
@@ -22,16 +24,21 @@ type Friend = {
   friendEmail: string;
 };
 
+type RootStackParamList = {
+  FriendDetail: {
+    friendPk: string;
+  };
+  // 다른 화면들의 파라미터 정의도 여기에 추가
+};
+
 interface FriendSearchProps {
   search: (name: string) => void;
   friends: Friend[];
 }
-interface ISearchData {
-  cityname: string;
-  id: string;
-}
 
 const FriendSearch: React.FC<FriendSearchProps> = (props) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'FriendDetail'>>();
+  
   const [loading, setLoading] = useState(true);
   const searchAPI = (keyword: string) => {
     return props.friends.filter((v) => v.friendName.includes(keyword));
@@ -96,7 +103,7 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
         </View>
       ) : (
         <FlatList
-        style={{ maxHeight: 90 }}
+          style={{ maxHeight: 90 }}
           keyExtractor={(item) => item.friendId.toString()}
           data={list}
           disableScrollViewPanResponder={true}
@@ -119,7 +126,12 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
             return (
               <TouchableOpacity
                 onPressIn={() => Keyboard.dismiss()}
-                onPress={() => Alert.alert('클릭 시: 동작 코드')}
+                onPress={() => Alert.alert(`${item.friendName}`, "해당 친구와 비교를 원하시나요?", [
+                  { text: "비교하러 가기", onPress: () => {
+                    navigation.navigate('FriendDetail', { friendPk: `${item.friendId}` });
+                  }},
+                  { text: "취소하기", onPress: () => {}},
+                ])}
                 activeOpacity={1}
                 style={styles.applicationBox}
                 key={items.index}

@@ -5,7 +5,6 @@ import ComponentsHeader from '../../components/ComponentsHeader';
 import FriendMessageComponent from '../../components/friends/FriendMessageComponent';
 import FriendSpendKing from '../../components/friends/FriendSpendKing';
 import FriendList from '../../components/friends/FriendList';
-import NestedScrollView from 'react-native-nested-scroll-view';
 
 const FriendScreen: React.FC = () => {
   return (

@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
-  TouchableOpacity,
 } from 'react-native';
 
 import FriendSearch from './children/FriendSearch';
@@ -84,9 +83,9 @@ const FriendList: React.FC = () => {
 
       {friends.map((friend, index) => {
         return (
-          <TouchableOpacity key={index}>
+          <View key={index}>
             <FriendListItem friend={friend} />
-          </TouchableOpacity>
+          </View>
         );
       })}
     </ScrollView>

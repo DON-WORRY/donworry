@@ -35,6 +35,12 @@ public class CategoryAmountResponse {
 }
 */
 
+type FriendData = {
+  value: CategoryAmountList;
+};
+
+type FriendDataList = FriendData[];
+
 type CategoryAmountList = CategoryAmount[];
 
 type CategoryAmount = {
@@ -124,9 +130,10 @@ const FriendSpendKing: React.FC = () => {
             .catch((e) => console.error(e));
         })
       );
-      console.log('tmp', tmp);
-      const allValues = tmp.flatMap((item) => item.value);
-      console.log('allValues', allValues);
+      type Tmp = {
+        value: CategoryAmountList
+      }
+      const allValues = tmp.flatMap((item : any) => item.value);
 
       const groupedByCategory = allValues.reduce((acc, curr) => {
         if (!acc[curr.category]) {
