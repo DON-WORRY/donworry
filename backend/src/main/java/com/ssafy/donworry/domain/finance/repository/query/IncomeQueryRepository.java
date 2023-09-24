@@ -11,6 +11,7 @@ import java.util.List;
 
 import static com.ssafy.donworry.domain.finance.entity.QConsumption.consumption;
 import static com.ssafy.donworry.domain.finance.entity.QConsumptionCategory.consumptionCategory;
+import static com.ssafy.donworry.domain.finance.entity.QDetailDutchpay.detailDutchpay;
 import static com.ssafy.donworry.domain.finance.entity.QDutchpay.dutchpay;
 import static com.ssafy.donworry.domain.finance.entity.QIncome.income;
 
@@ -27,11 +28,12 @@ public class IncomeQueryRepository {
         return jpaQueryFactory
                 .select(consumptionCategory.consumptionCategoryName, income.incomePrice.sum())
                 .from(income)
-                .join(income.dutchpay, dutchpay)
+                .join(income.detailDutchpay, detailDutchpay)
+                .join(detailDutchpay.dutchpay, dutchpay)
                 .join(dutchpay.consumption, consumption)
                 .join(consumption.consumptionCategory, consumptionCategory)
                 .where(income.member.id.eq(memberId),
-                        income.dutchpay.isNotNull(),
+                        income.detailDutchpay.isNotNull(),
                         income.createdTime.between(startDate.atStartOfDay(), endDate.atStartOfDay())
                 )
                 .groupBy(consumptionCategory.consumptionCategoryName)
@@ -43,12 +45,13 @@ public class IncomeQueryRepository {
         LocalDate startDate = LocalDate.of(LocalDate.now().getYear(), month, 1);
         LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), month, startDate.lengthOfMonth());
         return jpaQueryFactory
-                .select(income.dutchpay.consumption.id, income.incomePrice)
+                .select(consumption.id, income.incomePrice)
                 .from(income)
-                .join(income.dutchpay, dutchpay)
+                .join(income.detailDutchpay, detailDutchpay)
+                .join(detailDutchpay.dutchpay, dutchpay)
                 .join(dutchpay.consumption, consumption)
                 .where(income.member.id.eq(memberId),
-                        income.dutchpay.isNotNull(),
+                        income.detailDutchpay.isNotNull(),
                         income.createdTime.between(startDate.atStartOfDay(), endDate.atStartOfDay()),
                         settingCategory(categoryId)
                 )

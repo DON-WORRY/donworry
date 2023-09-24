@@ -2,6 +2,7 @@ package com.ssafy.donworry.common.filter;
 
 
 import com.ssafy.donworry.common.error.ErrorCode;
+import com.ssafy.donworry.common.error.exception.InvalidValueException;
 import com.ssafy.donworry.common.response.ApiError;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,8 +17,6 @@ public class InvalidTokenEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.setContentType("application/json");
-        response.setStatus(401);
-        response.getWriter().write(ApiError.of(ErrorCode.INVALID_TOKEN).toString());
+        throw new InvalidValueException(ErrorCode.ATUTHENTIFICATION_ERROR);
     }
 }

@@ -12,16 +12,23 @@ public enum ErrorCode {
     ENTITY_NOT_FOUND(400, "C002", "해당 엔티티를 찾지 못했습니다."),
     INTERNAL_SERVER_ERROR(500, "C003", "서버에 접근이 불가능합니다."),
     HANDLE_ACCESS_DENIED(403, "C004", "접근이 거부되었습니다."),
+    ATUTHENTIFICATION_ERROR(401, "C005", "권한이 없습니다." ),
     
     // Member
     MEMBER_NOT_FOUND(400, "M001", "회원을 찾지 못했습니다."),
     MEMBER_DUPLICATE(400, "M002", "중복된 회원입니다."),
     MEMBER_SAVE_ERROR(400, "M003", "회원등록에 실패하였습니다."),
     PASSWORD_NOT_MATCH(400, "M004", "비밀번호가 일치하지 않습니다."),
+    SIMPLE_PASSWORD_NOT_MATCH(400, "M005", "간편 비밀번호가 일치하지 않습니다."),
 
     // Friend
     FRIEND_REQUEST_SAVE_ERROR(400, "F001", "친구 요청 저장에 실패했습니다."),
     FRIEND_REQUEST_NOT_FOUND(400, "F002", "친구 요청을 찾는데 실패했습니다."),
+    ALREADY_FRIEND_RELATIONSHIP(400, "F003", "이미 친구 관계입니다."),
+    ALREADY_FRIEND_REQUEST(400, "F004", "이미 친구 요청을 보냈습니다."),
+
+    // Goal
+    GOAL_SAVE_ERROR(400, "G001", "목표 등록에 실패하였습니다."),
 
     // Email
     RANDOM_CODE_ERROR(400, "E001", "이메일 인증 코드 만들기에 실패했습니다."),
@@ -49,7 +56,14 @@ public enum ErrorCode {
     CONSUMPTION_CATEGORY_NOT_FOUND(400, "CC001", "존재하지 않는 소비카테고리입니다!"),
 
     // Dutchpay
-    Dutchpay_SAVE_ERROR(400, "D001", "더치페이 생성에 실패하였습니다."),
+    DUTCHPAY_SAVE_ERROR(400, "D001", "더치페이 생성에 실패하였습니다."),
+    DUTCHPAY_DUPLICATE(400, "D002", "더치페이를 요청한 이력이 있습니다."),
+
+    // DetailDutchpay
+    DETAIL_DUTCHPAY_NOT_FOUND(400, "DD001", "존재하지 않는 세부 더치페이입니다!"),
+    DETAIL_DUTCHPAY_SAVE_ERROR(400, "DD002", "세부 더치페이 생성에 실패하였습니다.")
+
+
 
     ;
 

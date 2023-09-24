@@ -37,29 +37,14 @@ public class FriendQueryService {
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-        // TODO: 2023-09-20 로직 맞는지 검증 필요
-
-        List<FriendRequestResponse> receiverResponse = friendRequestQueryRepository.findReceivers(member);
-        List<FriendRequestResponse> senderResponse = friendRequestQueryRepository.findSenders(member);
-
-//        List<FriendRequestResponse> receiverResponse =  member.getRequestSenders().stream().map(
-//                (friendRequest) -> {
-//                    Member receivers = friendRequest.getReceiver();
-//                    return FriendRequestResponse.of(receivers, friendRequest.getId());
-//                }
-//        ).collect(Collectors.toList());
-//
-//        List<FriendRequestResponse> senderResponse = member.getRequestReceivers().stream().map(
-//                (friendRequest) -> {
-//                    Member senders = friendRequest.getSender();
-//                    return FriendRequestResponse.of(senders, friendRequest.getId());
-//                }
-//        ).collect(Collectors.toList());
+        List<FriendRequestResponse> senderResponse = friendRequestQueryRepository.findReceivers(member);
+        List<FriendRequestResponse> receiverResponse = friendRequestQueryRepository.findSenders(member);
 
         return FriendRequestListResponse.of(receiverResponse, senderResponse);
     }
 
     public FriendListResponse searchFriend(Long memberId){
+        log.debug("memberId:{}", memberId);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         List<FriendResponse> senderFriend = friendRelationshipQueryRepository.findSenderFriend(member);

@@ -38,6 +38,7 @@ public class AccountController {
         AccountAllResponse list = accountQueryService.searchAccountList(memberId);
         return ApiData.of(list);
     }
+
     @Operation(summary = "계좌 거래내역", description = "선택한 계좌의 거래내역을 불러오는 API입니다.")
     @GetMapping("/{account_id}")
     public ApiData<AccountHistoryResponse> searchAccount(@PathVariable("account_id") Long accountId) {
@@ -53,6 +54,9 @@ public class AccountController {
         Long memberId = userDetailsModel.getId();
         log.info("searchStatistics - memberID : " + memberId);
         List<StatisticsResponse> list = accountQueryService.searchStatisticsResponseList(memberId);
+        AccountAllResponse accountInfo = accountQueryService.searchAccountList(memberId);
+        StatisticsResponse lastrs = new StatisticsResponse(list.get(list.size()-1).accountId(), list.get(list.size()-1).time(),accountInfo.total());
+        list.set(list.size()-1, lastrs);
         return ApiData.of(list);
     }
 

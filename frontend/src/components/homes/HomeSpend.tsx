@@ -86,8 +86,6 @@ const HomeSpend: React.FC = () => {
 
   const totalAmount = processedData.reduce((sum, item) => sum + item.amount, 0);
 
-  console.log(memberId)
-
   return (
     <View style={styles.container}>
       <View style={styles.row}>

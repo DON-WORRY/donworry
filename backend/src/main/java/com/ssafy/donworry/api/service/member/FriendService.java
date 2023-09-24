@@ -1,5 +1,6 @@
 package com.ssafy.donworry.api.service.member;
 
+import com.ssafy.donworry.api.service.member.query.FriendQueryService;
 import com.ssafy.donworry.api.service.member.request.FriendCheckServiceRequest;
 import com.ssafy.donworry.api.service.member.request.FriendRequestServiceRequest;
 import com.ssafy.donworry.common.error.ErrorCode;
@@ -8,9 +9,11 @@ import com.ssafy.donworry.common.error.exception.InvalidValueException;
 import com.ssafy.donworry.domain.member.entity.FriendRelationship;
 import com.ssafy.donworry.domain.member.entity.FriendRequest;
 import com.ssafy.donworry.domain.member.entity.Member;
+import com.ssafy.donworry.domain.member.entity.enums.FriendRequestStatus;
 import com.ssafy.donworry.domain.member.repository.FriendRelationshipRepository;
 import com.ssafy.donworry.domain.member.repository.FriendRequestRepository;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
+import com.ssafy.donworry.domain.member.repository.query.FriendRelationshipQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,8 @@ public class FriendService {
                             );
 
                     if(receiver == sender) throw new EntityNotFoundException(ErrorCode.MEMBER_DUPLICATE);
+                    if(checkAlreadyFriendRelationship(sender, receiver)  || checkAlreadyFriendRelationship(receiver, sender)) throw new InvalidValueException(ErrorCode.ALREADY_FRIEND_RELATIONSHIP);
+                    if(checkAlreadyFriendRequest(sender, receiver) || checkAlreadyFriendRequest(receiver, sender)) throw new InvalidValueException(ErrorCode.ALREADY_FRIEND_REQUEST);
 
                     try{
                         friendRequestRepository.save(FriendRequest.of(receiver, sender));
@@ -51,6 +56,16 @@ public class FriendService {
         );
     }
 
+    private boolean checkAlreadyFriendRelationship(Member friend, Member member){
+        if(friendRelationshipRepository.findByReceiverAndSender(friend, member).isPresent()) return true;
+        return false;
+    }
+
+    private boolean checkAlreadyFriendRequest(Member friend, Member member){
+        if(friendRequestRepository.findByReceiverAndSenderAndFriendRequestStatus(friend, member, FriendRequestStatus.ACTIVE).isPresent()) return true;
+        return false;
+    }
+
     public String checkFriend(FriendCheckServiceRequest request, Long memberId){
         FriendRequest friendRequest = friendRequestRepository.findById(request.friendRequestId())
                 .orElseThrow(
@@ -59,14 +74,18 @@ public class FriendService {
 
         friendRequest.updateStatus();
 
-        if(friendRequest.getReceiver().getId() == request.friendId()){
+        log.debug("request.reqId:{}, request.Id: {}, memberId: {}", request.friendRequestId(), request.friendId(), memberId);
+
+        log.debug("receiverId: {}, accept:{}", friendRequest.getReceiver().getId(), request.isAccept());
+        if(friendRequest.getReceiver().getId() == memberId){
+
             if(request.isAccept()){
                 friendRelationshipRepository.save(FriendRelationship.of(friendRequest));
                 return "친구요청을 수락하였습니다.";
             }
             else return "친구요청을 거절하였습니다.";
         }
-        else if(friendRequest.getSender().getId() == memberId){
+        else if(friendRequest.getSender().getId() == request.friendId()){
             return "친구요청을 취소했습니다.";
         }
         else throw new InvalidValueException(ErrorCode.INVALID_INPUT_VALUE);

@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
+interface AssetGoalProps {
+  refreshKey: number;
+}
+
 const { width } = Dimensions.get('screen');
 const money = 8200000;
 const goal = 8000000;
 const progress = (money / goal) * 100;
 
-const AssetGoal: React.FC = () => {
+const AssetGoal: React.FC<AssetGoalProps> = (props) => {
+  const { refreshKey } = props;
   const [barContainerWidth, setBarContainerWidth] = useState(0);
 
   return (
