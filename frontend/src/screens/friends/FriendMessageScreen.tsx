@@ -47,105 +47,6 @@ type CheckResponseData = {
   sendRequest: SendRequest[];
 };
 
-const requestData = [
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-];
-
-const responseData = [
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-09-01',
-  },
-];
-// // 값을 가져오기
-// const getData = async (key: string) => {
-//   try {
-//     const value = await AsyncStorage.getItem(key);
-//     if (value !== null) {
-//       return value;
-//     }
-//   } catch (e) {
-//     // 읽기 에러
-//     console.error(e);
-//     throw e;
-//   }
-// };
-
 const FriendMessageScreen: React.FC = () => {
   const blackLogo = require('../../assets/logo/BlackLogo.png');
   const navigation = useNavigation<ScreenProps['navigation']>();
@@ -208,7 +109,7 @@ const FriendMessageScreen: React.FC = () => {
                   howCompoShow.isFirst ? styles.selected_title : null,
                 ]}
               >
-                요청 메시지
+                친구 요청하기
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -244,7 +145,7 @@ const FriendMessageScreen: React.FC = () => {
                   howCompoShow.isThird ? styles.selected_title : null,
                 ]}
               >
-                친구 요청하기
+                요청 메시지
               </Text>
             </TouchableOpacity>
           </View>
@@ -253,32 +154,10 @@ const FriendMessageScreen: React.FC = () => {
 
           {howCompoShow.isFirst ? (
             <>
-              <ScrollView
-                style={styles.large_box}
-                showsVerticalScrollIndicator={false}
-                alwaysBounceHorizontal={true}
-              >
-                {sendRequest.length > 0 ? (
-                  <>
-                    {sendRequest.map((data, index) => {
-                      return (
-                        <View key={index}>
-                          <FriendResponse
-                            email={data.memberEmail}
-                            name={data.memberName}
-                            time={data.createdTime}
-                            friendRequestId={data.friendRequestId}
-                            memberId={data.memberId}
-                            setRendering={setRendering}
-                          />
-                        </View>
-                      );
-                    })}
-                  </>
-                ) : (
-                  <></>
-                )}
-              </ScrollView>
+              <FriendSendRequest
+                setHowCompoShow={setHowCompoShow}
+                setRendering={setRendering}
+              />
             </>
           ) : howCompoShow.isSecond ? (
             <>
@@ -311,10 +190,32 @@ const FriendMessageScreen: React.FC = () => {
             </>
           ) : (
             <>
-              <FriendSendRequest
-                setHowCompoShow={setHowCompoShow}
-                setRendering={setRendering}
-              />
+              <ScrollView
+                style={styles.large_box}
+                showsVerticalScrollIndicator={false}
+                alwaysBounceHorizontal={true}
+              >
+                {sendRequest.length > 0 ? (
+                  <>
+                    {sendRequest.map((data, index) => {
+                      return (
+                        <View key={index}>
+                          <FriendResponse
+                            email={data.memberEmail}
+                            name={data.memberName}
+                            time={data.createdTime}
+                            friendRequestId={data.friendRequestId}
+                            memberId={data.memberId}
+                            setRendering={setRendering}
+                          />
+                        </View>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <></>
+                )}
+              </ScrollView>
             </>
           )}
         </View>

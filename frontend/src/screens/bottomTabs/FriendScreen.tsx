@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, VirtualizedList } from 'react-native';
 
 import ComponentsHeader from '../../components/ComponentsHeader';
 import FriendMessageComponent from '../../components/friends/FriendMessageComponent';
 import FriendSpendKing from '../../components/friends/FriendSpendKing';
 import FriendList from '../../components/friends/FriendList';
+import NestedScrollView from 'react-native-nested-scroll-view';
 
 const FriendScreen: React.FC = () => {
   return (

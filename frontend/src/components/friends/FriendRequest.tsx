@@ -56,12 +56,11 @@ const FriendRequest: React.FC<FriendRequestProps> = (props) => {
           <FontAwesome name="user-plus" style={styles.icon} size={20} />
           <Text style={styles.topText}>{props.email}</Text>
         </View>
-        <Text style={styles.topText}>{props.time}</Text>
+        <Text style={styles.topText}>{props.time.slice(0,10)}</Text>
       </View>
       <View style={styles.bottomBox}>
         <View style={styles.textBox}>
           <Text style={styles.nameText}>{props.name}</Text>
-          <Text> 님의 요청입니다.</Text>
         </View>
         <View style={styles.btnBox}>
           {/* 버튼 */}

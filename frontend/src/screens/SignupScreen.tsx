@@ -49,6 +49,8 @@ const SignupScreen: React.FC = () => {
     b: false,
     c: false,
   });
+  const [canSignup, setCanSignup] = useState(false);
+
   const navigation = useNavigation<ScreenProps['navigation']>();
 
   function MaleFemale(gender: string): string {
@@ -116,6 +118,7 @@ const SignupScreen: React.FC = () => {
                   memberPassword: password,
                   memberGender: newGender,
                   memberBirthDate: newBirth,
+                  memberSimplePassword: easyPassword,
                 };
                 userSignup(data)
                   .then(() => {
@@ -175,12 +178,35 @@ const SignupScreen: React.FC = () => {
               />
 
               <SignupPrivacyAgreement setIsChecked={setIsChecked} />
-              <SignupEasyButton setPageData={setPageData} />
-              <SignupBtn signupOper={signupOper} />
+              <SignupEasyButton
+                setPageData={setPageData}
+                canSignup={canSignup}
+              />
+              {canSignup ? (
+                <>
+                  <SignupBtn signupOper={signupOper} />
+                </>
+              ) : (
+                <></>
+              )}
             </>
           ) : (
             <>
-              {pageData.b ? <SignupSecond setPageData={setPageData} /> : <></>}
+              {pageData.b ? (
+                <SignupSecond
+                  setPageData={setPageData}
+                  setEasyPassword={setEasyPassword}
+                />
+              ) : (
+                <>
+                  <SignupThird
+                    setPageData={setPageData}
+                    setEasyPassword={setEasyPassword}
+                    easyPassword={easyPassword}
+                    setCanSignup={setCanSignup}
+                  />
+                </>
+              )}
             </>
           )}
         </KeyboardAwareScrollView>

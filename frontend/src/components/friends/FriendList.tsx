@@ -78,11 +78,9 @@ const FriendList: React.FC = () => {
   return (
     <ScrollView
       style={styles.container}
-      showsVerticalScrollIndicator={false}
-      alwaysBounceHorizontal={false}
     >
       <Text style={styles.header}>친구 목록</Text>
-      <FriendSearch search={search} />
+      <FriendSearch search={search} friends={friends}/>
 
       {friends.map((friend, index) => {
         return (
@@ -97,7 +95,7 @@ const FriendList: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     height: 470,
     padding: 20,
     width: screenWidth - 40,

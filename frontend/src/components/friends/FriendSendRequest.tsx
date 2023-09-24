@@ -75,9 +75,9 @@ const FriendSendRequest: React.FC<FriendSendRequestProps> = (props) => {
                   // console.log(r);
                   await setFriendEmail("")
                   await props.setHowCompoShow({
-                    isFirst: true,
+                    isFirst: false,
                     isSecond: false,
-                    isThird: false,
+                    isThird: true,
                   });
                   await props.setRendering(false)
                 })

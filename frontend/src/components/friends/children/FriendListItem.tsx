@@ -18,7 +18,7 @@ const FriendListItem: React.FC<FriendListItemProps> = (props) => {
         {props.friend.friendName}
       </Text>
       <Text style={[styles.text]}>
-        {props.friend.friendEmail}
+        {props.friend.friendEmail.slice(0, 8) + "..."}
       </Text>
     </View>
   );

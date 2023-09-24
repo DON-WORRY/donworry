@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { friendCheck } from '../../utils/FriendFunctions';
-import SelectDropdown from 'react-native-select-dropdown';
+// import SelectDropdown from 'react-native-select-dropdown';
 
 interface FriendResponseProps {
   email: string;
@@ -26,13 +26,13 @@ const FriendResponse: React.FC<FriendResponseProps> = (props) => {
       friendRequestId: props.friendRequestId,
       friendId: props.memberId,
     }
-    // console.log(data.friendRequestId)
-    // console.log(data.friendId)
+    console.log(data.friendRequestId)
+    console.log(data.friendId)
     friendCheck(data).then((r) => {
       // console.log(r)
       props.setRendering(false)
     }).catch((e) => {
-      console.error(e)
+      console.error(e.response)
     })
     console.log('cancel');
   }
@@ -43,12 +43,12 @@ const FriendResponse: React.FC<FriendResponseProps> = (props) => {
           <FontAwesome name="paper-plane" style={styles.icon} size={20} />
           <Text style={styles.topText}>{props.email}</Text>
         </View>
-        <Text style={styles.topText}>{props.time}</Text>
+        <Text style={styles.topText}>{props.time.slice(0,10)}</Text>
       </View>
       <View style={styles.bottomBox}>
         <View style={styles.textBox}>
           <Text style={styles.nameText}>{props.name}</Text>
-          <Text> 님께 친구 요청을 보냈습니다.</Text>
+          {/* <Text> 님께 친구 요청을 보냈습니다.</Text> */}
         </View>
         <View>
           {/* 버튼 */}

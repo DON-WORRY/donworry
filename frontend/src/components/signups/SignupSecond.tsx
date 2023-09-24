@@ -15,6 +15,7 @@ type Page = {
 };
 interface SignupSecondProps {
   setPageData: (data: Page) => void;
+  setEasyPassword: (password: string) => void;
 }
 
 const SignupSecond: React.FC<SignupSecondProps> = (props) => {
@@ -36,7 +37,6 @@ const SignupSecond: React.FC<SignupSecondProps> = (props) => {
   const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
   useEffect(() => {
     shuffle(numbers);
-    console.log(numbers);
   }, []);
 
   async function clickButton(str: string) {
@@ -174,24 +174,34 @@ const SignupSecond: React.FC<SignupSecondProps> = (props) => {
         e: true,
         f: true,
       });
-      return alert('다음페이지');
+      console.log(easyPass);
+      // console.log(easyPass.length);
+      // 수정 필요
+      props.setPageData({
+        a: false,
+        b: false,
+        c: true,
+      });
+      props.setEasyPassword(easyPass+str)
+      // return alert('다음페이지');
     }
     const tmpPass = (await easyPass) + str;
     await setEasyPass(tmpPass);
     await shuffle(numbers);
   }
-  useEffect(() => {
-    if (easyPass.length === 6) {
-      console.log(easyPass);
-      console.log(easyPass.length);
-      // 수정 필요
-      // props.setPageData({
-      //   a: false,
-      //   b: false,
-      //   c: true,
-      // });
-    }
-  }, [easyPass.length === 6]);
+  // useEffect(() => {
+  //   if (easyPass.length == 6) {
+  //     console.log(easyPass);
+  //     console.log(easyPass.length);
+  //     // 수정 필요
+  //     props.setPageData({
+  //       a: false,
+  //       b: false,
+  //       c: true,
+  //     });
+  //     props.setEasyPassword(easyPass)
+  //   }
+  // }, [easyPass.length == 6]);
 
   return (
     <View style={styles.container}>

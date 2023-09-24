@@ -3,8 +3,6 @@ import { View, Text, StyleSheet, Alert, Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
 import { APP_ENV_KAKAO_API_KEY, APP_ENV_REDIRECT_URI } from '@env';
-console.log(APP_ENV_KAKAO_API_KEY);
-console.log(APP_ENV_REDIRECT_URI);
 const URI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${APP_ENV_KAKAO_API_KEY}&redirect_uri=${APP_ENV_REDIRECT_URI}&lang=ko`;
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 interface ScreenProps {
