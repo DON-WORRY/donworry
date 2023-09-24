@@ -17,6 +17,7 @@ type SignupData = {
   memberPassword: string;
   memberGender: string;
   memberBirthDate: string;
+  memberSimplePassword: string;
 };
 
 // 로그인 params
@@ -67,13 +68,14 @@ export function userLogin(data: LoginData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/members/login', data)
     .then(async (response) => {
-      console.log(response.data)
+      console.log(response.data.data.memberBirthDate)
       const accessToken = await response.data.data.accessToken;
       const memberEmail = await response.data.data.memberEmail;
       const memberId = await response.data.data.memberId.toString();
       const memberName = await response.data.data.memberName;
       const memberRole = await response.data.data.memberRole;
       const refreshToken = await response.data.data.refreshToken;
+      const memberBirthDate = await response.data.data.memberBirthDate;
 
       await storeData('accessToken', accessToken);
       await storeData('memberEmail', memberEmail);
@@ -81,10 +83,10 @@ export function userLogin(data: LoginData): Promise<void> {
       await storeData('memberName', memberName);
       await storeData('memberRole', memberRole);
       await storeData('refreshToken', refreshToken);
+      await storeData('memberBirthDate', memberBirthDate);
     })
     .catch((e) => {
-      console.error(e);
-      throw e; // 에러를 다시 던져서, 함수를 호출하는 측에서 catch 가능하도록 합니다.
+      throw e.response.data; // 에러를 다시 던져서, 함수를 호출하는 측에서 catch 가능하도록 합니다.
     });
 }
 
@@ -116,14 +118,14 @@ export function userFindPassword(): Promise<void> {
 }
 
 // 로그아웃
-export function userLogout(): Promise<void> {
+export async function userLogout(): Promise<void> {
   return axiosWithAuth
-    .get('/api/user/logout')
+    .get('/api/members/logout')
     .then((res) => {
-      console.log(res);
+      AsyncStorage.clear();
+      return res.data;
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import DonWorryText from '../components/logins/LoginDonWorryText';
 import Login from '../components/logins/Login';
+// import KakaoLogin from './KakaoLogin';
 
 const LoginPage: React.FC = () => {
   const [moveAnimation] = useState<Animated.Value>(new Animated.Value(0));

@@ -11,6 +11,9 @@ import SignupMiddleInput from '../components/signups/SignupMiddleInput';
 import SignupBottomInput from '../components/signups/SignupBottomInput';
 import SignupPrivacyAgreement from '../components/signups/SignupPrivacyAgreement';
 import SignupBtn from '../components/signups/SignupBtn';
+import SignupEasyButton from '../components/signups/SignupEasyButton';
+import SignupSecond from '../components/signups/SignupSecond';
+import SignupThird from '../components/signups/SignupThird';
 
 interface ScreenProps {
   navigation: {
@@ -40,6 +43,13 @@ const SignupScreen: React.FC = () => {
   const [userGender, setUserGender] = useState('');
   const [userBirth, setUserBirth] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [easyPassword, setEasyPassword] = useState('');
+  const [pageData, setPageData] = useState({
+    a: true,
+    b: false,
+    c: false,
+  });
+  const [canSignup, setCanSignup] = useState(false);
 
   const navigation = useNavigation<ScreenProps['navigation']>();
 
@@ -108,6 +118,7 @@ const SignupScreen: React.FC = () => {
                   memberPassword: password,
                   memberGender: newGender,
                   memberBirthDate: newBirth,
+                  memberSimplePassword: easyPassword,
                 };
                 userSignup(data)
                   .then(() => {
@@ -143,30 +154,61 @@ const SignupScreen: React.FC = () => {
         <Modal />
       ) : (
         <KeyboardAwareScrollView style={styles.container}>
-          <SignupHeader />
+          {pageData.a ? (
+            <>
+              <SignupHeader />
+              <SignupMiddleInput
+                setEmail={setEmail}
+                email={email}
+                setPassword={setPassword}
+                setCheckPassword={setCheckPassword}
+                checkPassword={checkPassword}
+                setIsCertificated={setIsCertificated}
+                password={password}
+                isCertificated={isCertificated}
+                setIsLoading={setIsLoading}
+              />
 
-          <SignupMiddleInput
-            setEmail={setEmail}
-            email={email}
-            setPassword={setPassword}
-            setCheckPassword={setCheckPassword}
-            checkPassword={checkPassword}
-            setIsCertificated={setIsCertificated}
-            password={password}
-            isCertificated={isCertificated}
-            setIsLoading={setIsLoading}
-          />
+              <SignupBottomInput
+                setUserName={setUserName}
+                userName={userName}
+                setUserGender={setUserGender}
+                setUserBirth={setUserBirth}
+                userBirth={userBirth}
+              />
 
-          <SignupBottomInput
-            setUserName={setUserName}
-            userName={userName}
-            setUserGender={setUserGender}
-            setUserBirth={setUserBirth}
-            userBirth={userBirth}
-          />
-
-          <SignupPrivacyAgreement setIsChecked={setIsChecked} />
-          <SignupBtn signupOper={signupOper} />
+              <SignupPrivacyAgreement setIsChecked={setIsChecked} />
+              <SignupEasyButton
+                setPageData={setPageData}
+                canSignup={canSignup}
+              />
+              {canSignup ? (
+                <>
+                  <SignupBtn signupOper={signupOper} />
+                </>
+              ) : (
+                <></>
+              )}
+            </>
+          ) : (
+            <>
+              {pageData.b ? (
+                <SignupSecond
+                  setPageData={setPageData}
+                  setEasyPassword={setEasyPassword}
+                />
+              ) : (
+                <>
+                  <SignupThird
+                    setPageData={setPageData}
+                    setEasyPassword={setEasyPassword}
+                    easyPassword={easyPassword}
+                    setCanSignup={setCanSignup}
+                  />
+                </>
+              )}
+            </>
+          )}
         </KeyboardAwareScrollView>
       )}
     </>

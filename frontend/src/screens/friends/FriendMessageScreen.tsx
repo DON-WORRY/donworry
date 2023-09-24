@@ -9,10 +9,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import FriendRequest from '../../components/friends/FriendRequest';
 import FriendResponse from '../../components/friends/FriendResponse';
 import { useNavigation } from '@react-navigation/native';
+import FriendSendRequest from '../../components/friends/FriendSendRequest';
+
+// 함수 입력
+import { friendRequestList } from '../../utils/FriendFunctions';
 import BackHeader from '../../components/BackHeader';
 
 interface ScreenProps {
@@ -21,239 +26,205 @@ interface ScreenProps {
   };
 }
 
-const requestData = [
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-];
+type ReceivedRequest = {
+  friendRequestId: number;
+  memberId: number;
+  memberEmail: string;
+  memberName: string;
+  createdTime: string;
+};
 
-const responseData = [
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-08-31',
-  },
-  {
-    email: 'oooo@naver.com',
-    name: 'test',
-    time: '2023-09-01',
-  },
-];
-// 값을 가져오기
-const getData = async (key: string) => {
-  try {
-    const value = await AsyncStorage.getItem(key);
-    if (value !== null) {
-      return value;
-    }
-  } catch (e) {
-    // 읽기 에러
-    console.error(e);
-    throw e;
-  }
+type SendRequest = {
+  friendRequestId: number;
+  memberId: number;
+  memberEmail: string;
+  memberName: string;
+  createdTime: string;
+};
+
+type CheckResponseData = {
+  receivedRequest: ReceivedRequest[];
+  sendRequest: SendRequest[];
 };
 
 const FriendMessageScreen: React.FC = () => {
   const blackLogo = require('../../assets/logo/BlackLogo.png');
   const navigation = useNavigation<ScreenProps['navigation']>();
-  const [newMemberId, setNewMemberId] = useState('');
+  // const [newMemberId, setNewMemberId] = useState('');
   const [howCompoShow, setHowCompoShow] = useState({
     isFirst: true,
     isSecond: false,
     isThird: false,
   });
+  const [receivedRequest, setReceivedRequest] = useState<ReceivedRequest[]>([]);
+  const [sendRequest, setSendRequest] = useState<SendRequest[]>([]);
+  const [rendering, setRendering] = useState(true);
 
+  // 바로 렌더링 할 수 있게 하는 함수
   useEffect(() => {
     const fetch = async () => {
-      const memberId = await getData('memberId');
-      if (memberId !== undefined) {
-        await setNewMemberId(memberId);
-      }
+      const allRequstList = await friendRequestList()
+        .then((r) => {
+          return r.data;
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+      setReceivedRequest(allRequstList.receivedRequest);
+      setSendRequest(allRequstList.sendRequest);
+      setRendering(true);
     };
     fetch();
-  }, []);
-
+  }, [rendering == false]);
   return (
-    <View style={styles.container}>
-      <BackHeader screen="Friend" />
-      <View>
-        <Text style={styles.headerText}>친구 요청 및 수신</Text>
-      </View>
-      <View>
-        <View style={styles.sub_title_box}>
-          <TouchableOpacity
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <View style={styles.header_box}>
+          <MaterialCommunityIcons
+            name="arrow-left"
+            size={30}
             onPress={() => {
-              setHowCompoShow({
-                isFirst: true,
-                isSecond: false,
-                isThird: false,
-              });
+              navigation.goBack('TabNavigation', { screen: 'Friend' });
             }}
-          >
-            <Text
-              style={[
-                styles.sub_title,
-                howCompoShow.isFirst ? styles.selected_title : null,
-              ]}
-            >
-              요청 메시지
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setHowCompoShow({
-                isFirst: false,
-                isSecond: true,
-                isThird: false,
-              });
-            }}
-          >
-            <Text
-              style={[
-                styles.sub_title,
-                howCompoShow.isSecond ? styles.selected_title : null,
-              ]}
-            >
-              수신 메시지
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setHowCompoShow({
-                isFirst: false,
-                isSecond: false,
-                isThird: true,
-              });
-            }}
-          >
-            <Text
-              style={[
-                styles.sub_title,
-                howCompoShow.isThird ? styles.selected_title : null,
-              ]}
-            >
-              친구 요청하기
-            </Text>
-          </TouchableOpacity>
+          />
+          <Image source={blackLogo} style={styles.logo} />
         </View>
-        {/* 막대선 */}
-        <View style={styles.line}></View>
+        <View>
+          <Text style={styles.header_text}>친구 요청 및 수신</Text>
+        </View>
+        <View>
+          <View style={styles.sub_title_box}>
+            <TouchableOpacity
+              onPress={() => {
+                setHowCompoShow({
+                  isFirst: true,
+                  isSecond: false,
+                  isThird: false,
+                });
+              }}
+            >
+              <Text
+                style={[
+                  styles.sub_title,
+                  howCompoShow.isFirst ? styles.selected_title : null,
+                ]}
+              >
+                친구 요청하기
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setHowCompoShow({
+                  isFirst: false,
+                  isSecond: true,
+                  isThird: false,
+                });
+              }}
+            >
+              <Text
+                style={[
+                  styles.sub_title,
+                  howCompoShow.isSecond ? styles.selected_title : null,
+                ]}
+              >
+                수신 메시지
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setHowCompoShow({
+                  isFirst: false,
+                  isSecond: false,
+                  isThird: true,
+                });
+              }}
+            >
+              <Text
+                style={[
+                  styles.sub_title,
+                  howCompoShow.isThird ? styles.selected_title : null,
+                ]}
+              >
+                요청 메시지
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {/* 막대선 */}
+          <View style={styles.line}></View>
 
-        {howCompoShow.isFirst ? (
-          <>
-            <ScrollView
-              style={styles.large_box}
-              showsVerticalScrollIndicator={false}
-              alwaysBounceHorizontal={true}
-            >
-              {responseData.map((data, index) => {
-                return (
-                  <View key={index}>
-                    <FriendResponse
-                      email={data.email}
-                      name={data.name}
-                      time={data.time}
-                    />
-                  </View>
-                );
-              })}
-            </ScrollView>
-          </>
-        ) : howCompoShow.isSecond ? (
-          <>
-            <ScrollView
-              style={styles.large_box}
-              showsVerticalScrollIndicator={false}
-              alwaysBounceHorizontal={true}
-            >
-              {requestData.map((data, index) => {
-                return (
-                  <View key={index}>
-                    <FriendRequest
-                      email={data.email}
-                      name={data.name}
-                      time={data.time}
-                    />
-                  </View>
-                );
-              })}
-            </ScrollView>
-          </>
-        ) : (
-          <></>
-        )}
+          {howCompoShow.isFirst ? (
+            <>
+              <FriendSendRequest
+                setHowCompoShow={setHowCompoShow}
+                setRendering={setRendering}
+              />
+            </>
+          ) : howCompoShow.isSecond ? (
+            <>
+              <ScrollView
+                style={styles.large_box}
+                showsVerticalScrollIndicator={false}
+                alwaysBounceHorizontal={true}
+              >
+                {receivedRequest.length > 0 ? (
+                  <>
+                    {receivedRequest.map((data, index) => {
+                      return (
+                        <View key={index}>
+                          <FriendRequest
+                            email={data.memberEmail}
+                            name={data.memberName}
+                            time={data.createdTime}
+                            friendRequestId={data.friendRequestId}
+                            memberId={data.memberId}
+                            setRendering={setRendering}
+                          />
+                        </View>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <></>
+                )}
+              </ScrollView>
+            </>
+          ) : (
+            <>
+              <ScrollView
+                style={styles.large_box}
+                showsVerticalScrollIndicator={false}
+                alwaysBounceHorizontal={true}
+              >
+                {sendRequest.length > 0 ? (
+                  <>
+                    {sendRequest.map((data, index) => {
+                      return (
+                        <View key={index}>
+                          <FriendResponse
+                            email={data.memberEmail}
+                            name={data.memberName}
+                            time={data.createdTime}
+                            friendRequestId={data.friendRequestId}
+                            memberId={data.memberId}
+                            setRendering={setRendering}
+                          />
+                        </View>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <></>
+                )}
+              </ScrollView>
+            </>
+          )}
+        </View>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
+const screenWidth = Dimensions.get("screen").width
 const screenHeight = Dimensions.get('screen').height;
 
 const styles = StyleSheet.create({
@@ -263,7 +234,17 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     backgroundColor: 'light-gray',
   },
-  headerText: {
+  logo: {
+    height: 40,
+    width: 40,
+  },
+  header_box: {
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: screenWidth - 40,
+  },
+  header_text: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 30,
@@ -293,5 +274,7 @@ const styles = StyleSheet.create({
     color: '#7777F3',
   },
 });
+
+
 
 export default FriendMessageScreen;
