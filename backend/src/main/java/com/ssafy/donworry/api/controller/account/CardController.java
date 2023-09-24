@@ -34,10 +34,15 @@ public class CardController {
         return ApiData.of(consumptionResponse);
     }
     @Operation(summary = "해당 월의 상세카드 소비내역", description = "선택한 카드의 선택한 월 사용내역을 조회하는 API입니다.")
-    @GetMapping("/detail/{card_id}/{month}")
-    public ApiData<List<ConsumtionDetailResponse>> searchCardDetailConsumption(@PathVariable("card_id") Long cardId, @PathVariable("month") Long month) {
+    @GetMapping("/detail/{card_id}/{date}")
+    public ApiData<List<ConsumtionDetailResponse>> searchCardDetailConsumption(@PathVariable("card_id") Long cardId, @PathVariable("date") String date) {
 
-        List<ConsumtionDetailResponse> list = cardService.findEachCardOfMonthDetailConsumption(cardId, month);
+        String yearString = date.substring(0, 4);
+        String monthString = date.substring(4,6);
+        Long year = Long.valueOf(yearString);
+        Long month = Long.valueOf(monthString);
+
+        List<ConsumtionDetailResponse> list = cardService.findEachCardOfMonthDetailConsumption(cardId, year, month);
         return ApiData.of(list);
     }
 

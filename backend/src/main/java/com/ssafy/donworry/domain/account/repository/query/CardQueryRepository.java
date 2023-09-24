@@ -1,6 +1,5 @@
 package com.ssafy.donworry.domain.account.repository.query;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.donworry.api.controller.account.dto.response.CardInfoResponse;
@@ -9,14 +8,13 @@ import com.ssafy.donworry.api.controller.account.dto.response.eachCardConsumptio
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.ssafy.donworry.domain.account.entity.QAccount.account;
 import static com.ssafy.donworry.domain.account.entity.QCard.card;
 import static com.ssafy.donworry.domain.account.entity.QCardCompany.cardCompany;
 import static com.ssafy.donworry.domain.finance.entity.QConsumption.consumption;
+import static com.ssafy.donworry.domain.finance.entity.QConsumptionCategory.consumptionCategory;
 import static com.ssafy.donworry.domain.member.entity.QMember.member;
 
 @Repository
@@ -107,19 +105,25 @@ public class CardQueryRepository {
     }
 
 
-    public List<ConsumtionDetailResponse> findEachCardOfMonthDetailConsumption(Long cardId, Long month) {
+    public List<ConsumtionDetailResponse> findEachCardOfMonthDetailConsumption(Long cardId, Long year, Long month) {
         List<ConsumtionDetailResponse> result = queryFactory
                 .select(
                         Projections.constructor(
                                 ConsumtionDetailResponse.class,
                                 consumption.id,
+                                consumption.consumptionCategory.consumptionCategoryName,
                                 consumption.consumptionDetail,
                                 consumption.consumptionPrice,
                                 consumption.createdTime
                         )
                 )
                 .from(consumption)
-                .where(consumption.createdTime.month().eq(Math.toIntExact(month)))
+                .join(consumptionCategory)
+                .on(consumption.consumptionCategory.id.eq(consumptionCategory.id))
+                .where(consumption.createdTime.month().eq(Math.toIntExact(month)),
+                        consumption.createdTime.year().eq(Math.toIntExact(year)),
+                        consumption.card.id.eq(cardId))
+                .orderBy(consumption.createdTime.desc())
                 .fetch();
         return result;
     }

@@ -1,6 +1,5 @@
 package com.ssafy.donworry.domain.finance.entity;
 
-import com.ssafy.donworry.api.controller.finance.dto.request.ReqAmountRequest;
 import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 import com.ssafy.donworry.domain.member.entity.Member;
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.*;
 
 @Entity
 @Getter
@@ -20,14 +18,8 @@ import static jakarta.persistence.GenerationType.*;
 public class Dutchpay extends BaseEntity {
     @Id
     @Column(name = "dutchpay_id")
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull
-    private Long dutchpayReqPrice;
-
-    @NotNull
-    private Long dutchpayReceivedPrice;
 
     @NotNull
     @Enumerated(STRING)
@@ -39,25 +31,21 @@ public class Dutchpay extends BaseEntity {
     private Member member;
 
     @NotNull
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "consumption_id")
     private Consumption consumption;
 
     @Builder
-    public Dutchpay(Long id, Long dutchpayReqPrice, Long dutchpayReceivedPrice, DutchpayStatus dutchpayStatus, Member member, Consumption consumption) {
+    public Dutchpay(Long id, @NotNull DutchpayStatus dutchpayStatus, @NotNull Member member, @NotNull Consumption consumption) {
         this.id = id;
-        this.dutchpayReqPrice = dutchpayReqPrice;
-        this.dutchpayReceivedPrice = dutchpayReceivedPrice;
         this.dutchpayStatus = dutchpayStatus;
         this.member = member;
         this.consumption = consumption;
     }
 
-    public static Dutchpay of(ReqAmountRequest req, Member member, Consumption consumption) {
+    public static Dutchpay of(Consumption consumption, Member member) {
         return Dutchpay.builder()
-                .dutchpayReqPrice(req.price())
-                .dutchpayReceivedPrice(0l)
-                .dutchpayStatus(DutchpayStatus.INCOMPLETE)
+                .dutchpayStatus(DutchpayStatus.PROGRESS)
                 .member(member)
                 .consumption(consumption)
                 .build();

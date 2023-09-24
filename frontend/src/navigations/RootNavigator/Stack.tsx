@@ -3,10 +3,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../../screens/LoginScreen';
 import SignupScreen from '../../screens/SignupScreen';
 import FriendMessageScreen from '../../screens/friends/FriendMessageScreen';
+
 import DutchpayRequestScreen from '../../screens/consumptions/DutchpayRequestScreen';
 import HistoryScreen from '../../screens/historys/HistoryScreen';
 import ConsumptionScreen from '../../screens/consumptions/ConsumptionScreen';
 import DutchpayStateScreen from '../../screens/consumptions/DutchpayStateScreen';
+import CardHistoryScreen from '../../screens/historys/CardHistoryScreen';
+import AccountHistoryScreen from '../../screens/historys/AccountHistoryScreen';
 
 type RootStackParamList = {
   Login: undefined;
@@ -14,6 +17,8 @@ type RootStackParamList = {
   Message: undefined;
   History: undefined;
   Consumption: undefined;
+  CardHistory: undefined;
+  AccountHistory: undefined;
   DutchpayRequest: {
     bankName: string;
     detail: string;
@@ -56,8 +61,13 @@ const StackNavigation: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="History"
-        component={HistoryScreen}
+        name="CardHistory"
+        component={CardHistoryScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AccountHistory"
+        component={AccountHistoryScreen}
         options={{ headerShown: false }}
       />
 
