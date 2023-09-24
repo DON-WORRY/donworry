@@ -41,7 +41,6 @@ const formatAmount = (amount: string): string => {
 };
 
 const AssetChart: React.FC<AssetChartProps> = (props) => {
-  const { refreshKey } = props;
   const [userName, setUserName] = useState('');
   const [monthAmount, setMonthAmount] = useState(0);
   const [dataBar, setDataBar] = useState<Array<{ x: number; y: number }>>([]);
