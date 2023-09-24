@@ -1,5 +1,6 @@
 package com.ssafy.donworry.domain.finance.entity;
 
+import com.ssafy.donworry.api.controller.finance.dto.request.DutchpayTransferRequest;
 import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.member.entity.Member;
@@ -45,12 +46,12 @@ public class Income extends BaseEntity {
     @JoinColumn(name = "sender_account_id")
     private Account senderAccount;
 
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "dutchpay_id")
-    private Dutchpay dutchpay;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "detail_dutchpay_id")
+    private DetailDutchpay detailDutchpay;
 
     @Builder
-    public Income(Long id, @NotNull String incomeDetail, @NotNull Long incomePrice, @NotNull Long incomeRemainedAmount, @NotNull Member member, Account account, Account senderAccount, Dutchpay dutchpay) {
+    public Income(Long id, @NotNull String incomeDetail, @NotNull Long incomePrice, @NotNull Long incomeRemainedAmount, @NotNull Member member, @NotNull Account account, Account senderAccount, DetailDutchpay detailDutchpay) {
         this.id = id;
         this.incomeDetail = incomeDetail;
         this.incomePrice = incomePrice;
@@ -58,11 +59,12 @@ public class Income extends BaseEntity {
         this.member = member;
         this.account = account;
         this.senderAccount = senderAccount;
-        this.dutchpay = dutchpay;
+        this.detailDutchpay = detailDutchpay;
     }
 
+
     public static Income of(String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member
-    , Account account, Account senderAccount, Dutchpay dutchpay){
+    , Account account, Account senderAccount, DetailDutchpay detailDutchpay){
         return Income.builder()
                 .incomeDetail(incomeDetail)
                 .incomePrice(incomePrice)
@@ -70,7 +72,7 @@ public class Income extends BaseEntity {
                 .member(member)
                 .account(account)
                 .senderAccount(senderAccount)
-                .dutchpay(dutchpay)
+                .detailDutchpay(detailDutchpay)
                 .build();
     }
 }
