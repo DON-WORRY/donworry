@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Dimensions,
   Image,
+  TouchableOpacity
 } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -38,6 +39,8 @@ const CardHistoryScreen: React.FC = () => {
     groupedData: {},
     sumsByDate: {},
   });
+  const [nowMonth, setNowMonth] = useState(0);
+  const [checkMonth, setCheckMonth] = useState(0);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const blackLogo = require('../../assets/logo/BlackLogo.png');
   const navigation = useNavigation<ScreenProps['navigation']>();
@@ -46,36 +49,46 @@ const CardHistoryScreen: React.FC = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      try {
-        // const dataKeys = Object.keys(cardDetail.groupedData || {});
-        // const newDataKeys = dataKeys.slice(0, currentPage * itemsPerPage);
-
-        const newCardDetail: any = await accountCardDetail(cardId, 202309);
-        const groupedData = newCardDetail.data.reduce(
-          (acc: Record<string, CardDetailItem[]>, cur: CardDetailItem) => {
-            const createdDate = cur.createdTime.split('T')[0].slice(5);
-            if (!acc[createdDate]) acc[createdDate] = [];
-            acc[createdDate].push(cur);
-            return acc;
-          },
-          {}
-        );
-
-        const sumsByDate: { [key: string]: number } = {};
-        Object.keys(groupedData).forEach((date) => {
-          sumsByDate[date] = groupedData[date].reduce(
-            (sum: number, item: CardDetailItem) => sum + item.consumptionPrice,
-            0
-          );
-        });
-        setCardDetail({ groupedData, sumsByDate });
-        setTotalPrice(Object.values(sumsByDate).reduce((a, b) => a + b, 0));
-      } catch (error) {
-        console.error('An error occurred:', error);
-      }
+      const today = new Date().toISOString();
+      const year = today.substring(0, 4); 
+      const month = today.substring(5, 7);
+      const yearMonth = parseInt(year + month, 10);
+      setNowMonth(yearMonth);
+      setCheckMonth(yearMonth);
+  
+      await processCardDetails(cardId, yearMonth);
     };
     fetch();
   }, []);
+  
+  // 카드 내역 가져오는 함수 (카드Id, 요청년월(202309))
+  const processCardDetails = async (cardId: number, yearMonth: number) => {
+    try {
+      const newCardDetail: any = await accountCardDetail(cardId, yearMonth);
+      const groupedData = newCardDetail.data.reduce(
+        (acc: Record<string, CardDetailItem[]>, cur: CardDetailItem) => {
+          const createdDate = cur.createdTime.split('T')[0].slice(5);
+          if (!acc[createdDate]) acc[createdDate] = [];
+          acc[createdDate].push(cur);
+          return acc;
+        },
+        {}
+      );
+  
+      const sumsByDate: { [key: string]: number } = {};
+      Object.keys(groupedData).forEach((date) => {
+        sumsByDate[date] = groupedData[date].reduce(
+          (sum: number, item: CardDetailItem) => sum + item.consumptionPrice,
+          0
+        );
+      });
+      setCardDetail({ groupedData, sumsByDate });
+      setTotalPrice(Object.values(sumsByDate).reduce((a, b) => a + b, 0));
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  };
+  
 
   const loadMoreData = () => {
     setCurrentPage(currentPage + 1);
@@ -90,6 +103,44 @@ const CardHistoryScreen: React.FC = () => {
 
   const formatAmount = (amount: string): string => {
     return parseInt(amount, 10).toLocaleString('ko-KR') + '원';
+  };
+
+  const decreaseMonth = () => {
+    if (checkMonth > 202201) {
+      let newYear = Math.floor(checkMonth / 100);
+      let newMonth = checkMonth % 100;
+      
+      newMonth -= 1;
+      
+      if (newMonth < 1) {
+        newMonth = 12;
+        newYear -= 1;
+      }
+      
+      const newCheckMonth = newYear * 100 + newMonth;
+      
+      setCheckMonth(newCheckMonth);
+      processCardDetails(cardId, newCheckMonth);
+    }
+  };
+  
+  const increaseMonth = () => {
+    if (checkMonth !== nowMonth) {
+      let newYear = Math.floor(checkMonth / 100);
+      let newMonth = checkMonth % 100;
+      
+      newMonth += 1;
+      
+      if (newMonth > 12) {
+        newMonth = 1;
+        newYear += 1;
+      }
+      
+      const newCheckMonth = newYear * 100 + newMonth;
+      
+      setCheckMonth(newCheckMonth);
+      processCardDetails(cardId, newCheckMonth);
+    }
   };
 
   return (
@@ -113,17 +164,27 @@ const CardHistoryScreen: React.FC = () => {
           marginTop: width * 0.05,
         }}
       >
+        <TouchableOpacity
+          onPress={() => {
+            decreaseMonth();
+          }}
+        >
         <MaterialIcons
           name="arrow-back-ios"
           size={width * 0.05}
           style={{ marginTop: -width * 0.014 }}
-        />
-        <Text style={styles.headText}>2023.09</Text>
+        /></TouchableOpacity>
+        <Text style={styles.headText}>{checkMonth}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            increaseMonth();
+          }}
+        >
         <MaterialIcons
           name="arrow-forward-ios"
           size={width * 0.05}
           style={{ marginTop: -width * 0.014 }}
-        />
+        /></TouchableOpacity>
       </View>
 
       <View style={[styles.row, { width: '100%', marginBottom: width * 0.01 }]}>
@@ -143,7 +204,7 @@ const CardHistoryScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         renderItem={({ item: date }) => (
           <View>
-            <View style={[styles.row,]}>
+            <View style={[styles.row]}>
               <Text style={styles.dateText}>{formatDate(date)}</Text>
               <Text style={styles.dateText}>
                 {formatAmount(cardDetail.sumsByDate[date].toString())}

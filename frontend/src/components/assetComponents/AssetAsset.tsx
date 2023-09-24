@@ -29,7 +29,6 @@ const formatAmount = (amount: string): string => {
 };
 
 const AssetAsset: React.FC<AssetAssetProps> = (props) => {
-  // const { refreshKey } = props;
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();

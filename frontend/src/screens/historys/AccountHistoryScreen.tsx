@@ -19,7 +19,7 @@ interface ScreenProps {
   };
 }
 interface accountDetailItem {
-  cardName: string;
+  category: string;
   consumptionDetail: string;
   consumptionRemainedAmount: number;
   consumptionPrice: number;
@@ -38,7 +38,7 @@ const HistoryScreen: React.FC = () => {
   const blackLogo = require('../../assets/logo/BlackLogo.png');
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 3;
 
   useEffect(() => {
     const fetch = async () => {
@@ -132,14 +132,14 @@ const HistoryScreen: React.FC = () => {
               >
                 <Image
                   style={styles.imageStyle}
-                  source={images[detail.cardName]}
+                  source={images[detail.category]}
                 />
                 <Text style={[styles.itemText, { flex: 1 }]}>
                   {detail.consumptionDetail}
                 </Text>
                 <View style={{ alignItems: 'flex-end' }}>
                   <Text style={styles.itemText}>
-                    -{formatAmount(detail.consumptionPrice.toString())}
+                    {formatAmount(detail.consumptionPrice.toString())}
                   </Text>
                   <Text>
                     {formatAmount(detail.consumptionRemainedAmount.toString())}
