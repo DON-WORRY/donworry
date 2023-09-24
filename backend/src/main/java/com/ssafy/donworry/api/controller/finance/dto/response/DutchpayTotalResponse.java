@@ -12,9 +12,10 @@ public record DutchpayTotalResponse(
         Long price,
         int reqMemberSize,
         Long myDetailDutchpayId,
+        Long dutchpayId, // 정렬 기준
         List<DutchpayPersonResponse> dutchpayPersonList
 ) {
-    public static DutchpayTotalResponse of(Consumption consumption, Long myDetailDutchpayId, List<DutchpayPersonResponse> dutchpayPersonList) {
+    public static DutchpayTotalResponse of(Consumption consumption, Long myDetailDutchpayId, Long dutchpayId, List<DutchpayPersonResponse> dutchpayPersonList) {
         return new DutchpayTotalResponse(
                 consumption.getId(),
                 consumption.getConsumptionDetail(),
@@ -22,6 +23,7 @@ public record DutchpayTotalResponse(
                 consumption.getConsumptionPrice(),
                 dutchpayPersonList.size(),
                 myDetailDutchpayId,
+                dutchpayId,
                 dutchpayPersonList
         );
     }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class DutchpayQueryService {
                 log.info("보내는 세부더치페이{}", dutchpayPersonList.get(j));
             }
 
-            sendDutchpayTotalList.add(DutchpayTotalResponse.of(sendDutchpayList.get(i).getConsumption(), myDetailDutchpayId, dutchpayPersonList));
+            sendDutchpayTotalList.add(DutchpayTotalResponse.of(sendDutchpayList.get(i).getConsumption(), myDetailDutchpayId, sendDutchpayList.get(i).getId(), dutchpayPersonList));
         }
 
         List<DutchpayTotalResponse> receiveDutchpayTotalList = new ArrayList<>();
@@ -69,9 +70,11 @@ public class DutchpayQueryService {
                 dutchpayPersonList.add(DutchpayPersonResponse.of(detailDutchpayList.get(j)));
                 log.info("보내는 세부더치페이{}", dutchpayPersonList.get(j));
             }
-            receiveDutchpayTotalList.add(DutchpayTotalResponse.of(receiveDutchpayList.get(i).getConsumption(), null, dutchpayPersonList));
+            receiveDutchpayTotalList.add(DutchpayTotalResponse.of(receiveDutchpayList.get(i).getConsumption(), null, receiveDutchpayList.get(i).getId(), dutchpayPersonList));
         }
 
+        Collections.sort(sendDutchpayTotalList, (o1, o2) -> Math.toIntExact(o2.dutchpayId() - o1.dutchpayId()));
+        Collections.sort(receiveDutchpayTotalList, (o1, o2) -> Math.toIntExact(o2.dutchpayId() - o1.dutchpayId()));
         DutchpayTotalListResponse dutchpayTotalListResponse = DutchpayTotalListResponse.of(sendDutchpayTotalList, receiveDutchpayTotalList);
 
         return dutchpayTotalListResponse;
