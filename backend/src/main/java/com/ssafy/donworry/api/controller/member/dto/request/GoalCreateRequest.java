@@ -3,6 +3,7 @@ package com.ssafy.donworry.api.controller.member.dto.request;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record GoalCreateRequest(
@@ -11,11 +12,9 @@ public record GoalCreateRequest(
         Long goalAmount,
 
         @NotNull
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime goalStartTime,
+        LocalDate goalStartTime,
 
         @NotNull
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime goalEndTime
+        LocalDate goalEndTime
 ) {
 }

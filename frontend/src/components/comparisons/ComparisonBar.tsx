@@ -11,7 +11,7 @@ const screenWidth = Dimensions.get('screen').width;
 const totalBarWidth = screenWidth - 60;
 const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
   if (props.myValue <= props.friendsValue) {
-    const smallBarWidth = totalBarWidth * (props.myValue / props.friendsValue);
+    const smallBarWidth = props.friendsValue === 0 ? 0 : totalBarWidth * (props.myValue / props.friendsValue);
     const innerStyles = StyleSheet.create({
       smallBar: {
         width: smallBarWidth,
@@ -43,7 +43,7 @@ const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
       </View>
     );
   } else {
-    const smallBarWidth = totalBarWidth * (props.friendsValue / props.myValue);
+    const smallBarWidth = props.myValue === 0 ? 0 : totalBarWidth * (props.friendsValue / props.myValue);
     const innerStyles = StyleSheet.create({
       smallBar: {
         width: smallBarWidth,

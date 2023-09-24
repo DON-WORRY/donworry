@@ -1,47 +1,100 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
-
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  FlatList,
+} from 'react-native';
+import { RouteProp } from '@react-navigation/native';
 import ComponentsHeader from '../../components/ComponentsHeader';
 import ComparisonHeader from '../../components/comparisons/ComparisonHeader';
 import ComparisonChart from '../../components/comparisons/ComparisonChart';
 import ComparisonBar from '../../components/comparisons/ComparisonBar';
 
-const myData: {
-  [keyName: string]: number;
-} = {
-  food: 296000,
-  transport: 100000,
-  hobby: 90000,
-  life: 800000,
-  etc: 72000,
-  style: 220000,
+// 타입 정의
+type RootStackParamList = {
+  ComparisonScreen: {
+    friendPk: string; // 예: 친구의 pk 값을 전달받기 위한 타입
+    // 필요한 다른 파라미터들도 여기에 추가
+  };
 };
 
-const friendData: {
-  [keyName: string]: number;
-} = {
-  food: 370000,
-  transport: 200000,
-  hobby: 50000,
-  life: 1000000,
-  etc: 400000,
-  style: 178000,
+type CategoryAmountList = CategoryAmount[];
+
+type CategoryAmount = {
+  amount: number;
+  category: string;
 };
 
-const categoryName: {
-  [keyName: string]: string;
-} = {
-  food: '식비',
-  transport: '교통',
-  hobby: '취미',
-  life: '가사',
-  etc: '기타',
-  style: '의류',
+type TotalDataPropsType = {
+  categoryName: string;
+  myValue: number;
+  friendsValue: number;
 };
 
-const modeKey = ['food', 'transport', 'hobby', 'life', 'style', 'etc'];
+type TotalDataType = {
+  totalData: TotalDataPropsType[];
+};
 
-const ComparisonScreen: React.FC = () => {
+type ComparisonScreenProps = {
+  route: RouteProp<RootStackParamList, 'ComparisonScreen'>;
+};
+
+const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
+  // const ComparisonScreen: React.FC = () => {
+  const friendPk = route.params?.friendPk ?? -1;
+  const [myData, setMyData] = useState<CategoryAmountList>([]);
+  const [friendData, setFriendData] = useState<CategoryAmountList>([]);
+  const [totalData, setTotalData] = useState<TotalDataType>({
+    totalData: [
+      {
+        categoryName: '여가',
+        myValue: 0,
+        friendsValue: 0,
+      },
+      {
+        categoryName: '쇼핑',
+        myValue: 0,
+        friendsValue: 0,
+      },
+      {
+        categoryName: '교통',
+        myValue: 0,
+        friendsValue: 0,
+      },
+      {
+        categoryName: '식비',
+        myValue: 0,
+        friendsValue: 0,
+      },
+      {
+        categoryName: '생활',
+        myValue: 0,
+        friendsValue: 0,
+      },
+      {
+        categoryName: '기타',
+        myValue: 0,
+        friendsValue: 0,
+      },
+    ],
+  });
+  const [nowFriendId, setNowFriendId] = useState(-1);
+
+  // // 소비 불러오기
+  // useEffect(() => {
+  //   async function fetch() {
+  //     // 내 소비 불러오기
+  //     // 친구 리스트 불러오기
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   if (nowFriendId !== -1) {
+  //   }
+  // }, [nowFriendId !== -1]);
+
   return (
     <View style={styles.container}>
       <ComponentsHeader />
@@ -50,9 +103,9 @@ const ComparisonScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         alwaysBounceHorizontal={true}
       >
-      <ComparisonHeader />
+        <ComparisonHeader />
         <ComparisonChart />
-        {modeKey.map((keyName) => {
+        {/* {modeKey.map((keyName) => {
           return (
             <View key={keyName}>
               <ComparisonBar
@@ -62,7 +115,21 @@ const ComparisonScreen: React.FC = () => {
               />
             </View>
           );
-        })}
+        })} */}
+        <FlatList
+          disableScrollViewPanResponder={true}
+          scrollEnabled={false}
+          keyExtractor={(c) => c.categoryName}
+          data={totalData.totalData}
+          // renderItem 정보를 추가해주어야 합니다. 예를 들면:
+          renderItem={({ item }) => (
+            <ComparisonBar
+              categoryName={item.categoryName}
+              myValue={item.myValue}
+              friendsValue={item.friendsValue}
+            />
+          )}
+        />
       </ScrollView>
     </View>
   );
