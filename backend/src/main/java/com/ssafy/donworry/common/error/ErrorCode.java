@@ -61,9 +61,10 @@ public enum ErrorCode {
 
     // DetailDutchpay
     DETAIL_DUTCHPAY_NOT_FOUND(400, "DD001", "존재하지 않는 세부 더치페이입니다!"),
-    DETAIL_DUTCHPAY_SAVE_ERROR(400, "DD002", "세부 더치페이 생성에 실패하였습니다.")
+    DETAIL_DUTCHPAY_SAVE_ERROR(400, "DD002", "세부 더치페이 생성에 실패하였습니다."),
 
-
+    // Transfer
+    ACCOUNT_NO_MONEY(400, "TF001", "계좌의 잔액이 부족합니다."),
 
     ;
 

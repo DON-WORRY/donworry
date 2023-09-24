@@ -100,43 +100,66 @@ public class DutchpayService {
                 .orElseThrow(
                         () -> new EntityNotFoundException(ErrorCode.DETAIL_DUTCHPAY_NOT_FOUND)
                 );
-
+        log.info("상세 더치페이id : {}", detailDutchpay.getId());
         // 간편 비밀번호 확인
         if(!encoder.matches(dutchpayTransferRequest.simplePassword(), detailDutchpay.getMember().getMemberSimplePassword())) {
             throw new InvalidValueException(ErrorCode.SIMPLE_PASSWORD_NOT_MATCH);
         }
-        log.info("상세 더치페이id : {}", detailDutchpay.getId());
+
+        /***/
+
         Account senderAccount = accountRepository.findFirstByMemberId(memberId);
-        Account account = accountRepository.findFirstByMemberId(detailDutchpay.getMember().getId());
+        Account receiverAccount = accountRepository.findFirstByMemberId(detailDutchpay.getDutchpay().getMember().getId());
+
+        Long price = dutchpayTransferRequest.sendPrice();
+
+        if(senderAccount.getAccountAmount() < price) {
+            throw new InvalidValueException(ErrorCode.ACCOUNT_NO_MONEY);
+        }
+
+        Long reqPrice = detailDutchpay.getDutchpayReqPrice();
+        Long receivePrice = detailDutchpay.getDutchpayReceivedPrice();
+
+        DutchpayStatus dutchpayStatus = (reqPrice <= receivePrice + price) ? DutchpayStatus.COMPLETE : DutchpayStatus.PROGRESS;
+        detailDutchpay.updateDetailDutchpay(price, dutchpayStatus);
+        senderAccount.updateSendAmount(price);
+        receiverAccount.updateReceiveAmount(price);
+
+        /***/
+
+
+        detailDutchpayRepository.save(detailDutchpay);
+        log.info("save consumption : {}", detailDutchpay.getId());
+        accountRepository.save(senderAccount);
+        log.info("save senderAccount : {}", senderAccount.getId());
+        accountRepository.save(receiverAccount);
+        log.info("save receiverAccount : {}", receiverAccount.getId());
+
+
         Income income = Income.of(
-                detailDutchpay.getDutchpay().getConsumption().getConsumptionDetail() + " 정산",
-                dutchpayTransferRequest.sendPrice(),
-                account.getAccountAmount(),
+                detailDutchpay.getDutchpay().getConsumption().getConsumptionDetail() + "(정산)",
+                price,
+                receiverAccount.getAccountAmount(),
                 detailDutchpay.getMember(),
-                account,
+                receiverAccount,
                 senderAccount,
                 detailDutchpay
         );
-        incomeRepository.save(income);
-        log.info("save income : {}", income);
-
-        Long reqPrice = detailDutchpay.getDutchpayReqPrice();
-        Long receivePrice = detailDutchpay.getDutchpayReceivedPrice() + dutchpayTransferRequest.sendPrice();
-        DutchpayStatus dutchpayStatus = (reqPrice <= receivePrice) ? DutchpayStatus.COMPLETE : DutchpayStatus.PROGRESS;
         Consumption consumption = Consumption.of(
-                detailDutchpay.getDutchpay().getConsumption().getConsumptionDetail() + " 정산",
-                dutchpayTransferRequest.sendPrice(),
+                detailDutchpay.getDutchpay().getConsumption().getConsumptionDetail() + "(정산)",
+                price,
                 senderAccount.getAccountAmount(),
                 dutchpayStatus,
                 memberRepository.findById(memberId).get(),
                 senderAccount,
-                account,
+                receiverAccount,
                 detailDutchpay.getDutchpay().getConsumption().getConsumptionCategory()
         );
-        consumptionRepository.save(consumption);
-        log.info("save consumption : {}", consumption);
 
-        // TODO: 2023-09-24 (024) 에러 검증 추가하기
+        incomeRepository.save(income);
+        log.info("save income : {}", income.getId());
+        consumptionRepository.save(consumption);
+        log.info("save consumption : {}", consumption.getId());
 
         return detailDutchpay.getId();
     }

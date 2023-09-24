@@ -62,4 +62,9 @@ public class DetailDutchpay extends BaseEntity {
                 .dutchpay(dutchpay)
                 .build();
     }
+
+    public void updateDetailDutchpay(Long price, DutchpayStatus dutchpayStatus) {
+        this.dutchpayReceivedPrice += price;
+        this.dutchpayStatus = dutchpayStatus;
+    }
 }
