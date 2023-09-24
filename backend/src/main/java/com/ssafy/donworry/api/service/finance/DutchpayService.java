@@ -117,6 +117,7 @@ public class DutchpayService {
                 senderAccount,
                 detailDutchpay
         );
+        incomeRepository.save(income);
         log.info("save income : {}", income);
 
         Long reqPrice = detailDutchpay.getDutchpayReqPrice();
@@ -132,6 +133,7 @@ public class DutchpayService {
                 account,
                 detailDutchpay.getDutchpay().getConsumption().getConsumptionCategory()
         );
+        consumptionRepository.save(consumption);
         log.info("save consumption : {}", consumption);
 
         // TODO: 2023-09-24 (024) 에러 검증 추가하기
