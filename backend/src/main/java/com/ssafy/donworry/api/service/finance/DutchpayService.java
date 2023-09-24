@@ -77,7 +77,7 @@ public class DutchpayService {
         log.info("update consumption dutchpayStatus : {}", consumption.getId());
 
         for (ReqAmountRequest req : dutchpayCreateRequest.reqAmountList()) {
-            Member reqMember = memberRepository.findById(req.memberId())
+            Member reqMember = memberRepository.findByMemberEmail(req.memberEmail())
                     .orElseThrow(
                             () -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
                     );
