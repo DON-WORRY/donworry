@@ -114,6 +114,7 @@ public class DutchpayService {
             throw new InvalidValueException(ErrorCode.ACCOUNT_NO_MONEY);
         }
 
+
         Long reqPrice = detailDutchpay.getDutchpayReqPrice();
         Long receivePrice = detailDutchpay.getDutchpayReceivedPrice();
 
@@ -126,7 +127,7 @@ public class DutchpayService {
 
 
         detailDutchpayRepository.save(detailDutchpay);
-        log.info("save consumption : {}", detailDutchpay.getId());
+        log.info("save detailDutchpay : {}", detailDutchpay.getId());
         accountRepository.save(senderAccount);
         log.info("save senderAccount : {}", senderAccount.getId());
         accountRepository.save(receiverAccount);

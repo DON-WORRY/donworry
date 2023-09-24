@@ -34,6 +34,18 @@ public class DetailDutchpayQueryRepository {
                 .fetch();
     }
 
+    public List<Dutchpay> searchReceiveDutchpayList(Long memberId) {
+        return jpaQueryFactory
+                .select(dutchpay)
+                .from(detailDutchpay)
+                .join(detailDutchpay.dutchpay, dutchpay)
+                .where(
+                        dutchpay.member.id.eq(memberId),
+                        dutchpay.dutchpayStatus.eq(PROGRESS)
+                )
+                .fetch();
+    }
+
     public List<DetailDutchpay> searchDetailDutchpayList(Long dutchpayId) {
         return jpaQueryFactory
                 .select(detailDutchpay)
@@ -41,5 +53,6 @@ public class DetailDutchpayQueryRepository {
                 .where(detailDutchpay.dutchpay.id.eq(dutchpayId))
                 .fetch();
     }
+
 
 }

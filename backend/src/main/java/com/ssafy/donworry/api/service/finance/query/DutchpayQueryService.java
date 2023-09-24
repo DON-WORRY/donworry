@@ -53,7 +53,7 @@ public class DutchpayQueryService {
 
         // 보내야 할 더치페이 가져오기
         // 나의 멤버 아이디가 들어있는 세부더치페이의 더치페이 아이디 리스트 가져오기
-        List<Dutchpay> receiveDutchpayList = dutchpayRepository.findAllByMemberId(memberId);
+        List<Dutchpay> receiveDutchpayList = detailDutchpayQueryRepository.searchReceiveDutchpayList(memberId);
         // 리스트롤 통해 한 더치페이 현황 가져오기
         for(int i = 0; i < receiveDutchpayList.size(); i++) {
             log.info("받아야할 더치페이 ID : {}", receiveDutchpayList.get(i).getId());
