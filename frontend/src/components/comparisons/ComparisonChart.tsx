@@ -101,7 +101,7 @@ const RadarChartExample: React.FC<ComparisonProps> = (props) => {
       <VictoryChart
         polar
         theme={VictoryTheme.material}
-        domain={{ y: [0, maxValue + maxValue * 0.1] }}
+        domain={{ y: [0, maxValue ? maxValue + maxValue * 0.1 : 10] }}
         startAngle={30}
         endAngle={390}
         // height={screenWidth * 0.9}
