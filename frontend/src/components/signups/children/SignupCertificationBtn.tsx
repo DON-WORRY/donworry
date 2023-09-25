@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { userEmailJoin } from '../../../utils/UserFunctions';
 
 interface SignupCertificationBtnProps {
@@ -22,9 +22,13 @@ const SignupCertificationBtn: React.FC<SignupCertificationBtnProps> = (
       .then((res) => {
         props.setIsLoading(false);
       })
-      .catch(() => {
+      .catch((e) => {
+        console.error(e.response.data.message)
         props.setIsLoading(false);
-        return alert('이메일을 작성해주세요.');
+        return Alert.alert("이메일 중복", `${e.response.data.message}`, [{
+          text: "확인",
+          onPress: () => {}
+        }]);
       });
   }
   return (

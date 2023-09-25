@@ -18,7 +18,7 @@ const ComparisonHeader: React.FC = () => {
           <Text style={styles.headerText}>친구 소비</Text>
         </View>
       </View>
-        <SelectDropdown
+        {/* <SelectDropdown
           data={countries}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index);
@@ -37,7 +37,7 @@ const ComparisonHeader: React.FC = () => {
             styles.dropDownBox
           }
           defaultButtonText={"친구1"}
-        />
+        /> */}
     </View>
   );
 };

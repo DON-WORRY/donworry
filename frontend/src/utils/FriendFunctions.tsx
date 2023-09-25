@@ -1,6 +1,12 @@
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
 
+type Friend = {
+  friendId: number;
+  friendName: string;
+  friendEmail: string;
+};
+
 // // 친구 목록 조회
 export async function friendListInquiry(): Promise<any> {
   return axiosWithAuth
@@ -15,14 +21,13 @@ export async function friendListInquiry(): Promise<any> {
 }
 
 // 친구 요청 리스트
-export async function friendRequestList() {
+export async function friendRequestList() : Promise<void> {
   return axiosWithAuth
     .get('/api/friends/request/list')
     .then((res) => {
       return res.data;
     })
     .catch((e) => {
-      console.log(e);
       throw e;
     });
 }

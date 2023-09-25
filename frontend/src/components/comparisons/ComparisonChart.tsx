@@ -10,8 +10,21 @@ import {
 } from 'victory-native';
 
 const screenWidth = Dimensions.get('screen').width;
+type TotalDataPropsType = {
+  categoryName: string;
+  myValue: number;
+  friendsValue: number;
+};
 
-const RadarChartExample: React.FC = () => {
+type TotalDataType = {
+  totalData: TotalDataPropsType[];
+};
+
+interface ComparisonProps {
+  totalData: TotalDataType;
+}
+
+const RadarChartExample: React.FC<ComparisonProps> = (props) => {
   const adjustLabelPosition = (
     x: number | undefined,
     y: number | undefined,
