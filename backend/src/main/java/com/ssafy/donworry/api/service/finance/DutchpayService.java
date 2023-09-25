@@ -87,7 +87,7 @@ public class DutchpayService {
                     );
             try {
                 DetailDutchpay detailDutchpay = DetailDutchpay.of(req, reqMember, dutchpay);
-                detailDutchpayRepository.save(detailDutchpay);
+                detailDutchpayRepository. save(detailDutchpay);
             }
             catch (Exception e) {
                 throw new InvalidValueException(ErrorCode.DETAIL_DUTCHPAY_SAVE_ERROR);

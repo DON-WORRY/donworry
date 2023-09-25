@@ -69,15 +69,10 @@ public enum ErrorCode {
     DETAIL_DUTCHPAY_MEMBER_NOT_MATCH(400, "DD003", "세부 더치페이 회원과 로그인 한 회원이 일치하지 않습니다."),
 
     // Transfer
-    ACCOUNT_NO_MONEY(400, "TF001", "계좌의 잔액이 부족합니다."),
-
-    ;
-
-
+    ACCOUNT_NO_MONEY(400, "TF001", "계좌의 잔액이 부족합니다.");
 
     private final int status;
     private final String code;
     private final String message;
-
 
 }
