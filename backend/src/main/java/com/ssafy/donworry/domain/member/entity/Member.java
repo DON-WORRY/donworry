@@ -142,7 +142,7 @@ public class Member extends BaseEntity {
                 .memberGender(request.memberGender())
                 .memberRole(request.memberRole())
                 .memberActivateStatus(request.memberActivateStatus())
-                .memberOauthProvider(OauthProvider.NONE)
+                .memberOauthProvider(request.memberOauthProvider())
                 .memberBirthDate(request.memberBirthDate())
                 .build();
     }

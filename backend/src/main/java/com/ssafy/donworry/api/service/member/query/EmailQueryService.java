@@ -4,6 +4,7 @@ import com.ssafy.donworry.api.service.member.request.EmailCheckAuthCodeServiceRe
 import com.ssafy.donworry.common.error.ErrorCode;
 import com.ssafy.donworry.common.error.exception.EntityNotFoundException;
 import com.ssafy.donworry.common.error.exception.InvalidValueException;
+import com.ssafy.donworry.common.util.RandomUtil;
 import com.ssafy.donworry.common.util.RedisUtil;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
 import jakarta.mail.MessagingException;
@@ -28,15 +29,16 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class EmailQueryService {
 
+    private final RedisUtil redisUtil;
     private final JavaMailSender mailSender;
     private final MemberRepository memberRepository;
-    private final RedisUtil redisUtil;
+    private final RandomUtil randomUtil;
 
     public void joinEmail(String email){
         if(memberRepository.existsByMemberEmail(email))
             throw new EntityNotFoundException(ErrorCode.MEMBER_DUPLICATE);
 
-        String authCode = createAuthCode();
+        String authCode = randomUtil.createAuthCode();
 
         try{
             MimeMessage emailForm = createEmailForm(email, authCode);
@@ -46,24 +48,6 @@ public class EmailQueryService {
         }
 
         redisUtil.setEmail(email, authCode);
-    }
-
-    private String createAuthCode() {
-        int length = 6;
-        final int leftLimit = 48;
-        // 소문자 'z'
-        final int rightLimit = 122;
-
-        Random random = new Random();
-        try{
-            return random.ints(leftLimit, rightLimit + 1)
-                    .filter(x -> (x <= 57 || x >= 65) && (x <= 90 || x >= 97))
-                    .limit(length)
-                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                    .toString();
-        } catch(InvalidValueException e){
-            throw new InvalidValueException(ErrorCode.RANDOM_CODE_ERROR);
-        }
     }
 
     private MimeMessage createEmailForm(String email, String authCode) throws MessagingException, UnsupportedEncodingException {
