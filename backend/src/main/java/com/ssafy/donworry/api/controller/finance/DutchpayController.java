@@ -29,13 +29,13 @@ public class DutchpayController {
 
     @Operation(summary = "더치페이 요청", description = "해당 거래내역에서 더치페이를 요청할 수 있는 API입니다.")
     @PostMapping("/create")
-    public ApiData<DutchpayTotalResponse> createDutchpay(@AuthenticationPrincipal UserDetailsModel userDetailsModel,
+    public ApiData<Long> createDutchpay(@AuthenticationPrincipal UserDetailsModel userDetailsModel,
                                                          @RequestBody DutchpayCreateRequest dutchpayCreateRequest) {
         log.info("createDutchpay : {}", dutchpayCreateRequest.consumptionId());
         Long memberId = userDetailsModel.getId();
 
-        DutchpayTotalResponse dutchpayTotalResponse = dutchpayService.createDutchpay(dutchpayCreateRequest, memberId);
-        return ApiData.of(dutchpayTotalResponse);
+        Long dutchpayId = dutchpayService.createDutchpay(dutchpayCreateRequest, memberId);
+        return ApiData.of(dutchpayId);
     }
 
     @Operation(summary = "더치페이 조회", description = "현재 사용자가 요청한 더치페이 항목을 조회할 수 있는 API입니다.")
