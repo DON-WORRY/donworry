@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 // 함수
-import { consumptionCategoryTotal } from '../../utils/ConsumptionFunctions';
+import {
+  consumptionCategoryTotal,
+  consumptionFriendRank,
+} from '../../utils/ConsumptionFunctions';
 import {
   friendListInquiry,
   friendTotalSpend,
@@ -81,6 +84,15 @@ const FriendSpendKing: React.FC = () => {
     const fetchName = async () => {
       const newName = await getData('memberName');
       setMyName(newName);
+      const tmpRank = await consumptionFriendRank()
+        .then((r) => {
+          console.log(r)          
+          return r
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+      await setRank(tmpRank);
     };
     fetchName();
   }, []);
@@ -131,9 +143,9 @@ const FriendSpendKing: React.FC = () => {
         })
       );
       type Tmp = {
-        value: CategoryAmountList
-      }
-      const allValues = tmp.flatMap((item : any) => item.value);
+        value: CategoryAmountList;
+      };
+      const allValues = tmp.flatMap((item: any) => item.value);
 
       const groupedByCategory = allValues.reduce((acc, curr) => {
         if (!acc[curr.category]) {
@@ -163,7 +175,7 @@ const FriendSpendKing: React.FC = () => {
   // 빈 배열을 전달하여 한 번만 실행되도록 함
   return (
     <View style={styles.container}>
-      <FriendSpendHeader friendsNumber={friendsNumber} rank={rank} />
+      <FriendSpendHeader friendsNumber={friendsNumber} rank={rank}/>
       <FriendCubes myName={myName} />
       <FriendSpendChart
         kingsAmount={friendsMinValues}
