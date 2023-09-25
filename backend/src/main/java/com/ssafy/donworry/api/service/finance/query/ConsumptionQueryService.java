@@ -1,9 +1,14 @@
 package com.ssafy.donworry.api.service.finance.query;
 
 import com.querydsl.core.Tuple;
+import com.ssafy.donworry.api.controller.account.dto.response.AccountAllResponse;
+import com.ssafy.donworry.api.controller.finance.FriendRankResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
+import com.ssafy.donworry.api.controller.member.dto.response.FriendListResponse;
+import com.ssafy.donworry.api.service.account.query.AccountQueryService;
+import com.ssafy.donworry.api.service.member.query.FriendQueryService;
 import com.ssafy.donworry.common.response.ApiError;
 import com.ssafy.donworry.domain.finance.entity.Consumption;
 import com.ssafy.donworry.domain.finance.repository.query.ConsumptionQueryRepository;
@@ -25,6 +30,8 @@ public class ConsumptionQueryService {
     private final MemberRepository memberRepository;
     private final ConsumptionQueryRepository consumptionQueryRepository;
     private final IncomeQueryRepository incomeQueryRepository;
+    private final FriendQueryService friendQueryService;
+    private final AccountQueryService accountQueryService;
 
     public CategoryTotalResponse searchCategoryTotal(Long memberId, int month) {
         // 1. 소비 데이터 가져오기
@@ -129,4 +136,20 @@ public class ConsumptionQueryService {
         return categoryAmountList;
     }
 
+    public FriendRankResponse findUserRank(Long memberId) {
+        log.debug("ConsumptionQueryServer -> findUserRank -> memberId : " + memberId);
+        // 친구 리스트 불러오기
+        FriendListResponse friendListResponse = friendQueryService.searchFriend(memberId);
+        List<Long> friendEachTotalPrice = new ArrayList<>();
+        Long memberTotalPrice = accountQueryService.searchAccountList(memberId).total();
+        Long friendId = null;
+
+        for(int i = 0; i < friendListResponse.friendResponseList().size(); i++){
+            friendId = friendListResponse.friendResponseList().get(i).friendId();
+            AccountAllResponse accountAllResponse = accountQueryService.searchAccountList(friendId);
+            if(memberTotalPrice < accountAllResponse.total())friendEachTotalPrice.add(accountAllResponse.total());
+        }
+        // 친구 리스트 기반
+        return FriendRankResponse.of((long) (friendEachTotalPrice.size()+1));
+    }
 }

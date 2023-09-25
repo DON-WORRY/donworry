@@ -1,10 +1,7 @@
 package com.ssafy.donworry.api.controller.finance;
 
 import com.ssafy.donworry.api.controller.finance.dto.request.CategoryModifyRequest;
-import com.ssafy.donworry.api.controller.finance.dto.response.CategoryAmountResponse;
-import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
-import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalHistoryResponse;
-import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
+import com.ssafy.donworry.api.controller.finance.dto.response.*;
 import com.ssafy.donworry.api.service.finance.ConsumptionService;
 import com.ssafy.donworry.api.service.finance.query.ConsumptionQueryService;
 import com.ssafy.donworry.common.model.UserDetailsModel;
@@ -76,6 +73,15 @@ public class ConsumptionController {
 
         return ApiData.of(id);
     }
+
+    @Operation(summary = "사용자의 소비 등수 확인", description = "사용자의 친구들 중 소비 등수를 확인하는 API입니다.")
+    @GetMapping("/friendrank")
+    public ApiData<FriendRankResponse> selectFriendUserRank(@AuthenticationPrincipal UserDetailsModel userDetailsModel) {
+        Long memberId = userDetailsModel.getId();
+        FriendRankResponse friendRankResponse = consumptionQueryService.findUserRank(memberId);
+        return ApiData.of(friendRankResponse);
+    }
+
 
     /**
      *  비즈니스 로직
