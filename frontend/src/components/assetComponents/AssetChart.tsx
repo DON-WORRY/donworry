@@ -40,6 +40,33 @@ const formatAmount = (amount: string): string => {
   return parseInt(amount, 10).toLocaleString('ko-KR') + '원';
 };
 
+const labelAmount = (amount: number) => {
+  if (amount < 10000) {
+    return `${amount}원`;
+  }
+  
+  const chkAmount = Math.floor(amount / 10000) * 10000;
+  let truncatedAmount = chkAmount;
+
+  const units = ['', '만', '억', '조'];
+  let formattedStr = '';
+  
+  for (const unit of units) {
+    const part = truncatedAmount % 10000;
+    
+    if (part !== 0) {
+      formattedStr = `${part}${unit} ` + formattedStr;
+    }
+    
+    truncatedAmount = Math.floor(truncatedAmount / 10000);
+    if (truncatedAmount === 0) {
+      break;
+    }
+  }
+  
+  return formattedStr.trim() + '원';
+};
+
 const AssetChart: React.FC<AssetChartProps> = (props) => {
   const [userName, setUserName] = useState('');
   const [monthAmount, setMonthAmount] = useState(0);
@@ -145,7 +172,7 @@ const AssetChart: React.FC<AssetChartProps> = (props) => {
               datum,
             }: {
               datum: { originalX: number; x: number; y: number };
-            }) => `${datum.originalX}월: ${formatAmount(datum.y.toString())}`}
+            }) => ` ${labelAmount(datum.y)} `}
             labelComponent={
               <VictoryTooltip
                 renderInPortal={false}

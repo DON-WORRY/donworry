@@ -8,10 +8,25 @@ type CategoryModifyData = {
 
 type DutchPayRequestData = {
   consumptionId: number;
-  friendId: number;
-  price: number;
+  reqAmountList: {
+    memberEmail: string;
+    price: number;
+  }[];
 };
+export { DutchPayRequestData };
 
+interface ConsumptionDataProps {
+  total(total: any): unknown;
+  categoryHistoryResponseList: {
+    bankName: string;
+    detail: string;
+    price: number;
+    dateTime: string;
+    id: number;
+  }[];
+}
+
+// 값을 가져오기
 const getData = async (key: string) => {
   try {
     const value = await AsyncStorage.getItem(key);
@@ -38,17 +53,21 @@ export async function consumptionCategoryTotal(month: number): Promise<any> {
 }
 
 // 카테고리별 소비내역
-export async function consumptionCategoryHistory(id: number): Promise<void> {
+export async function consumptionCategoryHistory(
+  id: number,
+  month: number
+): Promise<ConsumptionDataProps> {
   return axiosWithAuth
-    .get(`/api/consumption/history/${id}`)
+    .get(`/api/consumption/history/${id}?month=${month}`)
     .then((res) => {
-      return res.data;
+      return res.data.data;
     })
     .catch((e) => {
       console.error(e);
       throw e;
     });
 }
+export { ConsumptionDataProps };
 
 // 카테고리 변경
 export async function consumptionCategoryModify(
@@ -80,9 +99,7 @@ export async function consumptionDutchPayInquiry(): Promise<void> {
 }
 
 // 더치페이 요청
-export async function consumptionDutchPayRequest(
-  tmpData: DutchPayRequestData
-): Promise<void> {
+export async function consumptionDutchPayRequest(data: DutchPayRequestData) {
   // 받아온 memberId값이 string이기때문에 변환해줘야 한다.
   // parseInt(stringValue, 10)
   /*
@@ -95,15 +112,15 @@ export async function consumptionDutchPayRequest(
     }
   ]
 } */
-  const data = {
-    id: tmpData.consumptionId,
-    reqAmountList: [
-      {
-        memberId: tmpData.friendId,
-        price: tmpData.price,
-      },
-    ],
-  };
+  // const data = {
+  //   id: tmpData.consumptionId,
+  //   reqAmountList: [
+  //     {
+  //       memberId: tmpData.friendId,
+  //       price: tmpData.price,
+  //     },
+  //   ],
+  // };
   return axiosWithAuth
     .post('/api/dutchpay/create', data)
     .then((res) => {
