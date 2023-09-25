@@ -8,7 +8,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import ContentButton from '../ContentButton';
+import { Button } from '../ContentButton';
 import { images } from '../../assets/bank&card';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -117,15 +117,14 @@ const HomeSpend: React.FC = () => {
                   </Text>
                 </View>
               </View>
-              <TouchableOpacity
+              <Button
+                title="조회"
                 onPress={() => {
                   navigation.navigate('StackNavigation', {
                     screen: 'Consumption',
                   });
                 }}
-              >
-                <ContentButton />
-              </TouchableOpacity>
+              />
             </View>
           );
         }
