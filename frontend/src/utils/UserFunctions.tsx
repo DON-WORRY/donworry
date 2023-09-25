@@ -68,7 +68,7 @@ export function userLogin(data: LoginData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/members/login', data)
     .then(async (response) => {
-      console.log(response.data.data.memberBirthDate)
+      // console.log(response.data.data)
       const accessToken = await response.data.data.accessToken;
       const memberEmail = await response.data.data.memberEmail;
       const memberId = await response.data.data.memberId.toString();
