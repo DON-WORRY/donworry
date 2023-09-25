@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import {
   VictoryChart,
@@ -25,6 +25,27 @@ interface ComparisonProps {
 }
 
 const RadarChartExample: React.FC<ComparisonProps> = (props) => {
+  const [maxValue, setMaxValue] = useState(5);
+
+  useEffect(() => {
+    const tmpMaxValue = Math.max(
+      props.totalData.totalData[0].myValue,
+      props.totalData.totalData[1].myValue,
+      props.totalData.totalData[2].myValue,
+      props.totalData.totalData[3].myValue,
+      props.totalData.totalData[4].myValue,
+      props.totalData.totalData[5].myValue,
+      props.totalData.totalData[0].friendsValue,
+      props.totalData.totalData[1].friendsValue,
+      props.totalData.totalData[2].friendsValue,
+      props.totalData.totalData[3].friendsValue,
+      props.totalData.totalData[4].friendsValue,
+      props.totalData.totalData[5].friendsValue
+    );
+    setMaxValue(tmpMaxValue);
+    console.log(tmpMaxValue);
+  }, [props.totalData]);
+
   const adjustLabelPosition = (
     x: number | undefined,
     y: number | undefined,
@@ -58,21 +79,21 @@ const RadarChartExample: React.FC<ComparisonProps> = (props) => {
   };
 
   const data = [
-    { x: 0, y: 2 },
-    { x: 60, y: 3 },
-    { x: 120, y: 5 },
-    { x: 180, y: 1 },
-    { x: 240, y: 4 },
-    { x: 300, y: 2 },
+    { x: 0, y: props.totalData.totalData[0].myValue },
+    { x: 60, y: props.totalData.totalData[1].myValue },
+    { x: 120, y: props.totalData.totalData[2].myValue },
+    { x: 180, y: props.totalData.totalData[3].myValue },
+    { x: 240, y: props.totalData.totalData[4].myValue },
+    { x: 300, y: props.totalData.totalData[5].myValue },
   ];
 
   const data2 = [
-    { x: 0, y: 5 },
-    { x: 60, y: 4 },
-    { x: 120, y: 2 },
-    { x: 180, y: 3 },
-    { x: 240, y: 1 },
-    { x: 300, y: 5 },
+    { x: 0, y: props.totalData.totalData[0].friendsValue },
+    { x: 60, y: props.totalData.totalData[1].friendsValue },
+    { x: 120, y: props.totalData.totalData[2].friendsValue },
+    { x: 180, y: props.totalData.totalData[3].friendsValue },
+    { x: 240, y: props.totalData.totalData[4].friendsValue },
+    { x: 300, y: props.totalData.totalData[5].friendsValue },
   ];
 
   return (
@@ -80,7 +101,7 @@ const RadarChartExample: React.FC<ComparisonProps> = (props) => {
       <VictoryChart
         polar
         theme={VictoryTheme.material}
-        domain={{ y: [0, 5] }}
+        domain={{ y: [0, maxValue ? maxValue + maxValue * 0.1 : 10] }}
         startAngle={30}
         endAngle={390}
         // height={screenWidth * 0.9}
@@ -100,7 +121,14 @@ const RadarChartExample: React.FC<ComparisonProps> = (props) => {
         <VictoryPolarAxis
           labelPlacement="vertical"
           tickValues={[0, 60, 120, 180, 240, 300]}
-          tickFormat={['식비', '교통', '생활', '의류', '유흥', '기타']}
+          tickFormat={[
+            props.totalData.totalData[0].categoryName,
+            props.totalData.totalData[1].categoryName,
+            props.totalData.totalData[2].categoryName,
+            props.totalData.totalData[3].categoryName,
+            props.totalData.totalData[4].categoryName,
+            props.totalData.totalData[5].categoryName,
+          ]}
           style={{
             axis: { stroke: 'black' },
             ticks: { stroke: 'black' },

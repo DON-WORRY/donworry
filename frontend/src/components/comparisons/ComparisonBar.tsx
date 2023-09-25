@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
 
 interface ComparisonBarProps {
@@ -10,8 +10,23 @@ interface ComparisonBarProps {
 const screenWidth = Dimensions.get('screen').width;
 const totalBarWidth = screenWidth - 60;
 const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
+  const [myValue, setMyValue] = useState('');
+  const [friendValue, setFriendValue] = useState('');
+  const [amountDifference, setAmountDifference] = useState('');
+  useEffect(() => {
+    setMyValue(numberWithCommas(props.myValue));
+    setFriendValue(numberWithCommas(props.friendsValue));
+    setAmountDifference(numberWithCommas(props.myValue - props.friendsValue));
+  }, [props.friendsValue || props.myValue]);
+  function numberWithCommas(x: number) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
   if (props.myValue <= props.friendsValue) {
-    const smallBarWidth = props.friendsValue === 0 ? 0 : totalBarWidth * (props.myValue / props.friendsValue);
+    const smallBarWidth =
+      props.friendsValue === 0
+        ? 0
+        : totalBarWidth * (props.myValue / props.friendsValue);
     const innerStyles = StyleSheet.create({
       smallBar: {
         width: smallBarWidth,
@@ -33,17 +48,23 @@ const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
       <View style={styles.container}>
         <View style={styles.smallContainer}>
           <Text style={styles.titleText}>{props.categoryName}</Text>
-          <Text style={styles.valueText}>{props.friendsValue}원</Text>
+          <Text style={styles.valueText}>{friendValue}원</Text>
         </View>
         <View style={innerStyles.totalBar}>
           <View style={innerStyles.smallBar}>
-            <Text style={styles.innerText}>{props.myValue}원</Text>
+            <Text style={styles.innerText}>{myValue}원</Text>
           </View>
+          <Text style={styles.amountDifference}>
+            소비한 금액 차이 : {amountDifference}
+          </Text>
         </View>
       </View>
     );
   } else {
-    const smallBarWidth = props.myValue === 0 ? 0 : totalBarWidth * (props.friendsValue / props.myValue);
+    const smallBarWidth =
+      props.myValue === 0
+        ? 0
+        : totalBarWidth * (props.friendsValue / props.myValue);
     const innerStyles = StyleSheet.create({
       smallBar: {
         width: smallBarWidth,
@@ -65,12 +86,15 @@ const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
       <View style={styles.container}>
         <View style={styles.smallContainer}>
           <Text style={styles.titleText}>{props.categoryName}</Text>
-          <Text style={styles.valueText}>{props.myValue}원</Text>
+          <Text style={styles.valueText}>{myValue}원</Text>
         </View>
         <View style={innerStyles.totalBar}>
           <View style={innerStyles.smallBar}>
-            <Text style={styles.innerText}>{props.friendsValue}원</Text>
+            <Text style={styles.innerText}>{friendValue}원</Text>
           </View>
+          <Text style={styles.amountDifference}>
+            소비한 금액 차이 : {amountDifference}원
+          </Text>
         </View>
       </View>
     );
@@ -81,7 +105,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     backgroundColor: 'white',
-    height: 100,
+    height: 130,
     width: screenWidth - 40,
     marginBottom: 10,
     borderRadius: 15,
@@ -99,11 +123,16 @@ const styles = StyleSheet.create({
   smallContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: "flex-end"
+    alignItems: 'flex-end',
   },
   valueText: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  amountDifference: {
+    marginTop: 5,
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
 

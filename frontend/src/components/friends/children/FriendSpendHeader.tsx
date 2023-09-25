@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Dimensions, Text, StyleSheet } from 'react-native';
-
+import { consumptionFriendRank } from '../../../utils/ConsumptionFunctions';
 interface FriendSpendHeader {
   friendsNumber: number;
-  rank: number;
+  rank: number
 }
 
 const FriendSpendHeader: React.FC<FriendSpendHeader> = (props) => {
@@ -22,26 +22,26 @@ const FriendSpendHeader: React.FC<FriendSpendHeader> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     marginBottom: 20,
   },
   smallBox: {
-    flexDirection: "row"
+    flexDirection: 'row',
   },
   friendsNumberText: {
     fontSize: 24,
-    fontWeight: "500"
+    fontWeight: '500',
   },
   spendText: {
     fontSize: 32,
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   rankText: {
     fontSize: 32,
     color: '#F69496',
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
 });
 

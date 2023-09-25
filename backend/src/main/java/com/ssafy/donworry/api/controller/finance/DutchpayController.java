@@ -57,11 +57,11 @@ public class DutchpayController {
 
     @Operation(summary = "더치페이 송금", description = "더치페이에 대한 송금을 할 수 있는 API입니다.")
     @PostMapping("/transfer")
-    public ApiData<Long> transfer(@AuthenticationPrincipal UserDetailsModel userDetailsModel,
+    public ApiData<Long> transferByDetailDutchpay(@AuthenticationPrincipal UserDetailsModel userDetailsModel,
                                   @RequestBody DutchpayTransferRequest dutchpayTransferRequest) {
         Long memberId = userDetailsModel.getId();
-        Long l = dutchpayService.dutchpayTransfer(memberId, dutchpayTransferRequest);
-        return ApiData.of(l);
+        Long result = dutchpayService.dutchpayTransfer(memberId, dutchpayTransferRequest);
+        return ApiData.of(result);
     }
 
 }

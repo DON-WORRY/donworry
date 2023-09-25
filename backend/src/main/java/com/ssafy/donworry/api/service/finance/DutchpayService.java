@@ -115,7 +115,7 @@ public class DutchpayService {
         /***/
 
         Account senderAccount = accountRepository.findFirstByMemberId(memberId);
-        Account receiverAccount = accountRepository.findFirstByMemberId(detailDutchpay.getDutchpay().getMember().getId());
+        Account receiverAccount = detailDutchpay.getDutchpay().getConsumption().getAccount();
 
         Long price = dutchpayTransferRequest.sendPrice();
 

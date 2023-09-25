@@ -159,3 +159,14 @@ export async function consumptionDutchPayAllComplete(
       throw e;
     });
 }
+
+export async function consumptionFriendRank() : Promise<any> {
+  return axiosWithAuth
+  .get("api/consumption/friendrank")
+  .then((r) => {
+    return r.data.data.rank
+  })
+  .catch((e) => {
+    throw e;
+  })
+}

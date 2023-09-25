@@ -17,7 +17,7 @@ type DrawerProps = {
     openDrawer: () => void;
   };
 };
-const donWorryHeader = require('../assets/logo/DonWorryHeader.png');
+const donWorryHeader = require('../assets/logo/DONWORRYCOLOR.png');
 const screenWidth = Dimensions.get('screen').width;
 
 const ComponentsHeader: React.FC = () => {
@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   image: {
-    height: screenWidth * 0.1,
-    width: screenWidth * 0.37,
+    height: screenWidth * 0.08,
+    width: screenWidth * 0.4,
   },
 });
 
