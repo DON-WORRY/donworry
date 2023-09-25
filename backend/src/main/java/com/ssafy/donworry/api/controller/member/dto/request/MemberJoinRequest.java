@@ -1,6 +1,7 @@
 package com.ssafy.donworry.api.controller.member.dto.request;
 
 import com.ssafy.donworry.domain.member.entity.enums.MemberGender;
+import com.ssafy.donworry.domain.member.entity.enums.OauthProvider;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -21,7 +22,6 @@ public record MemberJoinRequest(
         String memberEmail,
 
         @Size(max = 11)
-        @NotNull
         @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)(?=.*[@$!%#*?&])[A-Za-z\\d@$!%*#?&]+$",
                 message = "비밀번호는 영문 소문자, 숫자, 특수문자(@$#!%*?&)를 포함해야 합니다.")
         String memberPassword,
@@ -31,6 +31,9 @@ public record MemberJoinRequest(
 
         @NotNull
         MemberGender memberGender,
+
+        @NotNull
+        OauthProvider memberOauthProvider,
 
         @NotNull
         LocalDate memberBirthDate
