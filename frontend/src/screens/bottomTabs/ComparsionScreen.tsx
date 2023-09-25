@@ -59,45 +59,95 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
   // const ComparisonScreen: React.FC = () => {
   const friendPk = route.params?.friendPk ?? -1;
   const [friendList, setFriendList] = useState<Friend[]>([]);
-  const [myData, setMyData] = useState<CategoryAmountList>([]);
-  const [friendData, setFriendData] = useState<CategoryAmountList>([]);
+  const [myData, setMyData] = useState<CategoryAmountList>([
+    {
+      category: '여가',
+      amount: 0,
+    },
+    {
+      category: '쇼핑',
+      amount: 0,
+    },
+    {
+      category: '교통',
+      amount: 0,
+    },
+    {
+      category: '식비',
+      amount: 0,
+    },
+    {
+      category: '생활',
+      amount: 0,
+    },
+    {
+      category: '기타',
+      amount: 0,
+    },
+  ]);
+  const [friendData, setFriendData] = useState<CategoryAmountList>([
+    {
+      category: '여가',
+      amount: 0,
+    },
+    {
+      category: '쇼핑',
+      amount: 0,
+    },
+    {
+      category: '교통',
+      amount: 0,
+    },
+    {
+      category: '식비',
+      amount: 0,
+    },
+    {
+      category: '생활',
+      amount: 0,
+    },
+    {
+      category: '기타',
+      amount: 0,
+    },
+  ]);
   const [totalData, setTotalData] = useState<TotalDataType>({
     totalData: [
       {
         categoryName: '여가',
         myValue: 0,
-        friendsValue: 0,
+        friendsValue: -1,
       },
       {
         categoryName: '쇼핑',
         myValue: 0,
-        friendsValue: 0,
+        friendsValue: -1,
       },
       {
         categoryName: '교통',
         myValue: 0,
-        friendsValue: 0,
+        friendsValue: -1,
       },
       {
         categoryName: '식비',
         myValue: 0,
-        friendsValue: 0,
+        friendsValue: -1,
       },
       {
         categoryName: '생활',
         myValue: 0,
-        friendsValue: 0,
+        friendsValue: -1,
       },
       {
         categoryName: '기타',
         myValue: 0,
-        friendsValue: 0,
+        friendsValue: -1,
       },
     ],
   });
   const [nowFriendId, setNowFriendId] = useState(-1);
   useEffect(() => {
-    // 가장 처음은 friend data를 업데이트하자
+// 가장 처음은 friend data를 업데이트하자
     // 내 데이터도 업데이트 해야한다.
     async function fetchFriends() {
       const newFriends: Friend[] = await friendListInquiry()
@@ -121,13 +171,12 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
       console.log(tmpMyData);
     }
 
-    async function allUpdate() {
-      await fetchFriends();
-      await fetchComparisonData();
-      // farams로 못 불러왔을 때
-      // 바로 비교 페이지로 들어갔을 때
-    }
+      fetchFriends();
+  }, [])
 
+
+
+  useEffect(() => {
     async function fetchComparisonData() {
       if (Number(friendPk) === -1) {
         // 친구가 있을 때
@@ -153,34 +202,34 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
           const newData = await {
             totalData: [
               {
-                categoryName: friendData[0].category,
+                categoryName: nowFriend[0].category,
                 myValue: myData[0].amount,
-                friendsValue: friendData[0].amount,
+                friendsValue: nowFriend[0].amount,
               },
               {
-                categoryName: friendData[1].category,
+                categoryName: nowFriend[1].category,
                 myValue: myData[1].amount,
-                friendsValue: friendData[1].amount,
+                friendsValue: nowFriend[1].amount,
               },
               {
-                categoryName: friendData[2].category,
+                categoryName: nowFriend[2].category,
                 myValue: myData[2].amount,
-                friendsValue: friendData[2].amount,
+                friendsValue: nowFriend[2].amount,
               },
               {
-                categoryName: friendData[3].category,
+                categoryName: nowFriend[3].category,
                 myValue: myData[3].amount,
-                friendsValue: friendData[3].amount,
+                friendsValue: nowFriend[3].amount,
               },
               {
-                categoryName: friendData[4].category,
+                categoryName: nowFriend[4].category,
                 myValue: myData[4].amount,
-                friendsValue: friendData[4].amount,
+                friendsValue: nowFriend[4].amount,
               },
               {
-                categoryName: friendData[5].category,
+                categoryName: nowFriend[5].category,
                 myValue: myData[5].amount,
-                friendsValue: friendData[5].amount,
+                friendsValue: nowFriend[5].amount,
               },
             ],
           };
@@ -205,7 +254,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
                 friendsValue: 0,
               },
               {
-                categoryName: friendData[3].category,
+                categoryName: myData[3].category,
                 myValue: myData[3].amount,
                 friendsValue: 0,
               },
@@ -241,34 +290,34 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         const newData = await {
           totalData: [
             {
-              categoryName: friendData[0].category,
+              categoryName: nowFriend[0].category,
               myValue: myData[0].amount,
-              friendsValue: friendData[0].amount,
+              friendsValue: nowFriend[0].amount,
             },
             {
-              categoryName: friendData[1].category,
+              categoryName: nowFriend[1].category,
               myValue: myData[1].amount,
-              friendsValue: friendData[1].amount,
+              friendsValue: nowFriend[1].amount,
             },
             {
-              categoryName: friendData[2].category,
+              categoryName: nowFriend[2].category,
               myValue: myData[2].amount,
-              friendsValue: friendData[2].amount,
+              friendsValue: nowFriend[2].amount,
             },
             {
-              categoryName: friendData[3].category,
+              categoryName: nowFriend[3].category,
               myValue: myData[3].amount,
-              friendsValue: friendData[3].amount,
+              friendsValue: nowFriend[3].amount,
             },
             {
-              categoryName: friendData[4].category,
+              categoryName: nowFriend[4].category,
               myValue: myData[4].amount,
-              friendsValue: friendData[4].amount,
+              friendsValue: nowFriend[4].amount,
             },
             {
-              categoryName: friendData[5].category,
+              categoryName: nowFriend[5].category,
               myValue: myData[5].amount,
-              friendsValue: friendData[5].amount,
+              friendsValue: nowFriend[5].amount,
             },
           ],
         };
@@ -279,8 +328,8 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
       }
       // 내 데이터가 나왔으니까
     }
-    allUpdate();
-  }, []);
+    fetchComparisonData()
+  }, [nowFriendId, myData, friendList.length, friendPk]);
   return (
     <View style={styles.container}>
       <ComponentsHeader />
@@ -289,7 +338,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         showsVerticalScrollIndicator={false}
         alwaysBounceHorizontal={true}
       >
-        <ComparisonHeader />
+        <ComparisonHeader friendName={nowFriendId}/>
         <ComparisonChart totalData={totalData} />
         {/* {modeKey.map((keyName) => {
           return (

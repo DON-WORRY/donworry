@@ -10,8 +10,14 @@ interface ComparisonBarProps {
 const screenWidth = Dimensions.get('screen').width;
 const totalBarWidth = screenWidth - 60;
 const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
+  function numberWithCommas(x: number) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
   if (props.myValue <= props.friendsValue) {
-    const smallBarWidth = props.friendsValue === 0 ? 0 : totalBarWidth * (props.myValue / props.friendsValue);
+    const smallBarWidth =
+      props.friendsValue === 0
+        ? 0
+        : totalBarWidth * (props.myValue / props.friendsValue);
     const innerStyles = StyleSheet.create({
       smallBar: {
         width: smallBarWidth,
@@ -43,7 +49,10 @@ const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
       </View>
     );
   } else {
-    const smallBarWidth = props.myValue === 0 ? 0 : totalBarWidth * (props.friendsValue / props.myValue);
+    const smallBarWidth =
+      props.myValue === 0
+        ? 0
+        : totalBarWidth * (props.friendsValue / props.myValue);
     const innerStyles = StyleSheet.create({
       smallBar: {
         width: smallBarWidth,
@@ -65,11 +74,11 @@ const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
       <View style={styles.container}>
         <View style={styles.smallContainer}>
           <Text style={styles.titleText}>{props.categoryName}</Text>
-          <Text style={styles.valueText}>{props.myValue}원</Text>
+          <Text style={styles.valueText}>{numberWithCommas(props.myValue)}원</Text>
         </View>
         <View style={innerStyles.totalBar}>
           <View style={innerStyles.smallBar}>
-            <Text style={styles.innerText}>{props.friendsValue}원</Text>
+            <Text style={styles.innerText}>{numberWithCommas(props.friendsValue)}원</Text>
           </View>
         </View>
       </View>
@@ -99,7 +108,7 @@ const styles = StyleSheet.create({
   smallContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: "flex-end"
+    alignItems: 'flex-end',
   },
   valueText: {
     fontSize: 20,
