@@ -1,13 +1,16 @@
 package com.ssafy.donworry.common.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.donworry.domain.member.entity.enums.OauthProvider;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"kakao_account"}, allowSetters = true)
 public class KakaoInfoModel {
 
     @JsonProperty("kakao_account")
@@ -19,8 +22,6 @@ public class KakaoInfoModel {
         private KakaoProfile profile;
         private String email;
         private String gender;
-        private String age_range;
-        private String birthday;
     }
 
     @Getter
@@ -29,6 +30,7 @@ public class KakaoInfoModel {
         private String nickname;
         private String profile_image;
     }
+
 
     public String getEmail() {
         return kakaoAccount.email;
@@ -39,18 +41,11 @@ public class KakaoInfoModel {
     }
 
     public String getGender() {
-        return kakaoAccount.gender;
+        return kakaoAccount.gender.toUpperCase();
     }
 
-    public String getAge_Range() {
-        return kakaoAccount.age_range;
-    }
-
-    public String getBirthday() {
-        return kakaoAccount.birthday;
-    }
-
+    @JsonIgnore
     public String getProfile_Image(){return kakaoAccount.profile.profile_image;}
 
-
+    public OauthProvider getOauthProvider() {return OauthProvider.KAKAO;}
 }
