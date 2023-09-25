@@ -8,9 +8,12 @@ type CategoryModifyData = {
 
 type DutchPayRequestData = {
   consumptionId: number;
-  friendId: number;
-  price: number;
+  reqAmountList: {
+    memberEmail: string;
+    price: number;
+  }[];
 };
+export { DutchPayRequestData };
 
 interface ConsumptionDataProps {
   total(total: any): unknown;
@@ -96,9 +99,7 @@ export async function consumptionDutchPayInquiry(): Promise<void> {
 }
 
 // 더치페이 요청
-export async function consumptionDutchPayRequest(
-  tmpData: DutchPayRequestData
-): Promise<void> {
+export async function consumptionDutchPayRequest(data: DutchPayRequestData) {
   // 받아온 memberId값이 string이기때문에 변환해줘야 한다.
   // parseInt(stringValue, 10)
   /*
@@ -111,15 +112,15 @@ export async function consumptionDutchPayRequest(
     }
   ]
 } */
-  const data = {
-    id: tmpData.consumptionId,
-    reqAmountList: [
-      {
-        memberId: tmpData.friendId,
-        price: tmpData.price,
-      },
-    ],
-  };
+  // const data = {
+  //   id: tmpData.consumptionId,
+  //   reqAmountList: [
+  //     {
+  //       memberId: tmpData.friendId,
+  //       price: tmpData.price,
+  //     },
+  //   ],
+  // };
   return axiosWithAuth
     .post('/api/dutchpay/create', data)
     .then((res) => {

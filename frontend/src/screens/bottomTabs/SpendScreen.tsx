@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
-
+import ComponentsHeader from '../../components/ComponentsHeader';
 interface ScreenProps {
   navigation: {
     navigate: (screen: string, params?: any) => void;
@@ -22,7 +22,16 @@ const SpendScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Spend Screen</Text>
+      <ComponentsHeader />
+      <TouchableOpacity
+        style={styles.listView}
+        onPress={() => {
+          navigation.navigate('StackNavigation', { screen: 'DutchpayState' });
+        }}
+      >
+        <Text style={styles.listText}>더치페이</Text>
+        <FontAwesome name="angle-right" size={40} />
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.listView}
         onPress={() => {
@@ -39,8 +48,8 @@ const SpendScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 60,
   },
   listView: {
     flexDirection: 'row',

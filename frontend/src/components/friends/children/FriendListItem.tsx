@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, Dimensions, StyleSheet } from 'react-native';
 
 type friendType = {
-  name: string;
-  email: string;
+  memberName: string;
+  memberEmail: string;
 };
 
 interface FriendListItemProps {
@@ -15,10 +15,10 @@ const FriendListItem: React.FC<FriendListItemProps> = (props) => {
   return (
     <View style={styles.container}>
       <Text style={[styles.text, { color: props.state }]}>
-        {props.friend.name}
+        {props.friend.memberName}
       </Text>
       <Text style={[styles.text, { color: props.state }]}>
-        {props.friend.email}
+        {props.friend.memberEmail}
       </Text>
     </View>
   );
