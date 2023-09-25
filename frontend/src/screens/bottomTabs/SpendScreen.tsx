@@ -1,36 +1,46 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import TestScreen from '../../utils/TestScreen';
-
+import { FontAwesome } from '@expo/vector-icons';
+import ComponentsHeader from '../../components/ComponentsHeader';
 interface ScreenProps {
   navigation: {
     navigate: (screen: string, params?: any) => void;
   };
 }
-const consumptionData = {
-  conId: 1,
-  conName: '수완초밥&참치',
-  conMoney: 100000,
-};
+
+const screenWidth = Dimensions.get('screen').width;
 
 const SpendScreen: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
+
   return (
     <View style={styles.container}>
-      <Text>Spend Screen</Text>
+      <ComponentsHeader />
       <TouchableOpacity
-        style={{ backgroundColor: 'gray', padding: 30 }}
+        style={styles.listView}
         onPress={() => {
-          navigation.navigate('StackNavigation', {
-            screen: 'DutchPayRequest',
-            params: consumptionData,
-          });
+          navigation.navigate('StackNavigation', { screen: 'DutchpayState' });
         }}
       >
-        <Text>소비 내역 중 하나</Text>
+        <Text style={styles.listText}>더치페이</Text>
+        <FontAwesome name="angle-right" size={40} />
       </TouchableOpacity>
-      <TestScreen />
+      <TouchableOpacity
+        style={styles.listView}
+        onPress={() => {
+          navigation.navigate('StackNavigation', { screen: 'Consumption' });
+        }}
+      >
+        <Text style={styles.listText}>소비 페이지</Text>
+        <FontAwesome name="angle-right" size={40} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -38,8 +48,23 @@ const SpendScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 60,
+  },
+  listView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 80,
+    paddingLeft: 20,
+    width: screenWidth - 40,
+    borderRadius: 15,
+    backgroundColor: 'white',
+    marginBottom: 10,
+  },
+  listText: {
+    width: screenWidth - 100,
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 });
 

@@ -102,7 +102,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
     async function fetchFriends() {
       const newFriends: Friend[] = await friendListInquiry()
         .then((r) => {
-          console.log(r.data.friendResponseList)
+          console.log(r.data.friendResponseList);
           return r.data.friendResponseList;
         })
         .catch((e) => {
@@ -117,7 +117,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         })
         .catch((e) => console.error('0000', e));
       await setMyData(tmpMyData);
-      console.log("tmpMyData")
+      console.log('tmpMyData');
       console.log(tmpMyData);
     }
 
@@ -143,7 +143,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
           })
             .then((r) => {
               console.log('-================');
-              console.log(r)
+              console.log(r);
               return r.data.categoryAmountList;
             })
             .catch((e) => {
@@ -290,7 +290,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         alwaysBounceHorizontal={true}
       >
         <ComparisonHeader />
-        <ComparisonChart totalData={totalData}/>
+        <ComparisonChart totalData={totalData} />
         {/* {modeKey.map((keyName) => {
           return (
             <View key={keyName}>

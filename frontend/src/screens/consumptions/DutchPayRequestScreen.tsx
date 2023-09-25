@@ -22,12 +22,22 @@ import { Button } from '../../components/logins/Login';
 import { AntDesign } from '@expo/vector-icons';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
+import { RootStackParamList } from '../../navigations/RootNavigator/Stack';
+import { useNavigation } from '@react-navigation/native';
+import { consumptionDutchPayRequest } from '../../utils/ConsumptionFunctions';
+import { DutchPayRequestData } from '../../utils/ConsumptionFunctions';
+
+interface ScreenProps {
+  navigation: {
+    navigate: (screen: string, params?: any) => void;
+  };
+}
 
 interface MemberProps {
-  id: number;
-  name: string;
-  email: string;
-  money?: string;
+  memberId: number;
+  memberName: string;
+  memberEmail: string;
+  price?: string;
 }
 
 interface Nq1ButtonProps {
@@ -41,40 +51,57 @@ interface MyRequestProps {
   onPress: () => void;
 }
 
+// type DutchpayRequestScreenProps = {
+//   route: RouteProp<
+//     {
+//       DutchpayRequest: {
+//         bankName: string;
+//         detail: string;
+//         price: number;
+//         dateTime: string;
+//         id: number;
+//       };
+//     },
+//     'DutchpayRequest'
+//   >;
+// };
+
 type DutchpayRequestScreenProps = {
-  route: RouteProp<
-    { DutchpayRequest: { conId: number; conName: string; conMoney: number } },
-    'DutchpayRequest'
-  >;
+  route: RouteProp<RootStackParamList, 'DutchpayRequest'>;
 };
 
 const dummyData = [
   {
-    id: 1,
-    name: 'test1',
-    email: 'test1@naver.com',
+    memberId: 1,
+    memberName: 'test1',
+    memberEmail: '123',
   },
   {
-    id: 2,
-    name: 'test2',
-    email: 'test2@naver.com',
+    memberId: 2,
+    memberName: 'test2',
+    memberEmail: '456',
   },
   {
-    id: 3,
-    name: 'test3',
-    email: 'test3@naver.com',
+    memberId: 3,
+    memberName: 'test3',
+    memberEmail: 'test3@naver.com',
   },
   {
-    id: 4,
-    name: 'test4',
-    email: 'test4@naver.com',
+    memberId: 4,
+    memberName: 'test4',
+    memberEmail: 'test4@naver.com',
   },
   {
-    id: 5,
-    name: 'test5',
-    email: 'test5@naver.com',
+    memberId: 5,
+    memberName: 'test5',
+    memberEmail: 'test5@naver.com',
   },
 ];
+
+function formattedPrice(inputPrice: number) {
+  const price = new Intl.NumberFormat('en-US').format(inputPrice);
+  return price;
+}
 
 const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
   route,
@@ -90,19 +117,15 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
   const snapPoints = useMemo(() => ['58%'], []);
 
   const consumptionData = route.params;
-  const formattedMoney = new Intl.NumberFormat('en-US').format(
-    consumptionData.conMoney
-  );
   const [inputValue, setInputValue] = useState('');
   const [currentMember, setCurrentMember] = useState(1);
-  const [remainingAmount, setRemainingAmount] = useState(
-    consumptionData.conMoney
-  );
+  const [remainingAmount, setRemainingAmount] = useState(consumptionData.price);
   const [myRequestAccount, setMyRequestAccount] = useState('');
   const [disabled, setDisabled] = useState(true);
   const handleInputChange = (newValue: string) => {
     setInputValue(newValue);
   };
+  const navigation = useNavigation<ScreenProps['navigation']>();
 
   useEffect(() => {
     if (selectedMemberList.length === 0 && myRequestAccount) {
@@ -116,7 +139,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
     // 0원인지 확인하기
     if (remainingAmount == 0) {
       const hasEmptyMoneyInSelectedMembers = selectedMemberList.some(
-        (member) => member.money === ''
+        (member) => member.price === ''
       );
       if (!hasEmptyMoneyInSelectedMembers) {
         setDisabled(false);
@@ -160,10 +183,10 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
     }
     const updateInputValue = N1 ? inputValue : '';
     if (selectedMember) {
-      setIsActive({ ...isActive, [selectedMember.id]: true });
+      setIsActive({ ...isActive, [selectedMember.memberId]: true });
       setSelectedMemberList([
         ...selectedMemberList,
-        { ...selectedMember, money: updateInputValue },
+        { ...selectedMember, price: updateInputValue },
       ]);
       // 현재인원 최신화
       setCurrentMember((prevMember) => prevMember + 1);
@@ -185,9 +208,10 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
     bottomSheetModalRef.current.dismiss();
   }
   function handleDelete(data: MemberProps) {
-    setIsActive({ ...isActive, [data.id]: false });
-    const amount = selectedMemberList.find((item) => item.id === data.id)
-      ?.money;
+    setIsActive({ ...isActive, [data.memberId]: false });
+    const amount = selectedMemberList.find(
+      (item) => item.memberId === data.memberId
+    )?.price;
     const updatedSelectedMemberList = selectedMemberList.filter(
       (item) => item !== data
     );
@@ -200,33 +224,60 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
     // 현재인원 최신화
     setCurrentMember((prevMember) => prevMember - 1);
   }
+  function handleDutchpayRequest() {
+    async function createDutchpayData() {
+      try {
+        const response = await consumptionDutchPayRequest(data);
+        if (response) {
+          console.log(response.status);
+        } else {
+          console.error('API response does not contain data.');
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    }
+    const reqAmountList = selectedMemberList.map(({ memberEmail, price }) => ({
+      memberEmail,
+      price: parseFloat(price || '0'),
+    }));
+    const data: DutchPayRequestData = {
+      consumptionId: consumptionData.id,
+      reqAmountList: reqAmountList,
+    };
+    console.log(data);
+    createDutchpayData();
+  }
+
   return (
     <BottomSheetModalProvider>
       <SafeAreaView style={styles.container}>
         <BackHeader screen="Spend" />
         <ScrollView>
           <Text>더치페이</Text>
-          <Text style={styles.amountText}>{formattedMoney}원</Text>
-          <Text>{consumptionData.conName}</Text>
+          <Text style={styles.amountText}>
+            {formattedPrice(consumptionData.price)}원
+          </Text>
+          <Text>{consumptionData.detail}</Text>
           <ContentBox>
-            <FriendSearch search={search} />
+            {/* <FriendSearch search={search} /> */}
             {dummyData.map((dummy) => {
               return (
                 <TouchableOpacity
-                  key={dummy.id}
+                  key={dummy.memberId}
                   onPress={() => {
-                    if (!isActive[dummy.id]) {
+                    if (!isActive[dummy.memberId]) {
                       handlePress(dummy);
                     }
                   }}
                   style={{
-                    pointerEvents: isActive[dummy.id] ? 'none' : 'auto',
+                    pointerEvents: isActive[dummy.memberId] ? 'none' : 'auto',
                   }}
                 >
-                  <FriendListItem
+                  {/* <FriendListItem
                     friend={dummy}
-                    state={isActive[dummy.id] ? 'gray' : 'black'}
-                  />
+                    state={isActive[dummy.memberId] ? 'gray' : 'black'}
+                  /> */}
                 </TouchableOpacity>
               );
             })}
@@ -250,15 +301,17 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
           />
           {selectedMemberList.map((data) => {
             return (
-              <View style={styles.bottomView} key={data.id}>
+              <View style={styles.bottomView} key={data.memberId}>
                 <ContentBox widthPercentage={0.75}>
                   <View style={styles.bottomViewText}>
                     <View>
-                      <Text style={styles.bottomTitleText}>{data.name}</Text>
+                      <Text style={styles.bottomTitleText}>
+                        {data.memberName}
+                      </Text>
                     </View>
                     <View>
                       <Text style={styles.bottomAmountText}>
-                        요청금액 {data.money === '' ? '1/N' : data.money}원
+                        요청금액 {data.price === '' ? '1/N' : data.price}원
                       </Text>
                     </View>
                   </View>
@@ -281,7 +334,13 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
           <View style={styles.buttonView}>
             <Button
               title="더치페이 요청"
-              onPress={() => bottomSheetModalRef.current.present()}
+              onPress={() => {
+                handleDutchpayRequest();
+                // navigation.navigate('StackNavigation', {
+                //   screen: 'DutchpayState',
+                //   params: consumptionData,
+                // });
+              }}
               disabled={disabled}
             />
           </View>
@@ -452,4 +511,4 @@ const styles = StyleSheet.create({
 });
 
 export default DutchpayRequestScreen;
-export { MemberProps };
+export { MemberProps, DutchpayRequestScreenProps };

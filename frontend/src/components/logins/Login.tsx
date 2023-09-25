@@ -59,29 +59,32 @@ const Login: React.FC = () => {
 
   return (
     <>
-    <View style={styles.container}>
-      <Inputbox
-        placeholder="이메일"
-        value={loginId}
-        onChangeText={(text) => setloginId(text)}
-        secureTextEntry={false}
-        keyboardType="email-address"
-      />
-      <Inputbox
-        placeholder="비밀번호"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry={true}
-      />
-      <Button title="로그인" onPress={handleLogin} />
+      <View style={styles.container}>
+        <Inputbox
+          placeholder="이메일"
+          value={loginId}
+          onChangeText={(text) => setloginId(text)}
+          secureTextEntry={false}
+          keyboardType="email-address"
+        />
+        <Inputbox
+          placeholder="비밀번호"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry={true}
+        />
+        <Button title="로그인" onPress={handleLogin} />
 
-      <TouchableOpacity style={styles.kakao} onPress={() => {
-        navigation.navigate('Kakao')
-      }}>
-        <Image source={KakaoLogin} style={styles.kakaoImg}/>
-      </TouchableOpacity>
-      <GoToSignup />
-    </View>
+        <TouchableOpacity
+          style={styles.kakao}
+          onPress={() => {
+            navigation.navigate('Kakao');
+          }}
+        >
+          <Image source={KakaoLogin} style={styles.kakaoImg} />
+        </TouchableOpacity>
+        <GoToSignup />
+      </View>
     </>
   );
 };
@@ -134,7 +137,7 @@ const GoToSignup: React.FC = () => {
   );
 };
 
-const screenWidth = Dimensions.get("screen").width
+const screenWidth = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   input: {
     height: 55,
@@ -171,18 +174,18 @@ const styles = StyleSheet.create({
   kakao: {
     marginTop: 10,
     width: screenWidth,
-    flexDirection: "row",
-    justifyContent:"center",
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   container: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center"
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   kakaoImg: {
     width: screenWidth * 0.7,
-    height : screenWidth * 0.7 * 3 / 20
-  }
+    height: (screenWidth * 0.7 * 3) / 20,
+  },
 });
 
 export default Login;
