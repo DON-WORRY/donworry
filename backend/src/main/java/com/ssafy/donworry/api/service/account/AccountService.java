@@ -178,7 +178,7 @@ public class AccountService {
     private Long randomInitHolding() {
         Random random = new Random();
         // 1부터 10,000 사이의 난수 생성
-        long randomHolding = random.nextInt(10000) + 1L;
+        long randomHolding = random.nextInt(300) + 100L;
         return randomHolding * 1000;
     }
 

@@ -4,12 +4,14 @@ import com.ssafy.donworry.api.controller.finance.dto.request.ReqAmountRequest;
 import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 import com.ssafy.donworry.domain.member.entity.Member;
+import com.ssafy.donworry.domain.member.entity.Notification;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.*;
@@ -33,6 +35,9 @@ public class DetailDutchpay extends BaseEntity {
     @Enumerated(STRING)
     private DutchpayStatus dutchpayStatus;
 
+    @OneToOne(mappedBy = "detailDutchpay", cascade = ALL, orphanRemoval = true)
+    private Notification notification;
+
     @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -44,11 +49,12 @@ public class DetailDutchpay extends BaseEntity {
     private Dutchpay dutchpay;
 
     @Builder
-    public DetailDutchpay(Long id, Long dutchpayReqPrice, Long dutchpayReceivedPrice, DutchpayStatus dutchpayStatus, Member member, Dutchpay dutchpay) {
+    public DetailDutchpay(Long id, Long dutchpayReqPrice, Long dutchpayReceivedPrice, DutchpayStatus dutchpayStatus, Notification notification, Member member, Dutchpay dutchpay) {
         this.id = id;
         this.dutchpayReqPrice = dutchpayReqPrice;
         this.dutchpayReceivedPrice = dutchpayReceivedPrice;
         this.dutchpayStatus = dutchpayStatus;
+        this.notification = notification;
         this.member = member;
         this.dutchpay = dutchpay;
     }

@@ -39,16 +39,12 @@ public class Dutchpay extends BaseEntity {
     @JoinColumn(name = "consumption_id")
     private Consumption consumption;
 
-    @OneToMany(mappedBy = "dutchpay", cascade = ALL, orphanRemoval = true)
-    private List<Notification> notifications;
-
     @Builder
-    public Dutchpay(Long id, DutchpayStatus dutchpayStatus, Member member, Consumption consumption, List<Notification> notifications) {
+    public Dutchpay(Long id, DutchpayStatus dutchpayStatus, Member member, Consumption consumption) {
         this.id = id;
         this.dutchpayStatus = dutchpayStatus;
         this.member = member;
         this.consumption = consumption;
-        this.notifications = notifications;
     }
 
     public static Dutchpay of(Consumption consumption, Member member) {
