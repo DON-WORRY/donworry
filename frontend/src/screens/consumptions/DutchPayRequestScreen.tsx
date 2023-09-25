@@ -34,6 +34,8 @@ import FriendListItemForDutchpay from '../../components/dutchpays/children/Fiend
 interface ScreenProps {
   navigation: {
     navigate: (screen: string, params?: any) => void;
+    pop: () => void;
+    replace: (screen: string, params?: any) => void;
   };
 }
 
@@ -220,7 +222,8 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
         const response = await consumptionDutchPayRequest(data);
         if (response) {
           console.log(response);
-          navigation.navigate('StackNavigation', { screen: 'DutchpayState' });
+          navigation.pop();
+          navigation.replace('StackNavigation', { screen: 'DutchpayState' });
         } else {
           console.error('API response does not contain data.');
         }

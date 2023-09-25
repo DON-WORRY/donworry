@@ -40,14 +40,15 @@ const ConsumptionScreen: React.FC = () => {
   const [consumptionData, setConSumptionData] =
     useState<ConsumptionResponseProps>();
 
-  const [categorySelected, setCategorySelected] = useState<number>(0);
+  const [category, setCategory] = useState<number>(0);
+  const [month, setMonth] = useState<number>(7);
 
   const navigation = useNavigation<ScreenProps['navigation']>();
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await consumptionCategoryHistory(0, 7);
+        const response = await consumptionCategoryHistory(category, month);
         if (response) {
           // setConSumptionData(response.categoryHistoryResponseList);
           // setTotalSpendMoney(response.total);
@@ -64,7 +65,7 @@ const ConsumptionScreen: React.FC = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [category]);
 
   function formattedDateDayOfTheWeek(dateTime: string): string {
     const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
@@ -93,12 +94,12 @@ const ConsumptionScreen: React.FC = () => {
           <Text>9월</Text>
           <View style={styles.headerDateView}>
             <SelectList
-              setSelected={(val: number) => setCategorySelected(val)}
+              setSelected={(val: number) => setCategory(val)}
               data={categoryData}
               save="key"
               search={false}
               boxStyles={{ borderRadius: 10 }}
-              defaultOption={{ key: '1', value: '전체' }}
+              defaultOption={{ key: '0', value: '전체' }}
             />
           </View>
 

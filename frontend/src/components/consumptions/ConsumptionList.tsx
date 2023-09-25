@@ -30,8 +30,13 @@ interface ConsumptionDataProps {
 }
 
 const categoryData = [
-  { key: '1', value: '전체' },
-  { key: '2', value: '식비' },
+  { key: '0', value: '전체' },
+  { key: '1', value: '교통' },
+  { key: '2', value: '생활(마트?)' },
+  { key: '3', value: '식비' },
+  { key: '4', value: '생활(화장품)' },
+  { key: '5', value: '문화' },
+  { key: '6', value: '기타' },
 ];
 
 const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
