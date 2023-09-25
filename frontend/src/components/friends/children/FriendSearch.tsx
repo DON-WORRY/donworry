@@ -25,10 +25,13 @@ type Friend = {
 };
 
 type RootStackParamList = {
-  FriendDetail: {
+  Home: undefined;
+  Spend: undefined;
+  Asset: undefined;
+  Comparison: {
     friendPk: string;
   };
-  // 다른 화면들의 파라미터 정의도 여기에 추가
+  Friend: undefined;
 };
 
 interface FriendSearchProps {
@@ -37,7 +40,7 @@ interface FriendSearchProps {
 }
 
 const FriendSearch: React.FC<FriendSearchProps> = (props) => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'FriendDetail'>>();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Comparison'>>();
   
   const [loading, setLoading] = useState(true);
   const searchAPI = (keyword: string) => {
@@ -128,7 +131,7 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
                 onPressIn={() => Keyboard.dismiss()}
                 onPress={() => Alert.alert(`${item.friendName}`, "해당 친구와 비교를 원하시나요?", [
                   { text: "비교하러 가기", onPress: () => {
-                    navigation.navigate('FriendDetail', { friendPk: `${item.friendId}` });
+                    navigation.navigate('Comparison', { friendPk: `${item.friendId}` });
                   }},
                   { text: "취소하기", onPress: () => {}},
                 ])}

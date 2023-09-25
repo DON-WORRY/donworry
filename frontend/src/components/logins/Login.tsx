@@ -35,7 +35,7 @@ interface ScreenProps {
     replace: (screen: string, params?: any) => void;
   };
 }
-const KakaoLogin = require('../../assets/logins/KakaoLogin2.png');
+const KakaoLogin = require('../../assets/logins/KakaoLogin3.png');
 const Login: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [loginId, setloginId] = useState('');
@@ -74,13 +74,14 @@ const Login: React.FC = () => {
         secureTextEntry={true}
       />
       <Button title="로그인" onPress={handleLogin} />
-      <GoToSignup />
-    </View>
+
       <TouchableOpacity style={styles.kakao} onPress={() => {
         navigation.navigate('Kakao')
       }}>
-        <Image source={KakaoLogin} />
+        <Image source={KakaoLogin} style={styles.kakaoImg}/>
       </TouchableOpacity>
+      <GoToSignup />
+    </View>
     </>
   );
 };
@@ -171,12 +172,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: screenWidth,
     flexDirection: "row",
-    justifyContent:"center"
+    justifyContent:"center",
   },
   container: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center"
+  },
+  kakaoImg: {
+    width: screenWidth * 0.7,
+    height : screenWidth * 0.7 * 3 / 20
   }
 });
 
