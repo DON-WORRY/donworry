@@ -84,10 +84,10 @@ export async function consumptionCategoryModify(
 }
 
 // 더치페이 조회
-export async function consumptionDutchPayInquiry(): Promise<void> {
-  const id = await getData('memberId');
+export async function consumptionDutchPayInquiry() {
+  // export async function consumptionDutchPayInquiry(): Promise<void> {
   return axiosWithAuth
-    .get(`/api/dutchpay/${id}`)
+    .get(`/api/dutchpay`)
     .then((res) => {
       console.log(res.data);
       return res.data;
@@ -100,27 +100,6 @@ export async function consumptionDutchPayInquiry(): Promise<void> {
 
 // 더치페이 요청
 export async function consumptionDutchPayRequest(data: DutchPayRequestData) {
-  // 받아온 memberId값이 string이기때문에 변환해줘야 한다.
-  // parseInt(stringValue, 10)
-  /*
-  {
-  "id": 0,
-  "reqAmountList": [
-    {
-      "memberId": 0,
-      "price": 0
-    }
-  ]
-} */
-  // const data = {
-  //   id: tmpData.consumptionId,
-  //   reqAmountList: [
-  //     {
-  //       memberId: tmpData.friendId,
-  //       price: tmpData.price,
-  //     },
-  //   ],
-  // };
   return axiosWithAuth
     .post('/api/dutchpay/create', data)
     .then((res) => {

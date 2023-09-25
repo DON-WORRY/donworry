@@ -8,22 +8,23 @@ import ComponentsHeader from '../../components/ComponentsHeader';
 
 const HomeScreen: React.FC = () => {
   return (
-      <View style={styles.container}>
-        <ComponentsHeader />
-        <ScrollView contentContainerStyle={styles.scrollViewContainer}
+    <View style={styles.container}>
+      <ComponentsHeader />
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContainer}
         showsVerticalScrollIndicator={false}
-        >
-          <ContentBox>
-            <HomeAsset />
-          </ContentBox>
-          <ContentBox>
-            <HomeSpend />
-          </ContentBox>
-          <ContentBox>
-            <HomeCardSpend />
-          </ContentBox>
-        </ScrollView>
-      </View>
+      >
+        <ContentBox>
+          <HomeAsset />
+        </ContentBox>
+        <ContentBox>
+          <HomeSpend />
+        </ContentBox>
+        <ContentBox>
+          <HomeCardSpend />
+        </ContentBox>
+      </ScrollView>
+    </View>
   );
 };
 
