@@ -85,7 +85,7 @@ public class FriendService {
             }
             else return "친구요청을 거절하였습니다.";
         }
-        else if(friendRequest.getSender().getId() == request.friendId()){
+        else if(friendRequest.getSender().getId() == memberId){
             return "친구요청을 취소했습니다.";
         }
         else throw new InvalidValueException(ErrorCode.INVALID_INPUT_VALUE);

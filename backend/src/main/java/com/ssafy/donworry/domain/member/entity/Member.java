@@ -66,7 +66,7 @@ public class Member extends BaseEntity {
     private MemberActivateStatus memberActivateStatus;
 
     @Enumerated(STRING)
-    private OauthProvider oauthProvider;
+    private OauthProvider memberOauthProvider;
 
     @NotNull
     private LocalDate memberBirthDate;
@@ -108,7 +108,7 @@ public class Member extends BaseEntity {
     private List<Account> accounts;
 
     @Builder
-    public Member(Long id, String memberName, String memberEmail, String memberPassword, String memberSimplePassword, MemberGender memberGender, MemberRole memberRole, MemberActivateStatus memberActivateStatus, LocalDate memberBirthDate, ProfileImage profileImage, Goal goals, List<FriendRelationship> relationshipReceivers, List<FriendRelationship> relationshipSenders, List<FriendRequest> requestReceivers, List<FriendRequest> requestSenders, List<Notification> notificationReceivers, List<Notification> notificationSenders, List<Dutchpay> dutchpays, List<Income> incomes, List<Consumption> consumptions, List<Account> accounts) {
+    public Member(Long id, String memberName, String memberEmail, String memberPassword, String memberSimplePassword, MemberGender memberGender, MemberRole memberRole, MemberActivateStatus memberActivateStatus, OauthProvider memberOauthProvider, LocalDate memberBirthDate, ProfileImage profileImage, Goal goals, List<FriendRelationship> relationshipReceivers, List<FriendRelationship> relationshipSenders, List<FriendRequest> requestReceivers, List<FriendRequest> requestSenders, List<Notification> notificationReceivers, List<Notification> notificationSenders, List<Dutchpay> dutchpays, List<Income> incomes, List<Consumption> consumptions, List<Account> accounts) {
         this.id = id;
         this.memberName = memberName;
         this.memberEmail = memberEmail;
@@ -117,6 +117,7 @@ public class Member extends BaseEntity {
         this.memberGender = memberGender;
         this.memberRole = memberRole;
         this.memberActivateStatus = memberActivateStatus;
+        this.memberOauthProvider = memberOauthProvider;
         this.memberBirthDate = memberBirthDate;
         this.profileImage = profileImage;
         this.goals = goals;
@@ -141,6 +142,7 @@ public class Member extends BaseEntity {
                 .memberGender(request.memberGender())
                 .memberRole(request.memberRole())
                 .memberActivateStatus(request.memberActivateStatus())
+                .memberOauthProvider(request.memberOauthProvider())
                 .memberBirthDate(request.memberBirthDate())
                 .build();
     }

@@ -1,6 +1,7 @@
 package com.ssafy.donworry.api.controller.finance.dto.response;
 
 import com.ssafy.donworry.domain.finance.entity.Consumption;
+import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,16 +20,19 @@ public class CategoryHistoryResponse {
     String bankName;
     Long price;
     LocalDateTime dateTime;
+    DutchpayStatus dutchpayStatus;
 
     @Builder
-    public CategoryHistoryResponse(Long id, String detail, String bankName, Long price, LocalDateTime dateTime) {
+    public CategoryHistoryResponse(Long id, String detail, String bankName, Long price, LocalDateTime dateTime, DutchpayStatus dutchpayStatus) {
         this.id = id;
         this.detail = detail;
         this.bankName = bankName;
         this.price = price;
         this.dateTime = dateTime;
-        // TODO: 2023-09-21 dataTime -> 소비날짜 변수명으로 변경
+        this.dutchpayStatus = dutchpayStatus;
     }
+
+
 
     public void updatePrice(Long incomePrice) {
         this.price -= incomePrice;

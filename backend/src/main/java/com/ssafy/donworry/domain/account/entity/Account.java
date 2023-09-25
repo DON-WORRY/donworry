@@ -50,8 +50,6 @@ public class Account extends BaseEntity {
         this.accountAmount = accountAmount;
     }
 
-
-
     public static Account of(Member member, Bank bank, String accountNumber, Long accountAmount){
         return Account.builder()
                 .member(member)
@@ -61,7 +59,10 @@ public class Account extends BaseEntity {
                 .build();
     }
 
-    public void updateAmount(Long cost){
-        this.accountAmount -= cost;
+    public void updateSendAmount(Long sendPrice) {
+        this.accountAmount -= sendPrice;
+    }
+    public void updateReceiveAmount(Long receivePrice){
+        this.accountAmount += receivePrice;
     }
 }
