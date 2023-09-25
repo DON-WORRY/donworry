@@ -69,8 +69,7 @@ public class OauthService {
             }
         }
         else{
-            //회원가입 진행
-            return null;
+            return model;
         }
     }
 
