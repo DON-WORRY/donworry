@@ -32,6 +32,7 @@ const FriendCubes: React.FC<FriendCubesProps> = (props) => {
       if (nowGender != undefined) {
         setMyGender(nowGender);
       }
+      console.log(nowGender)
     }
     fetch();
   });
@@ -40,7 +41,7 @@ const FriendCubes: React.FC<FriendCubesProps> = (props) => {
       <View style={styles.container}>
         <View style={styles.smallBox}>
           {/* <FontAwesome name="cube" size={100} style={styles.myCube} /> */}
-          {myGender == 'Male' ? (
+          {myGender === 'Male' ? (
             <Image source={Male} style={styles.myImage} />
           ) : (
             <Image source={Female} style={styles.myImage} />
