@@ -104,6 +104,10 @@ public class DutchpayService {
                 );
         log.info("상세 더치페이id : {}", detailDutchpay.getId());
         // 간편 비밀번호 확인
+        Member member = detailDutchpay.getMember();
+        if(!member.getId().equals(memberId)) {
+            throw new InvalidValueException(ErrorCode.DETAIL_DUTCHPAY_MEMBER_NOT_MATCH);
+        }
         if(!encoder.matches(dutchpayTransferRequest.simplePassword(), detailDutchpay.getMember().getMemberSimplePassword())) {
             throw new InvalidValueException(ErrorCode.SIMPLE_PASSWORD_NOT_MATCH);
         }
@@ -148,6 +152,7 @@ public class DutchpayService {
 
             consumptionRepository.save(c);
             dutchpayRepository.save(d);
+            // 모든 세부더치페이가 완료되었으면 더치페이 및 소비에 더치페이 상태 완료 변경
         }
         accountRepository.save(senderAccount);
         log.info("save senderAccount : {}", senderAccount.getId());
