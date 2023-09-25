@@ -96,7 +96,7 @@ public class AccountService {
                 Income income = Income.of("(주) 삼성전자", incomePrice, account.getAccountAmount() + incomePrice, member, account, null, null);
                 incomeRepository.save(income);
                 income.update(history, history);
-                account.updateAmount(-incomePrice);
+                account.updateReceiveAmount(incomePrice);
 
                 history = history.plusHours(9);
                 history = history.plusMinutes(55);
@@ -114,7 +114,7 @@ public class AccountService {
                 Consumption consumption = Consumption.of(consumptionDetail, consumptionPrice, consumptionRemainedAmount, NOTSTART, member, account, null, card, consumptionCategory);
                 consumptionRepository.save(consumption);
                 consumption.update(history, history);
-                account.updateAmount(consumptionPrice);
+                account.updateSendAmount(consumptionPrice);
 
             }
             history = history.plusHours(randomTime());
