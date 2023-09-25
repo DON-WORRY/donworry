@@ -33,11 +33,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   goldCube: {
-    color: '#FFD700',
+    color: '#6081DB',
     marginBottom: 5,
   },
   myCube: {
-    color: '#7777F3',
+    color: '#8260DB',
     marginBottom: 5,
   },
   smallBox: {
