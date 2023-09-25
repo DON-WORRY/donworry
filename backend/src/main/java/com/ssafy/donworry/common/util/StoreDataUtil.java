@@ -90,8 +90,7 @@ public class StoreDataUtil {
 
     public RandomConsumption randomStoreName() {
         Random random = new Random();
-        int i = random.nextInt(11)+1; // 1~11의 난수
-        i = i % 6 +1;
+        int i = random.nextInt(11) % 6 + 1; // 0~10의 난수
         int j = random.nextInt(data[i-1].length); //
         return new RandomConsumption(i, data[i-1][j]);
     }
