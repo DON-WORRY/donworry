@@ -4,6 +4,7 @@ import com.ssafy.donworry.api.controller.member.dto.request.MemberJoinRequest;
 import com.ssafy.donworry.domain.member.entity.enums.MemberActivateStatus;
 import com.ssafy.donworry.domain.member.entity.enums.MemberGender;
 import com.ssafy.donworry.domain.member.entity.enums.MemberRole;
+import com.ssafy.donworry.domain.member.entity.enums.OauthProvider;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -27,9 +28,12 @@ public record MemberJoinServiceRequest(
 
         LocalDate memberBirthDate,
 
+        OauthProvider memberOauthProvider,
+
         MemberRole memberRole,
 
         MemberActivateStatus memberActivateStatus
+
 ) {
     public static MemberJoinServiceRequest of(MemberJoinRequest request, String memberPassword, String memberSimplePassword){
         return new MemberJoinServiceRequest(
@@ -39,6 +43,7 @@ public record MemberJoinServiceRequest(
                 memberSimplePassword,
                 request.memberGender(),
                 request.memberBirthDate(),
+                request.memberOauthProvider(),
                 MemberRole.USER,
                 MemberActivateStatus.ACTIVATE
         );

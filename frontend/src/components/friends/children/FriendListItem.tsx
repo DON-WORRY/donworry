@@ -19,17 +19,19 @@ type friendType = {
 interface FriendListItemProps {
   friend: friendType;
 }
-
 type RootStackParamList = {
-  FriendDetail: {
+  Home: undefined;
+  Spend: undefined;
+  Asset: undefined;
+  Comparison: {
     friendPk: string;
   };
-  // 다른 화면들의 파라미터 정의도 여기에 추가
+  Friend: undefined;
 };
 
 const FriendListItem: React.FC<FriendListItemProps> = (props) => {
   const navigation =
-    useNavigation<StackNavigationProp<RootStackParamList, 'FriendDetail'>>();
+    useNavigation<StackNavigationProp<RootStackParamList, 'Comparison'>>();
 
   return (
     <TouchableOpacity
@@ -42,7 +44,7 @@ const FriendListItem: React.FC<FriendListItemProps> = (props) => {
             {
               text: '비교하러 가기',
               onPress: () => {
-                navigation.navigate('FriendDetail', {
+                navigation.navigate('Comparison', {
                   friendPk: `${props.friend.friendId}`,
                 });
               },

@@ -42,7 +42,9 @@ const formatAmount = (amount: string): string => {
 const HomeSpend: React.FC = () => {
   const [memberId, setMemberId] = useState('');
   const navigation = useNavigation<ScreenProps['navigation']>();
-  const [totalSpend, setTotalSpend] = useState<Array<{ amount: number; category: string }>>([]);
+  const [totalSpend, setTotalSpend] = useState<
+    Array<{ amount: number; category: string }>
+  >([]);
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
 
@@ -55,15 +57,19 @@ const HomeSpend: React.FC = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const today = new Date(); 
+        const today = new Date();
         const currentMonth = today.getMonth() + 1;
 
         const newMemberId = await getData('memberId');
-        const newTotalSpend: any = await consumptionCategoryTotal(currentMonth); 
+        const newTotalSpend: any = await consumptionCategoryTotal(currentMonth);
         if (newMemberId) {
           setMemberId(newMemberId);
         }
-        if (newTotalSpend && newTotalSpend.data && Array.isArray(newTotalSpend.data.categoryAmountList)) {
+        if (
+          newTotalSpend &&
+          newTotalSpend.data &&
+          Array.isArray(newTotalSpend.data.categoryAmountList)
+        ) {
           setTotalSpend(newTotalSpend.data.categoryAmountList);
         }
       } catch (error) {
@@ -75,7 +81,7 @@ const HomeSpend: React.FC = () => {
 
   const handleToggle = () => {
     setIsExpanded((prevState) => !prevState);
-  };  
+  };
 
   const processedData = (totalSpend || [])
     .map((item) => ({
@@ -113,7 +119,9 @@ const HomeSpend: React.FC = () => {
               </View>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('StackNavigation', { screen: 'History' });
+                  navigation.navigate('StackNavigation', {
+                    screen: 'Consumption',
+                  });
                 }}
               >
                 <ContentButton />
