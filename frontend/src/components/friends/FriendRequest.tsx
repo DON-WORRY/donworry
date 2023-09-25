@@ -1,19 +1,51 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { friendCheck } from '../../utils/FriendFunctions';
 
 interface FriendRequestProps {
   email: string;
   name: string;
   time: string;
+  friendRequestId: number;
+  memberId: number;
+  setRendering: (render: boolean) => void;
 }
 
 const FriendRequest: React.FC<FriendRequestProps> = (props) => {
   function accessHandle() {
+    const accessData = {
+      isAccept: true,
+      friendRequestId: props.friendRequestId,
+      friendId: props.memberId,
+    };
+    console.log(accessData.friendId);
+    console.log(accessData.friendRequestId);
+    friendCheck(accessData)
+      .then((r) => {
+        props.setRendering(false);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
     console.log('access');
   }
 
   function cancelHandle() {
+    const cancelData = {
+      isAccept: true,
+      friendRequestId: props.friendRequestId,
+      friendId: props.memberId,
+    };
+    friendCheck(cancelData)
+      .then((r) => {
+        console.log(r);
+        props.setRendering(false);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
     console.log('cancel');
   }
 
@@ -24,12 +56,11 @@ const FriendRequest: React.FC<FriendRequestProps> = (props) => {
           <FontAwesome name="user-plus" style={styles.icon} size={20} />
           <Text style={styles.topText}>{props.email}</Text>
         </View>
-        <Text style={styles.topText}>{props.time}</Text>
+        <Text style={styles.topText}>{props.time.slice(0,10)}</Text>
       </View>
       <View style={styles.bottomBox}>
         <View style={styles.textBox}>
           <Text style={styles.nameText}>{props.name}</Text>
-          <Text> 님의 요청입니다.</Text>
         </View>
         <View style={styles.btnBox}>
           {/* 버튼 */}

@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public record ReqAmountRequest(
-        @NotNull Long memberId,
+        @NotNull String memberEmail,
+
         @NotNull Long price
 ) {
 }

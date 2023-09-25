@@ -51,7 +51,8 @@ public class ConsumptionQueryRepository {
                         consumption.consumptionDetail,
                         consumption.account.bank.name,
                         consumption.consumptionPrice,
-                        consumption.createdTime
+                        consumption.createdTime,
+                        consumption.dutchpayStatus
                 ))
                 .from(consumption)
                 .where(
@@ -83,6 +84,7 @@ public class ConsumptionQueryRepository {
                 )
                 .from(consumption)
                 .leftJoin(consumption.consumptionCategory, consumptionCategory)
+                .where(consumption.account.id.eq(accountId))
                 .fetch();
 
 
@@ -102,6 +104,7 @@ public class ConsumptionQueryRepository {
                     )
                 )
                 .from(income)
+                .where(income.account.id.eq(accountId))
                 .fetch();
     }
 

@@ -1,77 +1,119 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosWithAuth, axiosWithoutAuth } from '../axios/http';
 
-type AcceptData = {
-  receiverId: number;
-};
-type RejectData = {
-  requestId: number;
-};
-type DeleteData = {
+type Friend = {
   friendId: number;
+  friendName: string;
+  friendEmail: string;
 };
 
-// 친구 목록 조회
-export async function friendListInquiry(): Promise<void> {
+// // 친구 목록 조회
+export async function friendListInquiry(): Promise<any> {
   return axiosWithAuth
-    .get('/api/friend/list')
+    .get('/api/friends/list')
     .then((res) => {
-      console.log(res);
+      return res.data;
     })
     .catch((e) => {
-      console.error(e);
+      // console.error(e);
+      throw e;
+    });
+}
+
+// 친구 요청 리스트
+export async function friendRequestList() : Promise<void> {
+  return axiosWithAuth
+    .get('/api/friends/request/list')
+    .then((res) => {
+      return res.data;
+    })
+    .catch((e) => {
       throw e;
     });
 }
 
 // 친구 요청
-export async function friendRequest(): Promise<void> {
+type FriendRequestData = {
+  memberEmails: string[];
+};
+export async function friendRequest(data: FriendRequestData): Promise<void> {
   return axiosWithAuth
-    .post('/api/friend/request')
+    .post('/api/friends/request', data)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
+      return res.data;
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
 
-// 친구 요청 수락
-export async function friendAccept(data: AcceptData): Promise<void> {
+// 친구 수락 or 거절
+type FriendCheckdata = {
+  isAccept: boolean;
+  friendRequestId: number;
+  friendId: number;
+};
+export async function friendCheck(data: FriendCheckdata): Promise<void> {
   return axiosWithAuth
-    .put('/api/friend/accept', )
+    .post('api/friends/check', data)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
+      return res.data;
     })
     .catch((e) => {
-      console.error(e);
+      // if e.data.message 만료된 토큰
+      // axiosWithAuth => refresh
       throw e;
     });
 }
 
-// 친구 요청 거절
-export async function friendReject(data: RejectData): Promise<void> {
+export async function friendTotalSpend(data: FriendSpend): Promise<any> {
   return axiosWithAuth
-    .delete('/api/friend/reject', )
-    .then((res) => {
-      console.log(res);
+    .get(`/api/consumption/comparison/${data.id}?month=${data.month}`)
+    .then((r) => {
+      return r.data;
     })
     .catch((e) => {
-      console.error(e);
       throw e;
     });
 }
 
-// 친구 제거
-export async function friendDelete(data: DeleteData): Promise<void> {
-  return axiosWithAuth
-    .delete('/api/friend/delete', )
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((e) => {
-      console.error(e);
-      throw e;
-    });
-}
+type FriendSpend = {
+  id: number;
+  month: number;
+};
+
+type ReceivedRequest = {
+  friendRequestId: 0;
+  memberId: 0;
+  memberEmail: string;
+  memberName: string;
+  createdTime: Date;
+};
+
+type SendRequest = {
+  friendRequestId: number;
+  memberId: number;
+  memberEmail: string;
+  memberName: string;
+  createdTime: string;
+};
+
+type CheckResponseData = {
+  receivedRequest: ReceivedRequest[];
+  sendRequest: SendRequest[];
+};
+
+// // 친구 제거
+// export async function friendDelete(data: DeleteData): Promise<void> {
+//   return axiosWithAuth
+//     .delete('/api/friend/delete', )
+//     .then((res) => {
+//       console.log(res);
+//     })
+//     .catch((e) => {
+//       console.error(e);
+//       throw e;
+//     });
+// }

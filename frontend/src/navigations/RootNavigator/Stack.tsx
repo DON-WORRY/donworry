@@ -3,13 +3,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../../screens/LoginScreen';
 import SignupScreen from '../../screens/SignupScreen';
 import FriendMessageScreen from '../../screens/friends/FriendMessageScreen';
-
 import DutchpayRequestScreen from '../../screens/consumptions/DutchpayRequestScreen';
-import HistoryScreen from '../../screens/historys/HistoryScreen';
 import ConsumptionScreen from '../../screens/consumptions/ConsumptionScreen';
 import DutchpayStateScreen from '../../screens/consumptions/DutchpayStateScreen';
 import CardHistoryScreen from '../../screens/historys/CardHistoryScreen';
 import AccountHistoryScreen from '../../screens/historys/AccountHistoryScreen';
+import KakaoLoginScreen from '../../screens/KakaoLoginScreen';
 
 type RootStackParamList = {
   Login: undefined;
@@ -33,6 +32,7 @@ type RootStackParamList = {
     dateTime: string;
     id: number;
   };
+  Kakao: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -68,6 +68,11 @@ const StackNavigation: React.FC = () => {
       <Stack.Screen
         name="AccountHistory"
         component={AccountHistoryScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Kakao"
+        component={KakaoLoginScreen}
         options={{ headerShown: false }}
       />
 

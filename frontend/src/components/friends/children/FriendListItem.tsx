@@ -1,26 +1,64 @@
 import React from 'react';
-import { View, Text, Dimensions, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 type friendType = {
-  memberName: string;
-  memberEmail: string;
+  friendId: number;
+  friendName: string;
+  friendEmail: string;
 };
 
 interface FriendListItemProps {
   friend: friendType;
-  state: string;
 }
+type RootStackParamList = {
+  Home: undefined;
+  Spend: undefined;
+  Asset: undefined;
+  Comparison: {
+    friendPk: string;
+  };
+  Friend: undefined;
+};
 
 const FriendListItem: React.FC<FriendListItemProps> = (props) => {
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'Comparison'>>();
+
   return (
-    <View style={styles.container}>
-      <Text style={[styles.text, { color: props.state }]}>
-        {props.friend.memberName}
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() =>
+        Alert.alert(
+          `${props.friend.friendName}`,
+          '해당 친구와 비교를 원하시나요?',
+          [
+            {
+              text: '비교하러 가기',
+              onPress: () => {
+                navigation.navigate('Comparison', {
+                  friendPk: `${props.friend.friendId}`,
+                });
+              },
+            },
+            { text: '취소하기', onPress: () => {} },
+          ]
+        )
+      }
+    >
+      <Text style={[styles.text]}>{props.friend.friendName}</Text>
+      <Text style={[styles.text]}>
+        {props.friend.friendEmail.slice(0, 8) + '...'}
       </Text>
-      <Text style={[styles.text, { color: props.state }]}>
-        {props.friend.memberEmail}
-      </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

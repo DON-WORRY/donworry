@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.*;
@@ -28,10 +29,10 @@ public class Goal extends BaseEntity {
     private Long goalAmount;
 
     @NotNull
-    private LocalDateTime goalStartTime;
+    private LocalDate goalStartTime;
 
     @NotNull
-    private LocalDateTime goalEndTime;
+    private LocalDate goalEndTime;
 
     @NotNull
     @OneToOne(fetch = LAZY)
@@ -39,7 +40,7 @@ public class Goal extends BaseEntity {
     private Member member;
 
     @Builder
-    public Goal(Long id, Long goalAmount, LocalDateTime goalStartTime, LocalDateTime goalEndTime, Member member) {
+    public Goal(Long id, Long goalAmount, LocalDate goalStartTime, LocalDate goalEndTime, Member member) {
         this.id = id;
         this.goalAmount = goalAmount;
         this.goalStartTime = goalStartTime;

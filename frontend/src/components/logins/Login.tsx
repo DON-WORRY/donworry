@@ -6,9 +6,13 @@ import {
   Dimensions,
   TouchableOpacity,
   Text,
+  Alert,
+  Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { userLogin } from '../../utils/UserFunctions';
+import { useDispatch } from 'react-redux';
+import { setMypageModal } from '../../store/Modal';
 
 interface InputboxProps {
   placeholder: string;
@@ -31,12 +35,12 @@ interface ScreenProps {
     replace: (screen: string, params?: any) => void;
   };
 }
-
+const KakaoLogin = require('../../assets/logins/KakaoLogin3.png');
 const Login: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [loginId, setloginId] = useState('');
   const [password, setPassword] = useState('');
-
+  const dispatch = useDispatch();
   function handleLogin() {
     // 로그인 시
     const data = {
@@ -45,32 +49,43 @@ const Login: React.FC = () => {
     };
     userLogin(data)
       .then(() => {
+        dispatch(setMypageModal(true));
         navigation.replace('TabNavigation', { screen: 'Home' });
       })
       .catch((e) => {
-        console.log(e);
-        return alert('아이디 또는 비밀번호가 유효하지 않습니다.');
+        return Alert.alert('로그인 실패', `${e.message}`);
       });
   }
 
   return (
-    <View>
-      <Inputbox
-        placeholder="이메일"
-        value={loginId}
-        onChangeText={(text) => setloginId(text)}
-        secureTextEntry={false}
-        keyboardType="email-address"
-      />
-      <Inputbox
-        placeholder="비밀번호"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry={true}
-      />
-      <Button title="로그인" onPress={handleLogin} />
-      <GoToSignup />
-    </View>
+    <>
+      <View style={styles.container}>
+        <Inputbox
+          placeholder="이메일"
+          value={loginId}
+          onChangeText={(text) => setloginId(text)}
+          secureTextEntry={false}
+          keyboardType="email-address"
+        />
+        <Inputbox
+          placeholder="비밀번호"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry={true}
+        />
+        <Button title="로그인" onPress={handleLogin} />
+
+        <TouchableOpacity
+          style={styles.kakao}
+          onPress={() => {
+            navigation.navigate('Kakao');
+          }}
+        >
+          <Image source={KakaoLogin} style={styles.kakaoImg} />
+        </TouchableOpacity>
+        <GoToSignup />
+      </View>
+    </>
   );
 };
 
@@ -122,6 +137,7 @@ const GoToSignup: React.FC = () => {
   );
 };
 
+const screenWidth = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   input: {
     height: 55,
@@ -154,6 +170,21 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 1,
     color: 'blue',
+  },
+  kakao: {
+    marginTop: 10,
+    width: screenWidth,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  container: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  kakaoImg: {
+    width: screenWidth * 0.7,
+    height: (screenWidth * 0.7 * 3) / 20,
   },
 });
 

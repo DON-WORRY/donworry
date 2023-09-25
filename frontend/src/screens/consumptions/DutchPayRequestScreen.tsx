@@ -260,7 +260,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
           </Text>
           <Text>{consumptionData.detail}</Text>
           <ContentBox>
-            <FriendSearch search={search} />
+            {/* <FriendSearch search={search} /> */}
             {dummyData.map((dummy) => {
               return (
                 <TouchableOpacity
@@ -274,10 +274,10 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
                     pointerEvents: isActive[dummy.memberId] ? 'none' : 'auto',
                   }}
                 >
-                  <FriendListItem
+                  {/* <FriendListItem
                     friend={dummy}
                     state={isActive[dummy.memberId] ? 'gray' : 'black'}
-                  />
+                  /> */}
                 </TouchableOpacity>
               );
             })}
