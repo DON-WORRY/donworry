@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.donworry.api.controller.account.dto.response.CardInfoResponse;
 import com.ssafy.donworry.api.controller.account.dto.response.ConsumtionDetailResponse;
 import com.ssafy.donworry.api.controller.account.dto.response.eachCardConsumptionTotalPrice;
+import com.ssafy.donworry.domain.account.entity.Card;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -127,4 +128,5 @@ public class CardQueryRepository {
                 .fetch();
         return result;
     }
+
 }
