@@ -87,7 +87,7 @@ public class DutchpayService {
                     );
             try {
                 DetailDutchpay detailDutchpay = DetailDutchpay.of(req, reqMember, dutchpay);
-                detailDutchpayRepository.save(detailDutchpay);
+                detailDutchpayRepository. save(detailDutchpay);
             }
             catch (Exception e) {
                 throw new InvalidValueException(ErrorCode.DETAIL_DUTCHPAY_SAVE_ERROR);
@@ -115,7 +115,7 @@ public class DutchpayService {
         /***/
 
         Account senderAccount = accountRepository.findFirstByMemberId(memberId);
-        Account receiverAccount = accountRepository.findFirstByMemberId(detailDutchpay.getDutchpay().getMember().getId());
+        Account receiverAccount = detailDutchpay.getDutchpay().getConsumption().getAccount();
 
         Long price = dutchpayTransferRequest.sendPrice();
 

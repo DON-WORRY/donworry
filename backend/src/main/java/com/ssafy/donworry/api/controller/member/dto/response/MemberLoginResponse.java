@@ -1,6 +1,7 @@
 package com.ssafy.donworry.api.controller.member.dto.response;
 
 import com.ssafy.donworry.common.model.JwtCreateModel;
+import com.ssafy.donworry.domain.member.entity.enums.MemberGender;
 import com.ssafy.donworry.domain.member.entity.enums.MemberRole;
 import jakarta.validation.constraints.NotNull;
 
@@ -27,6 +28,9 @@ public record MemberLoginResponse(
         LocalDate memberBirthDate,
 
         @NotNull
+        MemberGender memberGender,
+
+        @NotNull
         MemberRole memberRole
 
 ) {
@@ -39,6 +43,7 @@ public record MemberLoginResponse(
                 model.getName(),
                 model.getEmail(),
                 model.getBirthDate(),
+                model.getMemberGender(),
                 model.getMemberRole()
         );
     }

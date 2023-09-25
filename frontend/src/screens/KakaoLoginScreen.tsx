@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Alert, Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
 import { APP_ENV_KAKAO_API_KEY, APP_ENV_REDIRECT_URI } from '@env';
+import { axiosWithoutAuth } from '../axios/http';
+
 const URI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${APP_ENV_KAKAO_API_KEY}&redirect_uri=${APP_ENV_REDIRECT_URI}&lang=ko`;
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 interface ScreenProps {
@@ -21,8 +23,21 @@ const KakaoLogin: React.FC = () => {
       const requestCode = target.substring(condition + exp.length);
       // requestToken(requestCode);
       // navigation.replace('TabNavigation', { screen: 'Home' });
-      console.log(requestCode);
-      navigation.navigate('Login');
+      // console.log(requestCode);
+      
+      const data = {
+        kakaoAuthToken : requestCode
+      }
+      axiosWithoutAuth
+        .post('https://j9c210.p.ssafy.io/api/oauth/kakao', data)
+        .then((r) => {
+          console.log(r.data.data);
+          const farams = r.data.data
+          navigation.navigate('KakaoSignup', farams);
+        })
+        .catch((e) => {
+          console.error(e.response.data);
+        });
     }
   };
   const screenWidth = Dimensions.get('screen').width;
@@ -49,7 +64,6 @@ const KakaoLogin: React.FC = () => {
           onMessage={(event) => {
             console.log('Received message:', event.nativeEvent);
             const data = event.nativeEvent.url;
-            console.log(data);
             getCode(data);
           }}
         />

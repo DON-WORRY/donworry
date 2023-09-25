@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -37,12 +38,16 @@ public class FriendRequest extends BaseEntity {
     @JoinColumn(name = "sender_id")
     private Member sender;
 
+    @OneToOne(mappedBy = "friendRequest", cascade = ALL, orphanRemoval = true)
+    private Notification notification;
+
     @Builder
-    public FriendRequest(Long id, FriendRequestStatus friendRequestStatus, Member receiver, Member sender) {
+    public FriendRequest(Long id, FriendRequestStatus friendRequestStatus, Member receiver, Member sender, Notification notification) {
         this.id = id;
         this.friendRequestStatus = friendRequestStatus;
         this.receiver = receiver;
         this.sender = sender;
+        this.notification = notification;
     }
 
     public static FriendRequest of(Member receiver, Member sender){

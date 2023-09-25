@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Dimensions, Text, StyleSheet } from 'react-native';
+import { View, Dimensions, Text, StyleSheet, Animated } from 'react-native';
 
 /*
 public class CategoryAmountResponse {
@@ -52,34 +52,34 @@ const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
               : leftValue == 0
               ? 100
               : rightValue <= leftValue
-              ? 50
+              ? 60
               : rightValue >= leftValue * 2
               ? 100
-              : 50 + (leftValue / rightValue) * 25;
+              : 60 + (leftValue / rightValue) * 20;
           const leftPercent =
             leftValue == 0
               ? 0
               : rightValue == 0
               ? 100
               : leftValue <= rightValue
-              ? 50
+              ? 60
               : leftValue >= rightValue * 2
               ? 100
-              : 50 + (rightValue / leftValue) * 25;
+              : 60 + (rightValue / leftValue) * 20;
 
           const innerStyles = StyleSheet.create({
             //   left stick
             leftStickTop: {
-              backgroundColor: '#ADADF8',
-              height: 10,
+              backgroundColor: '#BA6EF9',
+              height: 12,
               borderTopLeftRadius: 5,
               borderTopRightRadius: 5,
               paddingRight: 5,
               width: `${leftPercent}%`,
             },
             leftStickBottom: {
-              height: 10,
-              backgroundColor: '#7777F3',
+              height: 12,
+              backgroundColor: '#8260DB',
               borderBottomLeftRadius: 5,
               borderBottomRightRadius: 5,
               paddingRight: 5,
@@ -87,16 +87,16 @@ const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
             },
             //   right stick
             rightStickTop: {
-              height: 10,
-              backgroundColor: '#FFE766',
+              height: 12,
+              backgroundColor: '#6EB7F9',
               borderTopLeftRadius: 5,
               borderTopRightRadius: 5,
               paddingRight: 5,
               width: `${rightPercent}%`,
             },
             rightStickBottom: {
-              height: 10,
-              backgroundColor: '#FFD700',
+              height: 12,
+              backgroundColor: '#6081DB',
               borderBottomLeftRadius: 5,
               borderBottomRightRadius: 5,
               paddingRight: 5,
@@ -202,14 +202,17 @@ const styles = StyleSheet.create({
     right: 5, // marginRight 대신에 right를 사용
     position: 'absolute',
     zIndex: 999999999,
-    // color: 'white',
+    color: 'white',
     fontWeight: 'bold',
+    fontSize: 16
   },
   amountRightText: {
     marginLeft: 5,
     position: 'absolute',
     zIndex: 999999999,
     fontWeight: 'bold',
+    color: 'white',
+    fontSize: 16
   },
 });
 

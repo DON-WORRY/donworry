@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -31,11 +32,15 @@ public class FriendRelationship extends BaseEntity {
     @JoinColumn(name = "sender_id")
     private Member sender;
 
+    @OneToOne(mappedBy = "friendRelationship", cascade = ALL, orphanRemoval = true)
+    private Notification notification;
+
     @Builder
-    public FriendRelationship(Long id, Member receiver, Member sender) {
+    public FriendRelationship(Long id, Member receiver, Member sender, Notification notification) {
         this.id = id;
         this.receiver = receiver;
         this.sender = sender;
+        this.notification = notification;
     }
 
     public static FriendRelationship of(FriendRequest request){

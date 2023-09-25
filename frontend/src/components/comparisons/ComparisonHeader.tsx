@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown';
 
-const countries = ['Egypt', 'Canada', 'Australia', 'Ireland'];
+interface ComparisonProps {
+  friendName: string
+}
 
-const ComparisonHeader: React.FC = () => {
-  const [selected, setSelected] = React.useState('');
+const ComparisonHeader: React.FC<ComparisonProps> = (props) => {
   return (
     <View style={styles.container}>
       <View>
@@ -15,7 +15,7 @@ const ComparisonHeader: React.FC = () => {
         </View>
         <View style={styles.lineBox}>
           <View style={styles.redBox}></View>
-          <Text style={styles.headerText}>친구 소비</Text>
+          <Text style={styles.headerText}>{props.friendName}님의 소비</Text>
         </View>
       </View>
         {/* <SelectDropdown

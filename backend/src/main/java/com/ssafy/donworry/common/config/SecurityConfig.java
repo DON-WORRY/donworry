@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
 //                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html/**", "/demo-ui.html/**", "/api-docs/**").permitAll()
-                        .requestMatchers("/api/oauth/**", "/api/emails/**", "/api/members/join", "/api/members/login").permitAll()
+                        .requestMatchers("/api/oauth/**", "/api/emails/**", "/api/members/join", "/api/members/login", "/api/blank").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

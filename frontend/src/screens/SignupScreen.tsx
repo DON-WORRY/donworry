@@ -119,6 +119,7 @@ const SignupScreen: React.FC = () => {
                   memberGender: newGender,
                   memberBirthDate: newBirth,
                   memberSimplePassword: easyPassword,
+                  memberOauthProvider: "NONE"
                 };
                 userSignup(data)
                   .then(() => {

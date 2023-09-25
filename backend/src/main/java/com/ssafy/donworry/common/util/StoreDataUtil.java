@@ -85,12 +85,12 @@ public class StoreDataUtil {
                     "성남스파이더클라이밍", "그립픽클라이밍짐", "에어즈락 클라이밍 위례점", "닷 클라이밍짐", "브릭스클라이밍짐",
                     "손상원 클라이밍짐 판교점", "판교락실내바다낚시터", "제일실내낚시터", "모란낚시", "서울용인낚시점 가든파이브라이프리빙관점",
                     "우리들낚시레저", "대박실내낚시터", "은성실내낚시터", "피싱코리아", "낚시프라자"},
-            {}};
+            {"병원","약국","건강 검진","동물병원","자선 단체 기부", "꽃피는농원한국생화랜드", "흙이랑꽃이랑도예공방네이버페이", "축의금","구제의류"}};
 
 
     public RandomConsumption randomStoreName() {
         Random random = new Random();
-        int i = random.nextInt(5)+1; // 1~5의 난수
+        int i = random.nextInt(11) % 6 + 1; // 0~10의 난수
         int j = random.nextInt(data[i-1].length); //
         return new RandomConsumption(i, data[i-1][j]);
     }

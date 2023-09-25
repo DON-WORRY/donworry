@@ -9,10 +9,12 @@ import com.ssafy.donworry.common.error.exception.InvalidValueException;
 import com.ssafy.donworry.domain.member.entity.FriendRelationship;
 import com.ssafy.donworry.domain.member.entity.FriendRequest;
 import com.ssafy.donworry.domain.member.entity.Member;
+import com.ssafy.donworry.domain.member.entity.Notification;
 import com.ssafy.donworry.domain.member.entity.enums.FriendRequestStatus;
 import com.ssafy.donworry.domain.member.repository.FriendRelationshipRepository;
 import com.ssafy.donworry.domain.member.repository.FriendRequestRepository;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
+import com.ssafy.donworry.domain.member.repository.NotificationRepository;
 import com.ssafy.donworry.domain.member.repository.query.FriendRelationshipQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ public class FriendService {
     private final MemberRepository memberRepository;
     private final FriendRequestRepository friendRequestRepository ;
     private final FriendRelationshipRepository friendRelationshipRepository;
+    private final NotificationRepository notificationRepository;
 
     public void requestFriend(FriendRequestServiceRequest request, Long memberId){
         request.memberEmails().forEach(
@@ -47,7 +50,10 @@ public class FriendService {
                     if(checkAlreadyFriendRequest(sender, receiver) || checkAlreadyFriendRequest(receiver, sender)) throw new InvalidValueException(ErrorCode.ALREADY_FRIEND_REQUEST);
 
                     try{
-                        friendRequestRepository.save(FriendRequest.of(receiver, sender));
+                        FriendRequest friendRequest = FriendRequest.of(receiver, sender);
+                        Notification notification = Notification.ofFriendReq(friendRequest);
+                        friendRequestRepository.save(friendRequest);
+                        notificationRepository.save(notification);
                     }
                     catch(Exception e){
                         throw new InvalidValueException(ErrorCode.FRIEND_REQUEST_SAVE_ERROR);
@@ -80,7 +86,10 @@ public class FriendService {
         if(friendRequest.getReceiver().getId() == memberId){
 
             if(request.isAccept()){
-                friendRelationshipRepository.save(FriendRelationship.of(friendRequest));
+                FriendRelationship friendRelationship = FriendRelationship.of(friendRequest);
+                Notification notification = Notification.ofFriendRel(friendRelationship);
+                friendRelationshipRepository.save(friendRelationship);
+                notificationRepository.save(notification);
                 return "친구요청을 수락하였습니다.";
             }
             else return "친구요청을 거절하였습니다.";

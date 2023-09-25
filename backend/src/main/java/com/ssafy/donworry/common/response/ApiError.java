@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class ApiError extends ApiResult {
 
-    private String message;
+    private final String message;
 
     private ApiError(int status, String code, String message){
         super(status, code);
@@ -19,10 +19,4 @@ public class ApiError extends ApiResult {
     public static ApiError of(ErrorCode errorCode){
         return new ApiError(errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage());
     }
-
-    // TODO: 2023-09-10 authenication 오류시 ToString으로 값이 잘 나오는지 확인 필요
-//    public String toStream(){
-//        return "{" +
-//                "\"status\":" + "\"" + this.getStatus()
-//    }
 }

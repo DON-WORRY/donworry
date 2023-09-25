@@ -4,12 +4,14 @@ import com.ssafy.donworry.api.controller.finance.dto.request.DutchpayTransferReq
 import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.member.entity.Member;
+import com.ssafy.donworry.domain.member.entity.Notification;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.PROTECTED;
@@ -50,8 +52,11 @@ public class Income extends BaseEntity {
     @JoinColumn(name = "detail_dutchpay_id")
     private DetailDutchpay detailDutchpay;
 
+    @OneToOne(mappedBy = "income", cascade = ALL, orphanRemoval = true)
+    private Notification notification;
+
     @Builder
-    public Income(Long id, @NotNull String incomeDetail, @NotNull Long incomePrice, @NotNull Long incomeRemainedAmount, @NotNull Member member, @NotNull Account account, Account senderAccount, DetailDutchpay detailDutchpay) {
+    public Income(Long id, String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member, Account account, Account senderAccount, DetailDutchpay detailDutchpay, Notification notification) {
         this.id = id;
         this.incomeDetail = incomeDetail;
         this.incomePrice = incomePrice;
@@ -60,8 +65,20 @@ public class Income extends BaseEntity {
         this.account = account;
         this.senderAccount = senderAccount;
         this.detailDutchpay = detailDutchpay;
+        this.notification = notification;
     }
 
+    public static Income of(String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member
+            , Account account, Account senderAccount){
+        return Income.builder()
+                .incomeDetail(incomeDetail)
+                .incomePrice(incomePrice)
+                .incomeRemainedAmount(incomeRemainedAmount)
+                .member(member)
+                .account(account)
+                .senderAccount(senderAccount)
+                .build();
+    }
 
     public static Income of(String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member
     , Account account, Account senderAccount, DetailDutchpay detailDutchpay){
