@@ -95,7 +95,7 @@ const HomeCardSpend: React.FC = () => {
                 onPress={() => {
                   navigation.navigate('StackNavigation', {
                     screen: 'CardHistory',
-                    params: { cardId: item.cardId },
+                    params: { cardId: item.cardId, cards: cardSpend },
                   });
                 }}
               >
