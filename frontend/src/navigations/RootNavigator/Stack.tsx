@@ -9,6 +9,7 @@ import DutchpayStateScreen from '../../screens/consumptions/DutchpayStateScreen'
 import CardHistoryScreen from '../../screens/historys/CardHistoryScreen';
 import AccountHistoryScreen from '../../screens/historys/AccountHistoryScreen';
 import KakaoLoginScreen from '../../screens/KakaoLoginScreen';
+import KakaoSignupScreen from '../../screens/Signups/KakaoSignupScreen';
 
 type RootStackParamList = {
   Login: undefined;
@@ -33,6 +34,7 @@ type RootStackParamList = {
     id: number;
   };
   Kakao: undefined;
+  KakaoSignup: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -89,6 +91,11 @@ const StackNavigation: React.FC = () => {
       <Stack.Screen
         name="Consumption"
         component={ConsumptionScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="KakaoSignup"
+        component={KakaoSignupScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

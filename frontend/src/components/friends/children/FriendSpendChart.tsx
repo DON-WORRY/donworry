@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Dimensions, Text, StyleSheet } from 'react-native';
+import { View, Dimensions, Text, StyleSheet, Animated } from 'react-native';
 
 /*
 public class CategoryAmountResponse {
