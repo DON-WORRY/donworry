@@ -50,7 +50,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
   }, [refreshKey]);
 
   const SetGoal = async () => {
-    const newGoal = 39999999;
+    const newGoal = 30000000;
     const nowTime = new Date().toISOString();
 
     const year = nowTime.substring(0, 4);
@@ -69,7 +69,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
     try {
       await accountSetGoal(data);
       setGoalAmount(newGoal);
-      setProgress(totalAmount / newGoal * 100)
+      setProgress((totalAmount / newGoal) * 100);
     } catch (e) {
       console.error('Failed to set goal:', e);
     }
@@ -79,30 +79,29 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
     if (amount < 10000) {
       return `${amount}원`;
     }
-    
-    // 뒤의 4자리를 없애기
+
     const chkAmount = Math.floor(amount / 10000) * 10000;
     let truncatedAmount = chkAmount;
-  
+
     const units = ['', '만', '억', '조'];
     let formattedStr = '';
-    
+
     for (const unit of units) {
       const part = truncatedAmount % 10000;
-      
+
       if (part !== 0) {
         formattedStr = `${part}${unit} ` + formattedStr;
       }
-      
+
       truncatedAmount = Math.floor(truncatedAmount / 10000);
       if (truncatedAmount === 0) {
         break;
       }
     }
-    
+
     return formattedStr.trim() + '원';
   };
-  
+
   return (
     <View style={styles.container}>
       <View style={[styles.row, { marginBottom: width * 0.04, width: '105%' }]}>
@@ -207,7 +206,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
         <Text style={styles.headText}>현재 자산</Text>
         <View style={styles.rightSection}>
           <Text style={{ fontWeight: 'bold', fontSize: width * 0.04 }}>
-          {formatAmount(totalAmount)}
+            {formatAmount(totalAmount)}
           </Text>
         </View>
       </View>
