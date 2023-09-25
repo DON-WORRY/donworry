@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
 
 interface ComparisonBarProps {
@@ -10,9 +10,16 @@ interface ComparisonBarProps {
 const screenWidth = Dimensions.get('screen').width;
 const totalBarWidth = screenWidth - 60;
 const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
+  const [myValue, setMyValue] = useState('');
+  const [friendValue, setFriendValue] = useState('');
+  useEffect(() => {
+    setMyValue(numberWithCommas(props.myValue));
+    setFriendValue(numberWithCommas(props.friendsValue));
+  }, [props.friendsValue || props.myValue]);
   function numberWithCommas(x: number) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
+
   if (props.myValue <= props.friendsValue) {
     const smallBarWidth =
       props.friendsValue === 0
@@ -74,11 +81,15 @@ const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
       <View style={styles.container}>
         <View style={styles.smallContainer}>
           <Text style={styles.titleText}>{props.categoryName}</Text>
-          <Text style={styles.valueText}>{numberWithCommas(props.myValue)}원</Text>
+          <Text style={styles.valueText}>
+            {numberWithCommas(props.myValue)}원
+          </Text>
         </View>
         <View style={innerStyles.totalBar}>
           <View style={innerStyles.smallBar}>
-            <Text style={styles.innerText}>{numberWithCommas(props.friendsValue)}원</Text>
+            <Text style={styles.innerText}>
+              {numberWithCommas(props.friendsValue)}원
+            </Text>
           </View>
         </View>
       </View>

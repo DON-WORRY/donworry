@@ -58,6 +58,7 @@ type Friend = {
 const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
   // const ComparisonScreen: React.FC = () => {
   const friendPk = route.params?.friendPk ?? -1;
+  const [friendName, setFriendName] = useState("친구 소비")
   const [friendList, setFriendList] = useState<Friend[]>([]);
   const [myData, setMyData] = useState<CategoryAmountList>([
     {
@@ -163,6 +164,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         nowMonth
       )
         .then((r) => {
+          setFriendName(r.data.name)
           return r.data.categoryAmountList;
         })
         .catch((e) => console.error('0000', e));
@@ -193,6 +195,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
             .then((r) => {
               console.log('-================');
               console.log(r);
+              setFriendName(r.data.name)
               return r.data.categoryAmountList;
             })
             .catch((e) => {
@@ -281,6 +284,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         })
           .then((r) => {
             console.log(r);
+            setFriendName(r.data.name)
             return r.data.categoryAmountList;
           })
           .catch((e) => {
@@ -338,7 +342,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         showsVerticalScrollIndicator={false}
         alwaysBounceHorizontal={true}
       >
-        <ComparisonHeader friendName={nowFriendId}/>
+        <ComparisonHeader friendName={friendName}/>
         <ComparisonChart totalData={totalData} />
         {/* {modeKey.map((keyName) => {
           return (
