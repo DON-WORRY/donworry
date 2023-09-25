@@ -73,9 +73,9 @@ public enum ErrorCode {
 
     // Account
     ACCOUNT_NOT_FOUND(400, "A001", "존재하지 않는 계좌입니다!"),
+
+
     ;
-
-
 
     private final int status;
     private final String code;
