@@ -1,22 +1,56 @@
-import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface FriendCubesProps {
   myName: string | undefined;
 }
 
+// 값을 가져오기
+const getData = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+const King = require('../../../assets/friends/King.png');
+const Female = require('../../../assets/friends/Female.png');
+const Male = require('../../../assets/friends/Male.png');
+
 const FriendCubes: React.FC<FriendCubesProps> = (props) => {
+  const [myGender, setMyGender] = useState('');
+  useEffect(() => {
+    async function fetch() {
+      const nowGender = await getData('memberGender');
+      if (nowGender != undefined) {
+        setMyGender(nowGender);
+      }
+    }
+    fetch();
+  });
   return (
     <View>
       <View style={styles.container}>
         <View style={styles.smallBox}>
-          <FontAwesome name="cube" size={100} style={styles.myCube} />
+          {/* <FontAwesome name="cube" size={100} style={styles.myCube} /> */}
+          {myGender == 'Male' ? (
+            <Image source={Male} style={styles.myImage} />
+          ) : (
+            <Image source={Female} style={styles.myImage} />
+          )}
           <Text style={styles.nameText}>나</Text>
           <Text style={styles.subNameText}>{props.myName}</Text>
         </View>
         <View style={styles.smallBox}>
-          <FontAwesome name="cube" size={100} style={styles.goldCube} />
+          {/* <FontAwesome name="cube" size={100} style={styles.goldCube} /> */}
+          <Image source={King} style={styles.kingImage} />
           <Text style={styles.nameText}>절약왕</Text>
           <Text style={styles.subNameText}>각 소비별 절약 1등</Text>
         </View>
@@ -60,6 +94,14 @@ const styles = StyleSheet.create({
   },
   subNameText: {
     fontSize: 16,
+  },
+  myImage: {
+    width: 112,
+    height: 100,
+  },
+  kingImage: {
+    width: 130,
+    height: 100,
   },
 });
 
