@@ -18,6 +18,7 @@ type SignupData = {
   memberGender: string;
   memberBirthDate: string;
   memberSimplePassword: string;
+  memberOauthProvider: string;
 };
 
 // 로그인 params
