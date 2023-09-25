@@ -6,6 +6,7 @@ import java.util.List;
 
 public record CategoryTotalResponse(
         @NotNull Long total,
+        @NotNull String name,
         @NotNull List<CategoryAmountResponse> categoryAmountList
 ) {
 

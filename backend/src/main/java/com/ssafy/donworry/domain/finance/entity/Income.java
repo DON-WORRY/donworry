@@ -64,6 +64,18 @@ public class Income extends BaseEntity {
 
 
     public static Income of(String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member
+            , Account account, Account senderAccount){
+        return Income.builder()
+                .incomeDetail(incomeDetail)
+                .incomePrice(incomePrice)
+                .incomeRemainedAmount(incomeRemainedAmount)
+                .member(member)
+                .account(account)
+                .senderAccount(senderAccount)
+                .build();
+    }
+
+    public static Income of(String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member
     , Account account, Account senderAccount, DetailDutchpay detailDutchpay){
         return Income.builder()
                 .incomeDetail(incomeDetail)

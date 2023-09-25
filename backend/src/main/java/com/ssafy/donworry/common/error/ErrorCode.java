@@ -71,6 +71,8 @@ public enum ErrorCode {
     // Transfer
     ACCOUNT_NO_MONEY(400, "TF001", "계좌의 잔액이 부족합니다."),
 
+    // Account
+    ACCOUNT_NOT_FOUND(400, "A001", "존재하지 않는 계좌입니다!"),
     ;
 
 

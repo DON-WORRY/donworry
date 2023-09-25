@@ -63,7 +63,8 @@ public class ConsumptionQueryService {
 
         // 5. 총합 계산 후 dto 생성
         Long total = createTotal(categoryAmountList);
-        return new CategoryTotalResponse(total, categoryAmountList);
+        String name = memberRepository.findById(memberId).get().getMemberName();
+        return new CategoryTotalResponse(total, name, categoryAmountList);
     }
 
     public List<CategoryHistoryResponse> searchCategoryHistory(Long memberId, Long categoryId, int month) {
