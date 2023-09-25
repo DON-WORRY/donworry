@@ -35,6 +35,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
             (newTotalAmount.data.total / newGoalAmount.data.goalAmount) * 100
           );
         }
+        setRemainDate(calculateRemainingDays(newGoalAmount.data.goalStartTime, newGoalAmount.data.goalEndTime))
       } catch (error) {
         console.log('error: ', error);
       }
@@ -44,6 +45,17 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
 
   const updateRemainDate = (newRemainDate: number) => {
     setRemainDate(newRemainDate);
+  };
+
+  const calculateRemainingDays = (startDate: string, endDate: string) => {
+    // 문자열 날짜를 Date 객체로 변환
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const diffTime = end.getTime() - start.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
   };
 
   const formatAmount = (amount: number) => {
