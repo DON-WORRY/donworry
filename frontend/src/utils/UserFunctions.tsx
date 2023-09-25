@@ -69,7 +69,7 @@ export function userLogin(data: LoginData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/members/login', data)
     .then(async (response) => {
-      // console.log(response.data.data)
+      console.log(response.data.data)
       const accessToken = await response.data.data.accessToken;
       const memberEmail = await response.data.data.memberEmail;
       const memberId = await response.data.data.memberId.toString();
@@ -77,6 +77,7 @@ export function userLogin(data: LoginData): Promise<void> {
       const memberRole = await response.data.data.memberRole;
       const refreshToken = await response.data.data.refreshToken;
       const memberBirthDate = await response.data.data.memberBirthDate;
+      const memberGender = await response.data.data.memberGender;
 
       await storeData('accessToken', accessToken);
       await storeData('memberEmail', memberEmail);
@@ -85,6 +86,7 @@ export function userLogin(data: LoginData): Promise<void> {
       await storeData('memberRole', memberRole);
       await storeData('refreshToken', refreshToken);
       await storeData('memberBirthDate', memberBirthDate);
+      await storeData('memberGender', memberGender);
     })
     .catch((e) => {
       throw e.response.data; // 에러를 다시 던져서, 함수를 호출하는 측에서 catch 가능하도록 합니다.
