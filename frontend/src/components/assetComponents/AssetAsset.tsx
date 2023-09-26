@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { Button } from '../ContentButton';
 import { images } from '../../assets/bank&card';
-import { useNavigation } from '@react-navigation/native';
 import { accountSearchAccountList } from '../../utils/AccountFunctions';
 
 interface ScreenProps {
@@ -104,7 +103,7 @@ const AssetAsset: React.FC<AssetAssetProps> = (props) => {
                   title="송금"
                   onPress={() => {
                     navigation.navigate('StackNavigation', {
-                      screen: 'WireTranfer',
+                      screen: 'WireTransfer',
                       params: { accounts: accounts, accountId: item.accountId },
                     });
                   }}

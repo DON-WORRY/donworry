@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import AssetAsset from '../../components/assetComponents/AssetAsset';
 import AssetChart from '../../components/assetComponents/AssetChart';
@@ -7,7 +7,7 @@ import ContentBox from '../../components/ContentBox';
 import ComponentsHeader from '../../components/ComponentsHeader';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
-function AssetScreen() {
+function AssetScreen({ route }) {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -19,6 +19,12 @@ function AssetScreen() {
 
     setRefreshing(false);
   }, []);
+
+  useEffect(() => {
+    if (route.params?.refresh) {
+      onRefresh();
+    }
+  }, [route.params?.refresh]);
 
   return (
     <BottomSheetModalProvider>

@@ -10,7 +10,7 @@ import CardHistoryScreen from '../../screens/historys/CardHistoryScreen';
 import AccountHistoryScreen from '../../screens/historys/AccountHistoryScreen';
 import KakaoLoginScreen from '../../screens/KakaoLoginScreen';
 import KakaoSignupScreen from '../../screens/Signups/KakaoSignupScreen';
-import WireTranferScreen from '../../screens/WireTransferScreen';
+import WireTransferScreen from '../../screens/WireTransferScreen';
 
 type RootStackParamList = {
   Login: undefined;
@@ -34,6 +34,10 @@ type RootStackParamList = {
     dateTime: string;
     id: number;
     dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
+  };
+  WireTransfer: {
+    accounts: Array<any>;
+    accountId: number;
   };
   Kakao: undefined;
   KakaoSignup: {
@@ -108,8 +112,8 @@ const StackNavigation: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="WireTranfer"
-        component={WireTranferScreen}
+        name="WireTransfer"
+        component={WireTransferScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
