@@ -21,7 +21,7 @@ public record DutchpayTotalResponse(
                 consumption.getConsumptionDetail(),
                 consumption.getMember().getMemberName(),
                 consumption.getConsumptionPrice(),
-                dutchpayPersonList.size(),
+                dutchpayPersonList.size() + 1,
                 myDetailDutchpayId,
                 dutchpayId,
                 dutchpayPersonList
