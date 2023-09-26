@@ -29,10 +29,10 @@ public class ConsumptionQueryRepository {
         LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), month, startDate.lengthOfMonth());
 
         return jpaQueryFactory
-                .select(consumptionCategory.consumptionCategoryName, consumption.consumptionPrice.sum())
+                .select(consumptionCategory.id, consumptionCategory.consumptionCategoryName, consumption.consumptionPrice.sum())
                 .from(consumption)
                 .join(consumption.consumptionCategory, consumptionCategory)
-                .groupBy(consumptionCategory.consumptionCategoryName)
+                .groupBy(consumptionCategory.id)
                 .where(
                         consumption.member.id.eq(memberId),
                         consumption.createdTime.between(startDate.atStartOfDay(), endDate.atStartOfDay())
