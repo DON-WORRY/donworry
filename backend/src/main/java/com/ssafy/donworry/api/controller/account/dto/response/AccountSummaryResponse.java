@@ -6,6 +6,7 @@ public record AccountSummaryResponse(
 
         Long accountId,
         String bankName,
+        String accountNumber,
         Long amount
 ) {
 
@@ -13,6 +14,7 @@ public record AccountSummaryResponse(
         return new AccountSummaryResponse(
                 account.getId(),
                 account.getBank().getName(),
+                account.getAccountNumber(),
                 account.getAccountAmount()
         );
     }

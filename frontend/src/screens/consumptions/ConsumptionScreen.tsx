@@ -15,6 +15,7 @@ import ConsumptionList from '../../components/consumptions/ConsumptionList';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
+import { categoryData } from '../../components/consumptions/ConsumptionList';
 
 interface ScreenProps {
   navigation: {
@@ -34,11 +35,6 @@ interface ConsumptionResponseProps {
   categoryHistoryResponseList: ConsumptionDataProps[];
   total: any;
 }
-
-const categoryData = [
-  { key: '1', value: '전체' },
-  { key: '2', value: '식비' },
-];
 
 const ConsumptionScreen: React.FC = () => {
   const [consumptionData, setConSumptionData] =
@@ -138,7 +134,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    // zIndex: 1,
   },
   subContainer: {
     width: width * 0.9,
@@ -175,4 +170,3 @@ const styles = StyleSheet.create({
   },
 });
 export default ConsumptionScreen;
-export { categoryData };

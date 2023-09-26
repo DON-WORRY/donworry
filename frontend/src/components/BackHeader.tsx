@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
   },
   headerBox: {
     height: 40,
+    alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: screenWidth - 40,

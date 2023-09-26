@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import BackHeader from '../../components/BackHeader';
 import ContentBox from '../../components/ContentBox';
-import FriendSearch from '../../components/friends/children/FriendSearch';
-import FriendListItem from '../../components/friends/children/FriendListItem';
+// import FriendSearch from '../../components/friends/children/FriendSearch';
+// import FriendListItem from '../../components/friends/children/FriendListItem';
+// import FriendList from '../../components/friends/FriendList';
 import { Ionicons } from '@expo/vector-icons';
 import {
   BottomSheetModalProvider,
@@ -26,6 +27,9 @@ import { RootStackParamList } from '../../navigations/RootNavigator/Stack';
 import { useNavigation } from '@react-navigation/native';
 import { consumptionDutchPayRequest } from '../../utils/ConsumptionFunctions';
 import { DutchPayRequestData } from '../../utils/ConsumptionFunctions';
+import FriendListForDutchpay from '../../components/dutchpays/FriendListForDutchpay';
+import { friendListInquiry } from '../../utils/FriendFunctions';
+import FriendListItemForDutchpay from '../../components/dutchpays/children/FiendListItemForDutchpay';
 
 interface ScreenProps {
   navigation: {
@@ -40,6 +44,13 @@ interface MemberProps {
   price?: string;
 }
 
+interface FriendProps {
+  friendId: number;
+  friendName: string;
+  friendEmail: string;
+  price?: string;
+}
+
 interface Nq1ButtonProps {
   title: string;
   onPress: () => void;
@@ -51,52 +62,9 @@ interface MyRequestProps {
   onPress: () => void;
 }
 
-// type DutchpayRequestScreenProps = {
-//   route: RouteProp<
-//     {
-//       DutchpayRequest: {
-//         bankName: string;
-//         detail: string;
-//         price: number;
-//         dateTime: string;
-//         id: number;
-//       };
-//     },
-//     'DutchpayRequest'
-//   >;
-// };
-
 type DutchpayRequestScreenProps = {
   route: RouteProp<RootStackParamList, 'DutchpayRequest'>;
 };
-
-const dummyData = [
-  {
-    memberId: 1,
-    memberName: 'test1',
-    memberEmail: '123',
-  },
-  {
-    memberId: 2,
-    memberName: 'test2',
-    memberEmail: '456',
-  },
-  {
-    memberId: 3,
-    memberName: 'test3',
-    memberEmail: 'test3@naver.com',
-  },
-  {
-    memberId: 4,
-    memberName: 'test4',
-    memberEmail: 'test4@naver.com',
-  },
-  {
-    memberId: 5,
-    memberName: 'test5',
-    memberEmail: 'test5@naver.com',
-  },
-];
 
 function formattedPrice(inputPrice: number) {
   const price = new Intl.NumberFormat('en-US').format(inputPrice);
@@ -126,6 +94,26 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
     setInputValue(newValue);
   };
   const navigation = useNavigation<ScreenProps['navigation']>();
+  const [friends, setFriends] = useState<FriendProps[]>([]);
+
+  // 친구목록 불러오기
+  useEffect(() => {
+    async function fetch() {
+      const data = await friendListInquiry()
+        .then((r) => {
+          // console.log(r)
+          return r.data.friendResponseList;
+        })
+        .catch((e) => {
+          throw e;
+        });
+      // console.log('freinds', data);
+      await setFriends(data);
+      // console.log(data);
+      return;
+    }
+    fetch();
+  }, []);
 
   useEffect(() => {
     if (selectedMemberList.length === 0 && myRequestAccount) {
@@ -151,12 +139,14 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
     }
   }, [remainingAmount, selectedMemberList]);
 
-  function search(name: string) {
-    console.log(name);
-  }
   // 친구 클릭 시
-  function handlePress(dummy: MemberProps) {
-    setSelectedMember(dummy);
+  function handlePress(data: FriendProps) {
+    const transformedData: MemberProps = {
+      memberId: data.friendId,
+      memberName: data.friendName,
+      memberEmail: data.friendEmail,
+    };
+    setSelectedMember(transformedData);
     bottomSheetModalRef.current.present(); // 돈 입력 모달 표시
   }
   // 돈 입력 후 추가 클릭 시
@@ -229,7 +219,8 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
       try {
         const response = await consumptionDutchPayRequest(data);
         if (response) {
-          console.log(response.status);
+          console.log(response);
+          navigation.navigate('StackNavigation', { screen: 'DutchpayState' });
         } else {
           console.error('API response does not contain data.');
         }
@@ -260,27 +251,30 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
           </Text>
           <Text>{consumptionData.detail}</Text>
           <ContentBox>
-            {/* <FriendSearch search={search} /> */}
-            {dummyData.map((dummy) => {
-              return (
-                <TouchableOpacity
-                  key={dummy.memberId}
-                  onPress={() => {
-                    if (!isActive[dummy.memberId]) {
-                      handlePress(dummy);
-                    }
-                  }}
-                  style={{
-                    pointerEvents: isActive[dummy.memberId] ? 'none' : 'auto',
-                  }}
-                >
-                  {/* <FriendListItem
-                    friend={dummy}
-                    state={isActive[dummy.memberId] ? 'gray' : 'black'}
-                  /> */}
-                </TouchableOpacity>
-              );
-            })}
+            <FriendListForDutchpay>
+              {friends.map((friend) => {
+                return (
+                  <TouchableOpacity
+                    key={friend.friendId}
+                    onPress={() => {
+                      if (!isActive[friend.friendId]) {
+                        handlePress(friend);
+                      }
+                    }}
+                    style={{
+                      pointerEvents: isActive[friend.friendId]
+                        ? 'none'
+                        : 'auto',
+                    }}
+                  >
+                    <FriendListItemForDutchpay
+                      friend={friend}
+                      state={isActive[friend.friendId] ? 'gray' : 'black'}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
+            </FriendListForDutchpay>
           </ContentBox>
           <View style={styles.middleView}>
             <View>

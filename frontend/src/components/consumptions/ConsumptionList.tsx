@@ -11,7 +11,6 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Button } from '../../components/logins/Login';
 import { AntDesign } from '@expo/vector-icons';
-import { categoryData } from '../../screens/consumptions/ConsumptionScreen';
 import { useNavigation } from '@react-navigation/native';
 
 interface ScreenProps {
@@ -29,6 +28,11 @@ interface ConsumptionDataProps {
     id: number;
   };
 }
+
+const categoryData = [
+  { key: '1', value: '전체' },
+  { key: '2', value: '식비' },
+];
 
 const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
   const blackLogo = require('../../assets/logo/BlackLogo.png');
@@ -235,3 +239,4 @@ const styles = StyleSheet.create({
 });
 
 export default ConsumptionList;
+export { categoryData };
