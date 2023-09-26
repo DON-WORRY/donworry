@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Children, ReactNode } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 
-import FriendSearch from './children/FriendSearch';
-import FriendListItem from './children/FriendListItem';
-
+import FriendSearch from '../friends/children/FriendSearch';
 import { friendListInquiry } from '../../utils/FriendFunctions';
 
 type Friend = {
@@ -12,9 +10,14 @@ type Friend = {
   friendEmail: string;
 };
 
+interface FriendListForDutchpayProps {
+  children: ReactNode;
+}
 const screenWidth = Dimensions.get('screen').width;
 
-const FriendList: React.FC = () => {
+const FriendListForDutchpay: React.FC<FriendListForDutchpayProps> = ({
+  children,
+}) => {
   const [friends, setFriends] = useState<Friend[]>([]);
 
   // 친구 숫자에 따라 다르게 나타나게 구현해야 한다.
@@ -44,14 +47,7 @@ const FriendList: React.FC = () => {
     <ScrollView style={styles.container}>
       <Text style={styles.header}>친구 목록</Text>
       <FriendSearch search={search} friends={friends} />
-
-      {friends.map((friend, index) => {
-        return (
-          <View key={index}>
-            <FriendListItem friend={friend} />
-          </View>
-        );
-      })}
+      {children}
     </ScrollView>
   );
 };
@@ -72,4 +68,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FriendList;
+export default FriendListForDutchpay;

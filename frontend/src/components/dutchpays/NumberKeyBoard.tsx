@@ -44,7 +44,7 @@ const NumberKeyBoard: React.FC<NumberKeyBoardProps> = ({
     <>
       <View style={styles.nameView}>
         <Text style={styles.nameText}>
-          {selectedMember ? selectedMember.name : '나'}
+          {selectedMember ? selectedMember.memberName : '나'}
         </Text>
       </View>
       <View style={styles.accountView}>

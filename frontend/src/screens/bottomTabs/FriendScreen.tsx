@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, VirtualizedList } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  VirtualizedList,
+} from 'react-native';
 
 import ComponentsHeader from '../../components/ComponentsHeader';
 import FriendMessageComponent from '../../components/friends/FriendMessageComponent';
