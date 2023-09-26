@@ -163,7 +163,7 @@ public class DutchpayService {
 
 
         Income income = Income.of(
-                detailDutchpay.getDutchpay().getConsumption().getConsumptionDetail() + "(정산)",
+                "(정산)" + detailDutchpay.getDutchpay().getConsumption().getConsumptionDetail(),
                 price,
                 receiverAccount.getAccountAmount(),
                 detailDutchpay.getMember(),
@@ -172,7 +172,7 @@ public class DutchpayService {
                 detailDutchpay
         );
         Consumption consumption = Consumption.of(
-                detailDutchpay.getDutchpay().getConsumption().getConsumptionDetail() + "(정산)",
+                "(정산)" + detailDutchpay.getDutchpay().getConsumption().getConsumptionDetail(),
                 price,
                 senderAccount.getAccountAmount(),
                 dutchpayStatus,
