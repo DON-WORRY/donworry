@@ -75,7 +75,7 @@ public class FinanceService {
                 receiverAccount.getMember().getMemberName() + "에게 이체",
                 price,
                 senderAccount.getAccountAmount(),
-                NOTSTART,
+                COMPLETE,
                 member,
                 senderAccount,
                 receiverAccount,
