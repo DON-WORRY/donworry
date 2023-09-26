@@ -147,6 +147,26 @@ export async function accountGoalInquiry(): Promise<void> {
       throw e;
     });
 }
+
+interface wireData {
+  accountId: number;
+  accountNumber: string;
+  price: number;
+  consumptionCategoryId: number;
+  simplePassword: string;
+}
+
+export async function wireTransfer(data: wireData): Promise<void> {
+  return axiosWithAuth
+    .post('/api/finance/transfer', data)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((e) => {
+      throw e;
+    });
+}
+
 // // 내 자산 순위 조회
 // export async function accountAssetRankInquiry(): Promise<void> {
 //   return axiosWithAuth

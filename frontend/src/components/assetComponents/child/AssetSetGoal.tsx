@@ -8,7 +8,7 @@ import {
   Dimensions,
   Keyboard,
 } from 'react-native';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -21,7 +21,7 @@ const AssetSetGoal: React.FC<{
   updateRemainDate: (newRemainDate: number) => void;
 }> = ({ updateRemainDate }) => {
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
-  const snapPoints = useMemo(() => ['35%', '70%'], []);
+  const snapPoints = useMemo(() => ['40%', '70%'], []);
   const [goalAmountInput, setGoalAmountInput] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
