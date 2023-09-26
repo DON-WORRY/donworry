@@ -4,6 +4,17 @@ import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
 import { APP_ENV_KAKAO_API_KEY, APP_ENV_REDIRECT_URI } from '@env';
 import { axiosWithoutAuth } from '../axios/http';
+import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// 토큰 저장하기
+const storeData = async (key: string, value: string) => {
+  try {
+    await AsyncStorage.setItem(key, value);
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 const URI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${APP_ENV_KAKAO_API_KEY}&redirect_uri=${APP_ENV_REDIRECT_URI}&lang=ko`;
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
@@ -14,8 +25,23 @@ interface ScreenProps {
   };
 }
 
+type KakaoType = {
+  email: string
+  gender: string;
+  nickname: string;
+  oauthProvider: string;
+};
+
+type RootStackParamList = {
+  KakaoSignup: {
+    kakao: KakaoType;
+  };
+};
+
 const KakaoLogin: React.FC = () => {
-  const navigation = useNavigation<ScreenProps['navigation']>();
+  const navigationLogin = useNavigation<ScreenProps['navigation']>();
+  const navigationSignup =
+    useNavigation<StackNavigationProp<RootStackParamList, 'KakaoSignup'>>();
   const getCode = (target: string) => {
     const exp = 'code=';
     const condition = target.indexOf(exp);
@@ -24,16 +50,39 @@ const KakaoLogin: React.FC = () => {
       // requestToken(requestCode);
       // navigation.replace('TabNavigation', { screen: 'Home' });
       // console.log(requestCode);
-      
+
       const data = {
-        kakaoAuthToken : requestCode
-      }
+        kakaoAuthToken: requestCode,
+      };
       axiosWithoutAuth
         .post('https://j9c210.p.ssafy.io/api/oauth/kakao', data)
         .then((r) => {
           console.log(r.data.data);
-          const farams = r.data.data
-          navigation.navigate('KakaoSignup', farams);
+          const farams = r.data.data;
+          if (farams.accessToken !== undefined) {
+            // 로그인 과정이 오래 걸림
+            navigationLogin.replace('TabNavigation', { screen: 'Home' });
+            // 토큰 저장
+            const accessToken = farams.accessToken
+            const memberEmail = farams.memberEmail;
+            const memberId = farams.memberId.toString();
+            const memberName = farams.memberName;
+            const memberRole = farams.memberRole;
+            const refreshToken = farams.refreshToken;
+            const memberBirthDate = farams.memberBirthDate;
+            const memberGender = farams.memberGender;
+      
+            storeData('accessToken', accessToken);
+            storeData('memberEmail', memberEmail);
+            storeData('memberId', memberId);
+            storeData('memberName', memberName);
+            storeData('memberRole', memberRole);
+            storeData('refreshToken', refreshToken);
+            storeData('memberBirthDate', memberBirthDate);
+            storeData('memberGender', memberGender);
+          } else {
+            navigationSignup.navigate('KakaoSignup', {kakao: farams});
+          }
         })
         .catch((e) => {
           console.error(e.response.data);

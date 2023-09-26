@@ -4,22 +4,23 @@ import Checkbox from 'expo-checkbox';
 
 interface SignupPrivacyAgreementProps {
   setIsChecked: (isChecked: boolean) => void;
+  isChecked: boolean;
 }
 
 const SignupPrivacyAgreement: React.FC<SignupPrivacyAgreementProps> = (
   props
 ) => {
-  const [isChecked, setIsChecked] = useState(false);
+  // const [isChecked, setIsChecked] = useState(false);
 
   return (
     <View style={styles.container}>
       <Checkbox
         style={styles.checkBox}
-        color={isChecked ? '#7777F3' : undefined}
-        value={isChecked}
+        color={props.isChecked ? '#7777F3' : undefined}
+        value={props.isChecked}
         onValueChange={() => {
-          setIsChecked(!isChecked);
-          props.setIsChecked(!isChecked);
+          // setIsChecked(!isChecked);
+          props.setIsChecked(!props.isChecked);
         }}
       />
       <Text>개인정보 수집 이용 동의</Text>
