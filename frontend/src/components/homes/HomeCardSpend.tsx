@@ -8,7 +8,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import ContentButton from '../ContentButton';
+import { Button } from '../ContentButton';
 import { images } from '../../assets/bank&card';
 import { useNavigation } from '@react-navigation/native';
 import { accountCardHistory } from '../../utils/AccountFunctions';
@@ -91,16 +91,14 @@ const HomeCardSpend: React.FC = () => {
                   </Text>
                 </View>
               </View>
-              <TouchableOpacity
+                <Button 
+                title="조회"
                 onPress={() => {
                   navigation.navigate('StackNavigation', {
                     screen: 'CardHistory',
                     params: { cardId: item.cardId, cards: cardSpend },
                   });
-                }}
-              >
-                <ContentButton />
-              </TouchableOpacity>
+                }}/>
             </View>
           );
         }

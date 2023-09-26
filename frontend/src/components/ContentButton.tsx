@@ -1,13 +1,26 @@
 import React from 'react';
-import { View, Dimensions, Text, StyleSheet } from 'react-native';
+import { View, Dimensions, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const { width } = Dimensions.get('screen');
 
-const MyButton = () => {
+interface ButtonProps {
+  title: string;
+  onPress: () => void;
+  disabled?: boolean;
+}
+const Button: React.FC<ButtonProps> = (props) => {
+  const { title, onPress, disabled } = props;
   return (
-    <View style={styles.button}>
-      <Text style={styles.text}>내역</Text>
-    </View>
+    <TouchableOpacity
+      style={[
+        styles.button,
+      ]}
+      onPress={onPress}
+      activeOpacity={0.5}
+      disabled={disabled}
+    >
+      <Text style={styles.text}>{title}</Text>
+    </TouchableOpacity>
   );
 };
 
@@ -19,6 +32,7 @@ const styles = StyleSheet.create({
     height: width * 0.09,
     justifyContent: 'center',
     marginTop: width * 0.05,
+    zIndex: 2,
   },
   text: {
     fontSize: width * 0.036,
@@ -26,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyButton;
+export { Button };

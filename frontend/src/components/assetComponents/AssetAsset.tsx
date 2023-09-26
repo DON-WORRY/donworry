@@ -8,7 +8,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import ContentButton from '../ContentButton';
+import { Button } from '../ContentButton';
 import { images } from '../../assets/bank&card';
 import { useNavigation } from '@react-navigation/native';
 import { accountSearchAccountList } from '../../utils/AccountFunctions';
@@ -33,7 +33,7 @@ const AssetAsset: React.FC<AssetAssetProps> = (props) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
   const [accounts, setAccounts] = useState<
-    Array<{ accountId: number, bankName: string; amount: number }>
+    Array<{ accountId: number; bankName: string; amount: number }>
   >([]);
   const [accountsAmount, setAccountsAmount] = useState(0);
 
@@ -78,30 +78,32 @@ const AssetAsset: React.FC<AssetAssetProps> = (props) => {
       {accounts.map((item, index) => {
         if (index < 4 || isExpanded) {
           return (
-            <View key={index} style={styles.row}>
-              <View style={styles.imageTextContainer}>
-                <Image
-                  style={styles.imageStyle}
-                  source={images[item.bankName]}
-                />
-                <View style={styles.textContainer}>
-                  <Text style={styles.cardContent}>{item.bankName}</Text>
-                  <Text style={styles.spendContent}>
-                    {formatAmount(item.amount.toString())}
-                  </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('StackNavigation', {
+                  screen: 'AccountHistory',
+                  params: { accountId: item.accountId },
+                });
+              }}
+            >
+              <View key={index} style={styles.row}>
+                <View style={styles.imageTextContainer}>
+                  <Image
+                    style={styles.imageStyle}
+                    source={images[item.bankName]}
+                  />
+                  <View style={styles.textContainer}>
+                    <Text style={styles.cardContent}>{item.bankName}</Text>
+                    <Text style={styles.spendContent}>
+                      {formatAmount(item.amount.toString())}
+                    </Text>
+                  </View>
                 </View>
+                <Button
+                title='송금'
+                onPress={()=>console.log(1)} />
               </View>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('StackNavigation', {
-                    screen: 'AccountHistory',
-                    params: { accountId: item.accountId },
-                  });
-                }}
-              >
-                <ContentButton />
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           );
         }
         return null;

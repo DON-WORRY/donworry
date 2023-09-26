@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity,} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import {
-  accountSetGoal,
   accountGoalInquiry,
   accountSearchAccountList,
 } from '../../utils/AccountFunctions';
+import AssetSetGoal from '../../components/assetComponents/child/AssetSetGoal'
 
 interface AssetGoalProps {
   refreshKey: number;
@@ -20,12 +14,11 @@ interface AssetGoalProps {
 const { width } = Dimensions.get('screen');
 
 const AssetGoal: React.FC<AssetGoalProps> = (props) => {
-  const { refreshKey } = props;
   const [barContainerWidth, setBarContainerWidth] = useState(0);
-
   const [goalAmount, setGoalAmount] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [remainDate, setRemainDate] = useState(0);
 
   useEffect(() => {
     const fetch = async () => {
@@ -42,63 +35,48 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
             (newTotalAmount.data.total / newGoalAmount.data.goalAmount) * 100
           );
         }
+        setRemainDate(calculateRemainingDays(newGoalAmount.data.goalStartTime, newGoalAmount.data.goalEndTime))
       } catch (error) {
         console.log('error: ', error);
       }
     };
     fetch();
-  }, [refreshKey]);
+  }, [props.refreshKey, remainDate]);
 
-  const SetGoal = async () => {
-    const newGoal = 30000000;
-    const nowTime = new Date().toISOString();
+  const updateRemainDate = (newRemainDate: number) => {
+    setRemainDate(newRemainDate);
+  };
 
-    const year = nowTime.substring(0, 4);
-    const month = nowTime.substring(5, 7);
-    const rest = nowTime.substring(7);
+  const calculateRemainingDays = (startDate: string, endDate: string) => {
+    // 문자열 날짜를 Date 객체로 변환
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
-    const newMonth = String(parseInt(month, 10) + 1).padStart(2, '0');
-    const endTime = `${year}-${newMonth}${rest}`;
+    const diffTime = end.getTime() - start.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    const data = {
-      goalAmount: newGoal,
-      goalStartTime: nowTime,
-      goalEndTime: endTime,
-    };
-
-    try {
-      await accountSetGoal(data);
-      setGoalAmount(newGoal);
-      setProgress((totalAmount / newGoal) * 100);
-    } catch (e) {
-      console.error('Failed to set goal:', e);
-    }
+    return diffDays;
   };
 
   const formatAmount = (amount: number) => {
     if (amount < 10000) {
       return `${amount}원`;
     }
-
     const chkAmount = Math.floor(amount / 10000) * 10000;
     let truncatedAmount = chkAmount;
-
     const units = ['', '만', '억', '조'];
     let formattedStr = '';
 
     for (const unit of units) {
       const part = truncatedAmount % 10000;
-
       if (part !== 0) {
         formattedStr = `${part}${unit} ` + formattedStr;
       }
-
       truncatedAmount = Math.floor(truncatedAmount / 10000);
       if (truncatedAmount === 0) {
         break;
       }
     }
-
     return formattedStr.trim() + '원';
   };
 
@@ -106,21 +84,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
     <View style={styles.container}>
       <View style={[styles.row, { marginBottom: width * 0.04, width: '105%' }]}>
         <Text style={styles.headText}>자산</Text>
-        <TouchableOpacity
-          onPress={() => {
-            SetGoal();
-          }}
-        >
-          <View style={styles.rightSection}>
-            <Text>설정</Text>
-            <MaterialIcons
-              style={styles.icon}
-              name="arrow-forward-ios"
-              color={'grey'}
-              size={width * 0.06}
-            />
-          </View>
-        </TouchableOpacity>
+        <AssetSetGoal updateRemainDate={updateRemainDate} />
       </View>
 
       {goalAmount !== null && (
@@ -214,7 +178,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
         <Text style={styles.headText}>도전 기간</Text>
         <View style={styles.rightSection}>
           <Text style={{ fontWeight: 'bold', fontSize: width * 0.04 }}>
-            120일 남음
+            {remainDate}일 남음
           </Text>
         </View>
       </View>
@@ -244,9 +208,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-  },
-  icon: {
-    marginLeft: 8,
   },
   barContainer: {
     flexDirection: 'row',
