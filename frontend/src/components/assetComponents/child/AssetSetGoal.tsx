@@ -4,24 +4,28 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  Image,
   TouchableOpacity,
   Dimensions,
+  Keyboard,
 } from 'react-native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { accountSetGoal } from '../../../utils/AccountFunctions';
 import { Button } from '../../../components/logins/Login';
+
+const { width, height } = Dimensions.get('screen');
 
 const AssetSetGoal: React.FC<{
   updateRemainDate: (newRemainDate: number) => void;
 }> = ({ updateRemainDate }) => {
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
-  const snapPoints = useMemo(() => ['35%'], []);
+  const snapPoints = useMemo(() => ['35%', '70%'], []);
   const [goalAmountInput, setGoalAmountInput] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
+  const { dismiss } = useBottomSheetModal();
 
   const handleInputChange = (text: string) => {
     setGoalAmountInput(text);
@@ -99,11 +103,38 @@ const AssetSetGoal: React.FC<{
     }
   };
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        bottomSheetModalRef.current?.snapToIndex(1); // 모달을 완전히 확장합니다.
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        bottomSheetModalRef.current?.snapToIndex(0); // 모달을 원래 위치로 복귀합니다.
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (!isFocused) {
+      bottomSheetModalRef.current?.dismiss();
+    }
+  }, [isFocused]);
+
   return (
     <View>
       <TouchableOpacity
         onPress={() => {
-          console.log(bottomSheetModalRef);
           bottomSheetModalRef.current.present();
         }}
       >
@@ -123,9 +154,24 @@ const AssetSetGoal: React.FC<{
         ref={bottomSheetModalRef}
         index={0}
         snapPoints={snapPoints}
+        backdropComponent={() => (
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'transparent', // 배경색을 투명하게 설정
+            }}
+            onPress={() => dismiss()}
+            activeOpacity={1}
+          />
+        )}
       >
         <View style={styles.container}>
-          <View style={styles.row}>
+          <View style={[styles.row, { marginTop: width * 0.1 }]}>
             <Text>목표 금액</Text>
             <TextInput
               style={styles.textInput}
@@ -152,25 +198,23 @@ const AssetSetGoal: React.FC<{
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
           />
+          <Button
+            title="목표설정"
+            onPress={async () => {
+              await SetGoal();
+            }}
+            style={{ justifyContent: 'center' }}
+            widthPercentage={0.9}
+          />
         </View>
-        <Button
-          title="목표설정"
-          onPress={async () => {
-            await SetGoal();
-          }}
-          widthPercentage={0.9}
-        />
       </BottomSheetModal>
     </View>
   );
 };
 
-const width = Dimensions.get('screen').width;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     paddingLeft: width * 0.25,
     paddingRight: width * 0.25,
