@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity,} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import {
   accountGoalInquiry,
   accountSearchAccountList,
 } from '../../utils/AccountFunctions';
-import AssetSetGoal from '../../components/assetComponents/child/AssetSetGoal'
+import AssetSetGoal from '../../components/assetComponents/child/AssetSetGoal';
 
 interface AssetGoalProps {
   refreshKey: number;
@@ -35,7 +41,12 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
             (newTotalAmount.data.total / newGoalAmount.data.goalAmount) * 100
           );
         }
-        setRemainDate(calculateRemainingDays(newGoalAmount.data.goalStartTime, newGoalAmount.data.goalEndTime))
+        setRemainDate(
+          calculateRemainingDays(
+            newGoalAmount.data.goalStartTime,
+            newGoalAmount.data.goalEndTime
+          )
+        );
       } catch (error) {
         console.log('error: ', error);
       }
@@ -97,13 +108,15 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
                   position: 'absolute',
                   left:
                     (Math.min(progress, 90) / 100) * barContainerWidth -
-                    width * 0.17,
+                    width * 0.2,
                   alignItems: 'center',
                 }}
               >
                 <View style={[styles.triangle, { left: width * 0.1 }]} />
                 <View style={styles.balloon}>
-                  <Text style={styles.balloonText}>{progress.toFixed(1)}%</Text>
+                  <Text style={styles.balloonText}>
+                    {progress > 100 ? ' 달성완료 ' : `${progress.toFixed(1)}%`}
+                  </Text>
                 </View>
               </View>
             )}
@@ -111,7 +124,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
               style={{
                 ...styles.runnerIcon,
                 left:
-                  (Math.min(progress, 91) / 100) * barContainerWidth -
+                  (Math.min(progress, 89) / 100) * barContainerWidth -
                   width * 0.05,
               }}
               name="directions-run"
@@ -178,7 +191,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
         <Text style={styles.headText}>도전 기간</Text>
         <View style={styles.rightSection}>
           <Text style={{ fontWeight: 'bold', fontSize: width * 0.04 }}>
-            {remainDate}일 남음
+            {remainDate <= 0 ? '기간만료' : `${remainDate}일 남음`}
           </Text>
         </View>
       </View>
