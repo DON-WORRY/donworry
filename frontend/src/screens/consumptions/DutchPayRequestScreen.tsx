@@ -7,6 +7,7 @@ import {
   Dimensions,
   ScrollView,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import BackHeader from '../../components/BackHeader';
 import ContentBox from '../../components/ContentBox';
@@ -18,7 +19,7 @@ import {
   BottomSheetModalProvider,
   BottomSheetModal,
 } from '@gorhom/bottom-sheet';
-import NumberKeyBoard from '../../components/dutchpays/NumberKeyBoard';
+import NumberKeyBoard from '../../components/dutchpays/DutchpayNumberKeyBoard';
 import { Button } from '../../components/logins/Login';
 import { AntDesign } from '@expo/vector-icons';
 import { useRoute, RouteProp } from '@react-navigation/native';
@@ -27,7 +28,7 @@ import { RootStackParamList } from '../../navigations/RootNavigator/Stack';
 import { useNavigation } from '@react-navigation/native';
 import { consumptionDutchPayRequest } from '../../utils/ConsumptionFunctions';
 import { DutchPayRequestData } from '../../utils/ConsumptionFunctions';
-import FriendListForDutchpay from '../../components/dutchpays/FriendListForDutchpay';
+import FriendListForDutchpay from '../../components/dutchpays/DutchpayFriendListForDutchpay';
 import { friendListInquiry } from '../../utils/FriendFunctions';
 import FriendListItemForDutchpay from '../../components/dutchpays/children/FiendListItemForDutchpay';
 
@@ -423,6 +424,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
+    paddingTop: Platform.OS === 'android' ? 60 : 0,
   },
   amountText: {
     fontWeight: '600',

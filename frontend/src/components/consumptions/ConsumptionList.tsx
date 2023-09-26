@@ -12,6 +12,7 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import { Button } from '../../components/logins/Login';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { images } from '../../assets/bank&card';
 
 interface ScreenProps {
   navigation: {
@@ -26,16 +27,17 @@ interface ConsumptionDataProps {
     price: number;
     dateTime: string;
     id: number;
+    dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
   };
 }
 
 const categoryData = [
   { key: '0', value: '전체' },
   { key: '1', value: '교통' },
-  { key: '2', value: '생활(마트?)' },
+  { key: '2', value: '생활' },
   { key: '3', value: '식비' },
-  { key: '4', value: '생활(화장품)' },
-  { key: '5', value: '문화' },
+  { key: '4', value: '쇼핑' },
+  { key: '5', value: '여가' },
   { key: '6', value: '기타' },
 ];
 
@@ -82,11 +84,17 @@ const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
       <TouchableOpacity
         style={styles.listContainer}
         onPress={() => {
+          bottomSheetModalRef.current.dismiss();
           bottomSheetModalRef.current.present();
         }}
       >
         <View style={styles.listViewLeft}>
-          <Image source={blackLogo} style={styles.listLogo} />
+          <View style={styles.listLogoView}>
+            <Image
+              source={images[props.consumptionData.bankName]}
+              style={styles.listLogo}
+            />
+          </View>
           <View style={styles.listTitleView}>
             <Text>{formattedDetail(props.consumptionData.detail)}</Text>
             <Text style={styles.listBankText}>
@@ -142,13 +150,22 @@ const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
             </View>
           </View>
           <Button
-            title="더치페이"
+            title={
+              props.consumptionData.dutchpayStatus === 'NOTSTART'
+                ? '더치페이'
+                : props.consumptionData.dutchpayStatus === 'PROGRESS'
+                ? '더치페이진행중'
+                : '더치페이완료'
+            }
             onPress={() => {
               navigation.navigate('StackNavigation', {
                 screen: 'DutchpayRequest',
                 params: props.consumptionData,
               });
             }}
+            disabled={
+              props.consumptionData.dutchpayStatus === 'NOTSTART' ? false : true
+            }
             widthPercentage={0.9}
           />
         </View>
@@ -166,11 +183,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  listLogoView: {
+    borderRadius: 50,
+    overflow: 'hidden',
+    backgroundColor: 'white',
+  },
   listLogo: {
     height: 40,
     width: 40,
   },
   listTitleView: {
+    marginLeft: 10,
     justifyContent: 'space-around',
   },
   listBankText: {

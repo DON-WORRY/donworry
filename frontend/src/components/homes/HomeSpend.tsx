@@ -43,7 +43,7 @@ const HomeSpend: React.FC = () => {
   const [memberId, setMemberId] = useState('');
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [totalSpend, setTotalSpend] = useState<
-    Array<{ amount: number; category: string }>
+    Array<{ amount: number; category: string; categoryId: number }>
   >([]);
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
@@ -85,6 +85,7 @@ const HomeSpend: React.FC = () => {
 
   const processedData = (totalSpend || [])
     .map((item) => ({
+      categoryId: item.categoryId,
       category: item.category,
       amount: -item.amount, // 음수로 표시하려면 '-'를 붙여야 함
     }))
@@ -121,6 +122,10 @@ const HomeSpend: React.FC = () => {
                 onPress={() => {
                   navigation.navigate('StackNavigation', {
                     screen: 'Consumption',
+                    params: {
+                      categoryId: item.categoryId,
+                      category: item.category,
+                    },
                   });
                 }}
               >

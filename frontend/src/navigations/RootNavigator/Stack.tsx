@@ -16,7 +16,7 @@ type RootStackParamList = {
   SignUp: undefined;
   Message: undefined;
   History: undefined;
-  Consumption: undefined;
+  Consumption: { categoryId: number; category: string };
   CardHistory: undefined;
   AccountHistory: undefined;
   DutchpayRequest: {
@@ -32,6 +32,7 @@ type RootStackParamList = {
     price: number;
     dateTime: string;
     id: number;
+    dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
   };
   Kakao: undefined;
   KakaoSignup: undefined;
