@@ -119,7 +119,7 @@ const SignupScreen: React.FC = () => {
                   memberGender: newGender,
                   memberBirthDate: newBirth,
                   memberSimplePassword: easyPassword,
-                  memberOauthProvider: "NONE"
+                  memberOauthProvider: 'NONE',
                 };
                 userSignup(data)
                   .then(() => {
@@ -144,8 +144,9 @@ const SignupScreen: React.FC = () => {
         } else {
           return alert('비밀번호가 틀렸습니다.');
         }
+      } else {
+        return alert('개인정보수집 동의에 체크해주세요.');
       }
-      return alert('개인정보수집 동의에 체크해주세요.');
     }
     return alert('이메일 인증을 해주세요.');
   }
@@ -178,7 +179,10 @@ const SignupScreen: React.FC = () => {
                 userBirth={userBirth}
               />
 
-              <SignupPrivacyAgreement setIsChecked={setIsChecked} />
+              <SignupPrivacyAgreement
+                setIsChecked={setIsChecked}
+                isChecked={isChecked}
+              />
               <SignupEasyButton
                 setPageData={setPageData}
                 canSignup={canSignup}

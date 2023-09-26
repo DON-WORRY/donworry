@@ -13,11 +13,15 @@ const ComaprisonBar: React.FC<ComparisonBarProps> = (props) => {
   const [myValue, setMyValue] = useState('');
   const [friendValue, setFriendValue] = useState('');
   const [amountDifference, setAmountDifference] = useState('');
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
-    setMyValue(numberWithCommas(props.myValue));
-    setFriendValue(numberWithCommas(props.friendsValue));
-    setAmountDifference(numberWithCommas(props.myValue - props.friendsValue));
-  }, [props.friendsValue || props.myValue]);
+    async function fetch() {
+      await setMyValue(numberWithCommas(props.myValue));
+      await setFriendValue(numberWithCommas(props.friendsValue));
+      await setAmountDifference(numberWithCommas(props.myValue - props.friendsValue));
+    }
+    fetch()
+  }, [props.friendsValue, props.myValue]);
   function numberWithCommas(x: number) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
