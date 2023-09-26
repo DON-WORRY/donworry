@@ -35,7 +35,14 @@ type RootStackParamList = {
     dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
   };
   Kakao: undefined;
-  KakaoSignup: undefined;
+  KakaoSignup: {
+    kakao: {
+      email: string;
+      gender: string;
+      nickname: string;
+      oauthProvider: string;
+    };
+  };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
