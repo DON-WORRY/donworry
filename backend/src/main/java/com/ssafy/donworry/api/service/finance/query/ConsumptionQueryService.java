@@ -114,24 +114,25 @@ public class ConsumptionQueryService {
 
         for (Tuple consumption : consumptionList) {
             boolean flag = true;
-            String categoryName = consumption.get(0, String.class);
-            Long categoryAmount = consumption.get(1, Long.class);
+            Long categoryId = consumption.get(0, Long.class);
+            String categoryName = consumption.get(1, String.class);
+            Long categoryAmount = consumption.get(2, Long.class);
             for (Tuple income : incomeList) {
                 if (income.get(0, String.class).equals(categoryName)) {
-                    categoryAmountList.add(new CategoryAmountResponse(categoryName, categoryAmount - income.get(1, Long.class)));
+                    categoryAmountList.add(new CategoryAmountResponse(categoryId, categoryName, categoryAmount - income.get(1, Long.class)));
                     flag = false;
                     break;
                 }
             }
             if (flag) {
-                categoryAmountList.add(new CategoryAmountResponse(categoryName, categoryAmount));
+                categoryAmountList.add(new CategoryAmountResponse(categoryId, categoryName, categoryAmount));
             }
             check[category.indexOf(categoryName)] = true;
         }
 
         for (int i = 0; i < category.size(); i++) {
             if (!check[i]) {
-                categoryAmountList.add(new CategoryAmountResponse(category.get(i), 0l));
+                categoryAmountList.add(new CategoryAmountResponse((long)i, category.get(i), 0l));
             }
         }
         return categoryAmountList;
