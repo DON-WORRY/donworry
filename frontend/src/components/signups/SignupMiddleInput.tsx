@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    fontSize: 18
   },
   inputFirst: {
     borderTopWidth: 1,
@@ -216,6 +217,7 @@ const styles = StyleSheet.create({
   },
   innerText: {
     width: screenWidth * 0.57,
+    fontSize: 18
   },
   isFocused: {
     borderColor: '#7777F3',

@@ -62,7 +62,7 @@ const SignupBottomInput: React.FC<SignupBottomInputProps> = (props) => {
         }}
       >
         <TextInput
-          style={isGenderFocused ? styles.innerFocusedText : null}
+          style={[isGenderFocused ? styles.innerFocusedText : null, {fontSize: 18}]}
           editable={false}
           placeholder={selectedGender}
           placeholderTextColor={
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderBottomWidth: 0.5,
+    fontSize: 18,
   },
   inputSecond: {
     borderTopWidth: 0.5,
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     marginBottom: 10,
+    fontSize: 18,
   },
   isFocused: {
     borderColor: '#7777F3',
