@@ -79,7 +79,7 @@ public class FinanceService {
                 member,
                 senderAccount,
                 receiverAccount,
-                consumptionCategoryRepository.findById(6l).get()
+                consumptionCategoryRepository.findById(transferAccountRequest.consumptionCategoryId()).get()
         );
 
         incomeRepository.save(income);
