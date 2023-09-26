@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { Button } from '../logins/Login';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MemberProps } from '../../screens/consumptions/DutchpayRequestScreen';
 

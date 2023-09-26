@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Children, ReactNode } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 
 import FriendSearch from '../friends/children/FriendSearch';
 import { friendListInquiry } from '../../utils/FriendFunctions';

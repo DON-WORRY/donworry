@@ -182,13 +182,14 @@ const SignupSecond: React.FC<SignupSecondProps> = (props) => {
         b: false,
         c: true,
       });
-      props.setEasyPassword(easyPass+str)
+      props.setEasyPassword(easyPass + str);
       // return alert('다음페이지');
     }
     const tmpPass = (await easyPass) + str;
     await setEasyPass(tmpPass);
     await shuffle(numbers);
   }
+
   // useEffect(() => {
   //   if (easyPass.length == 6) {
   //     console.log(easyPass);

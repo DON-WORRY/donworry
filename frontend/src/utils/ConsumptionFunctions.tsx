@@ -23,7 +23,14 @@ interface ConsumptionDataProps {
     price: number;
     dateTime: string;
     id: number;
+    dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
   }[];
+}
+
+interface DutchPayPriceSendData {
+  detailDutchpayId: number;
+  sendPrice: number;
+  simplePassword: string;
 }
 
 // 값을 가져오기
@@ -38,6 +45,7 @@ const getData = async (key: string) => {
     throw e;
   }
 };
+export { getData };
 
 // 카테고리별 소비합계
 export async function consumptionCategoryTotal(month: number): Promise<any> {
@@ -110,6 +118,20 @@ export async function consumptionDutchPayRequest(data: DutchPayRequestData) {
     });
 }
 
+// 더치페이 송금
+export async function consumptionDutchPayPriceSend(
+  data: DutchPayPriceSendData
+) {
+  return axiosWithAuth
+    .post('/api/dutchpay/transfer', data)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((e) => {
+      throw e;
+    });
+}
+
 // 더치페이 완료 (친구에게 요청보낸다.)
 export async function consumptionDutchPayComplete(
   dutchPayId: number,
@@ -139,13 +161,14 @@ export async function consumptionDutchPayAllComplete(
     });
 }
 
-export async function consumptionFriendRank() : Promise<any> {
+// 소비등수
+export async function consumptionFriendRank(): Promise<any> {
   return axiosWithAuth
-  .get("api/consumption/friendrank")
-  .then((r) => {
-    return r.data.data.rank
-  })
-  .catch((e) => {
-    throw e;
-  })
+    .get('api/consumption/friendrank')
+    .then((r) => {
+      return r.data.data.rank;
+    })
+    .catch((e) => {
+      throw e;
+    });
 }
