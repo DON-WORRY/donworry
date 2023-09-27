@@ -31,7 +31,7 @@ const SpendScreen: React.FC = () => {
           navigation.navigate('StackNavigation', { screen: 'DutchpayState' });
         }}
       >
-        <Text style={styles.listText}>더치페이</Text>
+        <Text style={styles.listText}>더치페이 현황</Text>
         <FontAwesome name="angle-right" size={40} />
       </TouchableOpacity>
       <TouchableOpacity
