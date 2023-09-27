@@ -69,6 +69,11 @@ public class AccountController {
         return ApiData.of(userRankResponse);
     }
 
+    @Operation(summary = "계좌번호 존재 여부 확인", description = "계좌 번호가 존재하는지 확인하는 API입니다.")
+    @GetMapping("/isaccount")
+    public ApiData<Boolean> searchAccountNumber(@RequestParam String accountNumber){
+        return ApiData.of(accountService.isAccountNumber(accountNumber));
+    }
 
 
     @Operation(summary = "테스트", description = "사용자 계정 생성 시 테스트 진행")
@@ -79,6 +84,7 @@ public class AccountController {
         accountService.createMemberInitAccount(memberId);
         return ApiData.of("성공!");
     }
+
 
 
 
