@@ -199,4 +199,7 @@ public class AccountService {
     }
 
 
+    public Boolean isAccountNumber(String accountNumber) {
+        return accountRepository.existsByAccountNumber(accountNumber);
+    }
 }
