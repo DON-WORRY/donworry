@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus.COMPLETE;
 import static com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus.NOTSTART;
 
 @Slf4j
