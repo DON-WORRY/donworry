@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
-  SafeAreaView,
-  Platform,
 } from 'react-native';
 import BackHeader from '../../components/BackHeader';
 import ContentBox from '../../components/ContentBox';
@@ -246,7 +244,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
 
   return (
     <BottomSheetModalProvider>
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <BackHeader screen="Spend" />
         <ScrollView>
           <Text>더치페이</Text>
@@ -343,13 +341,13 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
             />
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
         snapPoints={snapPoints}
       >
-        <View style={styles.container}>
+        <View style={styles.headerContainer}>
           <View style={styles.headerView}>
             <Text style={styles.headerText}>요청 금액 입력</Text>
             <TouchableOpacity
@@ -424,7 +422,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? 60 : 0,
+    paddingTop: 60,
   },
   amountText: {
     fontWeight: '600',
@@ -476,6 +474,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
+  },
+  headerContainer: {
+    alignItems: 'center',
+    flex: 1,
   },
   headerView: {
     width: Dimensions.get('screen').width * 0.9,

@@ -21,7 +21,7 @@ export async function friendListInquiry(): Promise<any> {
 }
 
 // 친구 요청 리스트
-export async function friendRequestList() : Promise<void> {
+export async function friendRequestList(): Promise<any> {
   return axiosWithAuth
     .get('/api/friends/request/list')
     .then((res) => {

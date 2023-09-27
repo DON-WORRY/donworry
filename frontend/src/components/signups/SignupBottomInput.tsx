@@ -62,7 +62,10 @@ const SignupBottomInput: React.FC<SignupBottomInputProps> = (props) => {
         }}
       >
         <TextInput
-          style={[isGenderFocused ? styles.innerFocusedText : null, {fontSize: 18}]}
+          style={[
+            isGenderFocused ? styles.innerFocusedText : null,
+            { fontSize: 18 },
+          ]}
           editable={false}
           placeholder={selectedGender}
           placeholderTextColor={

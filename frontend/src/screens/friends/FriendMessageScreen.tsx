@@ -62,19 +62,18 @@ const FriendMessageScreen: React.FC = () => {
 
   // 바로 렌더링 할 수 있게 하는 함수
   useEffect(() => {
-    const fetch = async () => {
-      const allRequstList = await friendRequestList()
-        .then((r) => {
-          return r.data;
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-      setReceivedRequest(allRequstList.receivedRequest);
-      setSendRequest(allRequstList.sendRequest);
-      setRendering(true);
+    const fetchData = async () => {
+      try {
+        const response = await friendRequestList();
+        const allRequstList = response.data;
+        setReceivedRequest(allRequstList.receivedRequest);
+        setSendRequest(allRequstList.sendRequest);
+        setRendering(true);
+      } catch (error) {
+        console.error(error);
+      }
     };
-    fetch();
+    fetchData();
   }, [rendering == false]);
   return (
     <KeyboardAwareScrollView>
@@ -224,7 +223,7 @@ const FriendMessageScreen: React.FC = () => {
   );
 };
 
-const screenWidth = Dimensions.get("screen").width
+const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
 
 const styles = StyleSheet.create({
@@ -274,7 +273,5 @@ const styles = StyleSheet.create({
     color: '#7777F3',
   },
 });
-
-
 
 export default FriendMessageScreen;

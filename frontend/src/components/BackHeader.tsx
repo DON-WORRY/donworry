@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 interface ScreenProps {
   navigation: {
-    goBack: (screen: string, params?: any) => void;
+    goBack: () => void;
   };
 }
 
@@ -22,7 +22,7 @@ const BackHeader: React.FC<BackProps> = (props) => {
         name="arrow-left"
         size={30}
         onPress={() => {
-          navigation.goBack('Tabnavigation', { screen: props.screen });
+          navigation.goBack();
         }}
       />
       <Image source={blackLogo} style={styles.logo} />

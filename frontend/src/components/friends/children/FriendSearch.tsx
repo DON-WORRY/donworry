@@ -4,7 +4,6 @@ import {
   Alert,
   FlatList,
   Keyboard,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -40,8 +39,9 @@ interface FriendSearchProps {
 }
 
 const FriendSearch: React.FC<FriendSearchProps> = (props) => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Comparison'>>();
-  
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'Comparison'>>();
+
   const [loading, setLoading] = useState(true);
   const searchAPI = (keyword: string) => {
     return props.friends.filter((v) => v.friendName.includes(keyword));
@@ -79,7 +79,7 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
   }, [keyword]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={{ paddingHorizontal: 25 }}>
         <View style={styles.searchTextInput}>
           <TextInput
@@ -129,12 +129,23 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
             return (
               <TouchableOpacity
                 onPressIn={() => Keyboard.dismiss()}
-                onPress={() => Alert.alert(`${item.friendName}`, "해당 친구와 비교를 원하시나요?", [
-                  { text: "비교하러 가기", onPress: () => {
-                    navigation.navigate('Comparison', { friendPk: `${item.friendId}` });
-                  }},
-                  { text: "취소하기", onPress: () => {}},
-                ])}
+                onPress={() =>
+                  Alert.alert(
+                    `${item.friendName}`,
+                    '해당 친구와 비교를 원하시나요?',
+                    [
+                      {
+                        text: '비교하러 가기',
+                        onPress: () => {
+                          navigation.navigate('Comparison', {
+                            friendPk: `${item.friendId}`,
+                          });
+                        },
+                      },
+                      { text: '취소하기', onPress: () => {} },
+                    ]
+                  )
+                }
                 activeOpacity={1}
                 style={styles.applicationBox}
                 key={items.index}
@@ -164,12 +175,13 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
           }}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 60,
     backgroundColor: 'white',
   },
   fontStyle: {

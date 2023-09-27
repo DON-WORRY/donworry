@@ -10,7 +10,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import ComponentsHeader from '../../components/ComponentsHeader';
-import { SafeAreaView } from 'react-native-safe-area-context';
 interface ScreenProps {
   navigation: {
     navigate: (screen: string, params?: any) => void;
@@ -23,7 +22,7 @@ const SpendScreen: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ComponentsHeader />
       <TouchableOpacity
         style={styles.listView}
@@ -43,7 +42,7 @@ const SpendScreen: React.FC = () => {
         <Text style={styles.listText}>소비 페이지</Text>
         <FontAwesome name="angle-right" size={40} />
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: Platform.OS === 'android' ? 60 : 0,
+    paddingTop: 60,
   },
   listView: {
     flexDirection: 'row',

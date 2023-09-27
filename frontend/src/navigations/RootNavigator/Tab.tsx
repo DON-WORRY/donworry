@@ -8,7 +8,17 @@ import AssetScreen from '../../screens/bottomTabs/AssetScreen';
 import ComparisonScreen from '../../screens/bottomTabs/ComparsionScreen';
 import FriendScreen from '../../screens/bottomTabs/FriendScreen';
 
-const Tab = createBottomTabNavigator();
+type RootTabParamList = {
+  Home: undefined;
+  Spend: undefined;
+  Asset: { refresh: boolean };
+  Comparison: {
+    friendPk: string;
+  };
+  Friend: undefined;
+};
+
+const Tab = createBottomTabNavigator<RootTabParamList>();
 
 const TabNavigation: React.FC = () => {
   return (
@@ -96,3 +106,4 @@ const TabNavigation: React.FC = () => {
 };
 
 export default TabNavigation;
+export { RootTabParamList };
