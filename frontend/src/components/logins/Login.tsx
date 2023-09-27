@@ -8,6 +8,8 @@ import {
   Text,
   Alert,
   Image,
+  StyleProp,
+  ViewStyle
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { userLogin } from '../../utils/UserFunctions';
@@ -27,6 +29,7 @@ interface ButtonProps {
   onPress: () => void;
   widthPercentage?: number;
   disabled?: boolean;
+  style?: StyleProp<ViewStyle>;  // 스타일 prop을 추가
 }
 
 interface ScreenProps {
@@ -102,8 +105,30 @@ const Inputbox: React.FC<InputboxProps> = (props) => {
   );
 };
 
+// const Button: React.FC<ButtonProps> = (props) => {
+//   const { title, onPress, widthPercentage = 0.7, disabled } = props;
+//   return (
+//     <TouchableOpacity
+//       style={[
+//         styles.button,
+//         {
+//           width: Dimensions.get('screen').width * widthPercentage,
+//           backgroundColor: disabled ? 'gray' : '#7777F3',
+//         },
+//       ]}
+//       onPress={onPress}
+//       activeOpacity={0.9}
+//       disabled={disabled}
+//     >
+//       <Text style={styles.buttonText}>{title}</Text>
+//     </TouchableOpacity>
+//   );
+// };
+
+
 const Button: React.FC<ButtonProps> = (props) => {
-  const { title, onPress, widthPercentage = 0.7, disabled } = props;
+  const { title, onPress, widthPercentage = 0.7, disabled, style } = props;
+  
   return (
     <TouchableOpacity
       style={[
@@ -112,6 +137,7 @@ const Button: React.FC<ButtonProps> = (props) => {
           width: Dimensions.get('screen').width * widthPercentage,
           backgroundColor: disabled ? 'gray' : '#7777F3',
         },
+        style // 외부에서 주입된 스타일을 추가
       ]}
       onPress={onPress}
       activeOpacity={0.9}
@@ -121,6 +147,7 @@ const Button: React.FC<ButtonProps> = (props) => {
     </TouchableOpacity>
   );
 };
+
 
 const GoToSignup: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();

@@ -6,6 +6,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import BackHeader from '../../components/BackHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,7 +16,19 @@ import ConsumptionList from '../../components/consumptions/ConsumptionList';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
-import { categoryData } from '../../components/consumptions/ConsumptionList';
+import { RootStackParamList } from '../../navigations/RootNavigator/Stack';
+import { RouteProp } from '@react-navigation/native';
+import { AntDesign } from '@expo/vector-icons';
+
+const categoryData = [
+  { key: '0', value: '전체' },
+  { key: '1', value: '교통' },
+  { key: '2', value: '생활' },
+  { key: '3', value: '식비' },
+  { key: '4', value: '쇼핑' },
+  { key: '5', value: '여가' },
+  { key: '6', value: '기타' },
+];
 
 interface ScreenProps {
   navigation: {
@@ -29,28 +42,37 @@ interface ConsumptionDataProps {
   price: number;
   dateTime: string;
   id: number;
-  // dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
+  dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
 }
+
 interface ConsumptionResponseProps {
   categoryHistoryResponseList: ConsumptionDataProps[];
   total: any;
 }
 
-const ConsumptionScreen: React.FC = () => {
+interface ConsumptionScreenProps {
+  route: RouteProp<RootStackParamList, 'Consumption'>;
+}
+
+const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
   const [consumptionData, setConSumptionData] =
     useState<ConsumptionResponseProps>();
-
-  const [categorySelected, setCategorySelected] = useState<number>(0);
+  categoryData;
+  const [category, setCategory] = useState<number>(
+    route.params ? route.params.categoryId : 0
+  );
+  // 현재 날짜 반환
+  const currentDate = new Date();
+  const initialMonth = currentDate.getMonth() + 1;
+  const [month, setMonth] = useState<number>(initialMonth);
 
   const navigation = useNavigation<ScreenProps['navigation']>();
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData(category: number, month: number) {
       try {
-        const response = await consumptionCategoryHistory(0, 7);
+        const response = await consumptionCategoryHistory(category, month);
         if (response) {
-          // setConSumptionData(response.categoryHistoryResponseList);
-          // setTotalSpendMoney(response.total);
           setConSumptionData({
             categoryHistoryResponseList: response.categoryHistoryResponseList,
             total: response.total,
@@ -63,8 +85,8 @@ const ConsumptionScreen: React.FC = () => {
         console.error('An error occurred:', error);
       }
     }
-    fetchData();
-  }, []);
+    fetchData(category, month);
+  }, [category, month]);
 
   function formattedDateDayOfTheWeek(dateTime: string): string {
     const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
@@ -84,25 +106,52 @@ const ConsumptionScreen: React.FC = () => {
     return formatter;
   }
 
+  function handleGoToLeft() {
+    if (month > 1) {
+      setMonth(month - 1);
+    }
+  }
+
+  function handleGoToRight() {
+    if (month < initialMonth) {
+      setMonth(month + 1);
+    }
+  }
+
   return (
     <BottomSheetModalProvider>
       <SafeAreaView style={styles.container}>
         <BackHeader screen="Spend" />
         <View style={styles.subContainer}>
           <Text style={styles.headerTitleText}>소비</Text>
-          <Text>9월</Text>
           <View style={styles.headerDateView}>
+            <TouchableOpacity onPress={handleGoToLeft}>
+              <AntDesign name="caretleft" size={24} color="black" />
+            </TouchableOpacity>
+            <Text style={styles.headerDateText}>{month}월</Text>
+            <TouchableOpacity onPress={handleGoToRight}>
+              <AntDesign name="caretright" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.headerCategoryView}>
             <SelectList
-              setSelected={(val: number) => setCategorySelected(val)}
+              setSelected={(val: number) => {
+                setCategory(val);
+              }}
               data={categoryData}
               save="key"
               search={false}
               boxStyles={{ borderRadius: 10 }}
-              defaultOption={{ key: '1', value: '전체' }}
+              defaultOption={{
+                key: category,
+                value: categoryData[category].value,
+              }}
             />
           </View>
 
-          <Text>지출 : {formattedPrice(consumptionData?.total)}원</Text>
+          <Text style={styles.headerPriceText}>
+            지출 : {formattedPrice(consumptionData?.total)}원
+          </Text>
 
           <ScrollView style={styles.listScrollView}>
             {consumptionData?.categoryHistoryResponseList.map((data, index) => (
@@ -134,6 +183,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
+    paddingTop: Platform.OS === 'android' ? 60 : 0,
   },
   subContainer: {
     width: width * 0.9,
@@ -145,13 +195,27 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   headerDateView: {
-    width: width * 0.3,
+    flexDirection: 'row',
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  headerDateText: {
+    fontSize: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  headerCategoryView: {
+    width: width * 0.23,
     alignSelf: 'flex-end',
     position: 'absolute',
     borderRadius: 10,
     backgroundColor: 'white',
     top: 20,
     zIndex: 1,
+  },
+  headerPriceText: {
+    fontSize: 18,
+    fontWeight: '600',
   },
   // headerAccountView: {
   //   flexDirection: 'row',

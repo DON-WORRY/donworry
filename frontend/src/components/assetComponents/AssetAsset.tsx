@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { Button } from '../ContentButton';
 import { images } from '../../assets/bank&card';
-import { useNavigation } from '@react-navigation/native';
 import { accountSearchAccountList } from '../../utils/AccountFunctions';
 
 interface ScreenProps {
@@ -79,6 +78,7 @@ const AssetAsset: React.FC<AssetAssetProps> = (props) => {
         if (index < 4 || isExpanded) {
           return (
             <TouchableOpacity
+              key={index}
               onPress={() => {
                 navigation.navigate('StackNavigation', {
                   screen: 'AccountHistory',
@@ -86,7 +86,7 @@ const AssetAsset: React.FC<AssetAssetProps> = (props) => {
                 });
               }}
             >
-              <View key={index} style={styles.row}>
+              <View style={styles.row}>
                 <View style={styles.imageTextContainer}>
                   <Image
                     style={styles.imageStyle}
@@ -100,8 +100,14 @@ const AssetAsset: React.FC<AssetAssetProps> = (props) => {
                   </View>
                 </View>
                 <Button
-                title='송금'
-                onPress={()=>console.log(1)} />
+                  title="송금"
+                  onPress={() => {
+                    navigation.navigate('StackNavigation', {
+                      screen: 'WireTransfer',
+                      params: { accounts: accounts, accountId: item.accountId },
+                    });
+                  }}
+                />
               </View>
             </TouchableOpacity>
           );

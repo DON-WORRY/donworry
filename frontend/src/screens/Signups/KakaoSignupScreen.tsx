@@ -21,19 +21,7 @@ import SignupBtn from '../../components/signups/SignupBtn';
 import { userSignup } from '../../utils/UserFunctions';
 // 로그인 페이지로 이동
 import { useNavigation } from '@react-navigation/native';
-
-type KakaoType = {
-  email: string;
-  gender: string;
-  nickname: string;
-  oauthProvider: string;
-};
-
-type RootStackParamList = {
-  KakaoSignup: {
-    kakao: KakaoType;
-  };
-};
+import { RootStackParamList } from '../../navigations/RootNavigator/Stack';
 
 type KakaoScreenProps = {
   route: RouteProp<RootStackParamList, 'KakaoSignup'>;

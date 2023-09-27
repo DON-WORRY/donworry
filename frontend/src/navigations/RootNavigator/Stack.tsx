@@ -10,13 +10,14 @@ import CardHistoryScreen from '../../screens/historys/CardHistoryScreen';
 import AccountHistoryScreen from '../../screens/historys/AccountHistoryScreen';
 import KakaoLoginScreen from '../../screens/KakaoLoginScreen';
 import KakaoSignupScreen from '../../screens/Signups/KakaoSignupScreen';
+import WireTransferScreen from '../../screens/WireTransferScreen';
 
 type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
   Message: undefined;
   History: undefined;
-  Consumption: undefined;
+  Consumption: { categoryId: number; category: string };
   CardHistory: undefined;
   AccountHistory: undefined;
   DutchpayRequest: {
@@ -32,9 +33,21 @@ type RootStackParamList = {
     price: number;
     dateTime: string;
     id: number;
+    dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
+  };
+  WireTransfer: {
+    accounts: Array<any>;
+    accountId: number;
   };
   Kakao: undefined;
-  KakaoSignup: undefined;
+  KakaoSignup: {
+    kakao: {
+      email: string;
+      gender: string;
+      nickname: string;
+      oauthProvider: string;
+    };
+  };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -96,6 +109,11 @@ const StackNavigation: React.FC = () => {
       <Stack.Screen
         name="KakaoSignup"
         component={KakaoSignupScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="WireTransfer"
+        component={WireTransferScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
