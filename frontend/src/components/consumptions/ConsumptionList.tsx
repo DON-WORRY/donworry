@@ -42,7 +42,7 @@ const categoryData = [
 ];
 
 const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
-  const blackLogo = require('../../assets/logo/BlackLogo.png');
+  // const blackLogo = require('../../assets/logo/BlackLogo.png');
   // const navigation = useNavigation<ScreenProps['navigation']>();
   const snapPoints = useMemo(() => ['35%'], []);
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
@@ -119,7 +119,10 @@ const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalHeaderView}>
             <View style={styles.modalHeaderTitleView}>
-              <Image source={blackLogo} style={styles.modalHeaderLogo} />
+              <Image
+                source={images[props.consumptionData.bankName]}
+                style={styles.modalHeaderLogo}
+              />
               <Text style={styles.modalHeaderTitle}>
                 {props.consumptionData.detail}
               </Text>

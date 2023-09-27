@@ -6,8 +6,14 @@ import AssetGoal from '../../components/assetComponents/AssetGoal';
 import ContentBox from '../../components/ContentBox';
 import ComponentsHeader from '../../components/ComponentsHeader';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { RouteProp } from '@react-navigation/native';
+import { RootTabParamList } from '../../navigations/RootNavigator/Tab';
 
-function AssetScreen({ route }) {
+interface ConsumptionScreenProps {
+  route: RouteProp<RootTabParamList, 'Asset'>;
+}
+
+const AssetScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -50,7 +56,7 @@ function AssetScreen({ route }) {
       </View>
     </BottomSheetModalProvider>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import MyPageClose from './MyPageClose';
 import MypageOpen from './MypageOpen';
 import MyPageMenu from './MyPageMenu';
@@ -22,7 +16,7 @@ type UserData = {
   memberId: string;
   memberEmail: string;
   memberName: string;
-  memberBirthDate: string
+  memberBirthDate: string;
 };
 
 // 값을 가져오기
@@ -45,14 +39,14 @@ const MyPage: React.FC = () => {
     memberId: '-1',
     memberEmail: '1',
     memberName: '1',
-    memberBirthDate: "1"
+    memberBirthDate: '1',
   });
   useEffect(() => {
     async function fetch() {
       const memberId = await getData('memberId');
       const memberEmail = await getData('memberEmail');
       const memberName = await getData('memberName');
-      const memberBirthDate = await getData("memberBirthDate")
+      const memberBirthDate = await getData('memberBirthDate');
       if (
         memberId !== undefined &&
         memberEmail !== undefined &&
@@ -63,7 +57,7 @@ const MyPage: React.FC = () => {
           memberId: memberId,
           memberEmail: memberEmail,
           memberName: memberName,
-          memberBirthDate: memberBirthDate
+          memberBirthDate: memberBirthDate,
         };
         setData(tmpData);
       }
@@ -71,7 +65,7 @@ const MyPage: React.FC = () => {
     fetch();
   }, [clickView == false]);
   return data.memberId !== '' ? (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView style={styles.innerContainer}>
         {clickView ? <MypageOpen data={data} /> : <MyPageClose data={data} />}
         <HorizonLine />
@@ -81,7 +75,7 @@ const MyPage: React.FC = () => {
           <MyPageMenu imageName="send" text="송금하기" />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   ) : (
     <></>
   );
@@ -96,6 +90,7 @@ const HorizonLine = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 60,
     flex: 1,
   },
   horizontalLine: {

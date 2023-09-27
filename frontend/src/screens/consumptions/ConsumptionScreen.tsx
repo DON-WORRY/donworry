@@ -9,7 +9,6 @@ import {
   Platform,
 } from 'react-native';
 import BackHeader from '../../components/BackHeader';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { consumptionCategoryHistory } from '../../utils/ConsumptionFunctions';
 import ConsumptionList from '../../components/consumptions/ConsumptionList';
@@ -120,7 +119,7 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
 
   return (
     <BottomSheetModalProvider>
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <BackHeader screen="Spend" />
         <View style={styles.subContainer}>
           <Text style={styles.headerTitleText}>소비</Text>
@@ -173,7 +172,7 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
             ))}
           </ScrollView>
         </View>
-      </SafeAreaView>
+      </View>
     </BottomSheetModalProvider>
   );
 };
@@ -183,7 +182,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? 60 : 0,
+    paddingTop: 60,
   },
   subContainer: {
     width: width * 0.9,

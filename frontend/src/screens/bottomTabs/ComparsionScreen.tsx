@@ -17,16 +17,10 @@ import {
   friendTotalSpend,
 } from '../../utils/FriendFunctions';
 import { consumptionCategoryTotal } from '../../utils/ConsumptionFunctions';
+import { RootTabParamList } from '../../navigations/RootNavigator/Tab';
 
 const nowDate = new Date();
 const nowMonth = nowDate.getMonth() + 1;
-// 타입 정의
-type RootStackParamList = {
-  ComparisonScreen: {
-    friendPk: string; // 예: 친구의 pk 값을 전달받기 위한 타입
-    // 필요한 다른 파라미터들도 여기에 추가
-  };
-};
 
 type CategoryAmountList = CategoryAmount[];
 
@@ -46,7 +40,7 @@ type TotalDataType = {
 };
 
 type ComparisonScreenProps = {
-  route: RouteProp<RootStackParamList, 'ComparisonScreen'>;
+  route: RouteProp<RootTabParamList, 'Comparison'>;
 };
 
 type Friend = {
@@ -58,7 +52,7 @@ type Friend = {
 const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
   // const ComparisonScreen: React.FC = () => {
   const friendPk = route.params?.friendPk ?? -1;
-  const [friendName, setFriendName] = useState("친구 소비")
+  const [friendName, setFriendName] = useState('친구 소비');
   const [friendList, setFriendList] = useState<Friend[]>([]);
   const [myData, setMyData] = useState<CategoryAmountList>([
     {
@@ -148,7 +142,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
   });
   const [nowFriendId, setNowFriendId] = useState(-1);
   useEffect(() => {
-// 가장 처음은 friend data를 업데이트하자
+    // 가장 처음은 friend data를 업데이트하자
     // 내 데이터도 업데이트 해야한다.
     async function fetchFriends() {
       const newFriends: Friend[] = await friendListInquiry()
@@ -164,7 +158,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         nowMonth
       )
         .then((r) => {
-          setFriendName(r.data.name)
+          setFriendName(r.data.name);
           return r.data.categoryAmountList;
         })
         .catch((e) => console.error('0000', e));
@@ -173,10 +167,8 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
       console.log(tmpMyData);
     }
 
-      fetchFriends();
-  }, [])
-
-
+    fetchFriends();
+  }, []);
 
   useEffect(() => {
     async function fetchComparisonData() {
@@ -195,7 +187,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
             .then((r) => {
               console.log('-================');
               console.log(r);
-              setFriendName(r.data.name)
+              setFriendName(r.data.name);
               return r.data.categoryAmountList;
             })
             .catch((e) => {
@@ -284,7 +276,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         })
           .then((r) => {
             console.log(r);
-            setFriendName(r.data.name)
+            setFriendName(r.data.name);
             return r.data.categoryAmountList;
           })
           .catch((e) => {
@@ -332,7 +324,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
       }
       // 내 데이터가 나왔으니까
     }
-    fetchComparisonData()
+    fetchComparisonData();
   }, [nowFriendId, myData, friendList.length, friendPk]);
   return (
     <View style={styles.container}>
@@ -340,9 +332,9 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
-        alwaysBounceHorizontal={true}
+        alwaysBounceHorizontal={false}
       >
-        <ComparisonHeader friendName={friendName}/>
+        <ComparisonHeader friendName={friendName} />
         <ComparisonChart totalData={totalData} />
         {/* {modeKey.map((keyName) => {
           return (
