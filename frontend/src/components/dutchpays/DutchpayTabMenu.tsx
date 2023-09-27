@@ -151,7 +151,7 @@ const DutchpayTabMenu: React.FC = () => {
 const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
   props
 ) => {
-  const snapPoints = useMemo(() => ['35%'], []);
+  const snapPoints = useMemo(() => ['31%'], []);
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [selectedMemberId, setSelectedMemberId] = useState(0);
@@ -245,16 +245,24 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
                     <AntDesign name="close" size={24} color="black" />
                   </TouchableOpacity>
                 </View>
-                <View>
-                  <Text>{selectedMemberName}에게</Text>
+                <View style={styles.modalNameView}>
+                  <Text style={styles.modalNameText}>
+                    {selectedMemberName}에게
+                  </Text>
                 </View>
-                <View>
-                  <Text>{selectedMemberPrice}원</Text>
+                <View style={styles.modalPriceView}>
+                  <Text style={styles.modalPriceText}>
+                    {selectedMemberPrice}원
+                  </Text>
                 </View>
-                <View>
-                  <Text>을 보낼까요?</Text>
+                <View style={styles.modalSeqView}>
+                  <Text style={styles.modalSeqText}>을 보낼까요?</Text>
                 </View>
-                <Button title="송금" onPress={handlePriceSend} />
+                <Button
+                  title="송금"
+                  onPress={handlePriceSend}
+                  widthPercentage={0.9}
+                />
               </View>
             </BottomSheetModal>
           </View>
@@ -398,12 +406,31 @@ const styles = StyleSheet.create({
   modalContainer: {
     alignItems: 'center',
     flex: 1,
-    backgroundColor: 'gray',
   },
   modalHeaderView: {
     width: width * 0.9,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  modalNameView: {
+    alignSelf: 'flex-start',
+    paddingLeft: 10,
+  },
+  modalNameText: {
+    fontSize: 20,
+  },
+  modalPriceView: {},
+  modalPriceText: {
+    fontSize: 25,
+    fontWeight: '600',
+  },
+  modalSeqView: {
+    alignSelf: 'flex-end',
+    paddingRight: 10,
+    paddingBottom: 18,
+  },
+  modalSeqText: {
+    fontSize: 20,
   },
 });
 
