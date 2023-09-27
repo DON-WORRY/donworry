@@ -163,6 +163,11 @@ export async function wireTransfer(data: wireData): Promise<void> {
       console.log(res.data);
     })
     .catch((e) => {
+      if (e.response && e.response.data && e.response.data.message) {
+        console.log("API Error:", e.response.data.message); // 여기서 에러 메시지를 출력합니다.
+      } else {
+        console.log("An error occurred:", e);
+      }
       throw e;
     });
 }

@@ -120,14 +120,23 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
       simplePassword: simplePassword,
     };
 
+    const isErrorWithResponse = (error: any): error is { response: { data: { message: string } } } => {
+      return error && error.response && error.response.data && typeof error.response.data.message === 'string';
+    };
+
     try {
       await wireTransfer(data);
       navigation.navigate('Asset', { refresh: Date.now() });
     } catch (error) {
-      alert('계좌번호를 확인해주세요');
-      console.error('Error during wire transfer:', error);
+      if (isErrorWithResponse(error)) {
+        alert(error.response.data.message); // API에서 반환하는 에러 메시지를 보여줍니다.
+      } else {
+        alert('송금 중 오류가 발생했습니다.'); // 기본 오류 메시지
+      }
+      console.log('Error during wire transfer:', error); // console.error 대신 console.log를 사용
     }
-  };
+  }
+  
 
   return (
     <BottomSheetModalProvider>
@@ -166,6 +175,34 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
               onPress={() => {
                 bottomSheetModalRef.current.present();
                 setSendingAccount(account.accountNumber);
+                setSendingPrice('')
+                setSimplePassword('')
+              }}
+            >
+              <View style={styles.row}>
+                <Image
+                  style={styles.imageStyle}
+                  source={images[account.bankName]}
+                />
+                <View style={{ marginLeft: width * 0.05 }}>
+                  <Text style={styles.bankName}>{account.bankName}</Text>
+                  <Text style={styles.accountNumber}>
+                    {account.accountNumber}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
+          <Text style={[styles.headText, {marginTop: width * 0.1}]}>최근 송금 계좌</Text>
+          {filteredAccounts.map((account, index) => (
+            <TouchableOpacity
+              key={index}
+              style={{ flex: 1, width: '100%' }}
+              onPress={() => {
+                bottomSheetModalRef.current.present();
+                setSendingAccount(account.accountNumber);
+                setSendingPrice('')
+                setSimplePassword('')
               }}
             >
               <View style={styles.row}>
