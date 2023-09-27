@@ -2,6 +2,7 @@ package com.ssafy.donworry.api.controller.member;
 
 import com.ssafy.donworry.api.service.member.NotificationService;
 import com.ssafy.donworry.common.model.UserDetailsModel;
+import com.ssafy.donworry.common.util.SseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +15,12 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
 public class NotificationController {
-    private final NotificationService notificationService;
+    private final SseUtil sseUtil;
     @Operation(summary = "sse 구독 요청", description = "sse를 구독 요청하는 API입니다.")
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsModel userDetailsModel) {
         Long memberId = userDetailsModel.getId();
-        return notificationService.subscribe(memberId);
+        return sseUtil.subscribe(memberId);
     }
 
 

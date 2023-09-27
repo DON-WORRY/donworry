@@ -19,32 +19,9 @@ import java.io.IOException;
 @Transactional
 @RequiredArgsConstructor
 public class NotificationService {
-
-    private final EmitterRepository emitterRepository;
-    private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
-
     public void createNotification(){
 
     }
 
-    public SseEmitter subscribe(Long memberId) {
-        SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
-        emitterRepository.save(memberId, emitter);
-        emitter.onCompletion(() -> emitterRepository.delete(memberId));
-        emitter.onTimeout(() -> emitterRepository.delete(memberId));
-        try {
-            log.info("connect : " + memberId);
-            emitter.send(SseEmitter.event()
-                    .id("id")
-                    .name("sse")
-                    .data("connect completed")
-            );
 
-        } catch (IOException exception) {
-            throw new InvalidValueException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
-        return emitter;
-
-
-    }
 }
