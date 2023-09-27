@@ -3,6 +3,7 @@ package com.ssafy.donworry.api.service.member.query;
 import com.ssafy.donworry.api.controller.member.dto.response.MemberLoginResponse;
 import com.ssafy.donworry.api.controller.member.dto.response.MemberSearchResponse;
 import com.ssafy.donworry.api.service.member.request.MemberLoginServiceRequest;
+import com.ssafy.donworry.api.service.member.request.MemberSimplePasswordCheckServiceRequest;
 import com.ssafy.donworry.common.error.ErrorCode;
 import com.ssafy.donworry.common.error.exception.EntityNotFoundException;
 import com.ssafy.donworry.common.error.exception.InvalidValueException;
@@ -75,9 +76,21 @@ public class MemberQueryService {
         log.debug("userEmail: {}", userEmail);
         return memberRepository.findByMemberNameStartsWithAndMemberEmailNot(memberName, userEmail).stream()
                 .map(
-                        (member) -> MemberSearchResponse.of(member)
+                        MemberSearchResponse::of
                 )
                 .collect(Collectors.toList());
+    }
+
+    public void checkSimplePassword(MemberSimplePasswordCheckServiceRequest request, Long memberId){
+        log.debug("memberId: {}", memberId);
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
+                );
+
+        if(!encoder.matches(request.memberSimplePassword(), member.getMemberSimplePassword()))
+            throw new InvalidValueException(ErrorCode.SIMPLE_PASSWORD_NOT_MATCH);
     }
 
 }
