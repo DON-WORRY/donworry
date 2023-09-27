@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Text,
@@ -178,7 +177,7 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
     const data = {
       detailDutchpayId: selectedMemberId,
       sendPrice: selectedMemberPrice,
-      simplePassword: '123',
+      simplePassword: '456456',
     };
     sendDutchpayData(data);
     navigation.replace('StackNavigation', {

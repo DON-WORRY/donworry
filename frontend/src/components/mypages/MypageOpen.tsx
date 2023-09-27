@@ -1,12 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-} from 'react-native';
+import { Dimensions, StyleSheet, View, Text, Image } from 'react-native';
 import MypageImage from './MypageImage';
 import MypageText from './MypageText';
 import MypageButton from './MyPageButton';

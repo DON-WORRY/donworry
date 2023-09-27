@@ -1,12 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import MypageImage from './MypageImage';
 import { useDispatch } from 'react-redux';
 import { setMypageModal } from '../../store/Modal';
