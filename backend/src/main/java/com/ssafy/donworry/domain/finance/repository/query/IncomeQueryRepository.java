@@ -50,9 +50,9 @@ public class IncomeQueryRepository {
                 .join(income.detailDutchpay, detailDutchpay)
                 .join(detailDutchpay.dutchpay, dutchpay)
                 .join(dutchpay.consumption, consumption)
-                .where(income.member.id.eq(memberId),
+                .where(
                         income.detailDutchpay.isNotNull(),
-                        income.createdTime.between(startDate.atStartOfDay(), endDate.atStartOfDay()),
+                        income.member.id.eq(memberId),
                         settingCategory(categoryId)
                 )
                 .fetch();

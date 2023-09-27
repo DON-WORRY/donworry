@@ -166,7 +166,7 @@ public class DutchpayService {
                 "(정산)" + detailDutchpay.getDutchpay().getConsumption().getConsumptionDetail(),
                 price,
                 receiverAccount.getAccountAmount(),
-                detailDutchpay.getMember(),
+                detailDutchpay.getDutchpay().getMember(),
                 receiverAccount,
                 senderAccount,
                 detailDutchpay
@@ -176,7 +176,7 @@ public class DutchpayService {
                 price,
                 senderAccount.getAccountAmount(),
                 dutchpayStatus,
-                memberRepository.findById(memberId).get(),
+                detailDutchpay.getMember(),
                 senderAccount,
                 receiverAccount,
                 detailDutchpay.getDutchpay().getConsumption().getConsumptionCategory()
