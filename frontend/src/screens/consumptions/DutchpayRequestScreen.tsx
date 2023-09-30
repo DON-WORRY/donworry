@@ -261,7 +261,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
       reqAmountList: reqAmountList,
     };
     console.log(data);
-    // createDutchpayData();
+    createDutchpayData();
   }
 
   function handleDutchpayRequestByN1() {
@@ -289,7 +289,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
       reqAmountList: reqAmountList,
     };
     console.log(data);
-    // createDutchpayData();
+    createDutchpayData();
   }
 
   // 친구 검색
