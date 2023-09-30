@@ -22,26 +22,25 @@ const FiendListItemForDutchpay: React.FC<FiendListItemForDutchpayProps> = (
         {props.friend.friendName}
       </Text>
       <Text style={[styles.text, { color: props.state }]}>
-        {props.friend.friendEmail.slice(0, 8) + '...'}
+        {props.friend.friendEmail}
       </Text>
     </View>
   );
 };
 
-const screenWidth = Dimensions.get('screen').width;
+const width = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
-    width: screenWidth - 80,
-    height: 60,
-    paddingRight: 10,
-    paddingLeft: 10,
+    width: width * 0.7,
     flexDirection: 'row',
+    // paddingRight: 10,
+    // paddingLeft: 10,
     justifyContent: 'space-between',
-    alignItems: 'center',
+    marginTop: 15,
   },
   text: {
-    fontWeight: 'bold',
-    fontSize: 24,
+    fontWeight: '600',
+    fontSize: 22,
   },
 });
 

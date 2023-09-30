@@ -68,13 +68,11 @@ const MypageOpen: React.FC<MyPageOpenProps> = (props) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingTop: 60,
-    height: 500,
+    height: 400,
   },
   text: {
     fontSize: 35,
     fontWeight: '800',
-    paddingRight: 30,
   },
   image: {
     borderRadius: 50,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Children, ReactNode } from 'react';
-import { Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { Text, StyleSheet, Dimensions, ScrollView, View } from 'react-native';
 
 import FriendSearch from '../friends/children/FriendSearch';
 import { friendListInquiry } from '../../utils/FriendFunctions';
@@ -13,7 +13,6 @@ type Friend = {
 interface FriendListForDutchpayProps {
   children: ReactNode;
 }
-const screenWidth = Dimensions.get('screen').width;
 
 const FriendListForDutchpay: React.FC<FriendListForDutchpayProps> = ({
   children,
@@ -44,27 +43,29 @@ const FriendListForDutchpay: React.FC<FriendListForDutchpayProps> = ({
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.header}>친구 목록</Text>
-      <FriendSearch search={search} friends={friends} />
+      {/* <FriendSearch search={search} friends={friends} /> */}
       {children}
-    </ScrollView>
+    </View>
   );
 };
 
+const width = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
-    // flexDirection: 'row',
-    height: 470,
-    padding: 20,
-    width: screenWidth - 40,
+    padding: 15,
+    width: width * 0.9,
     borderRadius: 15,
+    alignItems: 'center',
     backgroundColor: 'white',
-    marginBottom: 100,
+    marginTop: 20,
+    marginBottom: 20,
   },
   header: {
-    fontWeight: 'bold',
-    fontSize: 18,
+    alignSelf: 'flex-start',
+    fontWeight: '700',
+    fontSize: 20,
   },
 });
 

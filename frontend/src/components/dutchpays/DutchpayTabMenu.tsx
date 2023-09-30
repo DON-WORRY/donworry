@@ -209,7 +209,14 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
             ))}
             <View style={styles.sendMemberView}>
               <Text style={styles.sendMemberText}>
-                보낸인원 0/{sendDutchpayTotal.reqMemberSize}
+                보낸인원{' '}
+                {
+                  sendDutchpayTotal.dutchpayPersonList.filter(
+                    (dutchpayPerson) =>
+                      dutchpayPerson.dutchpayStatus === 'COMPLETE'
+                  ).length
+                }
+                /{sendDutchpayTotal.reqMemberSize}
               </Text>
             </View>
             <Button
@@ -267,7 +274,7 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
           </View>
         ))
       ) : (
-        <Text>데이터가 없습니다.</Text>
+        <Text style={styles.emptyText}>요청 받은 더치페이가 없습니다</Text>
       )}
     </ScrollView>
   );
@@ -301,14 +308,21 @@ const DutchpayFriendsReceiveGroup: React.FC<DutchpayFriendsReceiveGroup> = (
             ))}
             <View style={styles.sendMemberView}>
               <Text style={styles.sendMemberText}>
-                보낸인원 0/{receiveDutchpayTotal.reqMemberSize}
+                보낸인원{' '}
+                {
+                  receiveDutchpayTotal.dutchpayPersonList.filter(
+                    (dutchpayPerson) =>
+                      dutchpayPerson.dutchpayStatus === 'COMPLETE'
+                  ).length
+                }
+                /{receiveDutchpayTotal.reqMemberSize}
               </Text>
             </View>
           </View>
         ))
       ) : (
         <View>
-          <Text>데이터가 없습니다.</Text>
+          <Text style={styles.emptyText}>요청한 더치페이가 없습니다.</Text>
         </View>
       )}
     </ScrollView>
@@ -316,6 +330,10 @@ const DutchpayFriendsReceiveGroup: React.FC<DutchpayFriendsReceiveGroup> = (
 };
 
 const DutchpayFriendList: React.FC<DutchpayFriendList> = (props) => {
+  let completeCount = 0;
+  if (props.dutchpayPerson.dutchpayStatus === 'COMPLETE') {
+    completeCount += 1;
+  }
   return (
     <View style={styles.contentBox}>
       <View style={styles.contentBoxView}>
@@ -430,6 +448,11 @@ const styles = StyleSheet.create({
   },
   modalSeqText: {
     fontSize: 20,
+  },
+  emptyText: {
+    color: 'lightgray',
+    fontSize: 20,
+    marginTop: 20,
   },
 });
 
