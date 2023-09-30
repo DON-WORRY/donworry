@@ -8,7 +8,7 @@ import java.util.List;
 @Component
 public class FileExtensionFilter {
 
-    // TODO: 2023-09-10 리팩토링 필요 
+    // TODO: 2023-09-10 리팩토링 하면서 filter 패키지 밑이 아닌 util 패키지 밑으로 옮겨야함
     private final String[] NOT_ALLOWED_IMG_EXTENSIONS = {"png", "jpg", "jpeg", "gif"};
     private final String[] NOT_ALLOWED_FILE_EXTENSIONS = {"jsp", "php", "asp", "html", "perl"};
 

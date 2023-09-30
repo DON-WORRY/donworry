@@ -2,12 +2,14 @@ package com.ssafy.donworry.api.controller.member;
 
 import com.ssafy.donworry.api.controller.member.dto.request.MemberJoinRequest;
 import com.ssafy.donworry.api.controller.member.dto.request.MemberLoginRequest;
+import com.ssafy.donworry.api.controller.member.dto.request.MemberSimplePasswordCheckRequest;
 import com.ssafy.donworry.api.controller.member.dto.response.MemberLoginResponse;
 import com.ssafy.donworry.api.controller.member.dto.response.MemberSearchResponse;
 import com.ssafy.donworry.api.service.member.MemberService;
 import com.ssafy.donworry.api.service.member.query.MemberQueryService;
 import com.ssafy.donworry.api.service.member.request.MemberJoinServiceRequest;
 import com.ssafy.donworry.api.service.member.request.MemberLoginServiceRequest;
+import com.ssafy.donworry.api.service.member.request.MemberSimplePasswordCheckServiceRequest;
 import com.ssafy.donworry.common.model.UserDetailsModel;
 import com.ssafy.donworry.common.response.ApiData;
 import com.ssafy.donworry.common.util.RandomUtil;
@@ -57,5 +59,12 @@ public class MemberController {
     @Operation(summary = "이름으로 전체 회원 검색", description = "회원 리스트 이름으로 검색 더치페이용")
     public ApiData<List<MemberSearchResponse>> searchMember(@RequestParam(required = false) String memberName, @AuthenticationPrincipal UserDetailsModel model) {
         return ApiData.of(memberQueryService.searchMember(memberName, model.getEmail()));
+    }
+
+    @PostMapping("/simple-password/check")
+    @Operation(summary = "간편 비밀번호 확인", description = "결제전 간편비밀번호 일치여부 확인")
+    public ApiData<String> checkSimplePassword(@RequestBody MemberSimplePasswordCheckRequest request, @AuthenticationPrincipal UserDetailsModel model){
+        memberQueryService.checkSimplePassword(MemberSimplePasswordCheckServiceRequest.of(request), model.getId());
+        return ApiData.of("간편 비밀번호 인증 확인되었습니다.");
     }
 }
