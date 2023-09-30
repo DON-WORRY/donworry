@@ -128,8 +128,15 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
               <AntDesign name="caretleft" size={24} color="black" />
             </TouchableOpacity>
             <Text style={styles.headerDateText}>{month}월</Text>
-            <TouchableOpacity onPress={handleGoToRight}>
-              <AntDesign name="caretright" size={24} color="black" />
+            <TouchableOpacity
+              onPress={handleGoToRight}
+              disabled={month === initialMonth ? true : false}
+            >
+              <AntDesign
+                name="caretright"
+                size={24}
+                color={month === initialMonth ? 'lightgray' : 'black'}
+              />
             </TouchableOpacity>
           </View>
           <View style={styles.headerCategoryView}>

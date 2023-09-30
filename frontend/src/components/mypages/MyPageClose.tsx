@@ -44,12 +44,10 @@ const MyPageClose: React.FC<MyPageCloseProps> = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 60,
-  },
+  container: {},
   header_view: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    // justifyContent: 'space-around',
   },
   profile_view: {
     padding: 5,
@@ -59,6 +57,7 @@ const styles = StyleSheet.create({
     width: 55,
   },
   text_view: {
+    marginLeft: 10,
     padding: 7,
     justifyContent: 'space-between',
   },
@@ -71,6 +70,8 @@ const styles = StyleSheet.create({
   },
   icon_view: {
     justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
   },
   down_image: {
     height: 30,

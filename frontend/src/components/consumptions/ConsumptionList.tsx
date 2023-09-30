@@ -13,6 +13,19 @@ import { Button } from '../../components/logins/Login';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { images } from '../../assets/bank&card';
+import SelectDropdown from 'react-native-select-dropdown';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+const categoryDataByValue = ['교통', '생활', '식비', '쇼핑', '여가', '기타'];
+
+const categoryData = [
+  { key: '1', value: '교통' },
+  { key: '2', value: '생활' },
+  { key: '3', value: '식비' },
+  { key: '4', value: '쇼핑' },
+  { key: '5', value: '여가' },
+  { key: '6', value: '기타' },
+];
 
 interface ScreenProps {
   navigation: {
@@ -31,22 +44,12 @@ interface ConsumptionDataProps {
   };
 }
 
-const categoryData = [
-  { key: '0', value: '전체' },
-  { key: '1', value: '교통' },
-  { key: '2', value: '생활' },
-  { key: '3', value: '식비' },
-  { key: '4', value: '쇼핑' },
-  { key: '5', value: '여가' },
-  { key: '6', value: '기타' },
-];
-
 const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
   // const blackLogo = require('../../assets/logo/BlackLogo.png');
   // const navigation = useNavigation<ScreenProps['navigation']>();
   const snapPoints = useMemo(() => ['35%'], []);
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
-  const [categorySelected, setCategorySelected] = useState<number>(0);
+  const [categorySelected, setCategorySelected] = useState('');
   const navigation = useNavigation<ScreenProps['navigation']>();
 
   function formattedTime(inputDateTime: string) {
@@ -140,15 +143,41 @@ const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
             </Text>
           </View>
           <View style={styles.modalCategoryView}>
-            <Text style={styles.modalCategoryText}>카테고리</Text>
+            <View style={styles.modalCategoryTextView}>
+              <Text style={styles.modalCategoryText}>카테고리</Text>
+            </View>
             <View style={styles.modalCategorySelectView}>
-              <SelectList
-                setSelected={(val: number) => setCategorySelected(val)}
-                data={categoryData}
-                save="key"
-                search={false}
-                boxStyles={{ borderRadius: 10 }}
-                defaultOption={{ key: '1', value: '전체' }}
+              <SelectDropdown
+                data={categoryDataByValue}
+                // defaultValueByIndex={1}
+                defaultValue={'교통'} // categoryData[props.consumptionData.categoryId ].value
+                onSelect={(selectedItem, index) => {
+                  // 이 때 카테고리 변경시키면 됨!!!!!
+                  console.log(selectedItem, index);
+                }}
+                // defaultButtonText={'Select country'}
+                // buttonTextAfterSelection={(selectedItem, index) => {
+                //   console.log('selecteditem : ' + selectedItem);
+                //   return selectedItem;
+                // }}
+                // rowTextForSelection={(item, index) => {
+                //   return item;
+                // }}
+                buttonStyle={styles.dropdown1BtnStyle}
+                buttonTextStyle={styles.dropdown1BtnTxtStyle}
+                renderDropdownIcon={(isOpened) => {
+                  return (
+                    <FontAwesome
+                      name={isOpened ? 'chevron-up' : 'chevron-down'}
+                      color={'#444'}
+                      size={18}
+                    />
+                  );
+                }}
+                dropdownIconPosition={'right'}
+                dropdownStyle={styles.dropdown1DropdownStyle}
+                rowStyle={styles.dropdown1RowStyle}
+                rowTextStyle={styles.dropdown1RowTxtStyle}
               />
             </View>
           </View>
@@ -182,7 +211,6 @@ const width = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   listContainer: {
     marginTop: 10,
-
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -238,6 +266,7 @@ const styles = StyleSheet.create({
   modalHeaderTitle: {
     fontSize: 20,
     fontWeight: '600',
+    marginLeft: 10,
   },
   modalHeaderExit: {},
   modalPriceView: {
@@ -249,25 +278,37 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   modalCategoryView: {
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: 13,
+    marginBottom: 8,
     flexDirection: 'row',
-    width: width * 0.7,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    width: width * 0.9,
+    justifyContent: 'flex-end',
+  },
+  modalCategoryTextView: {
+    justifyContent: 'center',
   },
   modalCategoryText: {
     fontSize: 20,
     fontWeight: '600',
   },
   modalCategorySelectView: {
-    position: 'absolute',
-    borderRadius: 10,
-    backgroundColor: 'white',
-    left: 200,
-    zIndex: 1,
+    marginLeft: 20,
   },
+  dropdown1BtnStyle: {
+    width: width * 0.26,
+    height: 50,
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#444',
+  },
+  dropdown1BtnTxtStyle: { color: '#444', textAlign: 'left' },
+  dropdown1DropdownStyle: { backgroundColor: '#EFEFEF' },
+  dropdown1RowStyle: {
+    backgroundColor: '#EFEFEF',
+    borderBottomColor: '#C5C5C5',
+  },
+  dropdown1RowTxtStyle: { color: '#444', textAlign: 'left', marginLeft: 15 },
 });
 
 export default ConsumptionList;
-export { categoryData };

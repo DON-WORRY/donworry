@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import BackHeader from '../../components/BackHeader';
 import ContentBox from '../../components/ContentBox';
@@ -28,7 +29,7 @@ import { consumptionDutchPayRequest } from '../../utils/ConsumptionFunctions';
 import { DutchPayRequestData } from '../../utils/ConsumptionFunctions';
 import FriendListForDutchpay from '../../components/dutchpays/DutchpayFriendListForDutchpay';
 import { friendListInquiry } from '../../utils/FriendFunctions';
-import FriendListItemForDutchpay from '../../components/dutchpays/children/FiendListItemForDutchpay';
+import FriendListItemForDutchpay from '../../components/dutchpays/children/DutchpayFiendListItemForDutchpay';
 
 interface ScreenProps {
   navigation: {
@@ -55,6 +56,7 @@ interface FriendProps {
 interface Nq1ButtonProps {
   title: string;
   onPress: () => void;
+  disabled?: boolean;
   widthPercentage?: number;
 }
 
@@ -91,11 +93,14 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
   const [remainingAmount, setRemainingAmount] = useState(consumptionData.price);
   const [myRequestAccount, setMyRequestAccount] = useState('');
   const [disabled, setDisabled] = useState(true);
+  const [disabledByN1, setDisabledByN1] = useState(true);
   const handleInputChange = (newValue: string) => {
     setInputValue(newValue);
   };
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [friends, setFriends] = useState<FriendProps[]>([]);
+  const [filteredFriends, setFilteredFriends] = useState<FriendProps[]>([]);
+  const [searchName, setSearchName] = useState('');
 
   // 친구목록 불러오기
   useEffect(() => {
@@ -110,6 +115,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
         });
       // console.log('freinds', data);
       await setFriends(data);
+      await setFilteredFriends(data);
       // console.log(data);
       return;
     }
@@ -137,6 +143,22 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
       }
     } else {
       setDisabled(true);
+    }
+  }, [remainingAmount, selectedMemberList]);
+
+  useEffect(() => {
+    // 다 1/N인지 확인하기
+    const hasEmptyMoneyInSelectedMembers = selectedMemberList.every(
+      (member) => member.price === ''
+    );
+    if (
+      selectedMemberList.length != 0 &&
+      hasEmptyMoneyInSelectedMembers &&
+      myRequestAccount === ''
+    ) {
+      setDisabledByN1(false);
+    } else {
+      setDisabledByN1(true);
     }
   }, [remainingAmount, selectedMemberList]);
 
@@ -239,106 +261,179 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
       reqAmountList: reqAmountList,
     };
     console.log(data);
-    createDutchpayData();
+    // createDutchpayData();
+  }
+
+  function handleDutchpayRequestByN1() {
+    async function createDutchpayData() {
+      try {
+        const response = await consumptionDutchPayRequest(data);
+        if (response) {
+          console.log(response);
+          navigation.pop();
+          navigation.replace('StackNavigation', { screen: 'DutchpayState' });
+        } else {
+          console.error('API response does not contain data.');
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    }
+    const totalMemberLength = selectedMemberList.length + 1;
+    const reqAmountList = selectedMemberList.map(({ memberEmail }) => ({
+      memberEmail,
+      price: Math.ceil(consumptionData.price / totalMemberLength),
+    }));
+    const data: DutchPayRequestData = {
+      consumptionId: consumptionData.id,
+      reqAmountList: reqAmountList,
+    };
+    console.log(data);
+    // createDutchpayData();
+  }
+
+  // 친구 검색
+  function handleSearchTextChange(text: string) {
+    setSearchName(text);
+
+    if (text === '') {
+      setFilteredFriends([]);
+    } else {
+      const filtered = friends.filter((friend) =>
+        friend.friendName.includes(text)
+      );
+      setFilteredFriends(filtered);
+    }
+  }
+
+  function renderFriendList(friend: FriendProps) {
+    return (
+      <View key={friend.friendId} style={{ overflow: 'scroll' }}>
+        <TouchableOpacity
+          onPress={() => {
+            if (!isActive[friend.friendId]) {
+              handlePress(friend);
+            }
+          }}
+          style={{
+            pointerEvents: isActive[friend.friendId] ? 'none' : 'auto',
+          }}
+        >
+          <FriendListItemForDutchpay
+            friend={friend}
+            state={isActive[friend.friendId] ? 'gray' : 'black'}
+          />
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   return (
     <BottomSheetModalProvider>
       <View style={styles.container}>
         <BackHeader screen="Spend" />
-        <ScrollView>
-          <Text>더치페이</Text>
-          <Text style={styles.amountText}>
-            {formattedPrice(consumptionData.price)}원
-          </Text>
-          <Text>{consumptionData.detail}</Text>
-          <ContentBox>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.scrollContainerView}>
+            <Text>더치페이</Text>
+            <Text style={styles.amountText}>
+              {formattedPrice(consumptionData.price)}원
+            </Text>
+            <Text>{consumptionData.detail}</Text>
+
             <FriendListForDutchpay>
-              {friends.map((friend) => {
-                return (
-                  <TouchableOpacity
-                    key={friend.friendId}
-                    onPress={() => {
-                      if (!isActive[friend.friendId]) {
-                        handlePress(friend);
-                      }
-                    }}
-                    style={{
-                      pointerEvents: isActive[friend.friendId]
-                        ? 'none'
-                        : 'auto',
-                    }}
-                  >
-                    <FriendListItemForDutchpay
-                      friend={friend}
-                      state={isActive[friend.friendId] ? 'gray' : 'black'}
-                    />
-                  </TouchableOpacity>
-                );
-              })}
+              <View>
+                <TextInput
+                  style={styles.searchTextInput}
+                  placeholder={'이름으로 친구 찾기'}
+                  value={searchName}
+                  onChangeText={(text) => handleSearchTextChange(text)}
+                />
+                <ScrollView>
+                  {searchName === '' ? (
+                    friends.length === 0 ? (
+                      <Text style={styles.searchResultText}>
+                        친구가 없습니다
+                      </Text>
+                    ) : (
+                      friends.map(renderFriendList)
+                    )
+                  ) : filteredFriends.length === 0 ? (
+                    <Text style={styles.searchResultText}>
+                      검색 결과가 없습니다
+                    </Text>
+                  ) : (
+                    filteredFriends.map(renderFriendList)
+                  )}
+                </ScrollView>
+              </View>
             </FriendListForDutchpay>
-          </ContentBox>
-          <View style={styles.middleView}>
-            <View>
-              <Text style={styles.currentMemberText}>
-                현재 인원 {currentMember}명
+
+            <View style={styles.middleView}>
+              <View>
+                <Text style={styles.currentMemberText}>
+                  현재 인원 {currentMember}명
+                </Text>
+              </View>
+              <Text style={styles.remainingAmountText}>
+                남은 금액 {remainingAmount}
               </Text>
             </View>
-            <Text style={styles.remainingAmountText}>
-              남은 금액 {remainingAmount}
-            </Text>
-          </View>
-          <MyRequestAccount
-            myRequestAccount={myRequestAccount}
-            onPress={() => {
-              setSelectedMember(undefined);
-              bottomSheetModalRef.current.present();
-            }}
-          />
-          {selectedMemberList.map((data) => {
-            return (
-              <View style={styles.bottomView} key={data.memberId}>
-                <ContentBox widthPercentage={0.75}>
-                  <View style={styles.bottomViewText}>
-                    <View>
-                      <Text style={styles.bottomTitleText}>
-                        {data.memberName}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.bottomAmountText}>
-                        요청금액 {data.price === '' ? '1/N' : data.price}원
-                      </Text>
-                    </View>
-                  </View>
-                </ContentBox>
-                <TouchableOpacity
-                  style={styles.bottomViewImage}
-                  onPress={() => {
-                    handleDelete(data);
-                  }}
-                >
-                  <Ionicons
-                    name="remove-circle-outline"
-                    size={40}
-                    color="red"
-                  />
-                </TouchableOpacity>
-              </View>
-            );
-          })}
-          <View style={styles.buttonView}>
-            <Button
-              title="더치페이 요청"
+            <MyRequestAccount
+              myRequestAccount={myRequestAccount}
               onPress={() => {
-                handleDutchpayRequest();
-                // navigation.navigate('StackNavigation', {
-                //   screen: 'DutchpayState',
-                //   params: consumptionData,
-                // });
+                setSelectedMember(undefined);
+                bottomSheetModalRef.current.present();
               }}
-              disabled={disabled}
             />
+            {selectedMemberList.map((data) => {
+              return (
+                <View style={styles.bottomView} key={data.memberId}>
+                  <ContentBox widthPercentage={0.75}>
+                    <View style={styles.bottomViewText}>
+                      <View>
+                        <Text style={styles.bottomTitleText}>
+                          {data.memberName}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text style={styles.bottomAmountText}>
+                          요청금액 {data.price === '' ? '1/N' : data.price}원
+                        </Text>
+                      </View>
+                    </View>
+                  </ContentBox>
+                  <TouchableOpacity
+                    style={styles.bottomViewImage}
+                    onPress={() => {
+                      handleDelete(data);
+                    }}
+                  >
+                    <Ionicons
+                      name="remove-circle-outline"
+                      size={40}
+                      color="red"
+                    />
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+            <View style={styles.buttonView}>
+              <Button
+                title="더치페이 요청"
+                onPress={() => {
+                  handleDutchpayRequest();
+                }}
+                disabled={disabled}
+                widthPercentage={0.65}
+              />
+              <Nq1Button
+                title="N/1 요청"
+                onPress={() => {
+                  handleDutchpayRequestByN1();
+                }}
+                disabled={disabledByN1}
+              />
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -409,9 +504,13 @@ const MyRequestAccount: React.FC<MyRequestProps> = (props) => {
 const Nq1Button: React.FC<Nq1ButtonProps> = (props) => {
   return (
     <TouchableOpacity
-      style={styles.n1button}
+      style={[
+        styles.n1button,
+        { backgroundColor: props.disabled ? 'gray' : '#FFCE84' },
+      ]}
       onPress={props.onPress}
       activeOpacity={0.9}
+      disabled={props.disabled}
     >
       <Text style={styles.n1buttonText}>{props.title}</Text>
     </TouchableOpacity>
@@ -424,9 +523,23 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 60,
   },
+  scrollContainerView: {
+    flex: 1,
+    overflow: 'scroll',
+  },
   amountText: {
     fontWeight: '600',
     fontSize: 25,
+  },
+  searchTextInput: {
+    height: 50,
+    width: Dimensions.get('screen').width * 0.7,
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 10,
+    fontSize: 18,
+    paddingLeft: 10,
+    marginTop: 15,
   },
   middleView: {
     flexDirection: 'row',
@@ -471,6 +584,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   buttonView: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
@@ -497,7 +611,6 @@ const styles = StyleSheet.create({
   n1button: {
     width: Dimensions.get('screen').width * 0.22,
     height: 45,
-    backgroundColor: '#FFCE84',
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -508,6 +621,11 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: 'white',
     fontWeight: 'bold',
+  },
+  searchResultText: {
+    fontSize: 17,
+    color: 'lightgray',
+    marginTop: 15,
   },
 });
 

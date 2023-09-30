@@ -80,14 +80,14 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ paddingHorizontal: 25 }}>
+      <View style={{ paddingHorizontal: 10 }}>
         <View style={styles.searchTextInput}>
           <TextInput
             autoCapitalize="none"
             autoCorrect={false}
             clearButtonMode="always"
             onChangeText={onChangeKeyword}
-            placeholderTextColor={'#000000'}
+            placeholderTextColor={'#B3BAC4'}
             style={styles.textInput}
             placeholder="친구 이름 검색"
             value={keyword}
@@ -179,26 +179,27 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
   );
 };
 
+const width = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
-    marginTop: 60,
+    width: width * 0.7,
     backgroundColor: 'white',
   },
   fontStyle: {
-    fontSize: 20,
+    fontSize: 15,
     color: 'black',
     marginTop: 6,
   },
   applicationBox: {
     borderBottomColor: '#7777F3',
-    borderBottomWidth: 2,
+    borderBottomWidth: 5,
     flexDirection: 'row',
   },
   searchTextInput: {
     justifyContent: 'center',
-    height: 60,
+    height: 50,
     lineHeight: 60,
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
     // backgroundColor: '#7777F3',
     marginTop: 15,
     borderRadius: 5,
