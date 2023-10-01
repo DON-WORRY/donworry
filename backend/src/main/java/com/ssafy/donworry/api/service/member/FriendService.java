@@ -1,11 +1,13 @@
 package com.ssafy.donworry.api.service.member;
 
+import com.ssafy.donworry.api.controller.member.dto.notification.DefaultNotificationDto;
 import com.ssafy.donworry.api.service.member.query.FriendQueryService;
 import com.ssafy.donworry.api.service.member.request.FriendCheckServiceRequest;
 import com.ssafy.donworry.api.service.member.request.FriendRequestServiceRequest;
 import com.ssafy.donworry.common.error.ErrorCode;
 import com.ssafy.donworry.common.error.exception.EntityNotFoundException;
 import com.ssafy.donworry.common.error.exception.InvalidValueException;
+import com.ssafy.donworry.common.util.SseUtil;
 import com.ssafy.donworry.domain.member.entity.FriendRelationship;
 import com.ssafy.donworry.domain.member.entity.FriendRequest;
 import com.ssafy.donworry.domain.member.entity.Member;
@@ -31,6 +33,7 @@ public class FriendService {
     private final FriendRequestRepository friendRequestRepository ;
     private final FriendRelationshipRepository friendRelationshipRepository;
     private final NotificationRepository notificationRepository;
+    private final SseUtil sseUtil;
 
     public void requestFriend(FriendRequestServiceRequest request, Long memberId){
         request.memberEmails().forEach(
@@ -54,6 +57,8 @@ public class FriendService {
                         Notification notification = Notification.ofFriendReq(friendRequest);
                         friendRequestRepository.save(friendRequest);
                         notificationRepository.save(notification);
+                        DefaultNotificationDto dto = DefaultNotificationDto.of(notification);
+                        sseUtil.send(receiver.getId(), dto);
                     }
                     catch(Exception e){
                         throw new InvalidValueException(ErrorCode.FRIEND_REQUEST_SAVE_ERROR);

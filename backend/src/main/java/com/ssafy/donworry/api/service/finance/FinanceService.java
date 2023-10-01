@@ -97,12 +97,7 @@ public class FinanceService {
         Notification notification = Notification.ofIncome(income);
         notificationRepository.save(notification);
         log.info("save notification : {}", notification.getId());
-        DefaultNotificationDto dto =  DefaultNotificationDto.builder()
-                .notificationId(notification.getId())
-                .notificationContent(notification.getNotificationContent())
-                .notificationType(notification.getNotificationType())
-                .notificationStatus(notification.getNotificationStatus())
-                .build();
+        DefaultNotificationDto dto = DefaultNotificationDto.of(notification);
         sseUtil.send(receiverAccount.getMember().getId(), dto);
 
 
