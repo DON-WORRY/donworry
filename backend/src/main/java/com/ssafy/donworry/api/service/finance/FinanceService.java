@@ -1,6 +1,7 @@
 package com.ssafy.donworry.api.service.finance;
 
 import com.ssafy.donworry.api.controller.finance.dto.request.TransferAccountRequest;
+import com.ssafy.donworry.api.controller.member.dto.notification.DefaultNotificationDto;
 import com.ssafy.donworry.common.error.ErrorCode;
 import com.ssafy.donworry.common.error.exception.EntityNotFoundException;
 import com.ssafy.donworry.common.error.exception.InvalidValueException;
@@ -17,6 +18,7 @@ import com.ssafy.donworry.domain.finance.repository.IncomeRepository;
 import com.ssafy.donworry.domain.member.entity.Member;
 import com.ssafy.donworry.domain.member.entity.Notification;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
+import com.ssafy.donworry.domain.member.repository.NotificationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,7 @@ public class FinanceService {
     private final IncomeRepository incomeRepository;
     private final ConsumptionRepository consumptionRepository;
     private final SseUtil sseUtil;
+    private final NotificationRepository notificationRepository;
 
 
     public Long transferByAccount(Long memberId, TransferAccountRequest transferAccountRequest) {
@@ -69,7 +72,7 @@ public class FinanceService {
         log.info("save receiverAccount : {}", receiverAccount.getId());
 
         Income income = Income.of(
-                member.getMemberName() + "에게 받음",
+                member.getMemberName() + "님에게 " + price + "원 받음",
                 price,
                 receiverAccount.getAccountAmount(),
                 receiverAccount.getMember(),
@@ -77,7 +80,7 @@ public class FinanceService {
                 senderAccount
         );
         Consumption consumption = Consumption.of(
-                receiverAccount.getMember().getMemberName() + "에게 이체",
+                receiverAccount.getMember().getMemberName() + "님에게 " + price + "원 이체",
                 price,
                 senderAccount.getAccountAmount(),
                 COMPLETE,
@@ -88,10 +91,21 @@ public class FinanceService {
         );
 
         incomeRepository.save(income);
-        Notification notification = Notification.ofIncome(income);
-        log.info("알림 생성 : {}", notification.getId());
-        sseUtil.send(receiverAccount.getMember().getId(), notification);
         log.info("save income : {}", income.getId());
+
+
+        Notification notification = Notification.ofIncome(income);
+        notificationRepository.save(notification);
+        log.info("save notification : {}", notification.getId());
+        DefaultNotificationDto dto =  DefaultNotificationDto.builder()
+                .notificationId(notification.getId())
+                .notificationContent(notification.getNotificationContent())
+                .notificationType(notification.getNotificationType())
+                .notificationStatus(notification.getNotificationStatus())
+                .build();
+        sseUtil.send(receiverAccount.getMember().getId(), dto);
+
+
         consumptionRepository.save(consumption);
         log.info("save consumption : {}", consumption.getId());
 

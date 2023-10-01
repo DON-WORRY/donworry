@@ -39,12 +39,12 @@ public class SseUtil {
         return emitter;
     }
 
-    public void send(Long memberId, Notification notification) {
+    public void send(Long memberId, Object data) {
         emitterRepository.get(memberId).ifPresentOrElse(it -> {
                     try {
                         it.send(SseEmitter.event()
                                 .name("sse")
-                                .data(notification.getId()));
+                                .data(data));
                         log.info("알림 보내기 성공");
                     } catch (IOException e) {
                         emitterRepository.delete(memberId);
