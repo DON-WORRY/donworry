@@ -1,16 +1,11 @@
 package com.ssafy.donworry.api.controller.finance.dto.response;
 
-import com.ssafy.donworry.domain.finance.entity.Consumption;
 import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
-import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
-import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor

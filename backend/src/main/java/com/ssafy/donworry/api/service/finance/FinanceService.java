@@ -9,9 +9,7 @@ import com.ssafy.donworry.common.util.SseUtil;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.account.repository.AccountRepository;
 import com.ssafy.donworry.domain.finance.entity.Consumption;
-import com.ssafy.donworry.domain.finance.entity.ConsumptionCategory;
 import com.ssafy.donworry.domain.finance.entity.Income;
-import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 import com.ssafy.donworry.domain.finance.repository.ConsumptionCategoryRepository;
 import com.ssafy.donworry.domain.finance.repository.ConsumptionRepository;
 import com.ssafy.donworry.domain.finance.repository.IncomeRepository;
@@ -26,7 +24,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus.COMPLETE;
-import static com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus.NOTSTART;
 
 @Slf4j
 @Service

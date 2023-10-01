@@ -3,7 +3,6 @@ package com.ssafy.donworry.api.service.finance.query;
 import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayPersonResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayTotalListResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayTotalResponse;
-import com.ssafy.donworry.domain.finance.entity.Consumption;
 import com.ssafy.donworry.domain.finance.entity.DetailDutchpay;
 import com.ssafy.donworry.domain.finance.entity.Dutchpay;
 import com.ssafy.donworry.domain.finance.repository.DetailDutchpayRepository;

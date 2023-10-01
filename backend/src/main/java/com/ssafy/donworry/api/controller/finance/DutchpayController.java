@@ -2,22 +2,16 @@ package com.ssafy.donworry.api.controller.finance;
 
 import com.ssafy.donworry.api.controller.finance.dto.request.DutchpayCreateRequest;
 import com.ssafy.donworry.api.controller.finance.dto.request.DutchpayTransferRequest;
-import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayPersonResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayTotalListResponse;
-import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayTotalResponse;
 import com.ssafy.donworry.api.service.finance.DutchpayService;
 import com.ssafy.donworry.api.service.finance.query.DutchpayQueryService;
 import com.ssafy.donworry.common.model.UserDetailsModel;
 import com.ssafy.donworry.common.response.ApiData;
-import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @RestController

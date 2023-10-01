@@ -1,7 +1,6 @@
 package com.ssafy.donworry.api.controller.finance.dto.response;
 
 import com.ssafy.donworry.domain.finance.entity.Consumption;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
