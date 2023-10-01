@@ -95,6 +95,20 @@ public class DutchpayService {
             try {
                 DetailDutchpay detailDutchpay = DetailDutchpay.of(req, reqMember, dutchpay);
                 detailDutchpayRepository. save(detailDutchpay);
+
+                // 더치페이 알림
+                Notification notification = Notification.ofDetailDutchpay(detailDutchpay, member);
+                notificationRepository.save(notification);
+                log.info("save notification : {}", notification.getId());
+                DutchpayNotificationDto dto = DutchpayNotificationDto.builder()
+                        .notificationId(notification.getId())
+                        .notificationContent(notification.getNotificationContent())
+                        .notificationType(notification.getNotificationType())
+                        .notificationStatus(notification.getNotificationStatus())
+                        .accountId(consumption.getAccount().getId())
+                        .detailDutchpayId(detailDutchpay.getId())
+                        .build();
+                sseUtil.send(reqMember.getId(), dto);
             }
             catch (Exception e) {
                 throw new InvalidValueException(ErrorCode.DETAIL_DUTCHPAY_SAVE_ERROR);
