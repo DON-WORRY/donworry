@@ -1,6 +1,5 @@
 package com.ssafy.donworry.domain.finance.entity;
 
-import com.ssafy.donworry.api.controller.finance.dto.request.DutchpayTransferRequest;
 import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.member.entity.Member;
@@ -11,10 +10,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.*;
-import static lombok.AccessLevel.PROTECTED;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter

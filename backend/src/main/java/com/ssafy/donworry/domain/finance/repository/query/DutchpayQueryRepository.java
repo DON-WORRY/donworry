@@ -1,7 +1,6 @@
 package com.ssafy.donworry.domain.finance.repository.query;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.donworry.domain.finance.entity.Dutchpay;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

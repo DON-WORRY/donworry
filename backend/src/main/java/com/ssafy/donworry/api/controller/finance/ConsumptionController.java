@@ -1,7 +1,9 @@
 package com.ssafy.donworry.api.controller.finance;
 
 import com.ssafy.donworry.api.controller.finance.dto.request.CategoryModifyRequest;
-import com.ssafy.donworry.api.controller.finance.dto.response.*;
+import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
+import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalHistoryResponse;
+import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalResponse;
 import com.ssafy.donworry.api.service.finance.ConsumptionService;
 import com.ssafy.donworry.api.service.finance.query.ConsumptionQueryService;
 import com.ssafy.donworry.common.model.UserDetailsModel;
@@ -12,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j

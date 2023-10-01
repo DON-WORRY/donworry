@@ -9,18 +9,17 @@ import com.ssafy.donworry.api.controller.finance.dto.response.CategoryTotalRespo
 import com.ssafy.donworry.api.controller.member.dto.response.FriendListResponse;
 import com.ssafy.donworry.api.service.account.query.AccountQueryService;
 import com.ssafy.donworry.api.service.member.query.FriendQueryService;
-import com.ssafy.donworry.common.response.ApiError;
-import com.ssafy.donworry.domain.finance.entity.Consumption;
 import com.ssafy.donworry.domain.finance.repository.query.ConsumptionQueryRepository;
 import com.ssafy.donworry.domain.finance.repository.query.IncomeQueryRepository;
-import com.ssafy.donworry.domain.member.entity.Member;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Service
