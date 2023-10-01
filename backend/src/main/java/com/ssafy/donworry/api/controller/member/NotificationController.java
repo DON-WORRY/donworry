@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class NotificationController {
     private final SseUtil sseUtil;
     private final NotificationQueryService notificationQueryService;
+    private final NotificationService notificationService;
     @Operation(summary = "sse 구독 요청", description = "sse를 구독 요청하는 API입니다.")
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsModel userDetailsModel) {
@@ -33,6 +34,13 @@ public class NotificationController {
         Long memberId = userDetailsModel.getId();
         NotificationListResponse list = notificationQueryService.searchNotification(memberId);
         return ApiData.of(list);
+    }
+
+    @Operation(summary = "알림 상태 변경", description = "알림을 읽었을 때 상태를 변경할 수 있는 API입니다.")
+    @PostMapping(value = "update/{id}")
+    public ApiData<Long> updateNotificationStatus(@PathVariable("id") Long notificationId) {
+        Long result = notificationService.updateNotificationStatus(notificationId);
+        return ApiData.of(result);
     }
 
 
