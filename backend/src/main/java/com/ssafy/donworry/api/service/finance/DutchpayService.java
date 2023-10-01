@@ -5,11 +5,14 @@ import com.ssafy.donworry.api.controller.finance.dto.request.DutchpayTransferReq
 import com.ssafy.donworry.api.controller.finance.dto.request.ReqAmountRequest;
 import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayPersonResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.DutchpayTotalResponse;
+import com.ssafy.donworry.api.controller.member.dto.notification.DefaultNotificationDto;
+import com.ssafy.donworry.api.controller.member.dto.notification.DutchpayNotificationDto;
 import com.ssafy.donworry.api.service.finance.query.DutchpayQueryService;
 import com.ssafy.donworry.common.error.ErrorCode;
 import com.ssafy.donworry.common.error.exception.DuplicateReqException;
 import com.ssafy.donworry.common.error.exception.EntityNotFoundException;
 import com.ssafy.donworry.common.error.exception.InvalidValueException;
+import com.ssafy.donworry.common.util.SseUtil;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.account.repository.AccountRepository;
 import com.ssafy.donworry.domain.finance.entity.Consumption;
@@ -24,7 +27,9 @@ import com.ssafy.donworry.domain.finance.repository.IncomeRepository;
 import com.ssafy.donworry.domain.finance.repository.query.DetailDutchpayQueryRepository;
 import com.ssafy.donworry.domain.finance.repository.query.IncomeQueryRepository;
 import com.ssafy.donworry.domain.member.entity.Member;
+import com.ssafy.donworry.domain.member.entity.Notification;
 import com.ssafy.donworry.domain.member.repository.MemberRepository;
+import com.ssafy.donworry.domain.member.repository.NotificationRepository;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +56,8 @@ public class DutchpayService {
     private final BCryptPasswordEncoder encoder;
     private final AccountRepository accountRepository;
     private final IncomeRepository incomeRepository;
+    private final NotificationRepository notificationRepository;
+    private final SseUtil sseUtil;
 
     public Long createDutchpay(DutchpayCreateRequest dutchpayCreateRequest,
                                                 Long memberId) {
@@ -160,8 +167,6 @@ public class DutchpayService {
         log.info("save receiverAccount : {}", receiverAccount.getId());
 
 
-
-
         Income income = Income.of(
                 "(정산)" + detailDutchpay.getDutchpay().getConsumption().getConsumptionDetail(),
                 price,
@@ -184,6 +189,20 @@ public class DutchpayService {
 
         incomeRepository.save(income);
         log.info("save income : {}", income.getId());
+
+        Notification notification = Notification.ofIncome(income);
+        notificationRepository.save(notification);
+        log.info("save notification : {}", notification.getId());
+        DutchpayNotificationDto dto =  DutchpayNotificationDto.builder()
+                .notificationId(notification.getId())
+                .notificationContent(notification.getNotificationContent())
+                .notificationType(notification.getNotificationType())
+                .notificationStatus(notification.getNotificationStatus())
+                .detailDutchpayId(detailDutchpay.getId())
+                .build();
+        sseUtil.send(receiverAccount.getMember().getId(), dto);
+
+
         consumptionRepository.save(consumption);
         log.info("save consumption : {}", consumption.getId());
 
