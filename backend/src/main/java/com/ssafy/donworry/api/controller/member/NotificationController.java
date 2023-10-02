@@ -22,9 +22,8 @@ public class NotificationController {
     private final NotificationQueryService notificationQueryService;
     private final NotificationService notificationService;
     @Operation(summary = "sse 구독 요청", description = "sse를 구독 요청하는 API입니다.")
-    @GetMapping(value = "/subscribe", produces = "text/event-stream")
-    public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsModel userDetailsModel) {
-        Long memberId = userDetailsModel.getId();
+    @GetMapping(value = "/subscribe/{id}", produces = "text/event-stream")
+    public SseEmitter subscribe(@PathVariable("id") Long memberId) {
         return sseUtil.subscribe(memberId);
     }
 
