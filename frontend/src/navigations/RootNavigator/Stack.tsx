@@ -11,6 +11,7 @@ import AccountHistoryScreen from '../../screens/historys/AccountHistoryScreen';
 import KakaoLoginScreen from '../../screens/KakaoLoginScreen';
 import KakaoSignupScreen from '../../screens/Signups/KakaoSignupScreen';
 import WireTransferScreen from '../../screens/WireTransferScreen';
+import NewMessageScreen from '../../screens/newMessages/NewMessageScreen';
 
 type RootStackParamList = {
   Login: undefined;
@@ -48,6 +49,7 @@ type RootStackParamList = {
       oauthProvider: string;
     };
   };
+  NewMassageScreen: undefined
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -114,6 +116,11 @@ const StackNavigation: React.FC = () => {
       <Stack.Screen
         name="WireTransfer"
         component={WireTransferScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="NewMassageScreen"
+        component={NewMessageScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
