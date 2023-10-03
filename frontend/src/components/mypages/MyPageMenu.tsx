@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
+interface ScreenProps {
+  navigation: {
+    navigate: (screen: string, params?: any) => void;
+  };
+}
 
 interface MenuProps {
   imageName?: 'bell' | 'send';
@@ -8,9 +15,20 @@ interface MenuProps {
   text: string;
 }
 const MyPageMenu: React.FC<MenuProps> = (props) => {
+  const navigation = useNavigation<ScreenProps['navigation']>();
+  // navigation.navigate('StackNavigation', { screen: 'NewMassageScreen' });
+  function nextScreen(screen: string) {
+    if (screen === '내소식') {
+      navigation.navigate('StackNavigation', { screen: 'NewMassageScreen' });
+    } else if (screen === '계좌선택') {
+    } else {
+    }
+  }
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+        nextScreen(props.text)
+      }}>
         <View style={styles.touch_view}>
           <View style={styles.image_view}>
             {props.imageName2 === 'piggy-bank' ? (

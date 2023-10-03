@@ -18,7 +18,6 @@ import FriendSendRequest from '../../components/friends/FriendSendRequest';
 
 // 함수 입력
 import { friendRequestList } from '../../utils/FriendFunctions';
-import BackHeader from '../../components/BackHeader';
 
 interface ScreenProps {
   navigation: {

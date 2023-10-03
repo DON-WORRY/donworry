@@ -32,7 +32,19 @@ type RootStackParamList = {
 const FriendListItem: React.FC<FriendListItemProps> = (props) => {
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, 'Comparison'>>();
+  function extractUsernameFromEmail(email: string) {
+    // "@" 문자를 기준으로 이메일 주소를 분리
+    const parts = email.split('@');
 
+    // 이메일 주소가 "@" 문자를 포함하고 있다면
+    if (parts.length === 2) {
+      // "@" 이전의 부분을 반환
+      return parts[0];
+    } else {
+      // "@" 문자가 없는 경우나 "@" 문자가 두 개 이상인 경우에는 빈 문자열 반환
+      return email;
+    }
+  }
   return (
     <TouchableOpacity
       style={styles.container}
@@ -56,7 +68,7 @@ const FriendListItem: React.FC<FriendListItemProps> = (props) => {
     >
       <Text style={[styles.text]}>{props.friend.friendName}</Text>
       <Text style={[styles.text]}>
-        {props.friend.friendEmail.slice(0, 8) + '...'}
+        {extractUsernameFromEmail(props.friend.friendEmail)}
       </Text>
     </TouchableOpacity>
   );
