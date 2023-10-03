@@ -44,7 +44,9 @@ const MyPageClose: React.FC<MyPageCloseProps> = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    paddingLeft: 20,
+  },
   header_view: {
     flexDirection: 'row',
     // justifyContent: 'space-around',

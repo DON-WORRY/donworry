@@ -13,6 +13,7 @@ type DutchpayStateScreenProps = {
 const width = Dimensions.get('screen').width;
 
 const DutchpayStateScreen: React.FC<DutchpayStateScreenProps> = () => {
+  
   return (
     <BottomSheetModalProvider>
       <View style={styles.container}>
