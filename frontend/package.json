@@ -63,7 +63,6 @@
     "@babel/core": "^7.20.0",
     "@bam.tech/react-native-make": "^3.0.3",
     "@types/react": "~18.2.14",
-    "@types/react-native": "^0.72.2",
     "@types/react-native-dotenv": "^0.2.0",
     "@types/react-native-event-source": "^1.1.0",
     "@types/react-native-indicators": "^0.16.2",
