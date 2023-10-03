@@ -52,3 +52,14 @@ export async function notificationDelete(): Promise<void> {
       throw e;
     });
 }
+// 알림 읽기
+export async function notificationUpdate(id : number): Promise<void> {
+  return axiosWithAuth
+  .post(`/api/notifications/update/${id}`)
+  .then((r) => {
+    return r.data
+  })
+  .catch((e) => {
+    throw e
+  })
+}
