@@ -5,7 +5,8 @@ public record TransferAccountRequest(
         String accountNumber,
         Long price,
         Long consumptionCategoryId,
-        String simplePassword
+        String simplePassword,
+        boolean finger
 
 ) {
 }
