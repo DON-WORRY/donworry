@@ -1,4 +1,4 @@
-package com.ssafy.donworry.common.filter;
+package com.ssafy.donworry.common.util;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -6,9 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Component
-public class FileExtensionFilter {
+public class FileExtensionFilterUtil {
 
-    // TODO: 2023-09-10 리팩토링 하면서 filter 패키지 밑이 아닌 util 패키지 밑으로 옮겨야함
+    // TODO: 2023-09-10 리팩토링
     private final String[] NOT_ALLOWED_IMG_EXTENSIONS = {"png", "jpg", "jpeg", "gif"};
     private final String[] NOT_ALLOWED_FILE_EXTENSIONS = {"jsp", "php", "asp", "html", "perl"};
 

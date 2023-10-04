@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class SseUtil {
 
