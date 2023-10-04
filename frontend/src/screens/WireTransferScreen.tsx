@@ -150,6 +150,11 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
       return;
     }
 
+    if (parsedPrice.toString().length !== sendingPrice.length) {
+      alert('금액에는 숫자만 입력해주세요');
+      return;
+    }
+
     const data = {
       accountId: accountId,
       accountNumber: sendingAccount,
@@ -305,7 +310,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 />
               </View>
             </View>
-            <View style={styles.bottomSheetItem}>
+            <View style={[styles.bottomSheetItem, styles.row]}>
               <TextInput
                 style={[styles.textInput, { width: '90%' }]}
                 placeholder="송금 금액"
@@ -313,6 +318,9 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 value={String(sendingPrice)}
                 onChangeText={(text) => setSendingPrice(text)}
               />
+              <Text>
+                원
+              </Text>
             </View>
             <Button
               title="송금하기"

@@ -173,6 +173,7 @@ export async function wireTransfer(data: wireData): Promise<void> {
     });
 }
 
+
 // 계좌 조회
 export async function accountCheck(accountNumber: string): Promise<{ isAccount: boolean, name: string }>{
   return axiosWithAuth
