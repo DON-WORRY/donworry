@@ -173,8 +173,9 @@ export async function wireTransfer(data: wireData): Promise<void> {
     });
 }
 
+
 // 계좌 조회
-export async function accountCheck(data: wireData): Promise<void> {
+export async function accountCheck(data: string): Promise<void> {
   return axiosWithAuth
     .post('/api/account/isaccount', null, { params: data }) // data를 params로 수정
     .then((res) => {

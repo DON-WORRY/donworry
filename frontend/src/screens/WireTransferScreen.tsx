@@ -16,7 +16,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import BackHeader from '../components/BackHeader';
 import { RouteProp } from '@react-navigation/core';
 import { images } from '../assets/bank&card';
-import { wireTransfer, accountCheck } from '../utils/AccountFunctions';
+import { accountCheck } from '../utils/AccountFunctions';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Button } from '../components/logins/Login';
 
@@ -96,6 +96,23 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
     setItems(categoryData);
   }, []);
 
+  const checkAccount = async () => {
+    setSendingAccount(accountNumber);
+
+    const isErrorWithResponse = (error: any): error is { response: { data: { message: string } } } => {
+      return error && error.response && error.response.data && typeof error.response.data.message === 'string';
+    };
+    try {
+      accountCheck(accountNumber)
+    }
+    catch (error) {
+      if (isErrorWithResponse(error)) {
+        alert(error.response.data.message);
+      }
+      console.log('Error during wire transfer:', error);
+    }
+  }
+
   const sendingMoney = async () => {
     if (value === 0) {
       alert('카테고리를 선택해주세요');
@@ -104,6 +121,11 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
     const parsedPrice = parseInt(sendingPrice);
     if (isNaN(parsedPrice) || parsedPrice <= 0) {
       alert('금액을 입력해주세요');
+      return;
+    }
+
+    if (parsedPrice.toString().length !== sendingPrice.length) {
+      alert('금액에는 숫자만 입력해주세요');
       return;
     }
 
@@ -154,7 +176,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
               style={styles.button}
               onPress={() => {
                 bottomSheetModalRef.current.present();
-                setSendingAccount(accountNumber);
+                checkAccount()
               }}
               activeOpacity={0.9}
             >
@@ -254,7 +276,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 />
               </View>
             </View>
-            <View style={styles.bottomSheetItem}>
+            <View style={[styles.bottomSheetItem, styles.row]}>
               <TextInput
                 style={[styles.textInput, { width: '90%' }]}
                 placeholder="송금 금액"
@@ -262,16 +284,10 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 value={String(sendingPrice)}
                 onChangeText={(text) => setSendingPrice(text)}
               />
+              <Text>
+                원
+              </Text>
             </View>
-            {/* <View style={styles.bottomSheetItem}>
-              <TextInput
-                style={[styles.textInput, { width: '90%' }]}
-                placeholder="2차 비밀번호"
-                keyboardType="numeric"
-                value={simplePassword}
-                onChangeText={(text) => setSimplePassword(text)}
-              />
-            </View> */}
             <Button
               title="송금하기"
               onPress={async () => {
