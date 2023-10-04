@@ -6,10 +6,15 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
+  ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
+import ContentBox from '../../components/ContentBox';
 import ComponentsHeader from '../../components/ComponentsHeader';
+import HomeSpend from '../../components/homes/HomeSpend';
+import HomeCardSpend from '../../components/homes/HomeCardSpend';
+
 interface ScreenProps {
   navigation: {
     navigate: (screen: string, params?: any) => void;
@@ -24,24 +29,34 @@ const SpendScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <ComponentsHeader />
-      <TouchableOpacity
-        style={styles.listView}
-        onPress={() => {
-          navigation.navigate('StackNavigation', { screen: 'DutchpayState' });
-        }}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.listText}>더치페이 현황</Text>
-        <FontAwesome name="angle-right" size={40} />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.listView}
-        onPress={() => {
-          navigation.navigate('StackNavigation', { screen: 'Consumption' });
-        }}
-      >
-        <Text style={styles.listText}>소비 페이지</Text>
-        <FontAwesome name="angle-right" size={40} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.listView}
+          onPress={() => {
+            navigation.navigate('StackNavigation', { screen: 'DutchpayState' });
+          }}
+        >
+          <Text style={styles.listText}>더치페이 현황</Text>
+          <FontAwesome name="angle-right" size={40} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.listView}
+          onPress={() => {
+            navigation.navigate('StackNavigation', { screen: 'Consumption' });
+          }}
+        >
+          <Text style={styles.listText}>소비 페이지</Text>
+          <FontAwesome name="angle-right" size={40} />
+        </TouchableOpacity>
+        <ContentBox>
+          <HomeSpend />
+        </ContentBox>
+        <ContentBox>
+          <HomeCardSpend />
+        </ContentBox>
+      </ScrollView>
     </View>
   );
 };

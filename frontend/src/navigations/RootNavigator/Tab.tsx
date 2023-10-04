@@ -2,14 +2,12 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
-import HomeScreen from '../../screens/bottomTabs/HomeScreen';
 import SpendScreen from '../../screens/bottomTabs/SpendScreen';
 import AssetScreen from '../../screens/bottomTabs/AssetScreen';
 import ComparisonScreen from '../../screens/bottomTabs/ComparsionScreen';
 import FriendScreen from '../../screens/bottomTabs/FriendScreen';
 
 type RootTabParamList = {
-  Home: undefined;
   Spend: undefined;
   Asset: { refresh: boolean };
   Comparison: {
@@ -23,7 +21,7 @@ const Tab = createBottomTabNavigator<RootTabParamList>();
 const TabNavigation: React.FC = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Asset" // Asset으로 변경
       screenOptions={{
         tabBarStyle: {
           height: Platform.OS === 'android' ? 60 : 95,
@@ -42,28 +40,7 @@ const TabNavigation: React.FC = () => {
         },
       }}
     >
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          title: '홈',
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="home" color={color} size={size * 1.5} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Spend"
-        component={SpendScreen}
-        options={{
-          title: '소비',
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="credit-card" color={color} size={size * 1.5} />
-          ),
-        }}
-      />
+      {/* Home 탭 제거 */}
       <Tab.Screen
         name="Asset"
         component={AssetScreen}
@@ -76,6 +53,17 @@ const TabNavigation: React.FC = () => {
               color={color}
               size={size * 1.5}
             />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Spend"
+        component={SpendScreen}
+        options={{
+          title: '소비',
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="credit-card" color={color} size={size * 1.5} />
           ),
         }}
       />

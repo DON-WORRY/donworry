@@ -16,7 +16,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import BackHeader from '../components/BackHeader';
 import { RouteProp } from '@react-navigation/core';
 import { images } from '../assets/bank&card';
-import { wireTransfer } from '../utils/AccountFunctions';
+import { wireTransfer, accountCheck } from '../utils/AccountFunctions';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Button } from '../components/logins/Login';
 
@@ -58,7 +58,6 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
   const [choiceCategory, setChoiceCategory] = useState(0);
   const [sendingPrice, setSendingPrice] = useState('');
   const [sendingAccount, setSendingAccount] = useState('');
-  const [simplePassword, setSimplePassword] = useState('');
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0); // 초기값 설정
@@ -113,7 +112,6 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
       accountNumber: sendingAccount,
       price: parsedPrice,
       consumptionCategoryId: value,
-      simplePassword: simplePassword,
     };
 
     const isErrorWithResponse = (error: any): error is { response: { data: { message: string } } } => {
@@ -172,7 +170,6 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 bottomSheetModalRef.current.present();
                 setSendingAccount(account.accountNumber);
                 setSendingPrice('')
-                setSimplePassword('')
               }}
             >
               <View style={styles.row}>
@@ -198,7 +195,6 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 bottomSheetModalRef.current.present();
                 setSendingAccount(account.accountNumber);
                 setSendingPrice('')
-                setSimplePassword('')
               }}
             >
               <View style={styles.row}>
