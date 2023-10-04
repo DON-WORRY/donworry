@@ -31,8 +31,8 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static com.ssafy.donworry.domain.account.entity.QAccount.account;
-import static com.ssafy.donworry.domain.account.entity.QBank.bank;
+//import static com.ssafy.donworry.domain.account.entity.QAccount.account;
+//import static com.ssafy.donworry.domain.account.entity.QBank.bank;
 import static com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus.NOTSTART;
 
 @Slf4j
@@ -97,7 +97,7 @@ public class AccountService {
 
     public void createMemberInitConsumption(Long memberId, Long accountId, Long cardId) {
         LocalDateTime nowTime = LocalDateTime.now();
-        LocalDateTime history = LocalDateTime.now().minusMonths(12);
+        LocalDateTime history = LocalDateTime.now().minusMonths(4);
 
         Account account = accountRepository.findById(accountId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 계좌정보 입니다."));
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원정보 입니다."));
@@ -139,7 +139,7 @@ public class AccountService {
 
     public int randomTime() {
         Random random = new Random();
-        int i = random.nextInt(12) + 1;
+        int i = random.nextInt(4) + 8;
         return i;
     }
 
