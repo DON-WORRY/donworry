@@ -122,7 +122,11 @@ public class DutchpayService {
         if(!member.getId().equals(memberId)) {
             throw new InvalidValueException(ErrorCode.DETAIL_DUTCHPAY_MEMBER_NOT_MATCH);
         }
-        if(!encoder.matches(dutchpayTransferRequest.simplePassword(), detailDutchpay.getMember().getMemberSimplePassword())) {
+
+        if(dutchpayTransferRequest.finger()) {
+            log.info("지문인식 통과");
+        }
+        else if(!encoder.matches(dutchpayTransferRequest.simplePassword(), detailDutchpay.getMember().getMemberSimplePassword())) {
             throw new InvalidValueException(ErrorCode.SIMPLE_PASSWORD_NOT_MATCH);
         }
 
