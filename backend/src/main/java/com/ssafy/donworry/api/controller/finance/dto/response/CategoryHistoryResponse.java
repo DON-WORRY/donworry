@@ -16,16 +16,19 @@ public class CategoryHistoryResponse {
     Long price;
     LocalDateTime dateTime;
     DutchpayStatus dutchpayStatus;
+    Long categoryId;
 
     @Builder
-    public CategoryHistoryResponse(Long id, String detail, String bankName, Long price, LocalDateTime dateTime, DutchpayStatus dutchpayStatus) {
+    public CategoryHistoryResponse(Long id, String detail, String bankName, Long price, LocalDateTime dateTime, DutchpayStatus dutchpayStatus, Long categoryId) {
         this.id = id;
         this.detail = detail;
         this.bankName = bankName;
         this.price = price;
         this.dateTime = dateTime;
         this.dutchpayStatus = dutchpayStatus;
+        this.categoryId = categoryId;
     }
+
 
 
 
