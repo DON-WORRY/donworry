@@ -47,6 +47,8 @@ const HomeSpend: React.FC = () => {
   >([]);
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
+  const currentDate = new Date();
+  const initialMonth = currentDate.getMonth() + 1;
 
   useEffect(() => {
     if (!isFocused) {
@@ -70,6 +72,7 @@ const HomeSpend: React.FC = () => {
           newTotalSpend.data &&
           Array.isArray(newTotalSpend.data.categoryAmountList)
         ) {
+          console.log(newTotalSpend.data.categoryAmountList);
           setTotalSpend(newTotalSpend.data.categoryAmountList);
         }
       } catch (error) {
@@ -126,6 +129,7 @@ const HomeSpend: React.FC = () => {
                     params: {
                       categoryId: item.categoryId,
                       category: item.category,
+                      month: initialMonth,
                     },
                   });
                 }}
