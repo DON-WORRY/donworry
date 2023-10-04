@@ -8,8 +8,29 @@ import {
   Text,
   Alert,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { wireTransfer } from '../utils/AccountFunctions';
 
-const SamplePWCheck: React.FC = () => {
+interface ScreenProps {
+  navigation: {
+    navigate: (screen: string, params?: any) => void;
+  };
+}
+
+type Props = {
+  route?: {
+    params?: {
+      accountId?: number;
+      accountNumber?: string;
+      price?: number;
+      consumptionCategoryId?: number;
+      refresh?: number;
+    };
+  };
+};
+
+const SamplePWCheck: React.FC<Props> = (props) => {
+  const navigation = useNavigation<ScreenProps['navigation']>();
   const [easyPass, setEasyPass] = useState('');
   const [passwordNumbers, setPasswordNumbers] = useState<string[]>([]);
   async function shuffle(array: string[]): Promise<string[]> {
@@ -25,16 +46,60 @@ const SamplePWCheck: React.FC = () => {
     e: false,
     f: false,
   });
+
   const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
   useEffect(() => {
     shuffle(numbers);
+    console.log(numbers)
   }, []);
+
+  useEffect(() => {
+    if (easyPass.length === 6) {
+      wireTrans();
+    }
+  }, [easyPass]);  
+
+  const wireTrans = async () => {
+    const isErrorWithResponse = (
+      error: any
+    ): error is { response: { data: { message: string } } } => {
+      return (
+        error &&
+        error.response &&
+        error.response.data &&
+        typeof error.response.data.message === 'string'
+      );
+    };
+
+    if (
+      props.route?.params?.accountId &&
+      props.route?.params?.accountNumber &&
+      props.route?.params?.consumptionCategoryId &&
+      props.route?.params?.price &&
+      easyPass
+    ) {
+      const data = {
+        accountId: props.route?.params?.accountId,
+        accountNumber: props.route?.params?.accountNumber,
+        consumptionCategoryId: props.route?.params?.consumptionCategoryId,
+        price: props.route?.params?.price,
+        simplePassword: easyPass,
+      };
+      try {
+        await wireTransfer(data);
+        navigation.navigate('Asset', { refresh: Date.now() });
+      } 
+      catch (error) {
+        if (isErrorWithResponse(error)) {
+          alert(error.response.data.message);
+          setEasyPass('')
+        }
+      }
+    }
+  };
 
   async function clickButton(str: string) {
     if (str == 'delete') {
-      if (easyPass === '') {
-        return Alert.alert('삭제 오류', '비밀번호를 입력해주세요');
-      }
       const lenPass = easyPass.length;
       const tmpPass = easyPass.slice(0, lenPass - 1);
       if (lenPass == 1) {
@@ -163,11 +228,10 @@ const SamplePWCheck: React.FC = () => {
         e: true,
         f: true,
       });
-      console.log(easyPass);
     }
     const tmpPass = (await easyPass) + str;
     await setEasyPass(tmpPass);
-    await shuffle(numbers);
+    // await shuffle(numbers);
     console.log(tmpPass);
   }
   return (
