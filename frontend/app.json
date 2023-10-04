@@ -22,6 +22,7 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions": ["NOTIFICATIONS"],
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/logo/donLogo.png",
         "backgroundColor": "#ffffff"
@@ -34,6 +35,5 @@
     "plugins": [
       "expo-router"
     ]
-   
   }
 }

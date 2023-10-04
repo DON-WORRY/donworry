@@ -59,7 +59,9 @@
     "react-native-webview": "^13.2.2",
     "react-redux": "^8.1.2",
     "react-select": "^5.7.5",
-    "victory-native": "^36.6.11"
+    "victory-native": "^36.6.11",
+    "expo-notifications": "~0.20.1",
+    "expo-device": "~5.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

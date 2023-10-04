@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import HomeAsset from '../../components/homes/HomeAsset';
 import HomeSpend from '../../components/homes/HomeSpend';

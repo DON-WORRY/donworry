@@ -1,5 +1,5 @@
 export const images: { [key: string]: any } = {
-  국민은행: require('./국민은행.png'),
+  국민은행: require('./국민은행.png').uri,
   KB국민카드: require('./국민카드.png'),
   기업은행: require('./기업은행.png'),
   농협은행: require('./농협은행.png'),

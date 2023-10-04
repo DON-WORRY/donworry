@@ -29,9 +29,7 @@ const SpendScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <ComponentsHeader />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView showsVerticalScrollIndicator={false}>
         <TouchableOpacity
           style={styles.listView}
           onPress={() => {
@@ -39,15 +37,6 @@ const SpendScreen: React.FC = () => {
           }}
         >
           <Text style={styles.listText}>더치페이 현황</Text>
-          <FontAwesome name="angle-right" size={40} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.listView}
-          onPress={() => {
-            navigation.navigate('StackNavigation', { screen: 'Consumption' });
-          }}
-        >
-          <Text style={styles.listText}>소비 페이지</Text>
           <FontAwesome name="angle-right" size={40} />
         </TouchableOpacity>
         <ContentBox>
