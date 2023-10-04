@@ -26,7 +26,8 @@ const screenWidth = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingTop: 0,
     backgroundColor: 'white',
     height: screenHeight,
@@ -151,11 +152,11 @@ const SignupScreen: React.FC = () => {
     return alert('이메일 인증을 해주세요.');
   }
   return (
-    <>
+    <View style={styles.container}>
       {isLoading ? (
         <Modal />
       ) : (
-        <KeyboardAwareScrollView style={styles.container}>
+        <KeyboardAwareScrollView >
           {pageData.a ? (
             <>
               <SignupHeader />
@@ -216,7 +217,7 @@ const SignupScreen: React.FC = () => {
           )}
         </KeyboardAwareScrollView>
       )}
-    </>
+    </View>
   );
 };
 

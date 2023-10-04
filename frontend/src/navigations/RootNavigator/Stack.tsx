@@ -12,13 +12,14 @@ import KakaoLoginScreen from '../../screens/KakaoLoginScreen';
 import KakaoSignupScreen from '../../screens/Signups/KakaoSignupScreen';
 import WireTransferScreen from '../../screens/WireTransferScreen';
 import NewMessageScreen from '../../screens/newMessages/NewMessageScreen';
+import SimplePWCheckScreen from '../../screens/SamplePWCheckScreen'
 
 type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
   Message: undefined;
   History: undefined;
-  Consumption: { categoryId: number; category: string };
+  Consumption: { categoryId: number; category: string; month: number };
   CardHistory: undefined;
   AccountHistory: undefined;
   DutchpayRequest: {
@@ -35,6 +36,7 @@ type RootStackParamList = {
     dateTime: string;
     id: number;
     dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
+    categoryId: number;
   };
   WireTransfer: {
     accounts: Array<any>;
@@ -49,7 +51,8 @@ type RootStackParamList = {
       oauthProvider: string;
     };
   };
-  NewMassageScreen: undefined
+  NewMassageScreen: undefined;
+  SimplePWCheckScreen: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -121,6 +124,11 @@ const StackNavigation: React.FC = () => {
       <Stack.Screen
         name="NewMassageScreen"
         component={NewMessageScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SimplePWCheckScreen"
+        component={SimplePWCheckScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

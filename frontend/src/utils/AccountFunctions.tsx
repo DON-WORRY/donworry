@@ -156,6 +156,7 @@ interface wireData {
   simplePassword: string;
 }
 
+// 송금
 export async function wireTransfer(data: wireData): Promise<void> {
   return axiosWithAuth
     .post('/api/finance/transfer', data)
@@ -165,6 +166,23 @@ export async function wireTransfer(data: wireData): Promise<void> {
     .catch((e) => {
       if (e.response && e.response.data && e.response.data.message) {
         console.log("API Error:", e.response.data.message); // 여기서 에러 메시지를 출력합니다.
+      } else {
+        console.log("An error occurred:", e);
+      }
+      throw e;
+    });
+}
+
+// 계좌 조회
+export async function accountCheck(data: wireData): Promise<void> {
+  return axiosWithAuth
+    .post('/api/account/isaccount', null, { params: data }) // data를 params로 수정
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((e) => {
+      if (e.response && e.response.data && e.response.data.message) {
+        console.log("API Error:", e.response.data.message);
       } else {
         console.log("An error occurred:", e);
       }

@@ -52,7 +52,8 @@ public class ConsumptionQueryRepository {
                         consumption.account.bank.name,
                         consumption.consumptionPrice,
                         consumption.createdTime,
-                        consumption.dutchpayStatus
+                        consumption.dutchpayStatus,
+                        consumption.consumptionCategory.id
                 ))
                 .from(consumption)
                 .where(

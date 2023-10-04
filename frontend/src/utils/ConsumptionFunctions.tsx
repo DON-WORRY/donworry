@@ -24,6 +24,7 @@ interface ConsumptionDataProps {
     dateTime: string;
     id: number;
     dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
+    categoryId: number;
   }[];
 }
 
@@ -31,6 +32,7 @@ interface DutchPayPriceSendData {
   detailDutchpayId: number;
   sendPrice: number;
   simplePassword: string;
+  finger: boolean;
 }
 
 // 값을 가져오기
@@ -80,7 +82,7 @@ export { ConsumptionDataProps };
 // 카테고리 변경
 export async function consumptionCategoryModify(
   data: CategoryModifyData
-): Promise<void> {
+): Promise<any> {
   return axiosWithAuth
     .put('/api/consumption/modify', data)
     .then((res) => {

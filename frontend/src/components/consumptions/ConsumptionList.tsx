@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from 'react-native';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { SelectList } from 'react-native-dropdown-select-list';
@@ -15,25 +16,28 @@ import { useNavigation } from '@react-navigation/native';
 import { images } from '../../assets/bank&card';
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { consumptionCategoryModify } from '../../utils/ConsumptionFunctions';
 
 const categoryDataByValue = ['교통', '생활', '식비', '쇼핑', '여가', '기타'];
 
-const categoryData = [
-  { key: '1', value: '교통' },
-  { key: '2', value: '생활' },
-  { key: '3', value: '식비' },
-  { key: '4', value: '쇼핑' },
-  { key: '5', value: '여가' },
-  { key: '6', value: '기타' },
-];
+// const categoryData = [
+//   { key: '1', value: '교통' },
+//   { key: '2', value: '생활' },
+//   { key: '3', value: '식비' },
+//   { key: '4', value: '쇼핑' },
+//   { key: '5', value: '여가' },
+//   { key: '6', value: '기타' },
+// ];
 
 interface ScreenProps {
   navigation: {
+    replace: (screen: string, params?: any) => void;
     navigate: (screen: string, params?: any) => void;
   };
 }
 
 interface ConsumptionDataProps {
+  month: number;
   consumptionData: {
     bankName: string;
     detail: string;
@@ -41,12 +45,11 @@ interface ConsumptionDataProps {
     dateTime: string;
     id: number;
     dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
+    categoryId: number;
   };
 }
 
 const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
-  // const blackLogo = require('../../assets/logo/BlackLogo.png');
-  // const navigation = useNavigation<ScreenProps['navigation']>();
   const snapPoints = useMemo(() => ['35%'], []);
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
   const [categorySelected, setCategorySelected] = useState('');
@@ -80,6 +83,37 @@ const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
   function formattedPrice(inputPrice: number) {
     const formatter = new Intl.NumberFormat('en-US').format(inputPrice);
     return formatter;
+  }
+
+  async function handleCategoryModify(
+    consumptionId: number,
+    consumptionCategoryId: number
+  ) {
+    async function modifyDutchpayData() {
+      try {
+        const response = await consumptionCategoryModify({
+          consumptionId: consumptionId,
+          consumptionCategoryId: consumptionCategoryId,
+        });
+        if (response) {
+          console.log(response);
+          navigation.replace('StackNavigation', {
+            screen: 'Consumption',
+            params: {
+              categoryId: consumptionCategoryId,
+              category: categoryDataByValue[consumptionCategoryId - 1],
+              month: props.month,
+            },
+          });
+        } else {
+          console.error('API response does not contain data.');
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+        return Alert.alert('카테고리 변경에 실패했습니다.');
+      }
+    }
+    await modifyDutchpayData();
   }
 
   return (
@@ -149,20 +183,13 @@ const ConsumptionList: React.FC<ConsumptionDataProps> = (props) => {
             <View style={styles.modalCategorySelectView}>
               <SelectDropdown
                 data={categoryDataByValue}
-                // defaultValueByIndex={1}
-                defaultValue={'교통'} // categoryData[props.consumptionData.categoryId ].value
+                defaultValue={
+                  categoryDataByValue[props.consumptionData.categoryId - 1]
+                }
                 onSelect={(selectedItem, index) => {
-                  // 이 때 카테고리 변경시키면 됨!!!!!
-                  console.log(selectedItem, index);
+                  // 이 때 카테고리 변경!
+                  handleCategoryModify(props.consumptionData.id, index + 1);
                 }}
-                // defaultButtonText={'Select country'}
-                // buttonTextAfterSelection={(selectedItem, index) => {
-                //   console.log('selecteditem : ' + selectedItem);
-                //   return selectedItem;
-                // }}
-                // rowTextForSelection={(item, index) => {
-                //   return item;
-                // }}
                 buttonStyle={styles.dropdown1BtnStyle}
                 buttonTextStyle={styles.dropdown1BtnTxtStyle}
                 renderDropdownIcon={(isOpened) => {

@@ -8,12 +8,13 @@ import com.ssafy.donworry.domain.member.repository.EmitterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 
 @Slf4j
-@Component
+@Service
 @RequiredArgsConstructor
 public class SseUtil {
 
@@ -37,6 +38,7 @@ public class SseUtil {
         } catch (IOException exception) {
             throw new InvalidValueException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+        log.info("리턴값 : {}", emitter);
         return emitter;
     }
 

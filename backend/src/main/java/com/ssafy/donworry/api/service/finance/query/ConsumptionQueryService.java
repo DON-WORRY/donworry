@@ -110,7 +110,7 @@ public class ConsumptionQueryService {
 
     private List<CategoryAmountResponse> createCategoryAmountList(List<Tuple> consumptionList, List<Tuple> incomeList) {
         List<String> category = List.of("교통", "생활", "식비", "쇼핑", "여가", "기타");
-        boolean[] check = new boolean[6];
+        boolean[] check = new boolean[7];
         List<CategoryAmountResponse> categoryAmountList = new ArrayList<>();
 
         for (Tuple consumption : consumptionList) {
@@ -128,12 +128,12 @@ public class ConsumptionQueryService {
             if (flag) {
                 categoryAmountList.add(new CategoryAmountResponse(categoryId, categoryName, categoryAmount));
             }
-            check[category.indexOf(categoryName)] = true;
+            check[category.indexOf(categoryName) + 1] = true;
         }
 
-        for (int i = 0; i < category.size(); i++) {
+        for (int i = 1; i <= category.size(); i++) {
             if (!check[i]) {
-                categoryAmountList.add(new CategoryAmountResponse((long)i, category.get(i), 0l));
+                categoryAmountList.add(new CategoryAmountResponse((long)i, category.get(i-1), 0l));
             }
         }
         return categoryAmountList;

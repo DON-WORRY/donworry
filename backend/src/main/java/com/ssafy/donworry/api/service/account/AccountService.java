@@ -1,5 +1,6 @@
 package com.ssafy.donworry.api.service.account;
 
+import com.ssafy.donworry.api.controller.account.dto.response.AccountExistResponse;
 import com.ssafy.donworry.api.controller.account.dto.response.UserRankResponse;
 import com.ssafy.donworry.common.util.StoreDataUtil;
 import com.ssafy.donworry.domain.account.entity.Account;
@@ -12,6 +13,7 @@ import com.ssafy.donworry.domain.account.repository.AccountRepository;
 import com.ssafy.donworry.domain.account.repository.BankRepository;
 import com.ssafy.donworry.domain.account.repository.CardCompanyRepository;
 import com.ssafy.donworry.domain.account.repository.CardRepository;
+import com.ssafy.donworry.domain.account.repository.query.AccountQueryRepository;
 import com.ssafy.donworry.domain.account.repository.query.CardQueryRepository;
 import com.ssafy.donworry.domain.finance.entity.Consumption;
 import com.ssafy.donworry.domain.finance.entity.ConsumptionCategory;
@@ -51,6 +53,7 @@ public class AccountService {
     private final ConsumptionRepository consumptionRepository;
     private final IncomeRepository incomeRepository;
     private final CardQueryRepository cardQueryRepository;
+    private final AccountQueryRepository accountQueryRepository;
 
 
 
@@ -97,7 +100,7 @@ public class AccountService {
 
     public void createMemberInitConsumption(Long memberId, Long accountId, Long cardId) {
         LocalDateTime nowTime = LocalDateTime.now();
-        LocalDateTime history = LocalDateTime.now().minusMonths(12);
+        LocalDateTime history = LocalDateTime.now().minusMonths(4);
 
         Account account = accountRepository.findById(accountId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 계좌정보 입니다."));
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원정보 입니다."));
@@ -139,7 +142,7 @@ public class AccountService {
 
     public int randomTime() {
         Random random = new Random();
-        int i = random.nextInt(12) + 1;
+        int i = random.nextInt(4) + 8;
         return i;
     }
 
@@ -199,7 +202,13 @@ public class AccountService {
     }
 
 
-    public Boolean isAccountNumber(String accountNumber) {
-        return accountRepository.existsByAccountNumber(accountNumber);
+    public AccountExistResponse isAccountNumber(String accountNumber) {
+        boolean isAccount = accountRepository.existsByAccountNumber(accountNumber);
+        String name = "";
+        if(isAccount) {
+            name = accountQueryRepository.findNameByAccountNumber(accountNumber);
+        }
+        AccountExistResponse accountExistResponse = new AccountExistResponse(isAccount, name);
+        return accountExistResponse;
     }
 }
