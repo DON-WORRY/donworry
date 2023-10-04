@@ -1,9 +1,6 @@
 package com.ssafy.donworry.api.controller.account;
 
-import com.ssafy.donworry.api.controller.account.dto.response.AccountAllResponse;
-import com.ssafy.donworry.api.controller.account.dto.response.AccountHistoryResponse;
-import com.ssafy.donworry.api.controller.account.dto.response.StatisticsResponse;
-import com.ssafy.donworry.api.controller.account.dto.response.UserRankResponse;
+import com.ssafy.donworry.api.controller.account.dto.response.*;
 import com.ssafy.donworry.api.service.account.AccountService;
 import com.ssafy.donworry.api.service.account.query.AccountQueryService;
 import com.ssafy.donworry.api.service.member.MemberService;
@@ -71,7 +68,7 @@ public class AccountController {
 
     @Operation(summary = "계좌번호 존재 여부 확인", description = "계좌 번호가 존재하는지 확인하는 API입니다.")
     @GetMapping("/isaccount")
-    public ApiData<Boolean> searchAccountNumber(@RequestParam String accountNumber){
+    public ApiData<AccountExistResponse> searchAccountNumber(@RequestParam String accountNumber){
         return ApiData.of(accountService.isAccountNumber(accountNumber));
     }
 
