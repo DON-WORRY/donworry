@@ -16,7 +16,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import BackHeader from '../components/BackHeader';
 import { RouteProp } from '@react-navigation/core';
 import { images } from '../assets/bank&card';
-import { wireTransfer } from '../utils/AccountFunctions';
+import { wireTransfer, accountCheck } from '../utils/AccountFunctions';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Button } from '../components/logins/Login';
 
@@ -58,12 +58,11 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
   const [choiceCategory, setChoiceCategory] = useState(0);
   const [sendingPrice, setSendingPrice] = useState('');
   const [sendingAccount, setSendingAccount] = useState('');
-  const [simplePassword, setSimplePassword] = useState('');
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0); // 초기값 설정
   const [items, setItems] = useState<{ label: string; value: number }[]>([]);
-  const snapPoints = useMemo(() => ['60%', '70%'], []);
+  const snapPoints = useMemo(() => ['45%', '60%'], []);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -107,17 +106,12 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
       alert('금액을 입력해주세요');
       return;
     }
-    if (!simplePassword) {
-      alert('2차 비밀번호를 입력해주세요');
-      return;
-    }
 
     const data = {
       accountId: accountId,
       accountNumber: sendingAccount,
       price: parsedPrice,
       consumptionCategoryId: value,
-      simplePassword: simplePassword,
     };
 
     const isErrorWithResponse = (error: any): error is { response: { data: { message: string } } } => {
@@ -125,8 +119,8 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
     };
 
     try {
-      await wireTransfer(data);
-      navigation.navigate('Asset', { refresh: Date.now() });
+      // await wireTransfer(data);
+      navigation.navigate('SimplePWCheckScreen', { refresh: Date.now() });
     } catch (error) {
       if (isErrorWithResponse(error)) {
         alert(error.response.data.message); // API에서 반환하는 에러 메시지를 보여줍니다.
@@ -176,7 +170,6 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 bottomSheetModalRef.current.present();
                 setSendingAccount(account.accountNumber);
                 setSendingPrice('')
-                setSimplePassword('')
               }}
             >
               <View style={styles.row}>
@@ -202,7 +195,6 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 bottomSheetModalRef.current.present();
                 setSendingAccount(account.accountNumber);
                 setSendingPrice('')
-                setSimplePassword('')
               }}
             >
               <View style={styles.row}>
@@ -264,14 +256,14 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
             </View>
             <View style={styles.bottomSheetItem}>
               <TextInput
-                style={[styles.textInput, { width: '90%', marginBottom: 0 }]}
+                style={[styles.textInput, { width: '90%' }]}
                 placeholder="송금 금액"
                 keyboardType="numeric"
                 value={String(sendingPrice)}
                 onChangeText={(text) => setSendingPrice(text)}
               />
             </View>
-            <View style={styles.bottomSheetItem}>
+            {/* <View style={styles.bottomSheetItem}>
               <TextInput
                 style={[styles.textInput, { width: '90%' }]}
                 placeholder="2차 비밀번호"
@@ -279,7 +271,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 value={simplePassword}
                 onChangeText={(text) => setSimplePassword(text)}
               />
-            </View>
+            </View> */}
             <Button
               title="송금하기"
               onPress={async () => {
