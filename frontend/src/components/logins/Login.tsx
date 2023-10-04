@@ -82,24 +82,7 @@ const Login: React.FC<LoginProps> = (props) => {
         return Alert.alert('로그인 실패', `${e.message}`);
       });
 
-    const accessToken = await getData('accessToken');
-    const memberId = await getData('memberId');
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
-    const eventSource = await new EventSource(
-      `https://j9c210.p.ssafy.io/api/notifications/${memberId}`,
-      { headers: headers }
-    );
-    await eventSource.addEventListener('open', (event) => {
-      console.log('open', event.data);
-    });
-    // await eventSource.addEventListener('sse', (event) => {
-    //   console.log('2', event);
-    // });
-    // await eventSource.addEventListener('message', (event) => {
-    //   console.log('Received data:', event.data);
-    // });
+    
     navigation.replace('TabNavigation', { screen: 'Home' });
   }
 

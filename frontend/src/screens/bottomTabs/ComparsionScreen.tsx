@@ -55,7 +55,7 @@ type Friend = {
 const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
   // const ComparisonScreen: React.FC = () => {
   const friendPk = route.params?.friendPk ?? -1;
-  const [nowMonth, setNowMonth] =useState(getNowMonth)
+  const [nowMonth, setNowMonth] = useState(getNowMonth);
   const [friendName, setFriendName] = useState('친구 소비');
   const [friendList, setFriendList] = useState<Friend[]>([]);
   const [myData, setMyData] = useState<CategoryAmountList>([
@@ -332,21 +332,18 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
   }, [nowFriendId, myData, friendList.length, friendPk]);
   // 날짜 변경
   function changeMonth(str: string) {
-    if (str === "+") {
+    if (str === '+') {
       if (nowMonth === getNowMonth) {
-        return Alert.alert("선택 오류", "다음 달에 대한 정보가 없습니다.")
+        return Alert.alert('선택 오류', '다음 달에 대한 정보가 없습니다.');
       } else {
-        setNowMonth((prev) => prev + 1)
-        return
+        setNowMonth((prev) => prev + 1);
+        return;
       }
     } else {
-      setNowMonth((prev) => prev - 1)
-      return
+      setNowMonth((prev) => prev - 1);
+      return;
     }
   }
-
-
-
 
   return (
     <View style={styles.container}>
@@ -356,8 +353,26 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         showsVerticalScrollIndicator={false}
         alwaysBounceHorizontal={false}
       >
-        <ComparisonHeader friendName={friendName} />
-
+        <View style={styles.selectMonth}>
+          <ComparisonHeader friendName={friendName} />
+          <TouchableOpacity
+            onPress={() => {
+              changeMonth('-');
+            }}
+          >
+            <FontAwesome name="caret-left" size={40} />
+          </TouchableOpacity>
+          <View>
+            <Text style={styles.selectMonthText}>{nowMonth}월</Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              changeMonth('+');
+            }}
+          >
+            <FontAwesome name="caret-right" size={40} />
+          </TouchableOpacity>
+        </View>
         <FriendSearch friends={friendList} isComparison={true} />
         <ComparisonChart totalData={totalData} />
         {/* {modeKey.map((keyName) => {
@@ -371,22 +386,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
             </View>
           );
         })} */}
-        <View style={styles.selectMonth}>
-          <TouchableOpacity onPress={() => {
-            changeMonth("-")
-          }}>
-            <FontAwesome name="caret-left" size={40} />
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.selectMonthText}>{nowMonth}월</Text>
-          </View>
-          <TouchableOpacity
-          onPress={() => {
-            changeMonth("+")
-          }}>
-            <FontAwesome name="caret-right" size={40} />
-          </TouchableOpacity>
-        </View>
+
         <FlatList
           disableScrollViewPanResponder={true}
           scrollEnabled={false}
@@ -425,10 +425,10 @@ const styles = StyleSheet.create({
   },
   selectMonth: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    width: screenWidth - 40,
-    height: 60,
+    width: screenWidth - 50,
+    height: 70,
     marginBottom: 10,
   },
   selectMonthText: {

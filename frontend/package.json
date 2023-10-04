@@ -52,6 +52,7 @@
     "react-native-screens": "~3.22.0",
     "react-native-search-box": "^0.0.20",
     "react-native-select-dropdown": "^3.4.0",
+    "react-native-sse": "^1.1.0",
     "react-native-svg": "13.9.0",
     "react-native-vector-icons": "^10.0.0",
     "react-native-web": "~0.19.6",

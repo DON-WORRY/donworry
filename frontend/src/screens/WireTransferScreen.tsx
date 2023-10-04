@@ -16,7 +16,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import BackHeader from '../components/BackHeader';
 import { RouteProp } from '@react-navigation/core';
 import { images } from '../assets/bank&card';
-import { wireTransfer, accountCheck } from '../utils/AccountFunctions';
+import { accountCheck } from '../utils/AccountFunctions';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Button } from '../components/logins/Login';
 
@@ -55,7 +55,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
     (account) => account.accountId !== accountId
   );
   const [accountNumber, setAccountNumber] = useState('');
-  const [choiceCategory, setChoiceCategory] = useState(0);
+  // const [choiceCategory, setChoiceCategory] = useState(0);
   const [sendingPrice, setSendingPrice] = useState('');
   const [sendingAccount, setSendingAccount] = useState('');
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
@@ -63,6 +63,8 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
   const [value, setValue] = useState(0); // 초기값 설정
   const [items, setItems] = useState<{ label: string; value: number }[]>([]);
   const snapPoints = useMemo(() => ['45%', '60%'], []);
+  const [checkMessage, setCheckMessage] = useState('');
+  const [nowUser, setNowUser] = useState('');
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -96,6 +98,47 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
     setItems(categoryData);
   }, []);
 
+  const checkAccount = async () => {
+    setSendingAccount(accountNumber);
+
+    const isErrorWithResponse = (
+      error: any
+    ): error is { response: { data: { message: string } } } => {
+      return (
+        error &&
+        error.response &&
+        error.response.data &&
+        typeof error.response.data.message === 'string'
+      );
+    };
+    try {
+      const accountData = await accountCheck(accountNumber);
+      setSendingAccount(accountNumber);
+      if (accountData.isAccount === false) {
+        setCheckMessage('계좌번호를 확인해주세요');
+        return;
+      }
+      setNowUser(accountData.name);
+      bottomSheetModalRef.current.present();
+    } catch (error) {
+      if (isErrorWithResponse(error)) {
+        alert(error.response.data.message);
+      }
+      console.log('Error: ', error);
+    }
+  };
+
+  const chcekNowUser = async (accountNum: string) => {
+    setSendingAccount(accountNum);
+    try {
+      const accountData = await accountCheck(accountNum);
+      setNowUser(accountData.name);
+      bottomSheetModalRef.current.present();
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+  };
+
   const sendingMoney = async () => {
     if (value === 0) {
       alert('카테고리를 선택해주세요');
@@ -107,6 +150,11 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
       return;
     }
 
+    if (parsedPrice.toString().length !== sendingPrice.length) {
+      alert('금액에는 숫자만 입력해주세요');
+      return;
+    }
+
     const data = {
       accountId: accountId,
       accountNumber: sendingAccount,
@@ -114,23 +162,28 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
       consumptionCategoryId: value,
     };
 
-    const isErrorWithResponse = (error: any): error is { response: { data: { message: string } } } => {
-      return error && error.response && error.response.data && typeof error.response.data.message === 'string';
+    const isErrorWithResponse = (
+      error: any
+    ): error is { response: { data: { message: string } } } => {
+      return (
+        error &&
+        error.response &&
+        error.response.data &&
+        typeof error.response.data.message === 'string'
+      );
     };
 
     try {
-      // await wireTransfer(data);
-      navigation.navigate('SimplePWCheckScreen', { refresh: Date.now() });
+      navigation.navigate('SimplePWCheckScreen', { ...data, refresh: Date.now() });
     } catch (error) {
       if (isErrorWithResponse(error)) {
-        alert(error.response.data.message); // API에서 반환하는 에러 메시지를 보여줍니다.
+        alert(error.response.data.message);
       } else {
-        alert('송금 중 오류가 발생했습니다.'); // 기본 오류 메시지
+        alert('송금 중 오류가 발생했습니다.');
       }
-      console.log('Error during wire transfer:', error); // console.error 대신 console.log를 사용
+      console.log('Error during wire transfer:', error);
     }
-  }
-  
+  };
 
   return (
     <BottomSheetModalProvider>
@@ -144,7 +197,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
           <Text style={styles.headText}>송금하기</Text>
           <View style={styles.inputContainer}>
             <TextInput
-              style={styles.textInput}
+              style={[styles.textInput, { marginBottom: 0 }]}
               placeholder="계좌번호 입력"
               keyboardType="numeric"
               value={accountNumber}
@@ -153,13 +206,13 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                bottomSheetModalRef.current.present();
-                setSendingAccount(accountNumber);
+                checkAccount();
               }}
               activeOpacity={0.9}
             >
               <Text style={styles.buttonText}>송금</Text>
             </TouchableOpacity>
+            <Text style={styles.checkText}>{checkMessage}</Text>
           </View>
           <Text style={styles.headText}>내 계좌</Text>
           {filteredAccounts.map((account, index) => (
@@ -167,9 +220,8 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
               key={index}
               style={{ flex: 1, width: '100%' }}
               onPress={() => {
-                bottomSheetModalRef.current.present();
-                setSendingAccount(account.accountNumber);
-                setSendingPrice('')
+                chcekNowUser(account.accountNumber);
+                setSendingPrice('');
               }}
             >
               <View style={styles.row}>
@@ -186,15 +238,16 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
               </View>
             </TouchableOpacity>
           ))}
-          <Text style={[styles.headText, {marginTop: width * 0.1}]}>최근 송금 계좌</Text>
+          <Text style={[styles.headText, { marginTop: width * 0.1 }]}>
+            최근 송금 계좌
+          </Text>
           {filteredAccounts.map((account, index) => (
             <TouchableOpacity
               key={index}
               style={{ flex: 1, width: '100%' }}
               onPress={() => {
-                bottomSheetModalRef.current.present();
-                setSendingAccount(account.accountNumber);
-                setSendingPrice('')
+                chcekNowUser(account.accountNumber);
+                setSendingPrice('');
               }}
             >
               <View style={styles.row}>
@@ -240,7 +293,10 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 },
               ]}
             >
-              <Text>목표 금액</Text>
+              <View style={{ flexDirection: 'column' }}>
+                <Text style={{fontSize: width * 0.05, fontWeight: 'bold'}}>{nowUser}</Text>
+                <Text style={{fontSize: width * 0.04, color: 'gray'}}>{sendingAccount}</Text>
+              </View>
               <View>
                 <DropDownPicker
                   open={open}
@@ -254,7 +310,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 />
               </View>
             </View>
-            <View style={styles.bottomSheetItem}>
+            <View style={[styles.bottomSheetItem, styles.row]}>
               <TextInput
                 style={[styles.textInput, { width: '90%' }]}
                 placeholder="송금 금액"
@@ -262,16 +318,10 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 value={String(sendingPrice)}
                 onChangeText={(text) => setSendingPrice(text)}
               />
+              <Text>
+                원
+              </Text>
             </View>
-            {/* <View style={styles.bottomSheetItem}>
-              <TextInput
-                style={[styles.textInput, { width: '90%' }]}
-                placeholder="2차 비밀번호"
-                keyboardType="numeric"
-                value={simplePassword}
-                onChangeText={(text) => setSimplePassword(text)}
-              />
-            </View> */}
             <Button
               title="송금하기"
               onPress={async () => {
@@ -369,6 +419,11 @@ const styles = StyleSheet.create({
     marginTop: width * 0.1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  checkText: {
+    color: 'red',
+    marginBottom: width * 0.08,
+    fontSize: width * 0.045,
   },
 });
 
