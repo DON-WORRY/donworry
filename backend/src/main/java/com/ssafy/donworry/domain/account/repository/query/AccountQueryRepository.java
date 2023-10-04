@@ -86,4 +86,13 @@ public class AccountQueryRepository {
                 .fetchOne(); // 수정된 부분
         return UserRankResponse.of(totalAmount);
     }
+
+    public String findNameByAccountNumber(String accountNumber) {
+        String name = queryFactory
+                .select(account.member.memberName)
+                .from(account)
+                .where(account.accountNumber.eq(accountNumber))
+                .fetchOne();
+        return name;
+    }
 }

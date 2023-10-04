@@ -19,7 +19,7 @@ type RootStackParamList = {
   SignUp: undefined;
   Message: undefined;
   History: undefined;
-  Consumption: { categoryId: number; category: string };
+  Consumption: { categoryId: number; category: string; month: number };
   CardHistory: undefined;
   AccountHistory: undefined;
   DutchpayRequest: {
@@ -36,6 +36,7 @@ type RootStackParamList = {
     dateTime: string;
     id: number;
     dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
+    categoryId: number;
   };
   WireTransfer: {
     accounts: Array<any>;

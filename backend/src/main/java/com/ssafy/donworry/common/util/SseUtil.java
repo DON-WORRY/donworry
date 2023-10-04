@@ -37,6 +37,7 @@ public class SseUtil {
         } catch (IOException exception) {
             throw new InvalidValueException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+        log.info("리턴값 : {}", emitter);
         return emitter;
     }
 

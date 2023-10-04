@@ -46,7 +46,10 @@ public class FinanceService {
                 .orElseThrow(
                         () -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
                 );
-        if(!encoder.matches(transferAccountRequest.simplePassword(), member.getMemberSimplePassword())) {
+        if(transferAccountRequest.finger()) {
+            log.info("지문인식 통과");
+        }
+        else if(!encoder.matches(transferAccountRequest.simplePassword(), member.getMemberSimplePassword())) {
             throw new InvalidValueException(ErrorCode.SIMPLE_PASSWORD_NOT_MATCH);
         }
 

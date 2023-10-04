@@ -1,0 +1,24 @@
+server:
+  port: 8081
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: git@github.com:yhj0214/springcloudtest.git
+          ignore-local-ssh-settings: true
+          private-key: |
+            -----BEGIN EC PRIVATE KEY-----
+            MHcCAQEEIApKgkn8gjircLujVLkd+wTIgHKjljISCucCOAqlXcWjoAoGCCqGSM49
+            AwEHoUQDQgAE5+orkTQdgavoadWiAgo4j2Lv89dyQXaeW8eLFth/l9a0CC412lVQ
+            2WsS0f7LvXKSMFi7MCZStD89BAD/75LA8g==
+            -----END EC PRIVATE KEY-----
+          host-key: AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+          host-key-algorithm: ecdsa-sha2-nistp256
+
+        encrypt:
+          enabled: false
+
+encrypt:
+  key: key-brian
