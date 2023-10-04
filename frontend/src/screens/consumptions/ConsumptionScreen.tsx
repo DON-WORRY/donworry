@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigations/RootNavigator/Stack';
 import { RouteProp } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
+import LoaderModal from '../../components/modals/LoaderModal';
 
 const categoryData = [
   { key: '0', value: '전체' },
@@ -29,11 +30,11 @@ const categoryData = [
   { key: '6', value: '기타' },
 ];
 
-interface ScreenProps {
-  navigation: {
-    navigate: (screen: string, params?: any) => void;
-  };
-}
+// interface ScreenProps {
+//   navigation: {
+//     navigate: (screen: string, params?: any) => void;
+//   };
+// }
 
 interface ConsumptionDataProps {
   bankName: string;
@@ -42,6 +43,7 @@ interface ConsumptionDataProps {
   dateTime: string;
   id: number;
   dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
+  categoryId: number;
 }
 
 interface ConsumptionResponseProps {
@@ -63,9 +65,11 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
   // 현재 날짜 반환
   const currentDate = new Date();
   const initialMonth = currentDate.getMonth() + 1;
-  const [month, setMonth] = useState<number>(initialMonth);
-
-  const navigation = useNavigation<ScreenProps['navigation']>();
+  const [month, setMonth] = useState<number>(
+    route.params ? route.params.month : initialMonth
+  );
+  const [isLoading, setIsLoading] = useState(true);
+  // const navigation = useNavigation<ScreenProps['navigation']>();
 
   useEffect(() => {
     async function fetchData(category: number, month: number) {
@@ -76,7 +80,7 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
             categoryHistoryResponseList: response.categoryHistoryResponseList,
             total: response.total,
           });
-          console.log(response);
+          console.log(response.categoryHistoryResponseList);
         } else {
           console.error('API response does not contain data.');
         }
@@ -84,7 +88,13 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
         console.error('An error occurred:', error);
       }
     }
-    fetchData(category, month);
+    // 비동기 작업을 수행하는 함수 내에서 await 사용
+    async function loadData() {
+      await setIsLoading(true);
+      await fetchData(category, month);
+      setIsLoading(false);
+    }
+    loadData();
   }, [category, month]);
 
   function formattedDateDayOfTheWeek(dateTime: string): string {
@@ -117,7 +127,9 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
     }
   }
 
-  return (
+  return isLoading ? (
+    <LoaderModal />
+  ) : (
     <BottomSheetModalProvider>
       <View style={styles.container}>
         <BackHeader screen="Spend" />
@@ -174,7 +186,7 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
                     <View style={styles.horizontalLine}></View>
                   </View>
                 ) : null}
-                <ConsumptionList consumptionData={data} />
+                <ConsumptionList consumptionData={data} month={month} />
               </View>
             ))}
           </ScrollView>
