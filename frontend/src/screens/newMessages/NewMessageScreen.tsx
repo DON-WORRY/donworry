@@ -7,33 +7,24 @@ import {
   TouchableOpacity,
   FlatList,
   Text,
+  Alert
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { newMessages } from '../../utils/UserFunctions';
 import { FontAwesome } from '@expo/vector-icons';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { notificationUpdate } from '../../utils/NotificationFunctions';
-
-type RootStackParamList = {
-  Home: undefined;
-  Spend: undefined;
-  Asset: undefined;
-  Comparison: undefined;
-  Friend: undefined;
-};
 
 interface NotificationItemProps {
   item: {
     notificationContent: string;
     notificationId: number;
   };
+  setIsChanged : (isChanged: boolean) => void
 }
 
-const NotificationItem: React.FC<NotificationItemProps> = ({ item }) => {
+const NotificationItem: React.FC<NotificationItemProps> = ({ item, setIsChanged }) => {
   let icon;
-  let page = '';
-  const navigation = useNavigation<ScreenProps['navigation']>();
   if (item.notificationContent.includes('더치페이')) {
     icon = (
       <FontAwesome
@@ -43,7 +34,6 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ item }) => {
         color="#6EB7F9"
       />
     );
-    page = 'DutchpayState';
   } else if (item.notificationContent.includes('친구가')) {
     icon = (
       <FontAwesome
@@ -53,7 +43,6 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ item }) => {
         color="#7777F3"
       />
     );
-    page = 'Message';
   } else if (item.notificationContent.includes('받음')) {
     icon = (
       <FontAwesome
@@ -63,7 +52,6 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ item }) => {
         color="green"
       />
     );
-    page = 'Asset';
   } else if (item.notificationContent.includes('친구요청')) {
     icon = (
       <FontAwesome
@@ -73,38 +61,54 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ item }) => {
         color="#BA6EF9"
       />
     );
-    page = 'Message';
+  } else if (item.notificationContent.includes('정산')) {
+    icon = (
+      <FontAwesome
+        style={styles.iconStyle}
+        name="calculator"
+        size={24}
+        color="black"
+      />
+    );
   }
 
   // 일단 읽음 처리해야됨
-  async function clickHandle(itemId: number, page: string) {
+  async function clickHandle(itemId: number) {
     await notificationUpdate(itemId)
       .then((r) => {
-        console.log('실행');
+        console.log('읽음');
         console.log(r);
       })
       .catch((e) => {
         console.error(e);
       });
-    if (page === 'Asset') {
-      const newNavigation =
-        useNavigation<StackNavigationProp<RootStackParamList, 'Asset'>>();
-      newNavigation.replace('Asset');
-    } else {
-      navigation.replace('StackNavigation', { screen: page });
-    }
-    // 해당 페이지로 보내버려
-    // navigation.navigate('StackNavigation', { screen: 'Message' });
-    // asset으로 이동할 때
-    // navigation.navigate('Asset')
-    // const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Asset'>>();
+  }
+
+  async function WantYouRead(itemId: number) {
+    Alert.alert(
+      '알림', // 제목
+      '확인하시겠습니까?', // 내용
+      [
+        {
+          text: '확인', // 취소 버튼 텍스트
+          onPress: async () => {
+            await clickHandle(itemId)
+            await setIsChanged(true)
+          }
+        },
+        {
+          text: '취소', // 확인 버튼 텍스트
+        },
+      ],
+      { cancelable: false } // 뒤로가기 버튼으로 경고창을 닫지 못하게 함
+    );
   }
 
   return (
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() => {
-        clickHandle(item.notificationId, page);
+        WantYouRead(item.notificationId);
       }}
     >
       {icon}
@@ -132,6 +136,7 @@ const blackLogo = require('../../assets/logo/BlackLogo.png');
 const NewMessageScreen: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [messageData, setMessageData] = useState<MessageType[]>([]);
+  const [isChanged, setIsChanged] = useState(true)
   useEffect(() => {
     async function fetch() {
       const tmpData = await newMessages()
@@ -142,9 +147,10 @@ const NewMessageScreen: React.FC = () => {
           console.error(e);
         });
       await setMessageData(tmpData);
+      await setIsChanged(false)
     }
     fetch();
-  }, [messageData.length]);
+  }, [messageData.length, isChanged === true]);
   return (
     <View style={styles.container}>
       <View style={styles.header_box}>
@@ -166,8 +172,14 @@ const NewMessageScreen: React.FC = () => {
         style={styles.flatListContainer}
         keyExtractor={(item) => item.notificationId.toString()}
         data={messageData}
-        renderItem={(items) => <NotificationItem item={items.item} />}
+        renderItem={(items) => <NotificationItem item={items.item} setIsChanged={setIsChanged}/>}
       />
+      {/* <NotificationItem
+        item={{
+          notificationContent: '정산',
+          notificationId: 1,
+        }}
+      /> */}
     </View>
   );
 };
