@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: "100%",
-    height: 60,
+    height: 70,
     marginBottom: 10,
   },
   selectMonthText: {
