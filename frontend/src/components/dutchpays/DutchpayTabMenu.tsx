@@ -7,6 +7,7 @@ import {
   ScrollView,
   Platform,
   TouchableOpacity,
+  Alert
 } from 'react-native';
 import { Button } from '../../components/logins/Login';
 import { FontAwesome } from '@expo/vector-icons';
@@ -20,6 +21,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { getData } from '../../utils/ConsumptionFunctions';
 import { consumptionDutchPayPriceSend } from '../../utils/ConsumptionFunctions';
 import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface ScreenProps {
   navigation: {
@@ -156,8 +158,195 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
   const [selectedMemberId, setSelectedMemberId] = useState(0);
   const [selectedMemberName, setSelectedMemberName] = useState('');
   const [selectedMemberPrice, setSelectedMemberPrice] = useState(0);
+  // 송금을 클릭했어요?
+  const [isClickedSend, setIsClickedSend] = useState(false);
+  const [nowEasyPass, setNowEasyPass] = useState("")
+  const [easyPass, setEasyPass] = useState('');
+  const [passwordNumbers, setPasswordNumbers] = useState<string[]>([]);
+  async function shuffle(array: string[]): Promise<string[]> {
+    await array.sort(() => Math.random() - 0.5);
+    await setPasswordNumbers(array);
+    return array;
+  }
+  const [completeRound, setCompleteRound] = useState({
+    a: false,
+    b: false,
+    c: false,
+    d: false,
+    e: false,
+    f: false,
+  });
+  const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  useEffect(() => {
+    shuffle(numbers);
+  }, []);
 
-  function handlePriceSend() {
+  async function clickButton(str: string) {
+    // setCompleteRound((prev) => prev.nowIndex = true)
+    if (str == 'delete') {
+      // console.log('delete');
+      if (easyPass === '') {
+        return Alert.alert('삭제 오류', '비밀번호를 입력해주세요');
+      }
+      const lenPass = easyPass.length;
+      const tmpPass = easyPass.slice(0, lenPass - 1);
+      if (lenPass == 1) {
+        setCompleteRound({
+          a: false,
+          b: false,
+          c: false,
+          d: false,
+          e: false,
+          f: false,
+        });
+      } else if (lenPass == 2) {
+        setCompleteRound({
+          a: true,
+          b: false,
+          c: false,
+          d: false,
+          e: false,
+          f: false,
+        });
+      } else if (lenPass == 3) {
+        setCompleteRound({
+          a: true,
+          b: true,
+          c: false,
+          d: false,
+          e: false,
+          f: false,
+        });
+      } else if (lenPass == 4) {
+        setCompleteRound({
+          a: true,
+          b: true,
+          c: true,
+          d: false,
+          e: false,
+          f: false,
+        });
+      } else if (lenPass == 5) {
+        setCompleteRound({
+          a: true,
+          b: true,
+          c: true,
+          d: true,
+          e: false,
+          f: false,
+        });
+      } else if (lenPass == 6) {
+        setCompleteRound({
+          a: true,
+          b: true,
+          c: true,
+          d: true,
+          e: true,
+          f: false,
+        });
+      }
+      await setEasyPass(tmpPass);
+      return;
+    }
+
+    if (str == 'all') {
+      await setEasyPass('');
+      setCompleteRound({
+        a: false,
+        b: false,
+        c: false,
+        d: false,
+        e: false,
+        f: false,
+      });
+      return;
+    }
+    const nowIndex = easyPass.length + 1;
+    if (nowIndex == 1) {
+      setCompleteRound({
+        a: true,
+        b: false,
+        c: false,
+        d: false,
+        e: false,
+        f: false,
+      });
+    } else if (nowIndex == 2) {
+      setCompleteRound({
+        a: true,
+        b: true,
+        c: false,
+        d: false,
+        e: false,
+        f: false,
+      });
+    } else if (nowIndex == 3) {
+      setCompleteRound({
+        a: true,
+        b: true,
+        c: true,
+        d: false,
+        e: false,
+        f: false,
+      });
+    } else if (nowIndex == 4) {
+      setCompleteRound({
+        a: true,
+        b: true,
+        c: true,
+        d: true,
+        e: false,
+        f: false,
+      });
+    } else if (nowIndex == 5) {
+      setCompleteRound({
+        a: true,
+        b: true,
+        c: true,
+        d: true,
+        e: true,
+        f: false,
+      });
+    } else if (nowIndex == 6) {
+      setCompleteRound({
+        a: true,
+        b: true,
+        c: true,
+        d: true,
+        e: true,
+        f: true,
+      });
+      // console.log(easyPass.length);
+      // handlePriceSend()
+    }
+    const tmpPass = (await easyPass) + str;
+    await setEasyPass(tmpPass);
+    await shuffle(numbers);
+    if (tmpPass.length === 6) {
+      console.log(tmpPass)
+      await setNowEasyPass(tmpPass)
+      await setEasyPass("")
+      await setCompleteRound({
+        a: false,
+        b: false,
+        c: false,
+        d: false,
+        e: false,
+        f: false,
+      });
+      await handlePriceSend(tmpPass)
+      await setIsClickedSend(false)
+    }
+  }
+
+  async function clickSendButton() {
+    setIsClickedSend(true)
+  }
+
+  async function handlePriceSend(password: string) {
+    // 간편인증 하고
+    // 밑으로 들어가서
+    // 다음 함수 실행
     async function sendDutchpayData(data: {
       detailDutchpayId: number;
       sendPrice: number;
@@ -167,26 +356,202 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
         const response = await consumptionDutchPayPriceSend(data);
         if (response) {
           console.log(response);
+          navigation.replace('StackNavigation', {
+            screen: 'DutchpayState',
+          });
         } else {
           console.error('API response does not contain data.');
         }
       } catch (error) {
+        // 비밀 번호가 틀렸을 경우
+        setIsClickedSend(false)
         console.error('An error occurred:', error);
+        return Alert.alert("잘못된 비밀번호", "비밀번호가 틀렸습니다. 다시 시도해주세요.")
       }
     }
-    const data = {
+    const data = await {
       detailDutchpayId: selectedMemberId,
       sendPrice: selectedMemberPrice,
-      simplePassword: '456456',
+      simplePassword: password,
     };
-    sendDutchpayData(data);
-    navigation.replace('StackNavigation', {
-      screen: 'DutchpayState',
-    });
+    await sendDutchpayData(data);
   }
   return (
     <ScrollView>
-      {props.sendDutchpayTotalList.length > 0 ? (
+      {isClickedSend ? <View style={simpleStyles.container}>
+      <View style={simpleStyles.topBox}>
+        <Text style={simpleStyles.topText}>비밀번호 입력</Text>
+        <View style={simpleStyles.middleBox}>
+          <View
+            style={[
+              simpleStyles.roundBox,
+              completeRound.a ? simpleStyles.successBox : null,
+            ]}
+          ></View>
+          <View
+            style={[
+              simpleStyles.roundBox,
+              completeRound.b ? simpleStyles.successBox : null,
+            ]}
+          ></View>
+          <View
+            style={[
+              simpleStyles.roundBox,
+              completeRound.c ? simpleStyles.successBox : null,
+            ]}
+          ></View>
+          <View
+            style={[
+              simpleStyles.roundBox,
+              completeRound.d ? simpleStyles.successBox : null,
+            ]}
+          ></View>
+          <View
+            style={[
+              simpleStyles.roundBox,
+              completeRound.e ? simpleStyles.successBox : null,
+            ]}
+          ></View>
+          <View
+            style={[
+              simpleStyles.roundBox,
+              completeRound.f ? simpleStyles.successBox : null,
+            ]}
+          ></View>
+        </View>
+      </View>
+
+      <View style={simpleStyles.bottomBox}>
+        <View style={simpleStyles.rowBox}>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton(passwordNumbers[0]);
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.keyText}>{passwordNumbers[0]}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton(passwordNumbers[1]);
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.keyText}>{passwordNumbers[1]}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton(passwordNumbers[2]);
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.keyText}>{passwordNumbers[2]}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={simpleStyles.rowBox}>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton(passwordNumbers[3]);
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.keyText}>{passwordNumbers[3]}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton(passwordNumbers[4]);
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.keyText}>{passwordNumbers[4]}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton(passwordNumbers[5]);
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.keyText}>{passwordNumbers[5]}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={simpleStyles.rowBox}>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton(passwordNumbers[6]);
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.keyText}>{passwordNumbers[6]}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton(passwordNumbers[7]);
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.keyText}>{passwordNumbers[7]}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton(passwordNumbers[8]);
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.keyText}>{passwordNumbers[8]}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={simpleStyles.rowBox}>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton('all');
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.allRemove}>전체 삭제</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton(passwordNumbers[9]);
+            }}
+          >
+            <View>
+              <Text style={simpleStyles.keyText}>{passwordNumbers[9]}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={simpleStyles.keyBox}
+            onPress={() => {
+              clickButton('delete');
+            }}
+          >
+            <View>
+              <MaterialIcons name="backspace" size={30} color={'white'} />
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View> : <>{props.sendDutchpayTotalList.length > 0 ? (
         props.sendDutchpayTotalList.map((sendDutchpayTotal, index) => (
           <View style={styles.tabContainer} key={sendDutchpayTotal.dutchpayId}>
             <View style={styles.titleTopView}>
@@ -266,7 +631,7 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
                 </View>
                 <Button
                   title="송금"
-                  onPress={handlePriceSend}
+                  onPress={() => {clickSendButton()}}
                   widthPercentage={0.9}
                 />
               </View>
@@ -275,7 +640,8 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
         ))
       ) : (
         <Text style={styles.emptyText}>요청 받은 더치페이가 없습니다</Text>
-      )}
+      )}</>}
+      
     </ScrollView>
   );
 };
@@ -453,6 +819,86 @@ const styles = StyleSheet.create({
     color: 'lightgray',
     fontSize: 20,
     marginTop: 20,
+  },
+});
+
+const screenWidth = Dimensions.get('screen').width;
+const screenHeight = Dimensions.get('screen').height;
+
+const simpleStyles = StyleSheet.create({
+  container: {
+    height: screenHeight * 0.7,
+    width: screenWidth - 40,
+    // backgroundColor: "blue"
+  },
+  topBox: {
+    height: screenHeight * 0.4,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bottomBox: {
+    flexDirection: 'column',
+    flex: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    width: screenWidth - 40,
+    height: screenHeight,
+  },
+  lineBox: {
+    width: screenWidth - 40,
+  },
+  keyBox: {
+    backgroundColor: '#7777F3',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rowBox: {
+    flexDirection: 'row',
+    flex: 1,
+    width: screenWidth - 40,
+    // height: 60,
+  },
+  columnBox: {
+    width: screenWidth - 40,
+    height: screenHeight,
+  },
+  keyText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  allRemove: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  topText: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#7777F3',
+  },
+  roundBox: {
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+    backgroundColor: 'gray',
+    marginLeft: 5,
+    marginRight: 5,
+  },
+  middleBox: {
+    paddingTop: 30,
+    height: 60,
+    flexDirection: 'row',
+  },
+  successBox: {
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+    backgroundColor: '#7777F3',
+    marginLeft: 5,
+    marginRight: 5,
   },
 });
 

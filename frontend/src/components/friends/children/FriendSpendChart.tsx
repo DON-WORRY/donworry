@@ -39,6 +39,9 @@ const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
     }
     fetch();
   }, [props.myAmount, props.kingsAmount]);
+  function numberWithCommas(x: number) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
   return (
     <View>
       {myAmount.length > 0 && kingAmount.length > 0 ? (
@@ -106,7 +109,7 @@ const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
           return (
             <View key={indexNumber} style={styles.lineBox}>
               <View style={styles.leftStickBox}>
-                <Text style={styles.amountLeftText}>{leftValue}</Text>
+                <Text style={styles.amountLeftText}>{numberWithCommas(leftValue)}</Text>
                 <View style={innerStyles.leftStickTop}></View>
                 <View style={innerStyles.leftStickBottom}></View>
               </View>
@@ -116,7 +119,7 @@ const FriendSpendChart: React.FC<FriendSpendChartProps> = (props) => {
                 </View>
               </View>
               <View style={styles.rightStickBox}>
-                <Text style={styles.amountRightText}>{rightValue}</Text>
+                <Text style={styles.amountRightText}>{numberWithCommas(rightValue)}</Text>
                 <View style={innerStyles.rightStickTop}></View>
                 <View style={innerStyles.rightStickBottom}></View>
               </View>

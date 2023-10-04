@@ -32,6 +32,7 @@ public class SseUtil {
                     .name("sse")
                     .data("connect completed")
             );
+            log.info("send 완료 : {}", memberId);
 
         } catch (IOException exception) {
             throw new InvalidValueException(ErrorCode.INTERNAL_SERVER_ERROR);

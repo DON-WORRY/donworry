@@ -45,7 +45,7 @@ const ComparisonHeader: React.FC<ComparisonProps> = (props) => {
 const screenWidth = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
-    width: screenWidth - 40,
+    width: (screenWidth - 40)/2,
     flexDirection: 'row',
     height: 40,
     paddingLeft: 10,

@@ -9,12 +9,31 @@ import {
   Alert,
   Image,
   StyleProp,
-  ViewStyle
+  ViewStyle,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { userLogin } from '../../utils/UserFunctions';
+import { userLogin, subscribeMessage } from '../../utils/UserFunctions';
 import { useDispatch } from 'react-redux';
 import { setMypageModal } from '../../store/Modal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import EventSource from 'react-native-event-source';
+
+const getData = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    // 읽기 에러
+    console.error(e);
+    throw e;
+  }
+};
+
+interface LoginProps {
+  setLoading: (loading: boolean) => void;
+}
 
 interface InputboxProps {
   placeholder: string;
@@ -29,7 +48,7 @@ interface ButtonProps {
   onPress: () => void;
   widthPercentage?: number;
   disabled?: boolean;
-  style?: StyleProp<ViewStyle>;  // 스타일 prop을 추가
+  style?: StyleProp<ViewStyle>; // 스타일 prop을 추가
 }
 
 interface ScreenProps {
@@ -39,25 +58,49 @@ interface ScreenProps {
   };
 }
 const KakaoLogin = require('../../assets/logins/KakaoLogin3.png');
-const Login: React.FC = () => {
+const Login: React.FC<LoginProps> = (props) => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [loginId, setloginId] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  function handleLogin() {
+  async function handleLogin() {
     // 로그인 시
+    await props.setLoading(true);
+
     const data = {
       memberEmail: loginId,
       memberPassword: password,
     };
-    userLogin(data)
-      .then(() => {
-        dispatch(setMypageModal(true));
-        navigation.replace('TabNavigation', { screen: 'Home' });
+
+    await userLogin(data)
+      .then((res) => {
+        console.log('ok1');
+        // dispatch(setMypageModal(true));
       })
       .catch((e) => {
+        props.setLoading(false);
         return Alert.alert('로그인 실패', `${e.message}`);
       });
+
+    const accessToken = await getData('accessToken');
+    const memberId = await getData('memberId');
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+    const eventSource = await new EventSource(
+      `https://j9c210.p.ssafy.io/api/notifications/${memberId}`,
+      { headers: headers }
+    );
+    await eventSource.addEventListener('open', (event) => {
+      console.log('open', event.data);
+    });
+    // await eventSource.addEventListener('sse', (event) => {
+    //   console.log('2', event);
+    // });
+    // await eventSource.addEventListener('message', (event) => {
+    //   console.log('Received data:', event.data);
+    // });
+    navigation.replace('TabNavigation', { screen: 'Home' });
   }
 
   return (
@@ -76,7 +119,12 @@ const Login: React.FC = () => {
           onChangeText={(text) => setPassword(text)}
           secureTextEntry={true}
         />
-        <Button title="로그인" onPress={handleLogin} />
+        <Button
+          title="로그인"
+          onPress={() => {
+            handleLogin();
+          }}
+        />
 
         <TouchableOpacity
           style={styles.kakao}
@@ -125,10 +173,9 @@ const Inputbox: React.FC<InputboxProps> = (props) => {
 //   );
 // };
 
-
 const Button: React.FC<ButtonProps> = (props) => {
   const { title, onPress, widthPercentage = 0.7, disabled, style } = props;
-  
+
   return (
     <TouchableOpacity
       style={[
@@ -137,7 +184,7 @@ const Button: React.FC<ButtonProps> = (props) => {
           width: Dimensions.get('screen').width * widthPercentage,
           backgroundColor: disabled ? 'gray' : '#7777F3',
         },
-        style // 외부에서 주입된 스타일을 추가
+        style, // 외부에서 주입된 스타일을 추가
       ]}
       onPress={onPress}
       activeOpacity={0.9}
@@ -147,7 +194,6 @@ const Button: React.FC<ButtonProps> = (props) => {
     </TouchableOpacity>
   );
 };
-
 
 const GoToSignup: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();

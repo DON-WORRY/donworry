@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
     width: screenWidth - 40,
   },
   keyBox: {
-    backgroundColor: 'green',
+    backgroundColor: '#7777F3',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
   topText: {
     fontSize: 40,
     fontWeight: 'bold',
-    color: 'green',
+    color: '#7777F3',
   },
   roundBox: {
     height: 30,
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     borderRadius: 15,
-    backgroundColor: 'green',
+    backgroundColor: '#7777F3',
     marginLeft: 5,
     marginRight: 5,
   },
