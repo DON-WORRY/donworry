@@ -23,9 +23,9 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class OauthKakaoUtil {
 
-    @Value("${social-kakao.OAUTH2_KAKAO_REST_API}")
+    @Value("${OAUTH2_KAKAO_REST_API}")
     private String clientId;
-    @Value("${social-kakao.OAUTH2_KAKAO_REDIRECT_URL}")
+    @Value("${OAUTH2_KAKAO_REDIRECT_URL}")
     private String redirectUrl;
     private static final String ACCESS_URL = "https://kauth.kakao.com";
     private static final String INFO_URL = "https://kapi.kakao.com";

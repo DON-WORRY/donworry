@@ -31,8 +31,8 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.*;
 
-//import static com.ssafy.donworry.domain.account.entity.QAccount.account;
-//import static com.ssafy.donworry.domain.account.entity.QBank.bank;
+import static com.ssafy.donworry.domain.account.entity.QAccount.account;
+import static com.ssafy.donworry.domain.account.entity.QBank.bank;
 import static com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus.NOTSTART;
 
 @Slf4j
