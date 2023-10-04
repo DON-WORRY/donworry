@@ -135,22 +135,6 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
         <BackHeader screen="Spend" />
         <View style={styles.subContainer}>
           <Text style={styles.headerTitleText}>소비</Text>
-          <View style={styles.headerDateView}>
-            <TouchableOpacity onPress={handleGoToLeft}>
-              <AntDesign name="caretleft" size={24} color="black" />
-            </TouchableOpacity>
-            <Text style={styles.headerDateText}>{month}월</Text>
-            <TouchableOpacity
-              onPress={handleGoToRight}
-              disabled={month === initialMonth ? true : false}
-            >
-              <AntDesign
-                name="caretright"
-                size={24}
-                color={month === initialMonth ? 'lightgray' : 'black'}
-              />
-            </TouchableOpacity>
-          </View>
           <View style={styles.headerCategoryView}>
             <SelectList
               setSelected={(val: number) => {
@@ -166,10 +150,27 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
               }}
             />
           </View>
-
-          <Text style={styles.headerPriceText}>
-            지출 : {formattedPrice(consumptionData?.total)}원
-          </Text>
+          <View style={styles.headerMiddleView}>
+            <View style={styles.headerDateView}>
+              <TouchableOpacity onPress={handleGoToLeft}>
+                <AntDesign name="caretleft" size={24} color="black" />
+              </TouchableOpacity>
+              <Text style={styles.headerDateText}>{month}월</Text>
+              <TouchableOpacity
+                onPress={handleGoToRight}
+                disabled={month === initialMonth ? true : false}
+              >
+                <AntDesign
+                  name="caretright"
+                  size={24}
+                  color={month === initialMonth ? 'lightgray' : 'black'}
+                />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.headerPriceText}>
+              지출 : {formattedPrice(consumptionData?.total)}원
+            </Text>
+          </View>
 
           <ScrollView style={styles.listScrollView}>
             {consumptionData?.categoryHistoryResponseList.map((data, index) => (
@@ -182,7 +183,9 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
                   ) ? (
                   // 날짜가 바뀌면 날짜 표시
                   <View style={index === 0 ? null : styles.listDateView}>
-                    <Text>{formattedDateDayOfTheWeek(data.dateTime)}</Text>
+                    <Text style={styles.dateText}>
+                      {formattedDateDayOfTheWeek(data.dateTime)}
+                    </Text>
                     <View style={styles.horizontalLine}></View>
                   </View>
                 ) : null}
@@ -208,14 +211,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerTitleText: {
+    paddingTop: 20,
     fontSize: 30,
     fontWeight: '700',
     alignSelf: 'flex-start',
   },
+  headerMiddleView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   headerDateView: {
     flexDirection: 'row',
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 20,
+    paddingBottom: 5,
   },
   headerDateText: {
     fontSize: 20,
@@ -227,13 +235,13 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     position: 'absolute',
     borderRadius: 10,
-    backgroundColor: 'white',
-    top: 20,
+    top: 10,
     zIndex: 1,
   },
   headerPriceText: {
-    fontSize: 18,
-    fontWeight: '600',
+    alignSelf: 'flex-end',
+    fontSize: width * 0.06,
+    fontWeight: 'bold',
   },
   // headerAccountView: {
   //   flexDirection: 'row',
@@ -245,8 +253,13 @@ const styles = StyleSheet.create({
   listDateView: {
     marginTop: 20,
   },
+  dateText: {
+    paddingVertical: 5,
+    fontSize: width * 0.04,
+    fontWeight: 'bold',
+  },
   horizontalLine: {
-    borderBottomColor: 'black',
+    borderBottomColor: '#7777F3',
     borderBottomWidth: 2,
     marginVertical: 5,
   },

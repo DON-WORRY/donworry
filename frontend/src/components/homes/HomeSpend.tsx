@@ -13,6 +13,7 @@ import { images } from '../../assets/bank&card';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { consumptionCategoryTotal } from '../../utils/ConsumptionFunctions';
+import { AntDesign } from '@expo/vector-icons';
 
 interface ScreenProps {
   navigation: {
@@ -98,12 +99,18 @@ const HomeSpend: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={styles.headText}>소비</Text>
-        <Text style={[styles.headText, styles.amountText]}>
-          {formatAmount(totalAmount.toString())}
-        </Text>
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('StackNavigation', { screen: 'Consumption' });
+        }}
+      >
+        <View style={styles.row}>
+          <Text style={styles.headText}>소비</Text>
+          <Text style={[styles.headText, styles.amountText]}>
+            {formatAmount(totalAmount.toString())}
+          </Text>
+        </View>
+      </TouchableOpacity>
 
       {processedData.map((item, index) => {
         if (index < 4 || isExpanded) {
@@ -140,8 +147,16 @@ const HomeSpend: React.FC = () => {
         return null;
       })}
       {processedData.length > 4 && (
-        <TouchableOpacity onPress={handleToggle}>
-          <Text>{isExpanded ? '접기' : '더보기'}</Text>
+        <TouchableOpacity onPress={handleToggle} style={styles.addImage}>
+          {isExpanded ? (
+            <View>
+              <Text style={styles.addImageText}>닫기</Text>
+            </View>
+          ) : (
+            <View>
+              <Text style={styles.addImageText}>더보기</Text>
+            </View>
+          )}
         </TouchableOpacity>
       )}
     </View>
@@ -190,6 +205,16 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: width * 0.05,
     fontWeight: 'bold',
+  },
+  addImage: {
+    alignSelf: 'flex-end',
+    marginTop: 10,
+  },
+  addImageText: {
+    fontSize: 13,
+    paddingTop: 10,
+    fontWeight: '500',
+    color: 'gray',
   },
 });
 export default HomeSpend;

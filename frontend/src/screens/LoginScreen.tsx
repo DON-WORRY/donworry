@@ -9,10 +9,10 @@ import {
 import DonWorryText from '../components/logins/LoginDonWorryText';
 import Login from '../components/logins/Login';
 // import KakaoLogin from './KakaoLogin';
-import LoaderModal from "../components/modals/LoaderModal"
+import LoaderModal from '../components/modals/LoaderModal';
 
 const LoginPage: React.FC = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [moveAnimation] = useState<Animated.Value>(new Animated.Value(0));
   const [fadeInAnimation] = useState<Animated.Value>(new Animated.Value(0));
 
@@ -31,7 +31,7 @@ const LoginPage: React.FC = () => {
         toValue: -190,
         duration: 2000,
         delay: 1000,
-        useNativeDriver: false,
+        useNativeDriver: true,
       }),
       // 두 번째 애니메이션: 페이드 인 애니메이션
       Animated.timing(fadeInAnimation, {
@@ -47,16 +47,26 @@ const LoginPage: React.FC = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      {loading ? <><LoaderModal /></> : <><View style={styles.container}>
-        <View style={styles.box1}></View>
-        <View style={styles.box2}></View>
-        <Animated.View style={[moveAnimationStyles, { position: 'absolute' }]}>
-          <DonWorryText />
-        </Animated.View>
-        <Animated.View style={fadeInAnimationStyles}>
-          <Login setLoading={setLoading}/>
-        </Animated.View>
-      </View></>}
+      {loading ? (
+        <>
+          <LoaderModal />
+        </>
+      ) : (
+        <>
+          <View style={styles.container}>
+            <View style={styles.box1}></View>
+            <View style={styles.box2}></View>
+            <Animated.View
+              style={[moveAnimationStyles, { position: 'absolute' }]}
+            >
+              <DonWorryText />
+            </Animated.View>
+            <Animated.View style={fadeInAnimationStyles}>
+              <Login setLoading={setLoading} />
+            </Animated.View>
+          </View>
+        </>
+      )}
     </TouchableWithoutFeedback>
   );
 };

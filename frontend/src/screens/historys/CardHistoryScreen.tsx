@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { images } from '../../assets/bank&card';
@@ -62,7 +63,7 @@ const CardHistoryScreen: React.FC = () => {
     };
     fetch();
   }, [selectedCardId]);
-console.log(selectedCardId)
+  console.log(selectedCardId);
   // 카드 내역 가져오는 함수 (카드Id, 요청년월(202309))
   const processCardDetails = async (cardId: number, yearMonth: number) => {
     try {
@@ -95,16 +96,27 @@ console.log(selectedCardId)
     setCurrentPage(currentPage + 1);
   };
 
-  function formatDate(dateString: string): string {
-    const [month, day] = dateString.split('-');
-    const formattedMonth = parseInt(month, 10);
-    const formattedDay = parseInt(day, 10);
-    return `${formattedMonth}월 ${formattedDay}일`;
+  function formattedDateDayOfTheWeek(dateTime: string): string {
+    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+    const parts = dateTime.split('-');
+    const month = parseInt(parts[0], 10) - 1;
+    const day = parseInt(parts[1], 10);
+    const date = new Date(new Date().getFullYear(), month, day);
+    const dayOfWeek = daysOfWeek[date.getDay()];
+    return `${day}일 ${dayOfWeek}요일`;
   }
 
   const formatAmount = (amount: string): string => {
     return parseInt(amount, 10).toLocaleString('ko-KR') + '원';
   };
+
+  function formatAddDot(input: number) {
+    const inputString = String(input);
+    const lastIndex = inputString.length - 2;
+    const formattedString =
+      inputString.slice(0, lastIndex) + '.' + inputString.slice(lastIndex); // 문자열 조작
+    return formattedString;
+  }
 
   const decreaseMonth = () => {
     if (checkMonth > 202201) {
@@ -161,17 +173,29 @@ console.log(selectedCardId)
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          width: '108%',
+          width: width,
           marginTop: width * 0.05,
           marginBottom: width * 0.03,
         }}
       >
+        <Text style={styles.headTitleText}>카드</Text>
+        <CardPicker
+          cardId={selectedCardId}
+          setCardId={setSelectedCardId}
+          cards={cards}
+        />
+      </View>
+
+      <View
+        style={[
+          styles.headerMiddleRow,
+          { width: width * 0.9, marginBottom: width * 0.01 },
+        ]}
+      >
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'flex-start',
             alignItems: 'center',
-            marginLeft: width * 0.03
           }}
         >
           <TouchableOpacity
@@ -179,31 +203,28 @@ console.log(selectedCardId)
               decreaseMonth();
             }}
           >
-            <MaterialIcons
-              name="arrow-back-ios"
-              size={width * 0.05}
-              style={{ marginTop: -width * 0.014 }}
+            <AntDesign
+              name="caretleft"
+              size={24}
+              color="black"
+              // style={{ marginTop: -width * 0.025 }}
             />
           </TouchableOpacity>
-          <Text style={styles.headText}>{checkMonth}</Text>
+          <Text style={styles.headDateText}>{formatAddDot(checkMonth)}</Text>
           <TouchableOpacity
             onPress={() => {
               increaseMonth();
             }}
           >
-            <MaterialIcons
-              name="arrow-forward-ios"
-              size={width * 0.05}
-              style={{ marginTop: -width * 0.014 }}
+            <AntDesign
+              name="caretright"
+              size={24}
+              color="black"
+              // style={{ marginTop: -width * 0.025 }}
             />
           </TouchableOpacity>
         </View>
-        <CardPicker cardId={selectedCardId} setCardId={setSelectedCardId} cards={cards} />
-      </View>
-
-      <View style={[styles.row, { width: '100%', marginBottom: width * 0.01 }]}>
-        <Text style={styles.headText}>내역</Text>
-        <Text style={styles.headText}>
+        <Text style={[styles.headText, { marginTop: 5 }]}>
           지출 {formatAmount(totalPrice.toString())}
         </Text>
       </View>
@@ -218,8 +239,10 @@ console.log(selectedCardId)
         showsVerticalScrollIndicator={false}
         renderItem={({ item: date }) => (
           <View>
-            <View style={[styles.row]}>
-              <Text style={styles.dateText}>{formatDate(date)}</Text>
+            <View style={[styles.row, { marginTop: 20 }]}>
+              <Text style={styles.dateText}>
+                {formattedDateDayOfTheWeek(date)}
+              </Text>
               <Text style={styles.dateText}>
                 {formatAmount(cardDetail.sumsByDate[date].toString())}
               </Text>
@@ -267,11 +290,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  headTitleText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    paddingLeft: width * 0.07,
+    marginBottom: width * 0.03,
+  },
+  headerMiddleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  headDateText: {
+    fontSize: width * 0.06,
+    fontWeight: '500',
+  },
   headText: {
     fontSize: width * 0.06,
     fontWeight: 'bold',
     textAlign: 'left',
-    marginBottom: width * 0.03,
   },
   amountText: {
     textAlign: 'right',
@@ -296,8 +334,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   dateText: {
-    paddingVertical: 10,
-    fontSize: width * 0.05,
+    paddingVertical: 5,
+    fontSize: width * 0.04,
     fontWeight: 'bold',
   },
   itemText: {
@@ -308,7 +346,7 @@ const styles = StyleSheet.create({
     height: 0,
     width: width * 0.9,
     borderBottomWidth: 1,
-    borderBottomColor: 'black',
+    borderBottomColor: '#7777F3',
     marginBottom: 10,
   },
 });
