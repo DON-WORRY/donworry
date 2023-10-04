@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 
 // 함수
 import {
@@ -15,6 +22,7 @@ import FriendCubes from './children/FriendCubes';
 import FriendSpendHeader from './children/FriendSpendHeader';
 import FriendSpendChart from './children/FriendSpendChart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontAwesome } from '@expo/vector-icons';
 
 // 토큰 가져오기 함수
 const getData = async (key: string) => {
@@ -52,7 +60,7 @@ type CategoryAmount = {
 };
 
 const nowDate = new Date();
-const nowMonth = nowDate.getMonth() + 1;
+const getNowMonth = nowDate.getMonth() + 1;
 // const kingsAmount = {
 //   food: 240000,
 //   transport: 100000,
@@ -71,6 +79,7 @@ type Friend = {
 };
 
 const FriendSpendKing: React.FC = () => {
+  const [nowMonth, setNowMonth] = useState(getNowMonth);
   const [rank, setRank] = useState(0);
   const [friendsNumber, setFriendsNumber] = useState(0);
   const [myName, setMyName] = useState<string | undefined>(undefined);
@@ -86,8 +95,8 @@ const FriendSpendKing: React.FC = () => {
       setMyName(newName);
       const tmpRank = await consumptionFriendRank()
         .then((r) => {
-          console.log(r)          
-          return r
+          console.log(r);
+          return r;
         })
         .catch((e) => {
           console.error(e);
@@ -110,7 +119,7 @@ const FriendSpendKing: React.FC = () => {
       // 이름이 존재할 때만 실행
       fetchCategoryList();
     }
-  }, [myName]);
+  }, [myName, nowMonth]);
 
   // 3. 카테고리 리스트 데이터가 바뀌면 친구 목록을 가져옵니다.
   useEffect(() => {
@@ -173,9 +182,43 @@ const FriendSpendKing: React.FC = () => {
     }
   }, [friends]);
   // 빈 배열을 전달하여 한 번만 실행되도록 함
+
+  function changeMonth(str: string) {
+    if (str === '+') {
+      if (nowMonth === getNowMonth) {
+        return Alert.alert('선택 오류', '다음 달에 대한 정보가 없습니다.');
+      } else {
+        setNowMonth((prev) => prev + 1);
+        return;
+      }
+    } else {
+      setNowMonth((prev) => prev - 1);
+      return;
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <FriendSpendHeader friendsNumber={friendsNumber} rank={rank}/>
+      <View style={styles.selectMonth}>
+        <TouchableOpacity
+          onPress={() => {
+            changeMonth('-');
+          }}
+        >
+          <FontAwesome name="caret-left" size={40} />
+        </TouchableOpacity>
+        <View>
+          <Text style={styles.selectMonthText}>{nowMonth}월</Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            changeMonth('+');
+          }}
+        >
+          <FontAwesome name="caret-right" size={40} />
+        </TouchableOpacity>
+      </View>
+      <FriendSpendHeader friendsNumber={friendsNumber} rank={rank} />
       <FriendCubes myName={myName} />
       <FriendSpendChart
         kingsAmount={friendsMinValues}
@@ -188,7 +231,7 @@ const FriendSpendKing: React.FC = () => {
 const screenWidth = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
-    height: 525,
+    height: 585,
     padding: 20,
     width: screenWidth - 40,
     borderRadius: 15,
@@ -200,6 +243,20 @@ const styles = StyleSheet.create({
   },
   myCube: {
     color: '#7777F3',
+  },
+  selectMonth: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "100%",
+    height: 60,
+    marginBottom: 10,
+  },
+  selectMonthText: {
+    fontSize: 40,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
   },
 });
 

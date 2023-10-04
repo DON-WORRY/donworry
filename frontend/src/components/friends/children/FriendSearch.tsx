@@ -16,6 +16,7 @@ import {
 // import Select from "react-select"
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { ScreenWidth } from '@rneui/themed/dist/config';
 
 type Friend = {
   friendId: number;
@@ -34,8 +35,8 @@ type RootStackParamList = {
 };
 
 interface FriendSearchProps {
-  search: (name: string) => void;
   friends: Friend[];
+  isComparison?: boolean
 }
 
 const FriendSearch: React.FC<FriendSearchProps> = (props) => {
@@ -44,7 +45,7 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
 
   const [loading, setLoading] = useState(true);
   const searchAPI = (keyword: string) => {
-    return props.friends.filter((v) => v.friendName.includes(keyword));
+    return props.friends.filter((v) => v.friendName.includes(keyword) || v.friendEmail.includes(keyword));
   };
   const [list, setList] = useState<Friend[]>([]);
   const [keyword, setKeyword] = useState<string>('');
@@ -79,9 +80,9 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
   }, [keyword]);
 
   return (
-    <View style={styles.container}>
+    props.isComparison ? <><View style={comparisonStyles.container}>
       <View style={{ paddingHorizontal: 10 }}>
-        <View style={styles.searchTextInput}>
+        <View style={comparisonStyles.searchTextInput}>
           <TextInput
             autoCapitalize="none"
             autoCorrect={false}
@@ -89,7 +90,7 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
             onChangeText={onChangeKeyword}
             placeholderTextColor={'#B3BAC4'}
             style={styles.textInput}
-            placeholder="친구 이름 검색"
+            placeholder="친구 이름 및 이메일 검색"
             value={keyword}
           />
         </View>
@@ -111,19 +112,6 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
           data={list}
           disableScrollViewPanResponder={true}
           scrollEnabled={false}
-          ListEmptyComponent={() => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Text
-                style={{
-                  color: 'black',
-                  display: loading ? 'none' : 'flex',
-                  paddingVertical: 30,
-                }}
-              >
-                검색 내용이 없습니다.
-              </Text>
-            </View>
-          )}
           renderItem={(items) => {
             const { item } = items;
             return (
@@ -175,14 +163,98 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
           }}
         />
       )}
-    </View>
+    </View></> : <><View style={styles.container}>
+      <View style={{ paddingHorizontal: 10 }}>
+        <View style={styles.searchTextInput}>
+          <TextInput
+            autoCapitalize="none"
+            autoCorrect={false}
+            clearButtonMode="always"
+            onChangeText={onChangeKeyword}
+            placeholderTextColor={'#B3BAC4'}
+            style={styles.textInput}
+            placeholder="친구 이름 및 이메일 검색"
+            value={keyword}
+          />
+        </View>
+      </View>
+      {loading ? (
+        <View
+          style={{
+            marginTop: 25,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ActivityIndicator color={'#fff'} />
+        </View>
+      ) : (
+        <FlatList
+          style={{ maxHeight: 90 }}
+          keyExtractor={(item) => item.friendId.toString()}
+          data={list}
+          disableScrollViewPanResponder={true}
+          scrollEnabled={false}
+          renderItem={(items) => {
+            const { item } = items;
+            return (
+              <TouchableOpacity
+                onPressIn={() => Keyboard.dismiss()}
+                onPress={() =>
+                  Alert.alert(
+                    `${item.friendName}`,
+                    '해당 친구와 비교를 원하시나요?',
+                    [
+                      {
+                        text: '비교하러 가기',
+                        onPress: () => {
+                          navigation.navigate('Comparison', {
+                            friendPk: `${item.friendId}`,
+                          });
+                        },
+                      },
+                      { text: '취소하기', onPress: () => {} },
+                    ]
+                  )
+                }
+                activeOpacity={1}
+                style={styles.applicationBox}
+                key={items.index}
+              >
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                ></View>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    paddingVertical: 10,
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  {/* <Text style={styles.fontStyle}>Id {item.friendId} : </Text> */}
+                  <Text style={[styles.fontStyle, { fontWeight: 'bold' }]}>
+                    이름: {item.friendName} {'\n'}
+                    이메일: {item.friendEmail}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
+    </View></>
+    
   );
 };
 
 const width = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
-    width: width * 0.7,
+    width: "100%",
     backgroundColor: 'white',
   },
   fontStyle: {
@@ -205,6 +277,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 2,
     borderColor: 'black',
+    width: "100%"
   },
 
   textInput: {
@@ -216,4 +289,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+const comparisonStyles = StyleSheet.create({
+  container: {
+    marginTop: 10,
+    width: ScreenWidth - 40,
+    // backgroundColor: 'white',
+  },
+  searchTextInput: {
+    justifyContent: 'center',
+    height: 50,
+    lineHeight: 60,
+    paddingHorizontal: 10,
+    // backgroundColor: '#7777F3',
+    marginTop: 15,
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: '#7777F3',
+    width: "100%"
+  }
+})
+
 export default FriendSearch;

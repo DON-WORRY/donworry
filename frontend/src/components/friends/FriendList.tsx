@@ -19,9 +19,6 @@ const FriendList: React.FC = () => {
 
   // 친구 숫자에 따라 다르게 나타나게 구현해야 한다.
   // 친구 숫자가 일정 수를 넘으면 height를 넘은 숫자 만큼 + 40해준다.
-  function search(name: string) {
-    console.log(name);
-  }
   useEffect(() => {
     async function fetch() {
       const data = await friendListInquiry()
@@ -43,7 +40,7 @@ const FriendList: React.FC = () => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>친구 목록</Text>
-      <FriendSearch search={search} friends={friends} />
+      <FriendSearch friends={friends} />
 
       {friends.map((friend, index) => {
         return (

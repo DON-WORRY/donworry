@@ -69,7 +69,7 @@ export function userLogin(data: LoginData): Promise<void> {
   return axiosWithoutAuth
     .post('/api/members/login', data)
     .then(async (response) => {
-      console.log(response.data.data)
+      // console.log(response.data.data)
       const accessToken = await response.data.data.accessToken;
       const memberEmail = await response.data.data.memberEmail;
       const memberId = await response.data.data.memberId.toString();
@@ -154,6 +154,30 @@ export function userEmailCheck(data: EmailCheckData): Promise<void> {
     .then(() => {})
     .catch((e) => {
       console.error(e);
+      throw e;
+    });
+}
+
+export function subscribeMessage(): Promise<any> {
+  return axiosWithAuth
+    .get('/api/notifications/subscribe')
+    .then((r) => {
+      console.log('subscribe');
+      console.log(r);
+      return r;
+    })
+    .catch((e) => {
+      throw e;
+    });
+}
+
+export function newMessages(): Promise<any> {
+  return axiosWithAuth
+    .get('/api/notifications')
+    .then((r) => {
+      return r;
+    })
+    .catch((e) => {
       throw e;
     });
 }
