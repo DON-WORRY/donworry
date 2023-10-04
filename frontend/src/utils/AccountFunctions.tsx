@@ -173,12 +173,13 @@ export async function wireTransfer(data: wireData): Promise<void> {
     });
 }
 
+
 // 계좌 조회
-export async function accountCheck(data: wireData): Promise<void> {
+export async function accountCheck(accountNumber: string): Promise<{ isAccount: boolean, name: string }>{
   return axiosWithAuth
-    .post('/api/account/isaccount', null, { params: data }) // data를 params로 수정
+    .get('/api/account/isaccount', { params: { accountNumber: accountNumber } }) 
     .then((res) => {
-      console.log(res.data);
+      return res.data.data
     })
     .catch((e) => {
       if (e.response && e.response.data && e.response.data.message) {
@@ -189,15 +190,3 @@ export async function accountCheck(data: wireData): Promise<void> {
       throw e;
     });
 }
-
-// // 내 자산 순위 조회
-// export async function accountAssetRankInquiry(): Promise<void> {
-//   return axiosWithAuth
-//     .get('/api/account/rank')
-//     .then((res) => {
-//       console.log(res);
-//     })
-//     .catch((e) => {
-//       throw e;
-//     });
-// }
