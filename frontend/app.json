@@ -15,16 +15,12 @@
       "backgroundColor": "#FFFFFF",
       "barStyle": "dark-content"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "permissions": [
-        "NOTIFICATIONS"
-      ],
+      "permissions": ["NOTIFICATIONS"],
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/logo/donLogo.png",
         "backgroundColor": "#ffffff"
@@ -34,9 +30,7 @@
     "web": {
       "favicon": "./src/assets/logo/donLogo.png"
     },
-    "plugins": [
-      "expo-router"
-    ],
+    "plugins": ["expo-router"],
     "extra": {
       "router": {
         "origin": false

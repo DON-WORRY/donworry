@@ -8,12 +8,14 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import ComponentsHeader from '../../components/ComponentsHeader';
 import ComparisonHeader from '../../components/comparisons/ComparisonHeader';
 import ComparisonChart from '../../components/comparisons/ComparisonChart';
 import ComparisonBar from '../../components/comparisons/ComparisonBar';
+import LoaderModal from "../../components/modals/LoaderModal"
 import {
   friendListInquiry,
   friendTotalSpend,
@@ -53,7 +55,7 @@ type Friend = {
 };
 
 const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
-  // const ComparisonScreen: React.FC = () => {
+  const [loading, setLoading] = useState(false)
   const friendPk = route.params?.friendPk ?? -1;
   const [nowMonth, setNowMonth] = useState(getNowMonth);
   const [friendName, setFriendName] = useState('친구 소비');
@@ -145,10 +147,24 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
     ],
   });
   const [nowFriendId, setNowFriendId] = useState(-1);
+
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    // 각 컴포넌트를 새로고침하게 만들기 위해 refreshKey 값을 변경
+    setRefreshKey((prevKey) => prevKey + 1);
+
+    setRefreshing(false);
+  }, []);
+
   useEffect(() => {
     // 가장 처음은 friend data를 업데이트하자
     // 내 데이터도 업데이트 해야한다.
     async function fetchFriends() {
+      setLoading(true)
       const newFriends: Friend[] = await friendListInquiry()
         .then((r) => {
           console.log(r.data.friendResponseList);
@@ -169,13 +185,15 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
       await setMyData(tmpMyData);
       console.log('tmpMyData');
       console.log(tmpMyData);
+      setLoading(false)
     }
 
     fetchFriends();
-  }, [nowMonth]);
+  }, [nowMonth, refreshKey]);
 
   useEffect(() => {
     async function fetchComparisonData() {
+      setLoading(true)
       if (Number(friendPk) === -1) {
         // 친구가 있을 때
         if (friendList.length > 0) {
@@ -326,6 +344,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         console.log(totalData);
         await setTotalData(newData);
       }
+      setLoading(false)
       // 내 데이터가 나왔으니까
     }
     fetchComparisonData();
@@ -346,12 +365,16 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    loading ? <LoaderModal /> :
+    <><View style={styles.container}>
       <ComponentsHeader />
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         alwaysBounceHorizontal={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <View style={styles.selectMonth}>
           <ComparisonHeader friendName={friendName} />
@@ -373,7 +396,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
             <FontAwesome name="caret-right" size={40} />
           </TouchableOpacity>
         </View>
-        <FriendSearch friends={friendList} isComparison={true} />
+        {/* <FriendSearch friends={friendList} isComparison={true} /> */}
         <ComparisonChart totalData={totalData} />
         {/* {modeKey.map((keyName) => {
           return (
@@ -402,7 +425,8 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
           )}
         />
       </ScrollView>
-    </View>
+    </View></>
+    
   );
 };
 

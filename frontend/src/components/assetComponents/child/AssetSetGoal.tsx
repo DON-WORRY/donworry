@@ -21,7 +21,7 @@ const AssetSetGoal: React.FC<{
   updateRemainDate: (newRemainDate: number) => void;
 }> = ({ updateRemainDate }) => {
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
-  const snapPoints = useMemo(() => ['40%', '70%'], []);
+  const snapPoints = useMemo(() => ['37%', '60%'], []);
   const [goalAmountInput, setGoalAmountInput] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
@@ -123,7 +123,7 @@ const AssetSetGoal: React.FC<{
       keyboardDidHideListener.remove();
     };
   }, []);
-  
+
   const isFocused = useIsFocused();
   useEffect(() => {
     if (!isFocused) {
@@ -165,24 +165,18 @@ const AssetSetGoal: React.FC<{
               bottom: 0,
               backgroundColor: 'transparent', // 배경색을 투명하게 설정
             }}
-            onPress={() => dismiss()}
+            onPress={() => {
+              dismiss();
+              setSelectedDate('');
+              setGoalAmountInput('');
+            }}
             activeOpacity={1}
           />
         )}
       >
         <View style={styles.container}>
           <View style={[styles.row, { marginTop: width * 0.1 }]}>
-            <Text>목표 금액</Text>
-            <TextInput
-              style={styles.textInput}
-              placeholder="목표 금액"
-              keyboardType="numeric"
-              value={goalAmountInput}
-              onChangeText={handleInputChange}
-            />
-          </View>
-          <View style={styles.row}>
-            <Text>목표일</Text>
+            <Text style={styles.setText}>목표일</Text>
             <TouchableOpacity onPress={showDatePicker}>
               <TextInput
                 style={[styles.textInput, { color: 'black' }]}
@@ -191,6 +185,26 @@ const AssetSetGoal: React.FC<{
                 value={selectedDate}
               />
             </TouchableOpacity>
+          </View>
+          <View style={[styles.row]}>
+            <Text style={styles.setText}>목표 금액</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                marginRight: width * 0.12
+              }}
+            >
+              <TextInput
+                style={[styles.textInput, {width: '81%'}]}
+                placeholder="목표 금액"
+                keyboardType="numeric"
+                value={goalAmountInput}
+                onChangeText={handleInputChange}
+              />
+              <Text style={[styles.setText, {fontSize: width * 0.055}]}>원</Text>
+            </View>
           </View>
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
@@ -203,7 +217,11 @@ const AssetSetGoal: React.FC<{
             onPress={async () => {
               await SetGoal();
             }}
-            style={{ justifyContent: 'center' }}
+            style={{
+              width: '160%',
+              justifyContent: 'center',
+              marginTop: width * 0.1,
+            }}
             widthPercentage={0.9}
           />
         </View>
@@ -223,19 +241,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: width * 0.02,
-    width: '100%',
+    marginBottom: width * 0.04,
+    width: '150%',
   },
   rightSection: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
+  setText: {
+    fontSize: width * 0.05,
+    fontWeight: 'bold',
+  },
   textInput: {
     height: 40,
-    width: width * 0.3,
+    fontSize: width * 0.05,
+    textAlign: 'right',
+    width: width * 0.5,
     borderColor: 'gray',
-    borderWidth: 1,
+    borderBottomWidth: 2.5,
     paddingHorizontal: 10,
   },
 });

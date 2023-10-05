@@ -36,7 +36,9 @@ type RootStackParamList = {
 
 interface FriendSearchProps {
   friends: Friend[];
-  isComparison?: boolean
+  isComparison?: boolean;
+  setCompoHeight?: (height: number) => void;
+  setParentHeight?: (height: number) => void
 }
 
 const FriendSearch: React.FC<FriendSearchProps> = (props) => {
@@ -45,7 +47,9 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
 
   const [loading, setLoading] = useState(true);
   const searchAPI = (keyword: string) => {
-    return props.friends.filter((v) => v.friendName.includes(keyword) || v.friendEmail.includes(keyword));
+    return props.friends.filter(
+      (v) => v.friendName.includes(keyword) || v.friendEmail.includes(keyword)
+    );
   };
   const [list, setList] = useState<Friend[]>([]);
   const [keyword, setKeyword] = useState<string>('');
@@ -55,14 +59,31 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    const getList = () => {
+    const getList = async () => {
       try {
         setLoading(true);
         // if have API, set here
 
         // I just use dummy data.
-        const data = searchAPI(keyword);
-        setList(data);
+        console.log(list);
+        if (keyword.length < 1) {
+          setList([]);
+          if (props.setCompoHeight) {
+            props.setCompoHeight(0)
+          }
+          if (props.setParentHeight) {
+            props.setParentHeight(props.friends.length)
+          }
+        } else {
+          const data = searchAPI(keyword);
+          setList(data);
+          if (props.setCompoHeight) {
+            props.setCompoHeight(data.length)
+          }
+          if (props.setParentHeight) {
+            props.setParentHeight(0)
+          }
+        }
       } catch (error) {
         // code error
       } finally {
@@ -79,182 +100,188 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
     };
   }, [keyword]);
 
-  return (
-    props.isComparison ? <><View style={comparisonStyles.container}>
-      <View style={{ paddingHorizontal: 10 }}>
-        <View style={comparisonStyles.searchTextInput}>
-          <TextInput
-            autoCapitalize="none"
-            autoCorrect={false}
-            clearButtonMode="always"
-            onChangeText={onChangeKeyword}
-            placeholderTextColor={'#B3BAC4'}
-            style={styles.textInput}
-            placeholder="친구 이름 및 이메일 검색"
-            value={keyword}
-          />
+  return props.isComparison ? (
+    <>
+      <View style={comparisonStyles.container}>
+        <View style={{ paddingHorizontal: 10 }}>
+          <View style={comparisonStyles.searchTextInput}>
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              clearButtonMode="always"
+              onChangeText={onChangeKeyword}
+              placeholderTextColor={'#B3BAC4'}
+              style={styles.textInput}
+              placeholder="친구 이름 및 이메일 검색"
+              value={keyword}
+            />
+          </View>
         </View>
-      </View>
-      {loading ? (
-        <View
-          style={{
-            marginTop: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <ActivityIndicator color={'#fff'} />
-        </View>
-      ) : (
-        <FlatList
-          style={{ maxHeight: 90 }}
-          keyExtractor={(item) => item.friendId.toString()}
-          data={list}
-          disableScrollViewPanResponder={true}
-          scrollEnabled={false}
-          renderItem={(items) => {
-            const { item } = items;
-            return (
-              <TouchableOpacity
-                onPressIn={() => Keyboard.dismiss()}
-                onPress={() =>
-                  Alert.alert(
-                    `${item.friendName}`,
-                    '해당 친구와 비교를 원하시나요?',
-                    [
-                      {
-                        text: '비교하러 가기',
-                        onPress: () => {
-                          navigation.navigate('Comparison', {
-                            friendPk: `${item.friendId}`,
-                          });
+        {loading ? (
+          <View
+            style={{
+              marginTop: 25,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ActivityIndicator color={'#fff'} />
+          </View>
+        ) : (
+          <FlatList
+            style={{ maxHeight: 90 * list.length }}
+            keyExtractor={(item) => item.friendId.toString()}
+            data={list}
+            disableScrollViewPanResponder={true}
+            scrollEnabled={false}
+            renderItem={(items) => {
+              const { item } = items;
+              return (
+                <TouchableOpacity
+                  onPressIn={() => Keyboard.dismiss()}
+                  onPress={() =>
+                    Alert.alert(
+                      `${item.friendName}`,
+                      '해당 친구와 비교를 원하시나요?',
+                      [
+                        {
+                          text: '비교하러 가기',
+                          onPress: () => {
+                            navigation.navigate('Comparison', {
+                              friendPk: `${item.friendId}`,
+                            });
+                          },
                         },
-                      },
-                      { text: '취소하기', onPress: () => {} },
-                    ]
-                  )
-                }
-                activeOpacity={1}
-                style={styles.applicationBox}
-                key={items.index}
-              >
-                <View
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                ></View>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    paddingVertical: 10,
-                    paddingHorizontal: 10,
-                  }}
+                        { text: '취소하기', onPress: () => {} },
+                      ]
+                    )
+                  }
+                  activeOpacity={1}
+                  style={styles.applicationBox}
+                  key={items.index}
                 >
-                  {/* <Text style={styles.fontStyle}>Id {item.friendId} : </Text> */}
-                  <Text style={[styles.fontStyle, { fontWeight: 'bold' }]}>
-                    이름: {item.friendName} {'\n'}
-                    이메일: {item.friendEmail}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
-      )}
-    </View></> : <><View style={styles.container}>
-      <View style={{ paddingHorizontal: 10 }}>
-        <View style={styles.searchTextInput}>
-          <TextInput
-            autoCapitalize="none"
-            autoCorrect={false}
-            clearButtonMode="always"
-            onChangeText={onChangeKeyword}
-            placeholderTextColor={'#B3BAC4'}
-            style={styles.textInput}
-            placeholder="친구 이름 및 이메일 검색"
-            value={keyword}
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      paddingVertical: 10,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    {/* <Text style={styles.fontStyle}>Id {item.friendId} : </Text> */}
+                    <Text style={[styles.fontStyle, { fontWeight: 'bold' }]}>
+                      이름: {item.friendName} {'\n'}
+                      이메일: {item.friendEmail}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
           />
-        </View>
+        )}
       </View>
-      {loading ? (
-        <View
-          style={{
-            marginTop: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <ActivityIndicator color={'#fff'} />
+    </>
+  ) : (
+    <>
+      <View style={styles.container}>
+        <View style={{ paddingHorizontal: 10 }}>
+          <View style={styles.searchTextInput}>
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              clearButtonMode="always"
+              onChangeText={onChangeKeyword}
+              placeholderTextColor={'#B3BAC4'}
+              style={styles.textInput}
+              placeholder="친구 이름 및 이메일 검색"
+              value={keyword}
+            />
+          </View>
         </View>
-      ) : (
-        <FlatList
-          style={{ maxHeight: 90 }}
-          keyExtractor={(item) => item.friendId.toString()}
-          data={list}
-          disableScrollViewPanResponder={true}
-          scrollEnabled={false}
-          renderItem={(items) => {
-            const { item } = items;
-            return (
-              <TouchableOpacity
-                onPressIn={() => Keyboard.dismiss()}
-                onPress={() =>
-                  Alert.alert(
-                    `${item.friendName}`,
-                    '해당 친구와 비교를 원하시나요?',
-                    [
-                      {
-                        text: '비교하러 가기',
-                        onPress: () => {
-                          navigation.navigate('Comparison', {
-                            friendPk: `${item.friendId}`,
-                          });
+        {loading ? (
+          <View
+            style={{
+              marginTop: 25,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ActivityIndicator color={'#fff'} />
+          </View>
+        ) : (
+          <FlatList
+            style={{ height: 90 * list.length }}
+            keyExtractor={(item) => item.friendId.toString()}
+            data={list}
+            disableScrollViewPanResponder={true}
+            scrollEnabled={false}
+            renderItem={(items) => {
+              const { item } = items;
+              return (
+                <TouchableOpacity
+                  onPressIn={() => Keyboard.dismiss()}
+                  onPress={() =>
+                    Alert.alert(
+                      `${item.friendName}`,
+                      '해당 친구와 비교를 원하시나요?',
+                      [
+                        {
+                          text: '비교하러 가기',
+                          onPress: () => {
+                            navigation.navigate('Comparison', {
+                              friendPk: `${item.friendId}`,
+                            });
+                          },
                         },
-                      },
-                      { text: '취소하기', onPress: () => {} },
-                    ]
-                  )
-                }
-                activeOpacity={1}
-                style={styles.applicationBox}
-                key={items.index}
-              >
-                <View
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                ></View>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    paddingVertical: 10,
-                    paddingHorizontal: 10,
-                  }}
+                        { text: '취소하기', onPress: () => {} },
+                      ]
+                    )
+                  }
+                  activeOpacity={1}
+                  style={styles.applicationBox}
+                  key={items.index}
                 >
-                  {/* <Text style={styles.fontStyle}>Id {item.friendId} : </Text> */}
-                  <Text style={[styles.fontStyle, { fontWeight: 'bold' }]}>
-                    이름: {item.friendName} {'\n'}
-                    이메일: {item.friendEmail}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
-      )}
-    </View></>
-    
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      paddingVertical: 10,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    {/* <Text style={styles.fontStyle}>Id {item.friendId} : </Text> */}
+                    <View style={styles.blackRound}></View>
+                    <Text style={[styles.fontStyle, { fontWeight: 'bold' }]}>
+                      이름: {item.friendName} {'\n'}
+                      이메일: {item.friendEmail}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        )}
+      </View>
+    </>
   );
 };
 
 const width = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: '100%',
     backgroundColor: 'white',
   },
   fontStyle: {
@@ -263,8 +290,8 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   applicationBox: {
-    borderBottomColor: '#7777F3',
-    borderBottomWidth: 5,
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
     flexDirection: 'row',
   },
   searchTextInput: {
@@ -277,7 +304,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 2,
     borderColor: 'black',
-    width: "100%"
+    width: '100%',
   },
 
   textInput: {
@@ -287,6 +314,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: 0,
     fontWeight: 'bold',
+  },
+  blackRound: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: 'black',
+    margin: 20,
+    marginLeft: 0,
   },
 });
 
@@ -306,8 +341,8 @@ const comparisonStyles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 3,
     borderColor: '#7777F3',
-    width: "100%"
-  }
-})
+    width: '100%',
+  },
+});
 
 export default FriendSearch;

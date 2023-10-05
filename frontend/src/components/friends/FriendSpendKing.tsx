@@ -78,7 +78,12 @@ type Friend = {
   friendEmail: string;
 };
 
-const FriendSpendKing: React.FC = () => {
+interface FriendSpendKingProps {
+  refreshKey : number
+}
+
+
+const FriendSpendKing: React.FC<FriendSpendKingProps> = ({refreshKey}) => {
   const [nowMonth, setNowMonth] = useState(getNowMonth);
   const [rank, setRank] = useState(0);
   const [friendsNumber, setFriendsNumber] = useState(0);
@@ -104,7 +109,7 @@ const FriendSpendKing: React.FC = () => {
       await setRank(tmpRank);
     };
     fetchName();
-  }, []);
+  }, [refreshKey]);
 
   // 2. 이름이 바뀌면 카테고리 리스트 데이터를 가져옵니다.
   useEffect(() => {

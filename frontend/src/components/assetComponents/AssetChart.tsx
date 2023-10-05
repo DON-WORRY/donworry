@@ -21,6 +21,11 @@ interface AssetChartProps {
   refreshKey: number;
 }
 
+type PropsType = {
+  index: number;
+};
+
+
 const getData = async (key: string) => {
   try {
     const value = await AsyncStorage.getItem(key);
@@ -68,6 +73,7 @@ const labelAmount = (amount: number) => {
 };
 
 const AssetChart: React.FC<AssetChartProps> = (props) => {
+  const [activeTooltipIndex, setActiveTooltipIndex] = useState(11)
   const [userName, setUserName] = useState('');
   const [monthAmount, setMonthAmount] = useState(0);
   const [dataBar, setDataBar] = useState<Array<{ x: number; y: number }>>([]);
@@ -142,7 +148,7 @@ const AssetChart: React.FC<AssetChartProps> = (props) => {
             y="y"
             style={{
               data: {
-                fill: ('#7777F3'),
+                fill: '#7777F3',
                 height: ({ datum }) => datum.y * 0.8,
               },
             }}
@@ -172,9 +178,25 @@ const AssetChart: React.FC<AssetChartProps> = (props) => {
               datum,
             }: {
               datum: { originalX: number; x: number; y: number };
-            }) => ` ${labelAmount(datum.y)} `}
+            }) => `  ${labelAmount(datum.y)}  `}
+            events={[
+              {
+                target: 'data',
+                eventHandlers: {
+                  onPressIn: (event: any, props: PropsType) => {
+                    setActiveTooltipIndex(props.index);
+                    return null;
+                  },
+                },
+              },
+            ]}
             labelComponent={
               <VictoryTooltip
+                active={
+                  activeTooltipIndex !== null
+                    ? ({ index }) => index === activeTooltipIndex
+                    : undefined
+                }
                 renderInPortal={false}
                 style={{ fill: '#ffffff', fontSize: width * 0.03 }}
                 flyoutStyle={{

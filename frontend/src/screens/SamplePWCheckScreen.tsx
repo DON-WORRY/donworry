@@ -68,7 +68,6 @@ const SamplePWCheck: React.FC<Props> = (props) => {
       });
 
       if (result.success) {
-        alert('지문 인증 성공!');
         wireTrans(true)
       } else {
         alert('지문 인증 실패 또는 취소됨.');
@@ -95,10 +94,8 @@ const SamplePWCheck: React.FC<Props> = (props) => {
       props.route?.params?.accountId &&
       props.route?.params?.accountNumber &&
       props.route?.params?.consumptionCategoryId &&
-      props.route?.params?.price &&
-      easyPass
+      props.route?.params?.price
     ) {
-      console.log("ddddd")
       const data = {
         accountId: props.route?.params?.accountId,
         accountNumber: props.route?.params?.accountNumber,
@@ -109,7 +106,7 @@ const SamplePWCheck: React.FC<Props> = (props) => {
       };
       try {
         await wireTransfer(data);
-        navigation.navigate('Asset', { refresh: Date.now() });
+        navigation.navigate('SendingCompleteScreen', { source: 1 });
       } 
       catch (error) {
         if (isErrorWithResponse(error)) {
