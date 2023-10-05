@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import MyPageClose from './MyPageClose';
 import MypageOpen from './MypageOpen';
 import MyPageMenu from './MyPageMenu';
@@ -41,6 +47,13 @@ const MyPage: React.FC = () => {
     memberName: '1',
     memberBirthDate: '1',
   });
+
+  
+
+  const check = () => {
+    console.log('ddd');
+  };
+
   useEffect(() => {
     async function fetch() {
       const memberId = await getData('memberId');
@@ -71,7 +84,6 @@ const MyPage: React.FC = () => {
         <HorizonLine />
         <View>
           <MyPageMenu imageName="bell" text="내소식" />
-          <MyPageMenu imageName2="piggy-bank" text="계좌선택" />
           <MyPageMenu imageName="send" text="송금하기" />
         </View>
       </ScrollView>
@@ -81,8 +93,7 @@ const MyPage: React.FC = () => {
   );
 };
 
-const screenWidth = Dimensions.get('screen').width;
-const screenHeight = Dimensions.get('screen').height;
+const width = Dimensions.get('screen').width;
 
 const HorizonLine = () => {
   return <View style={styles.horizontalLine}></View>;
