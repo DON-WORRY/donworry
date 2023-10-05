@@ -124,7 +124,7 @@ public class AccountService {
             Long consumptionRemainedAmount = account.getAccountAmount() - consumptionPrice;
             ConsumptionCategory consumptionCategory = consumptionCategoryRepository.findById(Long.valueOf(randomConsumption.getI())).orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리 항목입니다."));
 
-            if (consumptionRemainedAmount > consumptionPrice) {
+            if (consumptionRemainedAmount > 0) {
                 Consumption consumption = Consumption.of(consumptionDetail, consumptionPrice, consumptionRemainedAmount, NOTSTART, member, account, null, card, consumptionCategory);
                 consumptionRepository.save(consumption);
                 consumption.update(history, history);
