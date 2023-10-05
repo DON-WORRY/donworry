@@ -18,40 +18,13 @@ import { RouteProp } from '@react-navigation/core';
 import { accountCheck } from '../utils/AccountFunctions';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Button } from '../components/logins/Login';
+import { images } from '../assets/bank&card';
 
 interface ScreenProps {
   navigation: {
     navigate: (screen: string, params?: any) => void;
   };
 }
-
-const images: { [key: string]: any } = {
-  국민은행: require('../assets/bank&card/국민은행.png'),
-  KB국민카드: require('../assets/bank&card/국민카드.png'),
-  기업은행: require('../assets/bank&card/기업은행.png'),
-  농협은행: require('../assets/bank&card/농협은행.png'),
-  농협카드: require('../assets/bank&card/농협카드.png'),
-  롯데카드: require('../assets/bank&card/롯데카드.png'),
-  삼성카드: require('../assets/bank&card/삼성카드.png'),
-  새마을금고: require('../assets/bank&card/새마을금고.png'),
-  신한은행: require('../assets/bank&card/신한은행.png'),
-  신한카드: require('../assets/bank&card/신한카드.png'),
-  신협은행: require('../assets/bank&card/신협은행.png'),
-  우리은행: require('../assets/bank&card/우리은행.png'),
-  우리카드: require('../assets/bank&card/우리카드.png'),
-  우체국: require('../assets/bank&card/우체국.png'),
-  카카오뱅크: require('../assets/bank&card/카카오뱅크.png'),
-  토스뱅크: require('../assets/bank&card/토스뱅크.png'),
-  하나은행: require('../assets/bank&card/하나은행.png'),
-  하나카드: require('../assets/bank&card/하나카드.png'),
-  현대카드: require('../assets/bank&card/현대카드.png'),
-  BC카드: require('../assets/bank&card/BC카드.png'),
-  대신은행: require('../assets/bank&card/대신은행.png'),
-  대화은행: require('../assets/bank&card/대화은행.png'),
-  평화은행: require('../assets/bank&card/평화은행.png'),
-  광주은행: require('../assets/bank&card/광주은행.png'),
-  신세계카드: require('../assets/bank&card/신세계카드.png'),
-};
 
 const width = Dimensions.get('screen').width;
 
@@ -158,6 +131,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
         setCheckMessage('계좌번호를 확인해주세요');
         return;
       }
+      setCheckMessage('');
       setNowUser(accountData.name);
       bottomSheetModalRef.current.present();
     } catch (error) {

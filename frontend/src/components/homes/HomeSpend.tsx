@@ -12,21 +12,13 @@ import { Button } from '../ContentButton';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { consumptionCategoryTotal } from '../../utils/ConsumptionFunctions';
+import { images } from '../../assets/bank&card';
 
 interface ScreenProps {
   navigation: {
     navigate: (screen: string, params?: any) => void;
   };
 }
-
-const images: { [key: string]: any } = {
-  교통: require('../../assets/bank&card/교통.png'),
-  기타: require('../../assets/bank&card/기타.png'),
-  생활: require('../../assets/bank&card/생활.png'),
-  쇼핑: require('../../assets/bank&card/쇼핑.png'),
-  식비: require('../../assets/bank&card/식비.png'),
-  여가: require('../../assets/bank&card/여가.png'),
-};
 
 const getData = async (key: string) => {
   try {
