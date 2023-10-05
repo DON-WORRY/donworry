@@ -27,7 +27,7 @@ const SpendScreen: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   return (
     <View style={styles.container}>
-      <ComponentsHeader mainOpen={true}/>
+      <ComponentsHeader />
       <ScrollView showsVerticalScrollIndicator={false}>
         <TouchableOpacity
           style={styles.listView}
