@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import MyPageClose from './MyPageClose';
 import MypageOpen from './MypageOpen';
 import MyPageMenu from './MyPageMenu';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { accountSearchAccountList } from '../../utils/AccountFunctions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 interface RootState {
   Modal: {
     mypageModal: boolean;
-  };
-}
-
-interface ScreenProps {
-  navigation: {
-    navigate: (screen: string, params?: any) => void;
   };
 }
 
@@ -42,11 +40,7 @@ const getData = async (key: string) => {
 };
 
 const MyPage: React.FC = () => {
-  const navigation = useNavigation<ScreenProps['navigation']>();
   const clickView = useSelector((state: RootState) => state.Modal.mypageModal);
-  const [accounts, setAccounts] = useState<
-    Array<{ accountId: number; bankName: string; amount: number }>
-  >([]);
   const [data, setData] = useState<UserData>({
     memberId: '-1',
     memberEmail: '1',
@@ -54,24 +48,11 @@ const MyPage: React.FC = () => {
     memberBirthDate: '1',
   });
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const newAccounts: any = await accountSearchAccountList();
-        if (
-          newAccounts &&
-          newAccounts.data &&
-          Array.isArray(newAccounts.data.accounts)
-        ) {
-          setAccounts(newAccounts.data.accounts);
-        }
-      } catch (error) {
-        console.error('에러:', error);
-      }
-    };
-    fetch();
-  }, []);
+  
 
+  const check = () => {
+    console.log('ddd');
+  };
 
   useEffect(() => {
     async function fetch() {
@@ -103,16 +84,7 @@ const MyPage: React.FC = () => {
         <HorizonLine />
         <View>
           <MyPageMenu imageName="bell" text="내소식" />
-          {/* <MyPageMenu imageName2="piggy-bank" text="계좌선택" /> */}
-          <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('StackNavigation', {
-              screen: 'WireTransfer',
-              params: { accounts: accounts, nowAccount: accounts[0] },
-            });
-          }}>
           <MyPageMenu imageName="send" text="송금하기" />
-          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
