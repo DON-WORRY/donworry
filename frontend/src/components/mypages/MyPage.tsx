@@ -36,10 +36,10 @@ const getData = async (key: string) => {
 const MyPage: React.FC = () => {
   const clickView = useSelector((state: RootState) => state.Modal.mypageModal);
   const [data, setData] = useState<UserData>({
-    memberId: '-1',
-    memberEmail: '1',
-    memberName: '1',
-    memberBirthDate: '1',
+    memberId: '...',
+    memberEmail: '...',
+    memberName: '...',
+    memberBirthDate: 'l...',
   });
   useEffect(() => {
     async function fetch() {
