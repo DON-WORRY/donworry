@@ -51,7 +51,7 @@ const images: { [key: string]: any } = {
   평화은행: require('../assets/bank&card/평화은행.png'),
   광주은행: require('../assets/bank&card/광주은행.png'),
   신세계카드: require('../assets/bank&card/신세계카드.png'),
-}
+};
 
 const width = Dimensions.get('screen').width;
 
@@ -64,12 +64,21 @@ const categoryData = [
   { label: '기타', value: 6 },
 ];
 
+// nowAccount의 내부 타입 정의
+type NowAccountType = {
+  amount: string;
+  accountId: number;
+  accountNumber: string;
+  bankName: string;
+};
+
 type RootStackParamList = {
   WireTransfer: {
     accounts: Array<any>;
-    accountId: number;
+    nowAccount: NowAccountType; // 이전에는 Array<any>였지만 NowAccountType으로 변경했습니다.
   };
 };
+
 type WireTransferRouteProp = RouteProp<RootStackParamList, 'WireTransfer'>;
 
 interface WireTransferProps {
@@ -77,19 +86,19 @@ interface WireTransferProps {
 }
 const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
   const navigation = useNavigation<ScreenProps['navigation']>();
-  const { accounts, accountId } = route.params;
+  const { accounts, nowAccount } = route.params;
   const filteredAccounts = accounts.filter(
-    (account) => account.accountId !== accountId
+    (account) => account.accountId !== nowAccount.accountId
   );
   const [accountNumber, setAccountNumber] = useState('');
-  // const [choiceCategory, setChoiceCategory] = useState(0);
   const [sendingPrice, setSendingPrice] = useState('');
   const [sendingAccount, setSendingAccount] = useState('');
+  const [sendingBank, setSendingBank] = useState('');
   const bottomSheetModalRef: React.RefObject<any> = useRef(null);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0); // 초기값 설정
   const [items, setItems] = useState<{ label: string; value: number }[]>([]);
-  const snapPoints = useMemo(() => ['45%', '60%'], []);
+  const snapPoints = useMemo(() => ['50%', '65%'], []);
   const [checkMessage, setCheckMessage] = useState('');
   const [nowUser, setNowUser] = useState('');
 
@@ -113,6 +122,10 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
       keyboardDidHideListener.remove();
     };
   }, []);
+
+  const formatAmount = (amount: string): string => {
+    return parseInt(amount, 10).toLocaleString('ko-KR') + '원';
+  };
 
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -155,7 +168,14 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
     }
   };
 
-  const chcekNowUser = async (accountNum: string) => {
+  const formatAccountNumber = (number: string) => {
+    const visiblePart = number.substring(0, 4);
+    const hiddenPart = number.substring(4).replace(/./g, 'O');
+    return visiblePart + hiddenPart;
+  };
+
+  const chcekNowUser = async (accountNum: string, bankName: string) => {
+    setSendingBank(bankName)
     setSendingAccount(accountNum);
     try {
       const accountData = await accountCheck(accountNum);
@@ -183,7 +203,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
     }
 
     const data = {
-      accountId: accountId,
+      accountId: nowAccount.accountId,
       accountNumber: sendingAccount,
       price: parsedPrice,
       consumptionCategoryId: value,
@@ -201,7 +221,10 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
     };
 
     try {
-      navigation.navigate('SimplePWCheckScreen', { ...data, refresh: Date.now() });
+      navigation.navigate('SimplePWCheckScreen', {
+        ...data,
+        refresh: Date.now(),
+      });
     } catch (error) {
       if (isErrorWithResponse(error)) {
         alert(error.response.data.message);
@@ -247,7 +270,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
               key={index}
               style={{ flex: 1, width: '100%' }}
               onPress={() => {
-                chcekNowUser(account.accountNumber);
+                chcekNowUser(account.accountNumber, account.bankName);
                 setSendingPrice('');
               }}
             >
@@ -259,7 +282,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 <View style={{ marginLeft: width * 0.05 }}>
                   <Text style={styles.bankName}>{account.bankName}</Text>
                   <Text style={styles.accountNumber}>
-                    {account.accountNumber}
+                    {formatAccountNumber(account.accountNumber)}
                   </Text>
                 </View>
               </View>
@@ -273,7 +296,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
               key={index}
               style={{ flex: 1, width: '100%' }}
               onPress={() => {
-                chcekNowUser(account.accountNumber);
+                chcekNowUser(account.accountNumber, account.bankName);
                 setSendingPrice('');
               }}
             >
@@ -285,7 +308,7 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
                 <View style={{ marginLeft: width * 0.05 }}>
                   <Text style={styles.bankName}>{account.bankName}</Text>
                   <Text style={styles.accountNumber}>
-                    {account.accountNumber}
+                    {formatAccountNumber(account.accountNumber)}
                   </Text>
                 </View>
               </View>
@@ -309,11 +332,28 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
         >
           <View style={styles.container}>
             <View
+              style={{
+                alignItems: 'flex-start',
+                width: '90%',
+                paddingTop: width * 0.1,
+              }}
+            >
+              <Text style={[styles.headText, { fontWeight: 'normal' }]}>
+                내{' '}
+                <Text style={{ fontWeight: 'bold' }}>
+                  {nowAccount.bankName}
+                </Text>
+                에서
+              </Text>
+              <Text style={{ color: 'gray' }}>
+                잔액 {formatAmount(nowAccount.amount)}
+              </Text>
+            </View>
+            <View
               style={[
                 {
                   flexDirection: 'row',
-                  marginTop: width * 0.1,
-                  marginBottom: 0,
+                  marginTop: width * 0.05,
                   justifyContent: 'space-between',
                   width: '90%',
                   alignItems: 'center',
@@ -321,8 +361,12 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
               ]}
             >
               <View style={{ flexDirection: 'column' }}>
-                <Text style={{fontSize: width * 0.05, fontWeight: 'bold'}}>{nowUser}</Text>
-                <Text style={{fontSize: width * 0.04, color: 'gray'}}>{sendingAccount}</Text>
+                <Text style={{ fontSize: width * 0.05 }}>
+                  <Text style={{ fontWeight: 'bold' }}>{nowUser}</Text> 님에게
+                </Text>
+                <Text style={{ fontSize: width * 0.04, color: 'gray' }}>
+                  {sendingBank} {sendingAccount}
+                </Text>
               </View>
               <View>
                 <DropDownPicker
@@ -339,13 +383,26 @@ const WireTransferScreen: React.FC<WireTransferProps> = ({ route }) => {
             </View>
             <View style={[styles.bottomSheetItem, styles.row]}>
               <TextInput
-                style={[styles.textInput, { width: '85%', marginLeft: width * 0.03, marginTop: width * 0.03 }]}
-                placeholder="송금 금액"
+                style={[
+                  styles.textInput,
+                  {
+                    width: '85%',
+                    marginLeft: width * 0.03,
+                    marginTop: width * 0.03,
+                  },
+                ]}
+                placeholder="얼마를 보낼까요?"
                 keyboardType="numeric"
                 value={String(sendingPrice)}
                 onChangeText={(text) => setSendingPrice(text)}
               />
-              <Text style={{fontWeight: 'bold', fontSize: width * 0.07, marginLeft: width * 0.01}}>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: width * 0.07,
+                  marginLeft: width * 0.01,
+                }}
+              >
                 원
               </Text>
             </View>

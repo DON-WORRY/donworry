@@ -131,7 +131,7 @@ const AssetAsset: React.FC<AssetAssetProps> = (props) => {
                   onPress={() => {
                     navigation.navigate('StackNavigation', {
                       screen: 'WireTransfer',
-                      params: { accounts: accounts, accountId: item.accountId },
+                      params: { accounts: accounts, nowAccount: item },
                     });
                   }}
                 />

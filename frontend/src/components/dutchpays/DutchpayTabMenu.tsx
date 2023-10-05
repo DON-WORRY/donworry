@@ -5,15 +5,12 @@ import {
   Text,
   Dimensions,
   ScrollView,
-  Platform,
   TouchableOpacity,
   Alert,
 } from 'react-native';
 import { Button } from '../../components/logins/Login';
 import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-import { useRoute, RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../navigations/RootNavigator/Stack';
 import { consumptionDutchPayInquiry } from '../../utils/ConsumptionFunctions';
 import { Tab, TabView } from '@rneui/themed';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
@@ -26,7 +23,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 
 interface ScreenProps {
   navigation: {
-    replace: (screen: string, params?: any) => void;
+    navigate: (screen: string, params?: any) => void;
   };
 }
 
@@ -182,6 +179,24 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
     shuffle(numbers);
   }, []);
 
+  useEffect(() => {
+    const updateState = async () => {
+      if (easyPass.length === 6) {
+        await setCompleteRound({
+          a: false,
+          b: false,
+          c: false,
+          d: false,
+          e: false,
+          f: false,
+        });
+        handlePriceSend(easyPass)
+      }
+    };
+    updateState();
+  }, [easyPass]);
+  
+
   async function clickButton(str: string) {
     // setCompleteRound((prev) => prev.nowIndex = true)
     if (str == 'delete') {
@@ -322,21 +337,10 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
     }
     const tmpPass = (await easyPass) + str;
     await setEasyPass(tmpPass);
-    await shuffle(numbers);
+    // await shuffle(numbers);
     if (tmpPass.length === 6) {
-      console.log(tmpPass);
       await setNowEasyPass(tmpPass);
-      await setEasyPass('');
-      await setCompleteRound({
-        a: false,
-        b: false,
-        c: false,
-        d: false,
-        e: false,
-        f: false,
-      });
       await handlePriceSend(tmpPass);
-      await setIsClickedSend(false);
     }
   }
 
@@ -395,10 +399,7 @@ const DutchpayFriendsSendGroup: React.FC<DutchpayFriendsSendGroup> = (
     try {
       const response = await consumptionDutchPayPriceSend(data);
       if (response) {
-        console.log(response);
-        navigation.replace('StackNavigation', {
-          screen: 'DutchpayState',
-        });
+        navigation.navigate('SendingCompleteScreen', { source: 2 });
       } else {
         console.error('API response does not contain data.');
       }

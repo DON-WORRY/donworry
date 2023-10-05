@@ -94,7 +94,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
   return (
     <View style={styles.container}>
       <View style={[styles.row, { marginBottom: width * 0.04, width: '105%' }]}>
-        <Text style={styles.headText}>자산</Text>
+        <Text style={styles.headText}>목표</Text>
         <AssetSetGoal updateRemainDate={updateRemainDate} />
       </View>
 
