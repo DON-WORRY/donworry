@@ -45,7 +45,6 @@ const FriendListForDutchpay: React.FC<FriendListForDutchpayProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.header}>친구 목록</Text>
-      {/* <FriendSearch search={search} friends={friends} /> */}
       {children}
     </View>
   );
@@ -59,8 +58,10 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: 'center',
     backgroundColor: 'white',
-    marginTop: 20,
+    marginTop: 5,
     marginBottom: 20,
+    borderColor: 'gray',
+    borderWidth: 1,
   },
   header: {
     alignSelf: 'flex-start',

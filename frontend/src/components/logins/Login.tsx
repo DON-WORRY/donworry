@@ -75,15 +75,13 @@ const Login: React.FC<LoginProps> = (props) => {
     await userLogin(data)
       .then((res) => {
         console.log('ok1');
+        navigation.replace('TabNavigation', { screen: 'Home' });
         // dispatch(setMypageModal(true));
       })
       .catch((e) => {
         props.setLoading(false);
         return Alert.alert('로그인 실패', `${e.message}`);
       });
-
-    
-    navigation.replace('TabNavigation', { screen: 'Home' });
   }
 
   return (

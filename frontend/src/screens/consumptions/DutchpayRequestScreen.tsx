@@ -69,9 +69,11 @@ type DutchpayRequestScreenProps = {
   route: RouteProp<RootStackParamList, 'DutchpayRequest'>;
 };
 
-function formattedPrice(inputPrice: number) {
-  const price = new Intl.NumberFormat('en-US').format(inputPrice);
-  return price;
+function formattedPrice(inputPrice: number | string) {
+  const price =
+    typeof inputPrice === 'string' ? parseFloat(inputPrice) : inputPrice;
+  const formatted = new Intl.NumberFormat('en-US').format(price);
+  return formatted;
 }
 
 const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
@@ -89,7 +91,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
 
   const consumptionData = route.params;
   const [inputValue, setInputValue] = useState('');
-  const [currentMember, setCurrentMember] = useState(1);
+  const [currentMember, setCurrentMember] = useState(0);
   const [remainingAmount, setRemainingAmount] = useState(consumptionData.price);
   const [myRequestAccount, setMyRequestAccount] = useState('');
   const [disabled, setDisabled] = useState(true);
@@ -321,7 +323,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
         >
           <FriendListItemForDutchpay
             friend={friend}
-            state={isActive[friend.friendId] ? 'gray' : 'black'}
+            state={isActive[friend.friendId] ? 'lightgray' : 'black'}
           />
         </TouchableOpacity>
       </View>
@@ -338,8 +340,24 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
             <Text style={styles.amountText}>
               {formattedPrice(consumptionData.price)}원
             </Text>
-            <Text>{consumptionData.detail}</Text>
-
+            <Text style={{ marginBottom: 10 }}>{consumptionData.detail}</Text>
+            <MyRequestAccount
+              myRequestAccount={myRequestAccount}
+              onPress={() => {
+                setSelectedMember(undefined);
+                bottomSheetModalRef.current.present();
+              }}
+            />
+            <View style={styles.middleView}>
+              <View>
+                <Text style={styles.currentMemberText}>
+                  현재 인원 {currentMember}명
+                </Text>
+              </View>
+              <Text style={styles.remainingAmountText}>
+                남은 금액 {formattedPrice(remainingAmount)}
+              </Text>
+            </View>
             <FriendListForDutchpay>
               <View>
                 <TextInput
@@ -367,56 +385,48 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
                 </ScrollView>
               </View>
             </FriendListForDutchpay>
-
-            <View style={styles.middleView}>
-              <View>
-                <Text style={styles.currentMemberText}>
-                  현재 인원 {currentMember}명
-                </Text>
-              </View>
-              <Text style={styles.remainingAmountText}>
-                남은 금액 {remainingAmount}
+            {selectedMemberList.length === 0 ? (
+              <Text style={styles.selectFriendsText}>
+                친구를 선택하여 주세요.
               </Text>
-            </View>
-            <MyRequestAccount
-              myRequestAccount={myRequestAccount}
-              onPress={() => {
-                setSelectedMember(undefined);
-                bottomSheetModalRef.current.present();
-              }}
-            />
-            {selectedMemberList.map((data) => {
-              return (
-                <View style={styles.bottomView} key={data.memberId}>
-                  <ContentBox widthPercentage={0.75}>
-                    <View style={styles.bottomViewText}>
-                      <View>
-                        <Text style={styles.bottomTitleText}>
-                          {data.memberName}
-                        </Text>
+            ) : (
+              selectedMemberList.map((data) => {
+                return (
+                  <View style={styles.bottomView} key={data.memberId}>
+                    <ContentBox widthPercentage={0.75}>
+                      <View style={styles.bottomViewText}>
+                        <View>
+                          <Text style={styles.bottomTitleText}>
+                            {data.memberName}
+                          </Text>
+                        </View>
+                        <View>
+                          <Text style={styles.bottomAmountText}>
+                            요청금액{' '}
+                            {data.price === ''
+                              ? '1/N'
+                              : formattedPrice(data.price || 0)}
+                            원
+                          </Text>
+                        </View>
                       </View>
-                      <View>
-                        <Text style={styles.bottomAmountText}>
-                          요청금액 {data.price === '' ? '1/N' : data.price}원
-                        </Text>
-                      </View>
-                    </View>
-                  </ContentBox>
-                  <TouchableOpacity
-                    style={styles.bottomViewImage}
-                    onPress={() => {
-                      handleDelete(data);
-                    }}
-                  >
-                    <Ionicons
-                      name="remove-circle-outline"
-                      size={40}
-                      color="red"
-                    />
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
+                    </ContentBox>
+                    <TouchableOpacity
+                      style={styles.bottomViewImage}
+                      onPress={() => {
+                        handleDelete(data);
+                      }}
+                    >
+                      <Ionicons
+                        name="remove-circle-outline"
+                        size={40}
+                        color="red"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              })
+            )}
             <View style={styles.buttonView}>
               <Button
                 title="더치페이 요청"
@@ -478,7 +488,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
 
 const MyRequestAccount: React.FC<MyRequestProps> = (props) => {
   return (
-    <ContentBox>
+    <ContentBox additionalStyle={{ borderColor: '#C4C4F8', borderWidth: 1 }}>
       <View style={styles.bottomViewText}>
         <View>
           <Text style={styles.bottomTitleText}>나</Text>
@@ -487,7 +497,10 @@ const MyRequestAccount: React.FC<MyRequestProps> = (props) => {
           <View>
             <Text style={styles.bottomAmountText}>
               요청금액{' '}
-              {props.myRequestAccount === '' ? '1/N' : props.myRequestAccount}원
+              {props.myRequestAccount === ''
+                ? '1/N'
+                : formattedPrice(props.myRequestAccount)}
+              원
             </Text>
           </View>
           <View style={styles.bottomPencilView}>
@@ -532,14 +545,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   searchTextInput: {
-    height: 50,
-    width: Dimensions.get('screen').width * 0.7,
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 10,
-    fontSize: 18,
-    paddingLeft: 10,
-    marginTop: 15,
+    height: 40,
+    width: Dimensions.get('screen').width * 0.45,
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    fontSize: 17,
+    paddingLeft: 8,
+    marginTop: 10,
+    marginBottom: 10,
   },
   middleView: {
     flexDirection: 'row',
@@ -554,6 +567,13 @@ const styles = StyleSheet.create({
   remainingAmountText: {
     fontSize: 20,
     fontWeight: '500',
+    paddingTop: 10,
+  },
+  selectFriendsText: {
+    fontSize: 17,
+    textAlign: 'center',
+    color: 'gray',
+    padding: 10,
   },
   bottomView: {
     flexDirection: 'row',
