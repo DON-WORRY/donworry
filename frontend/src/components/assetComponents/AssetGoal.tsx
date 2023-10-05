@@ -138,7 +138,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
                 left: barContainerWidth - width * 0.075,
               }}
               name="outlined-flag"
-              color={'red'}
+              color={'#7777F3'}
               size={width * 0.1}
             />
           </View>
@@ -153,7 +153,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
             <View
               style={[
                 styles.bar,
-                { width: `${progress}%`, backgroundColor: '#c43a31' },
+                { width: `${progress}%`, backgroundColor: '#7777F3' },
               ]}
             />
             <View
@@ -161,7 +161,7 @@ const AssetGoal: React.FC<AssetGoalProps> = (props) => {
                 styles.bar,
                 {
                   width: `${100 - progress}%`,
-                  backgroundColor: 'grey',
+                  backgroundColor: 'lightgrey',
                   position: 'absolute',
                   left: `${progress}%`,
                 },
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   },
   balloon: {
     position: 'absolute',
-    backgroundColor: 'pink',
+    backgroundColor: '#EBDDF7',
     borderRadius: 10,
     padding: 5,
     zIndex: 1, // 말풍선을 아이콘 위에 표시합니다.
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 14,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: 'pink',
+    borderBottomColor: '#EBDDF7',
     transform: [{ rotate: '90deg' }],
   },
 });

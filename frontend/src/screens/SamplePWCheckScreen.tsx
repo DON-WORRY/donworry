@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { wireTransfer } from '../utils/AccountFunctions';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 interface ScreenProps {
   navigation: {
@@ -49,17 +50,36 @@ const SamplePWCheck: React.FC<Props> = (props) => {
 
   const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
   useEffect(() => {
+    authenticateBiometric()
     shuffle(numbers);
-    console.log(numbers)
+    // console.log(numbers)
   }, []);
 
   useEffect(() => {
     if (easyPass.length === 6) {
-      wireTrans();
+      wireTrans(false);
     }
   }, [easyPass]);  
 
-  const wireTrans = async () => {
+  async function authenticateBiometric() {
+    try {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: '지문을 스캔해주세요.', // 사용자에게 보여질 메시지
+      });
+
+      if (result.success) {
+        alert('지문 인증 성공!');
+        wireTrans(true)
+      } else {
+        alert('지문 인증 실패 또는 취소됨.');
+      }
+    } catch (error: any) {
+      alert('지문 인증 오류: ' + error.message);
+    }
+  }
+
+
+  const wireTrans = async (success: boolean) => {
     const isErrorWithResponse = (
       error: any
     ): error is { response: { data: { message: string } } } => {
@@ -78,12 +98,14 @@ const SamplePWCheck: React.FC<Props> = (props) => {
       props.route?.params?.price &&
       easyPass
     ) {
+      console.log("ddddd")
       const data = {
         accountId: props.route?.params?.accountId,
         accountNumber: props.route?.params?.accountNumber,
         consumptionCategoryId: props.route?.params?.consumptionCategoryId,
         price: props.route?.params?.price,
         simplePassword: easyPass,
+        finger: success
       };
       try {
         await wireTransfer(data);
@@ -93,6 +115,14 @@ const SamplePWCheck: React.FC<Props> = (props) => {
         if (isErrorWithResponse(error)) {
           alert(error.response.data.message);
           setEasyPass('')
+          setCompleteRound({
+            a: false,
+            b: false,
+            c: false,
+            d: false,
+            e: false,
+            f: false,
+          });
         }
       }
     }
@@ -232,7 +262,7 @@ const SamplePWCheck: React.FC<Props> = (props) => {
     const tmpPass = (await easyPass) + str;
     await setEasyPass(tmpPass);
     // await shuffle(numbers);
-    console.log(tmpPass);
+    // console.log(tmpPass);
   }
   return (
     <View style={styles.mainContainer}>

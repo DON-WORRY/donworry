@@ -230,7 +230,7 @@ const SignupThird: React.FC<SignupThirdProps> = (props) => {
     }
     const tmpPass = (await easyPass) + str;
     await setEasyPass(tmpPass);
-    await shuffle(numbers);
+    // await shuffle(numbers);
   }
   // useEffect(() => {
   //   if (easyPass.length == 6) {
