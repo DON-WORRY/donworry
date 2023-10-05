@@ -35,6 +35,7 @@ const images: { [key: string]: any } = {
   쇼핑: require('../../assets/bank&card/쇼핑.png'),
   식비: require('../../assets/bank&card/식비.png'),
   여가: require('../../assets/bank&card/여가.png'),
+  송금: require('../../assets/bank&card/송금.png'),
 };
 
 const width = Dimensions.get('screen').width;
@@ -211,12 +212,7 @@ const CardHistoryScreen: React.FC = () => {
               decreaseMonth();
             }}
           >
-            <AntDesign
-              name="caretleft"
-              size={24}
-              color="black"
-              // style={{ marginTop: -width * 0.025 }}
-            />
+            <AntDesign name="caretleft" size={24} color="black" />
           </TouchableOpacity>
           <Text style={styles.headDateText}>{formatAddDot(checkMonth)}</Text>
           <TouchableOpacity
@@ -224,12 +220,7 @@ const CardHistoryScreen: React.FC = () => {
               increaseMonth();
             }}
           >
-            <AntDesign
-              name="caretright"
-              size={24}
-              color="black"
-              // style={{ marginTop: -width * 0.025 }}
-            />
+            <AntDesign name="caretright" size={24} color="black" />
           </TouchableOpacity>
         </View>
         <Text style={[styles.headText, { marginTop: 5 }]}>
@@ -263,8 +254,9 @@ const CardHistoryScreen: React.FC = () => {
               >
                 <Image
                   style={styles.imageStyle}
-                  source={images[detail.category]}
+                  source={images[detail.category || '송금']}
                 />
+
                 <Text style={[styles.itemText, { flex: 1 }]}>
                   {detail.consumptionDetail}
                 </Text>

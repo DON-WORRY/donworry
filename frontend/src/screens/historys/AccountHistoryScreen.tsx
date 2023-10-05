@@ -32,6 +32,7 @@ const images: { [key: string]: any } = {
   쇼핑: require('../../assets/bank&card/쇼핑.png'),
   식비: require('../../assets/bank&card/식비.png'),
   여가: require('../../assets/bank&card/여가.png'),
+  송금: require('../../assets/bank&card/송금.png'),
 };
 
 const width = Dimensions.get('screen').width;
@@ -140,8 +141,9 @@ const HistoryScreen: React.FC = () => {
               >
                 <Image
                   style={styles.imageStyle}
-                  source={images[detail.category]}
+                  source={images[detail.category || '송금']}
                 />
+
                 <Text style={[styles.itemText, { flex: 1 }]}>
                   {detail.consumptionDetail}
                 </Text>
@@ -216,7 +218,6 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: width * 0.04,
     fontWeight: 'bold',
-
   },
   line: {
     height: 0,
