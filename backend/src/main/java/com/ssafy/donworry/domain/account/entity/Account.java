@@ -10,6 +10,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
@@ -35,6 +38,10 @@ public class Account extends BaseEntity {
     private Bank bank;
 
     @NotNull
+    @OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
+    private List<Card> cards;
+
+    @NotNull
     @Size(max = 30)
     private String accountNumber;
 
@@ -42,10 +49,11 @@ public class Account extends BaseEntity {
     private Long accountAmount;
 
     @Builder
-    public Account(Long id, @NotNull Member member, @NotNull Bank bank, @NotNull String accountNumber, @NotNull Long accountAmount) {
+    public Account(Long id, Member member, Bank bank, List<Card> cards, String accountNumber, Long accountAmount) {
         this.id = id;
         this.member = member;
         this.bank = bank;
+        this.cards = cards;
         this.accountNumber = accountNumber;
         this.accountAmount = accountAmount;
     }

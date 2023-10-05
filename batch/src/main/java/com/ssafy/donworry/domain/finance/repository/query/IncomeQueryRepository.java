@@ -11,8 +11,6 @@ import java.util.List;
 
 import static com.ssafy.donworry.domain.finance.entity.QConsumption.consumption;
 import static com.ssafy.donworry.domain.finance.entity.QConsumptionCategory.consumptionCategory;
-import static com.ssafy.donworry.domain.finance.entity.QDetailDutchpay.detailDutchpay;
-import static com.ssafy.donworry.domain.finance.entity.QDutchpay.dutchpay;
 import static com.ssafy.donworry.domain.finance.entity.QIncome.income;
 
 @Repository
@@ -20,51 +18,5 @@ import static com.ssafy.donworry.domain.finance.entity.QIncome.income;
 public class IncomeQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
-
-    public List<Tuple> findIncomeCategoryTotal(Long memberId, int month) {
-        LocalDate startDate = LocalDate.of(LocalDate.now().getYear(), month, 1);
-        LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), month, startDate.lengthOfMonth());
-
-        return jpaQueryFactory
-                .select(consumptionCategory.consumptionCategoryName, income.incomePrice.sum())
-                .from(income)
-                .join(income.detailDutchpay, detailDutchpay)
-                .join(detailDutchpay.dutchpay, dutchpay)
-                .join(dutchpay.consumption, consumption)
-                .join(consumption.consumptionCategory, consumptionCategory)
-                .where(income.member.id.eq(memberId),
-                        income.detailDutchpay.isNotNull(),
-                        income.createdTime.between(startDate.atStartOfDay(), endDate.atStartOfDay())
-                )
-                .groupBy(consumptionCategory.consumptionCategoryName)
-                .fetch();
-
-    }
-
-    public List<Tuple> findIncomeDutchpayPriceByMemberId(Long memberId, Long categoryId, int month) {
-        LocalDate startDate = LocalDate.of(LocalDate.now().getYear(), month, 1);
-        LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), month, startDate.lengthOfMonth());
-        return jpaQueryFactory
-                .select(consumption.id, income.incomePrice)
-                .from(income)
-                .join(income.detailDutchpay, detailDutchpay)
-                .join(detailDutchpay.dutchpay, dutchpay)
-                .join(dutchpay.consumption, consumption)
-                .where(
-                        income.detailDutchpay.isNotNull(),
-                        income.member.id.eq(memberId),
-                        settingCategory(categoryId)
-                )
-                .fetch();
-    }
-
-    /**
-     * 비즈니스 로직
-     */
-
-    private BooleanExpression settingCategory(Long categoryId) {
-        return categoryId.equals(0l) ? null : consumption.consumptionCategory.id.eq(categoryId);
-    }
-
 
 }

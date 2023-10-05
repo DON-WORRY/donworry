@@ -2,8 +2,6 @@ package com.ssafy.donworry.domain.account.repository.query;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.donworry.api.controller.account.dto.response.StatisticsResponse;
-import com.ssafy.donworry.api.controller.account.dto.response.UserRankResponse;
 import com.ssafy.donworry.domain.account.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -35,55 +33,4 @@ public class AccountQueryRepository {
                 .fetch();
     }
 
-    public List<StatisticsResponse> findStatisticsOfConsumption(Long memberId, LocalDate startDate) {
-//        LocalDate startDate = LocalDate.of(2023, month, 1);
-        LocalDate endDate = startDate.plusMonths(1);
-
-        List<StatisticsResponse> list = queryFactory
-                .select(Projections.constructor(StatisticsResponse.class,
-                        consumption.account.id,
-                        consumption.createdTime.max(),
-                        consumption.consumptionRemainedAmount.max()
-                ))
-                .from(consumption)
-                .where(
-                        consumption.member.id.eq(memberId),
-                        consumption.createdTime.goe(startDate.atStartOfDay()),
-                        consumption.createdTime.lt(endDate.atStartOfDay())
-                )
-                .groupBy(consumption.account.id)
-                .fetch();
-
-        return list;
-    }
-
-    public List<StatisticsResponse> findStatisticsOfInCome(Long memberId, LocalDate startDate) {
-        LocalDate endDate = startDate.plusMonths(1);
-
-        List<StatisticsResponse> list = queryFactory
-                .select(Projections.constructor(StatisticsResponse.class,
-                        income.account.id,
-                        income.createdTime.max(),
-                        income.incomeRemainedAmount.max()
-                ))
-                .from(income)
-                .where(
-                        income.member.id.eq(memberId),
-                        income.createdTime.goe(startDate.atStartOfDay()),
-                        income.createdTime.lt(endDate.atStartOfDay())
-                )
-                .groupBy(income.account.id)
-                .fetch();
-        return list;
-    }
-
-    public UserRankResponse findTotalAmountByUserId(Long memberId) {
-        Long totalAmount = queryFactory
-                .select(account.accountAmount.sum())
-                .from(account)
-                .where(account.member.id.eq(memberId))
-                .groupBy(account.member.id)
-                .fetchOne(); // 수정된 부분
-        return UserRankResponse.of(totalAmount);
-    }
 }
