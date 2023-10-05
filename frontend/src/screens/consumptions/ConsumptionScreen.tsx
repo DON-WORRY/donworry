@@ -172,7 +172,10 @@ const ConsumptionScreen: React.FC<ConsumptionScreenProps> = ({ route }) => {
             </Text>
           </View>
 
-          <ScrollView style={styles.listScrollView}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={styles.listScrollView}
+          >
             {consumptionData?.categoryHistoryResponseList.map((data, index) => (
               <View key={data.id}>
                 {index === 0 ||

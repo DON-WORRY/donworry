@@ -38,7 +38,7 @@ const LoginPage: React.FC = () => {
         toValue: 1,
         duration: 1500,
         delay: 2000,
-        useNativeDriver: false,
+        useNativeDriver: true,
       }),
     ]);
 
