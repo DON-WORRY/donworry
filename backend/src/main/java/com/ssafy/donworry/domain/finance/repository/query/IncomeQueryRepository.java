@@ -1,8 +1,12 @@
 package com.ssafy.donworry.domain.finance.repository.query;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.donworry.api.controller.account.dto.response.AccountConsumptionDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -54,6 +58,48 @@ public class IncomeQueryRepository {
                         income.detailDutchpay.isNotNull(),
                         income.member.id.eq(memberId),
                         settingCategory(categoryId)
+                )
+                .fetch();
+    }
+
+    public List<AccountConsumptionDetailResponse> findAccountIncomeDetailDpNotNullByAccountId(Long accountId) {
+        return jpaQueryFactory
+                .select(Projections.constructor(
+                                AccountConsumptionDetailResponse.class,
+                                income.incomeDetail,
+                                consumption.consumptionCategory.consumptionCategoryName,
+                                income.incomePrice,
+                                income.incomeRemainedAmount,
+                                income.createdTime
+                        )
+                )
+                .from(income)
+                .join(income.detailDutchpay, detailDutchpay)
+                .join(detailDutchpay.dutchpay, dutchpay)
+                .join(dutchpay.consumption, consumption)
+                .where(
+                        income.account.id.eq(accountId),
+                        income.detailDutchpay.isNotNull()
+
+                )
+                .fetch();
+    }
+
+    public List<AccountConsumptionDetailResponse> findAccountIncomeDetailDpNullByAccountId(Long accountId) {
+        return jpaQueryFactory
+                .select(Projections.constructor(
+                                AccountConsumptionDetailResponse.class,
+                                income.incomeDetail,
+                                Expressions.constant(""),
+                                income.incomePrice,
+                                income.incomeRemainedAmount,
+                                income.createdTime
+                        )
+                )
+                .from(income)
+                .where(
+                        income.account.id.eq(accountId),
+                        income.detailDutchpay.isNull()
                 )
                 .fetch();
     }
