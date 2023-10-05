@@ -1,4 +1,4 @@
-package com.ssafy.donworry.common.util;
+package com.ssafy.donworry.util;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -90,7 +90,7 @@ public class StoreDataUtil {
 
     public RandomConsumption randomStoreName() {
         Random random = new Random();
-        int i = random.nextInt(11) % 6 + 1; // 0~10의 난수
+        int i = random.nextInt(11) % 5 + 1; // 0~10의 난수
         int j = random.nextInt(data[i-1].length); //
         return new RandomConsumption(i, data[i-1][j]);
     }
