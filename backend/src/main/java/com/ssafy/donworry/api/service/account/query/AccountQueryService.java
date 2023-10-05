@@ -52,11 +52,14 @@ public class AccountQueryService {
 
     public AccountHistoryResponse searchAccountDetailList(Long accountId) {
         List<AccountConsumptionDetailResponse> consumptions = consumptionQueryRepository.findAccountConsumptionDetailByAccountId(accountId);
-        List<AccountConsumptionDetailResponse> incomes = consumptionQueryRepository.findAccountIncomeDetailByAccountId(accountId);
+        List<AccountConsumptionDetailResponse> Dutchpayincomes = incomeQueryRepository.findAccountIncomeDetailDpNotNullByAccountId(accountId);
+        List<AccountConsumptionDetailResponse> noDutchpayincomes = incomeQueryRepository.findAccountIncomeDetailDpNullByAccountId(accountId);
         log.debug("searchAccountDetailList, accountId = " + accountId);
 
+
         List<AccountConsumptionDetailResponse> result = new ArrayList<>(consumptions);
-        result.addAll(incomes);
+        result.addAll(Dutchpayincomes);
+        result.addAll(noDutchpayincomes);
         result.sort(Comparator.comparing(AccountConsumptionDetailResponse::getCreateTime).reversed());
         log.debug("searchAccountDetailList, result.size() = " + result.size());
         return AccountHistoryResponse.of(result);

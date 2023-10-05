@@ -1,8 +1,11 @@
 package com.ssafy.donworry.domain.finance.repository.query;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.donworry.api.controller.account.dto.response.AccountConsumptionDetailResponse;
 import com.ssafy.donworry.api.controller.finance.dto.response.CategoryHistoryResponse;
@@ -93,21 +96,7 @@ public class ConsumptionQueryRepository {
     }
 
 
-    public List<AccountConsumptionDetailResponse> findAccountIncomeDetailByAccountId(Long accountId) {
-        return jpaQueryFactory
-                .select(Projections.constructor(
-                    AccountConsumptionDetailResponse.class,
-                    income.incomeDetail,
-                    income.account.accountNumber,
-                    income.incomePrice,
-                    income.incomeRemainedAmount,
-                    income.createdTime
-                    )
-                )
-                .from(income)
-                .where(income.account.id.eq(accountId))
-                .fetch();
-    }
+
 
 //    public List<Tuple> findAccountIncomeDetailByAccountId(Long accountId) {
 //
