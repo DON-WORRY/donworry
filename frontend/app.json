@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "client",
+    "name": "DONWORRY",
     "slug": "client",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,7 +22,9 @@
       "supportsTablet": true
     },
     "android": {
-      "permissions": ["NOTIFICATIONS"],
+      "permissions": [
+        "NOTIFICATIONS"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/logo/donLogo.png",
         "backgroundColor": "#ffffff"
@@ -34,6 +36,14 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "06f09189-4993-4a5b-883f-13fc0140ea50"
+      }
+    }
   }
 }
