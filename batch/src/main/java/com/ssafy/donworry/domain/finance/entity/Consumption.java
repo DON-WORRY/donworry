@@ -5,7 +5,6 @@ import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.account.entity.Card;
 import com.ssafy.donworry.domain.finance.entity.enums.DutchpayStatus;
 import com.ssafy.donworry.domain.member.entity.Member;
-import com.ssafy.donworry.domain.member.entity.Notification;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -63,11 +62,8 @@ public class Consumption extends BaseEntity {
     @JoinColumn(name = "consumption_category_id")
     private ConsumptionCategory consumptionCategory;
 
-    @OneToOne(mappedBy = "consumption", cascade = ALL, orphanRemoval = true)
-    private Notification notification;
-
     @Builder
-    public Consumption(Long id, String consumptionDetail, Long consumptionPrice, Long consumptionRemainedAmount, DutchpayStatus dutchpayStatus, Member member, Account account, Account receiverAccount, Card card, ConsumptionCategory consumptionCategory, Notification notification) {
+    public Consumption(Long id, String consumptionDetail, Long consumptionPrice, Long consumptionRemainedAmount, DutchpayStatus dutchpayStatus, Member member, Account account, Account receiverAccount, Card card, ConsumptionCategory consumptionCategory) {
         this.id = id;
         this.consumptionDetail = consumptionDetail;
         this.consumptionPrice = consumptionPrice;
@@ -78,7 +74,6 @@ public class Consumption extends BaseEntity {
         this.receiverAccount = receiverAccount;
         this.card = card;
         this.consumptionCategory = consumptionCategory;
-        this.notification = notification;
     }
 
     public static Consumption of(String consumptionDetail, Long consumptionPrice, Long consumptionRemainedAmount, DutchpayStatus dutchpayStatus,

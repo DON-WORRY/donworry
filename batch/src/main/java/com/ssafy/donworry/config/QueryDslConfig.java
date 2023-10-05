@@ -1,4 +1,4 @@
-package com.ssafy.donworry.common.config;
+package com.ssafy.donworry.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -12,4 +12,5 @@ public class QueryDslConfig {
     public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
         return new JPAQueryFactory(entityManager);
     }
+
 }

@@ -11,6 +11,7 @@ import {
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { accountTradeHistory } from '../../utils/AccountFunctions';
+import { images } from '../../assets/bank&card';
 
 interface ScreenProps {
   navigation: {
@@ -24,16 +25,6 @@ interface accountDetailItem {
   consumptionPrice: number;
   createTime: string;
 }
-
-const images: { [key: string]: any } = {
-  교통: require('../../assets/bank&card/교통.png'),
-  기타: require('../../assets/bank&card/기타.png'),
-  생활: require('../../assets/bank&card/생활.png'),
-  쇼핑: require('../../assets/bank&card/쇼핑.png'),
-  식비: require('../../assets/bank&card/식비.png'),
-  여가: require('../../assets/bank&card/여가.png'),
-  송금: require('../../assets/bank&card/송금.png'),
-};
 
 const width = Dimensions.get('screen').width;
 

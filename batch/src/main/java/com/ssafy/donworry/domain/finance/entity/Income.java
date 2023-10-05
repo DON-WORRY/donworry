@@ -3,7 +3,6 @@ package com.ssafy.donworry.domain.finance.entity;
 import com.ssafy.donworry.domain.BaseEntity;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.member.entity.Member;
-import com.ssafy.donworry.domain.member.entity.Notification;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -46,15 +45,8 @@ public class Income extends BaseEntity {
     @JoinColumn(name = "sender_account_id")
     private Account senderAccount;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "detail_dutchpay_id")
-    private DetailDutchpay detailDutchpay;
-
-    @OneToOne(mappedBy = "income", cascade = ALL, orphanRemoval = true)
-    private Notification notification;
-
     @Builder
-    public Income(Long id, String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member, Account account, Account senderAccount, DetailDutchpay detailDutchpay, Notification notification) {
+    public Income(Long id, String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member, Account account, Account senderAccount) {
         this.id = id;
         this.incomeDetail = incomeDetail;
         this.incomePrice = incomePrice;
@@ -62,8 +54,6 @@ public class Income extends BaseEntity {
         this.member = member;
         this.account = account;
         this.senderAccount = senderAccount;
-        this.detailDutchpay = detailDutchpay;
-        this.notification = notification;
     }
 
     public static Income of(String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member
@@ -78,16 +68,4 @@ public class Income extends BaseEntity {
                 .build();
     }
 
-    public static Income of(String incomeDetail, Long incomePrice, Long incomeRemainedAmount, Member member
-    , Account account, Account senderAccount, DetailDutchpay detailDutchpay){
-        return Income.builder()
-                .incomeDetail(incomeDetail)
-                .incomePrice(incomePrice)
-                .incomeRemainedAmount(incomeRemainedAmount)
-                .member(member)
-                .account(account)
-                .senderAccount(senderAccount)
-                .detailDutchpay(detailDutchpay)
-                .build();
-    }
 }
