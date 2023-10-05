@@ -142,7 +142,7 @@ const AssetChart: React.FC<AssetChartProps> = (props) => {
             y="y"
             style={{
               data: {
-                fill: ({ datum }) => (datum.y > 400000 ? '#006DFF' : '#3BE9DE'),
+                fill: ('#7777F3'),
                 height: ({ datum }) => datum.y * 0.8,
               },
             }}

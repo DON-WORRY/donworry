@@ -187,7 +187,7 @@ const SignupSecond: React.FC<SignupSecondProps> = (props) => {
     }
     const tmpPass = (await easyPass) + str;
     await setEasyPass(tmpPass);
-    await shuffle(numbers);
+    // await shuffle(numbers);
   }
 
   // useEffect(() => {

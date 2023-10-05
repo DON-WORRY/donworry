@@ -13,6 +13,7 @@ import KakaoSignupScreen from '../../screens/Signups/KakaoSignupScreen';
 import WireTransferScreen from '../../screens/WireTransferScreen';
 import NewMessageScreen from '../../screens/newMessages/NewMessageScreen';
 import SimplePWCheckScreen from '../../screens/SamplePWCheckScreen'
+import SendingCompleteScreen from '../../screens/SendingCompleteScreen';
 
 type RootStackParamList = {
   Login: undefined;
@@ -53,6 +54,7 @@ type RootStackParamList = {
   };
   NewMassageScreen: undefined;
   SimplePWCheckScreen: undefined;
+  SendingCompleteScreen: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -129,6 +131,11 @@ const StackNavigation: React.FC = () => {
       <Stack.Screen
         name="SimplePWCheckScreen"
         component={SimplePWCheckScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SendingCompleteScreen"
+        component={SendingCompleteScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
