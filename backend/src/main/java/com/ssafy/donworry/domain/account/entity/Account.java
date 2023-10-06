@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import static lombok.AccessLevel.*;
 
 @Entity
 @Getter
+@ToString(exclude = {"member", "bank", "cards"})
 @NoArgsConstructor(access = PROTECTED)
 public class Account extends BaseEntity {
 
@@ -37,7 +39,6 @@ public class Account extends BaseEntity {
     @JoinColumn(name = "bank_id")
     private Bank bank;
 
-    @NotNull
     @OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
     private List<Card> cards;
 
