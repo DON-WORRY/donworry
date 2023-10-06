@@ -12,7 +12,7 @@ import KakaoLoginScreen from '../../screens/KakaoLoginScreen';
 import KakaoSignupScreen from '../../screens/Signups/KakaoSignupScreen';
 import WireTransferScreen from '../../screens/WireTransferScreen';
 import NewMessageScreen from '../../screens/newMessages/NewMessageScreen';
-import SimplePWCheckScreen from '../../screens/SamplePWCheckScreen'
+import SimplePWCheckScreen from '../../screens/SamplePWCheckScreen';
 import SendingCompleteScreen from '../../screens/SendingCompleteScreen';
 
 type RootStackParamList = {
@@ -38,10 +38,16 @@ type RootStackParamList = {
     id: number;
     dutchpayStatus: 'NOTSTART' | 'PROGRESS' | 'COMPLETE';
     categoryId: number;
+    refresh: boolean;
   };
   WireTransfer: {
     accounts: Array<any>;
-    accountId: number;
+    nowAccount: {
+      accountId: number;
+      accountNumber: string;
+      amount: number;
+      bankName: string;
+    };
   };
   Kakao: undefined;
   KakaoSignup: {

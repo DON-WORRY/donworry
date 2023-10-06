@@ -48,7 +48,7 @@ type NowAccountType = {
 type RootStackParamList = {
   WireTransfer: {
     accounts: Array<any>;
-    nowAccount: NowAccountType; // 이전에는 Array<any>였지만 NowAccountType으로 변경했습니다.
+    nowAccount: NowAccountType;
   };
 };
 

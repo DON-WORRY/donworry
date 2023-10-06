@@ -26,6 +26,7 @@
     "expo": "~49.0.8",
     "expo-checkbox": "~2.4.0",
     "expo-constants": "~14.4.2",
+    "expo-device": "~5.4.0",
     "expo-linear-gradient": "~12.3.0",
     "expo-linking": "~5.0.2",
     "expo-local-authentication": "^13.6.0",
@@ -59,9 +60,7 @@
     "react-native-webview": "^13.2.2",
     "react-redux": "^8.1.2",
     "react-select": "^5.7.5",
-    "victory-native": "^36.6.11",
-    "expo-notifications": "~0.20.1",
-    "expo-device": "~5.4.0"
+    "victory-native": "^36.6.11"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
