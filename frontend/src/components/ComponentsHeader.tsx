@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -17,18 +17,19 @@ type DrawerProps = {
     openDrawer: () => void;
   };
 };
+
+
 const donWorryHeader = require('../assets/logo/DONWORRYCOLOR.png');
 const screenWidth = Dimensions.get('screen').width;
 
 const ComponentsHeader: React.FC = () => {
   const navigation = useNavigation<DrawerProps['navigation']>();
   const dispatch = useDispatch();
-
+  
   function handleMenuClick() {
     dispatch(setMypageModal(false));
     navigation.openDrawer();
   }
-
   return (
     <View style={styles.header}>
       <Image

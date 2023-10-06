@@ -25,7 +25,6 @@ const screenWidth = Dimensions.get('screen').width;
 
 const SpendScreen: React.FC = () => {
   const navigation = useNavigation<ScreenProps['navigation']>();
-
   return (
     <View style={styles.container}>
       <ComponentsHeader />

@@ -17,6 +17,7 @@ import SignupSecond from '../../components/signups/SignupSecond';
 import SignupThird from '../../components/signups/SignupThird';
 import SignupEasyButton from '../../components/signups/SignupEasyButton';
 import SignupBtn from '../../components/signups/SignupBtn';
+import LoaderModal from '../../components/modals/LoaderModal';
 // 회원가입 함수
 import { userSignup } from '../../utils/UserFunctions';
 // 로그인 페이지로 이동
@@ -35,6 +36,8 @@ interface ScreenProps {
 }
 
 const KakaoSignupScreen: React.FC<KakaoScreenProps> = ({ route }) => {
+  // 회원가입 로더 적용
+  const [loading, setLoading] = useState(false);
   // 파람스로 받은 데이터
   const email = route.params.kakao.email;
   const gender = route.params.kakao.gender;
@@ -97,6 +100,7 @@ const KakaoSignupScreen: React.FC<KakaoScreenProps> = ({ route }) => {
 
   //   회원가입 버튼 클릭시 작동
   function signupOper() {
+    setLoading(true)
     const newBirth =
       userBirth.slice(0, 4) +
       '-' +
@@ -124,6 +128,7 @@ const KakaoSignupScreen: React.FC<KakaoScreenProps> = ({ route }) => {
             })
             .catch((e) => {
               console.log(e);
+              setLoading(false)
               return alert('유효하지 않습니다.');
             });
         } else {
@@ -138,127 +143,136 @@ const KakaoSignupScreen: React.FC<KakaoScreenProps> = ({ route }) => {
   }
 
   return (
-    <KeyboardAwareScrollView style={styles.container}>
-      {pageData.a ? (
-        <>
-          <SignupHeader />
-          {/* 이메일 비활성화된 textInput*/}
-          {/* 수정가능한 이름 */}
-          {/* 생년월일 입력 */}
-          {/* 개인정보 취급 방침 체크 */}
-
-          <TextInput
-            style={[
-              stylesText.input,
-              stylesText.inputFirst,
-              stylesText.doneText,
-            ]}
-            value={'이메일 : ' + email}
-            editable={false}
-          />
-          <TextInput
-            style={[
-              stylesText.input,
-              stylesText.inputSecond,
-              stylesText.doneText,
-            ]}
-            value={'성별 : ' + (gender == 'MALE' ? '남자' : '여자')}
-            editable={false}
-          />
-
-          <TextInput
-            style={[
-              stylesText.input,
-              stylesText.inputThird,
-              whereFocus.name ? stylesText.isFocused : null,
-            ]}
-            placeholder="이름"
-            value={userName}
-            onChangeText={(text) => {
-              setUserName(text);
-            }}
-            onFocus={() => {
-              setWhereFocus({
-                name: true,
-                birth: false,
-              });
-            }}
-            onBlur={() => {
-              setWhereFocus({
-                name: false,
-                birth: false,
-              });
-            }}
-            placeholderTextColor={
-              setWhereFocus.name ? '#7777F3' : 'rgb(156, 156, 156)'
-            }
-          />
-          <TextInput
-            style={[
-              stylesText.input,
-              stylesText.inputFourth,
-              whereFocus.birth ? stylesText.isFocused : null,
-            ]}
-            value={userBirth}
-            placeholder="생년월일 8자리"
-            onChangeText={(text) => {
-              setUserBirth(text);
-            }}
-            onFocus={() => {
-              setWhereFocus({
-                name: false,
-                birth: true,
-              });
-            }}
-            onBlur={() => {
-              setWhereFocus({
-                name: false,
-                birth: false,
-              });
-            }}
-            placeholderTextColor={
-              whereFocus.birth ? '#7777F3' : 'rgb(156, 156, 156)'
-            }
-          />
-
-          <View style={stylesPrivacy.container}>
-            <Checkbox
-              style={stylesPrivacy.checkBox}
-              color={checkPrivacy ? '#7777F3' : undefined}
-              value={checkPrivacy}
-              onValueChange={() => {
-                setCheckPrivacy(!checkPrivacy);
-                setCheckPrivacy(!checkPrivacy);
-              }}
-            />
-            <Text>개인정보 수집 이용 동의</Text>
-            <Text style={stylesPrivacy.cautionText}>(필수)</Text>
-          </View>
-          <SignupEasyButton setPageData={setPageData} canSignup={canSignup} />
-          {canSignup ? (
-            <>
-              <SignupBtn signupOper={signupOper} />
-            </>
-          ) : (
-            <></>
-          )}
-        </>
-      ) : pageData.b ? (
-        <SignupSecond
-          setPageData={setPageData}
-          setEasyPassword={setEasyPassword}
-        />
+    <>
+      {loading ? (
+        <LoaderModal />
       ) : (
-        <>
-          <SignupThird
-            setPageData={setPageData}
-            setEasyPassword={setEasyPassword}
-            easyPassword={easyPassword}
-            setCanSignup={setCanSignup}
-          />
-        </>
+        <KeyboardAwareScrollView style={styles.container}>
+          {pageData.a ? (
+            <>
+              <SignupHeader />
+              {/* 이메일 비활성화된 textInput*/}
+              {/* 수정가능한 이름 */}
+              {/* 생년월일 입력 */}
+              {/* 개인정보 취급 방침 체크 */}
+
+              <TextInput
+                style={[
+                  stylesText.input,
+                  stylesText.inputFirst,
+                  stylesText.doneText,
+                ]}
+                value={'이메일 : ' + email}
+                editable={false}
+              />
+              <TextInput
+                style={[
+                  stylesText.input,
+                  stylesText.inputSecond,
+                  stylesText.doneText,
+                ]}
+                value={'성별 : ' + (gender == 'MALE' ? '남자' : '여자')}
+                editable={false}
+              />
+
+              <TextInput
+                style={[
+                  stylesText.input,
+                  stylesText.inputThird,
+                  whereFocus.name ? stylesText.isFocused : null,
+                ]}
+                placeholder="이름"
+                value={userName}
+                onChangeText={(text) => {
+                  setUserName(text);
+                }}
+                onFocus={() => {
+                  setWhereFocus({
+                    name: true,
+                    birth: false,
+                  });
+                }}
+                onBlur={() => {
+                  setWhereFocus({
+                    name: false,
+                    birth: false,
+                  });
+                }}
+                placeholderTextColor={
+                  setWhereFocus.name ? '#7777F3' : 'rgb(156, 156, 156)'
+                }
+              />
+              <TextInput
+                style={[
+                  stylesText.input,
+                  stylesText.inputFourth,
+                  whereFocus.birth ? stylesText.isFocused : null,
+                ]}
+                value={userBirth}
+                placeholder="생년월일 8자리"
+                onChangeText={(text) => {
+                  setUserBirth(text);
+                }}
+                onFocus={() => {
+                  setWhereFocus({
+                    name: false,
+                    birth: true,
+                  });
+                }}
+                onBlur={() => {
+                  setWhereFocus({
+                    name: false,
+                    birth: false,
+                  });
+                }}
+                placeholderTextColor={
+                  whereFocus.birth ? '#7777F3' : 'rgb(156, 156, 156)'
+                }
+              />
+
+              <View style={stylesPrivacy.container}>
+                <Checkbox
+                  style={stylesPrivacy.checkBox}
+                  color={checkPrivacy ? '#7777F3' : undefined}
+                  value={checkPrivacy}
+                  onValueChange={() => {
+                    setCheckPrivacy(!checkPrivacy);
+                    setCheckPrivacy(!checkPrivacy);
+                  }}
+                />
+                <Text>개인정보 수집 이용 동의</Text>
+                <Text style={stylesPrivacy.cautionText}>(필수)</Text>
+              </View>
+              <SignupEasyButton
+                setPageData={setPageData}
+                canSignup={canSignup}
+              />
+              {canSignup ? (
+                <>
+                  <SignupBtn signupOper={signupOper} />
+                </>
+              ) : (
+                <></>
+              )}
+            </>
+          ) : pageData.b ? (
+            <SignupSecond
+              setPageData={setPageData}
+              setEasyPassword={setEasyPassword}
+            />
+          ) : (
+            <>
+              <SignupThird
+                setPageData={setPageData}
+                setEasyPassword={setEasyPassword}
+                easyPassword={easyPassword}
+                setCanSignup={setCanSignup}
+              />
+            </>
+          )}
+        </KeyboardAwareScrollView>
       )}
-    </KeyboardAwareScrollView>
+    </>
   );
 };
 
