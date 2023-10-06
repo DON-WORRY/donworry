@@ -73,6 +73,7 @@ public enum ErrorCode {
 
     // Account
     ACCOUNT_NOT_FOUND(400, "A001", "존재하지 않는 계좌입니다!"),
+    ACCOUNT_CREATE_ERROR(400, "A002", "계좌 생성에 실패했습니다."),
 
     // Notification
     NOTIFICATION_NOT_FOUND(400, "N001", "알림내역을 찾지 못했습니다."),
