@@ -14,8 +14,14 @@ type Friend = {
 
 const screenWidth = Dimensions.get('screen').width;
 
-const FriendList: React.FC = () => {
+interface FriendListProps {
+  refreshKey: number;
+}
+
+const FriendList: React.FC<FriendListProps> = ({ refreshKey }) => {
   const [friends, setFriends] = useState<Friend[]>([]);
+  const [compoHeight, setCompoHeight] = useState(0);
+  const [parentHeight, setParentHeight] = useState(0);
 
   // 친구 숫자에 따라 다르게 나타나게 구현해야 한다.
   // 친구 숫자가 일정 수를 넘으면 height를 넘은 숫자 만큼 + 40해준다.
@@ -30,17 +36,31 @@ const FriendList: React.FC = () => {
           throw e;
         });
       // console.log('freinds', data);
-      await setFriends(data);
-      console.log(data);
+      setFriends(data);
+      setParentHeight(data.length);
       return;
     }
     fetch();
-  }, []);
-
+  }, [refreshKey]);
+  const styles = StyleSheet.create({
+    container: {
+      // flexDirection: 'row',
+      height: 120 + parentHeight * 60 + compoHeight * 84,
+      padding: 20,
+      width: screenWidth - 40,
+      borderRadius: 15,
+      backgroundColor: 'white',
+      marginBottom: 10,
+    },
+    header: {
+      fontWeight: 'bold',
+      fontSize: 18,
+    },
+  });
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.header}>친구 목록</Text>
-      <FriendSearch friends={friends} />
+      <FriendSearch friends={friends} setCompoHeight={setCompoHeight} setParentHeight={setParentHeight}/>
 
       {friends.map((friend, index) => {
         return (
@@ -49,24 +69,8 @@ const FriendList: React.FC = () => {
           </View>
         );
       })}
-    </ScrollView>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    // flexDirection: 'row',
-    height: 470,
-    padding: 20,
-    width: screenWidth - 40,
-    borderRadius: 15,
-    backgroundColor: 'white',
-    marginBottom: 100,
-  },
-  header: {
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-});
 
 export default FriendList;

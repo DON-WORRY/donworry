@@ -437,7 +437,7 @@ const DutchpayRequestScreen: React.FC<DutchpayRequestScreenProps> = ({
                 widthPercentage={0.65}
               />
               <Nq1Button
-                title="N/1 요청"
+                title="1/N 요청"
                 onPress={() => {
                   handleDutchpayRequestByN1();
                 }}

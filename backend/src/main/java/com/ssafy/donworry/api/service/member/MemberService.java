@@ -30,12 +30,18 @@ public class MemberService {
         if(memberRepository.existsByMemberEmail(request.memberEmail()))
             throw new EntityNotFoundException(ErrorCode.MEMBER_DUPLICATE);
 
+        Member member = Member.of(request);
+
         try{
-            Member member = Member.of(request);
             memberRepository.save(member);
-            accountService.createMemberInitAccount(member.getId());
         } catch(Exception e){
             throw new EntityNotFoundException(ErrorCode.MEMBER_SAVE_ERROR);
+        }
+
+        try{
+            accountService.createMemberInitAccount(member.getId());
+        } catch (Exception e){
+            throw new InvalidValueException(ErrorCode.ACCOUNT_CREATE_ERROR);
         }
     }
 
