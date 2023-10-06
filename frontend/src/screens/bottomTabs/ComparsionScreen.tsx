@@ -15,7 +15,7 @@ import ComponentsHeader from '../../components/ComponentsHeader';
 import ComparisonHeader from '../../components/comparisons/ComparisonHeader';
 import ComparisonChart from '../../components/comparisons/ComparisonChart';
 import ComparisonBar from '../../components/comparisons/ComparisonBar';
-import LoaderModal from "../../components/modals/LoaderModal"
+import LoaderModal from '../../components/modals/LoaderModal';
 import {
   friendListInquiry,
   friendTotalSpend,
@@ -54,8 +54,34 @@ type Friend = {
   friendEmail: string;
 };
 
+type CompType = {
+  amount: number;
+  category: string;
+  categoryId: number;
+};
+
 const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
-  const [loading, setLoading] = useState(false)
+  function mapTotalData(
+    myData: CategoryAmount[],
+    friendData: CategoryAmount[]
+  ): TotalDataType {
+    const result: TotalDataType = { totalData: [] };
+
+    myData.forEach((myItem) => {
+      const friendItem = friendData.find(
+        (fd) => fd.category === myItem.category
+      ) || { amount: 0 };
+      result.totalData.push({
+        categoryName: myItem.category,
+        myValue: myItem.amount,
+        friendsValue: friendItem.amount,
+      });
+    });
+
+    return result;
+  }
+
+  const [loading, setLoading] = useState(false);
   const friendPk = route.params?.friendPk ?? -1;
   const [nowMonth, setNowMonth] = useState(getNowMonth);
   const [friendName, setFriendName] = useState('친구 소비');
@@ -148,6 +174,9 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
   });
   const [nowFriendId, setNowFriendId] = useState(-1);
 
+  function sortByAmountDesc(data: CompType[]) {
+    return data.sort((a, b) => a.categoryId - b.categoryId);
+  }
   const [refreshing, setRefreshing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -164,7 +193,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
     // 가장 처음은 friend data를 업데이트하자
     // 내 데이터도 업데이트 해야한다.
     async function fetchFriends() {
-      await setLoading(true)
+      await setLoading(true);
       const newFriends: Friend[] = await friendListInquiry()
         .then((r) => {
           console.log(r.data.friendResponseList);
@@ -185,7 +214,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
       await setMyData(tmpMyData);
       console.log('tmpMyData');
       console.log(tmpMyData);
-      await setLoading(false)
+      await setLoading(false);
     }
 
     fetchFriends();
@@ -193,7 +222,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
 
   useEffect(() => {
     async function fetchComparisonData() {
-      await setLoading(true)
+      await setLoading(true);
       if (Number(friendPk) === -1) {
         // 친구가 있을 때
         if (friendList.length > 0) {
@@ -216,40 +245,8 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
               console.error('111', e);
             });
           await setFriendData(nowFriend);
-          const newData = await {
-            totalData: [
-              {
-                categoryName: nowFriend[0].category,
-                myValue: myData[0].amount,
-                friendsValue: nowFriend[0].amount,
-              },
-              {
-                categoryName: nowFriend[1].category,
-                myValue: myData[1].amount,
-                friendsValue: nowFriend[1].amount,
-              },
-              {
-                categoryName: nowFriend[2].category,
-                myValue: myData[2].amount,
-                friendsValue: nowFriend[2].amount,
-              },
-              {
-                categoryName: nowFriend[3].category,
-                myValue: myData[3].amount,
-                friendsValue: nowFriend[3].amount,
-              },
-              {
-                categoryName: nowFriend[4].category,
-                myValue: myData[4].amount,
-                friendsValue: nowFriend[4].amount,
-              },
-              {
-                categoryName: nowFriend[5].category,
-                myValue: myData[5].amount,
-                friendsValue: nowFriend[5].amount,
-              },
-            ],
-          };
+          const newData = mapTotalData(myData, nowFriend);
+          setTotalData(newData);
           await setTotalData(newData);
           // 친구가 없을 때
         } else {
@@ -305,49 +302,17 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
             console.error('222', e);
           });
         await setFriendData(nowFriend);
-        const newData = await {
-          totalData: [
-            {
-              categoryName: nowFriend[0].category,
-              myValue: myData[0].amount,
-              friendsValue: nowFriend[0].amount,
-            },
-            {
-              categoryName: nowFriend[1].category,
-              myValue: myData[1].amount,
-              friendsValue: nowFriend[1].amount,
-            },
-            {
-              categoryName: nowFriend[2].category,
-              myValue: myData[2].amount,
-              friendsValue: nowFriend[2].amount,
-            },
-            {
-              categoryName: nowFriend[3].category,
-              myValue: myData[3].amount,
-              friendsValue: nowFriend[3].amount,
-            },
-            {
-              categoryName: nowFriend[4].category,
-              myValue: myData[4].amount,
-              friendsValue: nowFriend[4].amount,
-            },
-            {
-              categoryName: nowFriend[5].category,
-              myValue: myData[5].amount,
-              friendsValue: nowFriend[5].amount,
-            },
-          ],
-        };
-        console.log(friendData);
-        console.log(myData);
-        console.log(totalData);
-        await setTotalData(newData);
+        const newData = mapTotalData(myData, nowFriend);
+        setTotalData(newData);
       }
-      await setLoading(false)
+      await setLoading(false);
       // 내 데이터가 나왔으니까
     }
     fetchComparisonData();
+    console.log('===================================');
+    console.log(myData);
+    console.log(friendData);
+    console.log(totalData.totalData);
   }, [nowFriendId, myData, friendList.length, friendPk]);
   // 날짜 변경
   function changeMonth(str: string) {
@@ -364,69 +329,59 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
     }
   }
 
-  return (
-    loading ? <LoaderModal /> :
-    <><View style={styles.container}>
-      <ComponentsHeader />
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        alwaysBounceHorizontal={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View style={styles.selectMonth}>
-          <ComparisonHeader friendName={friendName} />
-          <TouchableOpacity
-            onPress={() => {
-              changeMonth('-');
-            }}
-          >
-            <FontAwesome name="caret-left" size={40} />
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.selectMonthText}>{nowMonth}월</Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              changeMonth('+');
-            }}
-          >
-            <FontAwesome name="caret-right" size={40} />
-          </TouchableOpacity>
-        </View>
-        {/* <FriendSearch friends={friendList} isComparison={true} /> */}
-        <ComparisonChart totalData={totalData} />
-        {/* {modeKey.map((keyName) => {
-          return (
-            <View key={keyName}>
-              <ComparisonBar
-                categoryName={categoryName[keyName]}
-                myValue={myData[keyName]}
-                friendsValue={friendData[keyName]}
-              />
+  return loading ? (
+    <LoaderModal />
+  ) : (
+    <>
+      <View style={styles.container}>
+        <ComponentsHeader />
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          alwaysBounceHorizontal={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          <View style={styles.selectMonth}>
+            <ComparisonHeader friendName={friendName} />
+            <TouchableOpacity
+              onPress={() => {
+                changeMonth('-');
+              }}
+            >
+              <FontAwesome name="caret-left" size={40} />
+            </TouchableOpacity>
+            <View>
+              <Text style={styles.selectMonthText}>{nowMonth}월</Text>
             </View>
-          );
-        })} */}
+            <TouchableOpacity
+              onPress={() => {
+                changeMonth('+');
+              }}
+            >
+              <FontAwesome name="caret-right" size={40} />
+            </TouchableOpacity>
+          </View>
+          <ComparisonChart totalData={totalData} />
 
-        <FlatList
-          disableScrollViewPanResponder={true}
-          scrollEnabled={false}
-          keyExtractor={(c) => c.categoryName}
-          data={totalData.totalData}
-          // renderItem 정보를 추가해주어야 합니다. 예를 들면:
-          renderItem={({ item }) => (
-            <ComparisonBar
-              categoryName={item.categoryName}
-              myValue={item.myValue}
-              friendsValue={item.friendsValue}
-            />
-          )}
-        />
-      </ScrollView>
-    </View></>
-    
+          <FlatList
+            disableScrollViewPanResponder={true}
+            scrollEnabled={false}
+            keyExtractor={(c) => c.categoryName}
+            data={totalData.totalData}
+            // renderItem 정보를 추가해주어야 합니다. 예를 들면:
+            renderItem={({ item }) => (
+              <ComparisonBar
+                categoryName={item.categoryName}
+                myValue={item.myValue}
+                friendsValue={item.friendsValue}
+              />
+            )}
+          />
+        </ScrollView>
+      </View>
+    </>
   );
 };
 
@@ -464,3 +419,4 @@ const styles = StyleSheet.create({
 });
 
 export default ComparisonScreen;
+''
