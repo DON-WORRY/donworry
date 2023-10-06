@@ -38,11 +38,8 @@ public class MemberService {
             throw new EntityNotFoundException(ErrorCode.MEMBER_SAVE_ERROR);
         }
 
-        try{
-            accountService.createMemberInitAccount(member.getId());
-        } catch (Exception e){
-            throw new InvalidValueException(ErrorCode.ACCOUNT_CREATE_ERROR);
-        }
+        accountService.createMemberInitAccount(member.getId());
+
     }
 
 }

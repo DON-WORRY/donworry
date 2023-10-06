@@ -2,6 +2,8 @@ package com.ssafy.donworry.api.service.account;
 
 import com.ssafy.donworry.api.controller.account.dto.response.AccountExistResponse;
 import com.ssafy.donworry.api.controller.account.dto.response.UserRankResponse;
+import com.ssafy.donworry.common.error.ErrorCode;
+import com.ssafy.donworry.common.error.exception.InvalidValueException;
 import com.ssafy.donworry.common.util.StoreDataUtil;
 import com.ssafy.donworry.domain.account.entity.Account;
 import com.ssafy.donworry.domain.account.entity.Bank;
@@ -52,7 +54,6 @@ public class AccountService {
     private final ConsumptionCategoryRepository consumptionCategoryRepository;
     private final ConsumptionRepository consumptionRepository;
     private final IncomeRepository incomeRepository;
-    private final CardQueryRepository cardQueryRepository;
     private final AccountQueryRepository accountQueryRepository;
 
 
@@ -69,13 +70,18 @@ public class AccountService {
                 randomBankNumber = randomBankId();
             }
             isHave[Math.toIntExact(randomBankNumber)] = true;
+            log.debug("random bankId:{}", randomBankId());
             Bank bank = bankRepository.findById(randomBankId())
                     .orElseThrow(() -> new NoSuchElementException("존재하지 않는 은행입니다."));
             String accountNumber = randomAccountNumber();
             while(accountRepository.findByAccountNumber(accountNumber) != null){
                 accountNumber = randomAccountNumber();
             }
+            log.debug("계좌생성: {}", account.toString());
+
             Account account = Account.of(member, bank, accountNumber, randomInitHolding());
+            log.debug("계좌생성: {}", account.toString());
+
             accountRepository.save(account);
             Long accountId = account.getId();
             createMemberInitCard(member.getId(), account.getId());
