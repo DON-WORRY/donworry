@@ -79,11 +79,10 @@ type Friend = {
 };
 
 interface FriendSpendKingProps {
-  refreshKey : number
+  refreshKey: number;
 }
 
-
-const FriendSpendKing: React.FC<FriendSpendKingProps> = ({refreshKey}) => {
+const FriendSpendKing: React.FC<FriendSpendKingProps> = ({ refreshKey }) => {
   const [nowMonth, setNowMonth] = useState(getNowMonth);
   const [rank, setRank] = useState(0);
   const [friendsNumber, setFriendsNumber] = useState(0);
@@ -124,7 +123,7 @@ const FriendSpendKing: React.FC<FriendSpendKingProps> = ({refreshKey}) => {
       // 이름이 존재할 때만 실행
       fetchCategoryList();
     }
-  }, [myName, nowMonth]);
+  }, [myName, nowMonth, refreshKey]);
 
   // 3. 카테고리 리스트 데이터가 바뀌면 친구 목록을 가져옵니다.
   useEffect(() => {
@@ -205,23 +204,28 @@ const FriendSpendKing: React.FC<FriendSpendKingProps> = ({refreshKey}) => {
   return (
     <View style={styles.container}>
       <View style={styles.selectMonth}>
-        <TouchableOpacity
-          onPress={() => {
-            changeMonth('-');
-          }}
-        >
-          <FontAwesome name="caret-left" size={40} />
-        </TouchableOpacity>
         <View>
-          <Text style={styles.selectMonthText}>{nowMonth}월</Text>
+          <Text style={styles.headerText}>친구 최저 소비</Text>
         </View>
-        <TouchableOpacity
-          onPress={() => {
-            changeMonth('+');
-          }}
-        >
-          <FontAwesome name="caret-right" size={40} />
-        </TouchableOpacity>
+        <View style={styles.selectMonthBox}>
+          <TouchableOpacity
+            onPress={() => {
+              changeMonth('-');
+            }}
+          >
+            <FontAwesome name="caret-left" size={40} />
+          </TouchableOpacity>
+          <View>
+            <Text style={styles.selectMonthText}>{nowMonth}월</Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              changeMonth('+');
+            }}
+          >
+            <FontAwesome name="caret-right" size={40} />
+          </TouchableOpacity>
+        </View>
       </View>
       <FriendSpendHeader friendsNumber={friendsNumber} rank={rank} />
       <FriendCubes myName={myName} />
@@ -236,7 +240,7 @@ const FriendSpendKing: React.FC<FriendSpendKingProps> = ({refreshKey}) => {
 const screenWidth = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
-    height: 585,
+    height: 720,
     padding: 20,
     width: screenWidth - 40,
     borderRadius: 15,
@@ -251,9 +255,9 @@ const styles = StyleSheet.create({
   },
   selectMonth: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    width: "100%",
+    width: '100%',
     height: 70,
     marginBottom: 10,
   },
@@ -263,6 +267,15 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 10,
   },
+  selectMonthBox: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  headerText : {
+    fontSize : 20,
+    fontWeight: "bold"
+  }
 });
 
 export default FriendSpendKing;

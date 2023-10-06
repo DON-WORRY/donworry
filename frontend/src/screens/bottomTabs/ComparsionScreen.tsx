@@ -164,7 +164,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
     // 가장 처음은 friend data를 업데이트하자
     // 내 데이터도 업데이트 해야한다.
     async function fetchFriends() {
-      setLoading(true)
+      await setLoading(true)
       const newFriends: Friend[] = await friendListInquiry()
         .then((r) => {
           console.log(r.data.friendResponseList);
@@ -185,7 +185,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
       await setMyData(tmpMyData);
       console.log('tmpMyData');
       console.log(tmpMyData);
-      setLoading(false)
+      await setLoading(false)
     }
 
     fetchFriends();
@@ -193,7 +193,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
 
   useEffect(() => {
     async function fetchComparisonData() {
-      setLoading(true)
+      await setLoading(true)
       if (Number(friendPk) === -1) {
         // 친구가 있을 때
         if (friendList.length > 0) {
@@ -344,7 +344,7 @@ const ComparisonScreen: React.FC<ComparisonScreenProps> = ({ route }) => {
         console.log(totalData);
         await setTotalData(newData);
       }
-      setLoading(false)
+      await setLoading(false)
       // 내 데이터가 나왔으니까
     }
     fetchComparisonData();
