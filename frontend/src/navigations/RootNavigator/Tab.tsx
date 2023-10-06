@@ -8,7 +8,7 @@ import ComparisonScreen from '../../screens/bottomTabs/ComparsionScreen';
 import FriendScreen from '../../screens/bottomTabs/FriendScreen';
 
 type RootTabParamList = {
-  Spend: undefined;
+  Spend: { refresh: boolean };
   Asset: { refresh: boolean };
   Comparison: {
     friendPk: string;

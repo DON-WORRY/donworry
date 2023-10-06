@@ -18,6 +18,9 @@ interface ScreenProps {
     navigate: (screen: string, params?: any) => void;
   };
 }
+interface CardSpendProps {
+  refreshKey: number;
+}
 
 const { width } = Dimensions.get('screen');
 
@@ -25,7 +28,7 @@ const formatAmount = (amount: string): string => {
   return parseInt(amount, 10).toLocaleString('ko-KR') + '원';
 };
 
-const HomeCardSpend: React.FC = () => {
+const HomeCardSpend: React.FC<CardSpendProps> = (props) => {
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [isExpanded, setIsExpanded] = useState(false);
   const isFocused = useIsFocused();
@@ -60,7 +63,7 @@ const HomeCardSpend: React.FC = () => {
       }
     };
     fetch();
-  }, []);
+  }, [props.refreshKey]);
 
   const handleToggle = () => {
     setIsExpanded((prevState) => !prevState);

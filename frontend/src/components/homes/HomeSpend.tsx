@@ -20,6 +20,10 @@ interface ScreenProps {
   };
 }
 
+interface SpendProps {
+  refreshKey: number;
+}
+
 const getData = async (key: string) => {
   try {
     const value = await AsyncStorage.getItem(key);
@@ -39,7 +43,7 @@ const formatAmount = (amount: string): string => {
   return parseInt(amount, 10).toLocaleString('ko-KR') + '원';
 };
 
-const HomeSpend: React.FC = () => {
+const HomeSpend: React.FC<SpendProps> = (props) => {
   const [memberId, setMemberId] = useState('');
   const navigation = useNavigation<ScreenProps['navigation']>();
   const [totalSpend, setTotalSpend] = useState<
@@ -72,7 +76,6 @@ const HomeSpend: React.FC = () => {
           newTotalSpend.data &&
           Array.isArray(newTotalSpend.data.categoryAmountList)
         ) {
-          console.log(newTotalSpend.data.categoryAmountList);
           setTotalSpend(newTotalSpend.data.categoryAmountList);
         }
       } catch (error) {
@@ -80,7 +83,7 @@ const HomeSpend: React.FC = () => {
       }
     };
     fetch();
-  }, []);
+  }, [props.refreshKey]);
 
   const handleToggle = () => {
     setIsExpanded((prevState) => !prevState);
