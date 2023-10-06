@@ -11,9 +11,7 @@ import {
   View,
   Dimensions,
 } from 'react-native';
-// import { FontAwesome } from '@expo/vector-icons';
-// import SearchableDropdown from 'react-native-searchable-dropdown';
-// import Select from "react-select"
+import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ScreenWidth } from '@rneui/themed/dist/config';
@@ -38,13 +36,13 @@ interface FriendSearchProps {
   friends: Friend[];
   isComparison?: boolean;
   setCompoHeight?: (height: number) => void;
-  setParentHeight?: (height: number) => void
+  setParentHeight?: (height: number) => void;
 }
 
 const FriendSearch: React.FC<FriendSearchProps> = (props) => {
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, 'Comparison'>>();
-
+  const isFocused = useIsFocused();
   const [loading, setLoading] = useState(true);
   const searchAPI = (keyword: string) => {
     return props.friends.filter(
@@ -59,6 +57,12 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
   }, []);
 
   useEffect(() => {
+    if (!isFocused) {
+      setKeyword('');
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
     const getList = async () => {
       try {
         setLoading(true);
@@ -69,19 +73,19 @@ const FriendSearch: React.FC<FriendSearchProps> = (props) => {
         if (keyword.length < 1) {
           setList([]);
           if (props.setCompoHeight) {
-            props.setCompoHeight(0)
+            props.setCompoHeight(0);
           }
           if (props.setParentHeight) {
-            props.setParentHeight(props.friends.length)
+            props.setParentHeight(props.friends.length);
           }
         } else {
           const data = searchAPI(keyword);
           setList(data);
           if (props.setCompoHeight) {
-            props.setCompoHeight(data.length)
+            props.setCompoHeight(data.length);
           }
           if (props.setParentHeight) {
-            props.setParentHeight(0)
+            props.setParentHeight(0);
           }
         }
       } catch (error) {

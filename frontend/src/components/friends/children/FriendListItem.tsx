@@ -78,7 +78,7 @@ const screenWidth = Dimensions.get('screen').width;
 const styles = StyleSheet.create({
   container: {
     width: screenWidth - 80,
-    height: 60,
+    marginTop: screenWidth * 0.04,
     paddingRight: 10,
     paddingLeft: 10,
     flexDirection: 'row',
