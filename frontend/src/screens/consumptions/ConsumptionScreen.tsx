@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: 10,
     top: 10,
+    backgroundColor:"white",
     zIndex: 1,
   },
   headerPriceText: {
